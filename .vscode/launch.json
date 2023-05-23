@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Microsoft cloud sandbox",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "Sandbox",
+            "environmentName": "KohinoorSandbox",
+            "tenant": "abc87ed0-4014-486f-afd8-1577c92442a6",
+            "startupObjectId": 9305,
+            "startupObjectType": "Page",
+            "breakOnError": "All",
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true,
+            "schemaUpdateMode": "ForceSync",
+            
+        },
+        {
+            "name": "snapshotInitialize: Microsoft production cloud",
+            "type": "al",
+            "request": "snapshotInitialize",
+            "environmentType": "Sandbox",
+            "environmentName": "KohinoorSandbox",
+            "breakOnNext": "WebClient",
+            "executionContext": "DebugAndProfile",
+            "userId": "PCPLDEVELOPER",
+            "snapshotVerbosity": "Full"
+        }
+    ]
+}
