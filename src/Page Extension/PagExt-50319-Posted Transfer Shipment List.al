@@ -1,6 +1,6 @@
 pageextension 50319 "Posted Transfer Shipment List" extends "Posted Transfer Shipments"
 {
-    layout
+    layout//
     {
         addafter("Transfer-to Code")
         {
