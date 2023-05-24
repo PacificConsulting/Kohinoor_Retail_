@@ -113,7 +113,7 @@ table 50301 "Payment Lines"
             //     IF Icount <> 6 then
             //         error('6 digit of Cheque No. is allowed only')
             // end;
-        }
+        }//
         field(19; "Store No."; Code[20])
         {
             Caption = 'Store No.';
@@ -133,6 +133,25 @@ table 50301 "Payment Lines"
         field(22; "Transaction ID"; Text[50])
         {
             DataClassification = ToBeClassified;
+        }
+        field(23; "Salesperson Code"; Code[20])
+        {
+            Caption = 'Salesperson Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Salesperson/Purchaser";//.Code where("Global Dimension 2 Code" = field("Shortcut Dimension 2 Code"));
+            trigger OnValidate()
+            var
+                SP: Record "Salesperson/Purchaser";
+            begin
+                IF SP.Get(Rec."Salesperson Code") then
+                    "Salesperson Name" := SP.Name;
+            end;
+        }
+        field(24; "Salesperson Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+
         }
     }
 

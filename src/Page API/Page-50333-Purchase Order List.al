@@ -58,6 +58,14 @@ page 50333 "Purchase Order List API"
                 {
                     Caption = 'Vendor Invoice No.';
                 }
+                field(lrNo; Rec."LR No.")
+                {
+                    Caption = 'LR No.';
+                }
+                field(lrDate; Rec."LR Date")
+                {
+                    Caption = 'LR Date';
+                }
             }
         }
     }

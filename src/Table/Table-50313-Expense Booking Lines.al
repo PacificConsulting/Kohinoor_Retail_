@@ -61,7 +61,7 @@ table 50313 "Expense Booking Lines"
         field(7; "Max Allowed Exp.Amount"; Decimal)
         {
             DataClassification = ToBeClassified;
-            Caption = 'Expense Amount';
+            Caption = 'Expense Limit Amount';
             // Editable = false;
         }
     }

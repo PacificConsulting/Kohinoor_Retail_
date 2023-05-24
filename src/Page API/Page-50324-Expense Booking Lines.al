@@ -46,8 +46,40 @@ page 50324 "Expense Booking Lines"
                 {
                     Caption = 'Amount';
                 }
+                field(Status; Status)
+                {
+                    Caption = 'Status';
+                }
             }
         }
     }
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    var
+        EXPLine: Record "Expense Booking Lines";
+    begin
+        EXPLine.reset;
+        EXPLine.SetRange("Store No.", Rec."Store No.");
+        EXPLine.SetRange("Staff ID", Rec."Staff ID");
+        EXPLine.SetRange(Date, Rec.Date);
+        IF EXPLine.findlast then
+            Rec."Line No." := EXPLine."Line No." + 10000
+        else
+            Rec."Line No." := 10000;
+    end;
 
+    trigger OnAfterGetRecord()
+    var
+        EH: Record "Expense Booking Header";
+    begin
+        EH.Reset();
+        EH.SetRange("Store No.", rec."Store No.");
+        EH.SetRange("Staff ID", Rec."Staff ID");
+        EH.SetRange(Date, Rec.Date);
+        IF EH.FindFirst() then
+            Status := EH.Status;
+    end;
+
+
+    var
+        Status: Enum "Bank Drop Status";
 }

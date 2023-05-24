@@ -8,7 +8,14 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             var
                 TradeAggre: record "Trade Aggrement";
                 SalesHeder: record 36;
+                BlockItem: Record "Block Item List";
             begin
+                BlockItem.Reset();
+                BlockItem.SetRange("Store No.", "Store No.");
+                BlockItem.SetRange("Item No.", "No.");
+                if BlockItem.FindFirst() then
+                    Error('This %1 Item No. is block', BlockItem."Item No.");
+
                 IF SalesHeder.Get(rec."Document Type", rec."Document No.") then;
                 TradeAggre.Reset();
                 TradeAggre.SetCurrentKey("Item No.", "From Date", "To Date", "Location Code");

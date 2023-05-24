@@ -1358,6 +1358,7 @@ codeunit 50303 "POS Procedure"
         PaymentLine.SetRange("Document Type", Salesheader."Document Type");
         PaymentLine.SetRange("Document No.", Salesheader."No.");
         PaymentLine.SetFilter("Payment Method Code", '<>%1', 'ADVANCE');
+        PaymentLine.SetRange(Posted, false); //NSW 240523 New filter
         if PaymentLine.FindSet() then
             repeat
                 GenJourLine.Reset();

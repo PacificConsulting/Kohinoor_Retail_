@@ -121,6 +121,16 @@ page 50301 "Payment Lines Subform"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Transaction ID field.';
                 }
+                field("Salesperson Code"; Rec."Salesperson Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Salesperson Code field.';
+                }
+                field("Salesperson Name"; Rec."Salesperson Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Salesperson Name field.';
+                }
             }
         }
     }

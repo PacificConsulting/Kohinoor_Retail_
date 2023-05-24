@@ -114,6 +114,14 @@ page 50307 "Payment Lines API"
                 {
                     Caption = 'Transaction ID';
                 }
+                field(salespersonCode; Rec."Salesperson Code")
+                {
+                    Caption = 'Salesperson Code';
+                }
+                field(salespersonName; Rec."Salesperson Name")
+                {
+                    Caption = 'Salesperson Name';
+                }
 
             }
         }
