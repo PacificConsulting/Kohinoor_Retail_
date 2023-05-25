@@ -241,6 +241,53 @@ codeunit 50303 "POS Procedure"
 
 
 
+    /// <summary>
+    /// Post ship and Invoice for a Complete order with Auto updare Qty Ship from Sales Line Qty
+    /// </summary>
+    procedure AddComment(DocumentNo: Code[20]; LineNo: Integer; parameter: Text[200]): text
+    var
+        SalesLineInit: Record 37;
+        SL: Record 37;
+        RecType: Record 1670;
+        LenCnt: Integer;
+        I: Integer;
+        J: Integer;
+        CopyStr: Text;
+
+    begin
+        Clear(LenCnt);
+        Clear(CopyStr);
+        LenCnt := StrLen(parameter);
+
+        IF LenCnt > 100 then
+            J := 2
+        else
+            J := 1;
+
+        for I := 1 to J do begin
+            IF I = 1 then
+                CopyStr := CopyStr(parameter, 1, 100)
+            else
+                CopyStr := CopyStr(parameter, 101, 100);
+
+            SalesLineInit.Init();
+            SalesLineInit."Document Type" := SalesLineInit."Document Type"::Order;
+            SalesLineInit."Document No." := DocumentNo;
+
+            SL.Reset();
+            SL.SetRange("Document No.", DocumentNo);
+            IF SL.FindLast() then
+                SalesLineInit."Line No." := SL."Line No." + 10000
+            else
+                SalesLineInit."Line No." := 10000;
+
+            SalesLineInit.Insert();
+            SalesLineInit.Type := SalesLineInit.Type::" ";
+            SalesLineInit.Description := CopyStr;
+            SalesLineInit.Modify();
+        end;
+    end;
+
 
     /// <summary>
     /// Post ship and Invoice for a Complete order with Auto updare Qty Ship from Sales Line Qty

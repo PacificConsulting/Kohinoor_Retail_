@@ -55,7 +55,18 @@ page 50374 "Expense Booking"
                 var
                     ExpBook: Record "Expense Booking Header";
                 begin
-                    IF Confirm('Do you want submit expense booking', true) then begin
+                    IF GuiAllowed then begin
+                        IF Confirm('Do you want submit expense booking', true) then begin
+                            ExpBook.Reset();
+                            ExpBook.SetRange("Staff ID", rec."Staff ID");
+                            ExpBook.SetRange("Store No.", rec."Store No.");
+                            ExpBook.SetRange(Date, Rec.Date);
+                            IF ExpBook.FindFirst() then begin
+                                ExpBook.Status := ExpBook.Status::Released;
+                                ExpBook.Modify();
+                            end;
+                        end;
+                    end else begin
                         ExpBook.Reset();
                         ExpBook.SetRange("Staff ID", rec."Staff ID");
                         ExpBook.SetRange("Store No.", rec."Store No.");

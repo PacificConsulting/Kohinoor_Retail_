@@ -142,6 +142,15 @@ codeunit 50302 "POS Event and Subscriber"
                     //   exit(IsResult);
 
                 end;
+            'ADDCOM':  //<<<<** Add Comment on Live level new Line Insert **>>>>
+                begin
+                    IsResult := POSProcedure.AddComment(documentno, lineno, parameter1);
+                    IF IsResult = '' then
+                        exit('Success');
+                    // Else
+                    //   exit(IsResult);
+
+                end;
         end;
 
     end;

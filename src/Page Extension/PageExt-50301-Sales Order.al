@@ -173,6 +173,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     CU: Codeunit 50303;
                     POS: Codeunit 50302;
                     RES: Record 337;
+                    Tx: Text;
 
                 begin
                     //result := Cu.OrderConfirmationforDelivery(rec."No.");
@@ -198,6 +199,9 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //     repeat
                     //         RES.Delete();
                     //     until res.Next() = 0;
+                    Tx := 'This Is test';
+
+                    result := CU.AddComment(Rec."No.", 10000, Tx);
 
                 end;
             }
@@ -222,7 +226,8 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //result := POS.AddWarranty('KTPLSO23240121', 10000, 'ZOPPER', '12');
                     //result := POS.ShipTransferLine('KTRO029', 10000, '1');
                     //result := cu.InvoiceComplete(Rec."No.");
-                    result := POS.AzureStorageReport();
+                    //result := POS.AzureStorageReport();
+                    result := cu.ChangeUnitPrice(Rec."No.", 10000, rec."External Document No.");
 
                     Message(result);
                 end;
