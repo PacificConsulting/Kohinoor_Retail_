@@ -47,6 +47,11 @@ page 50338 "Request Tranfer Ord. Subform"
                     ToolTip = 'Specifies the value of the Transfer-from Name field.';
                     Editable = false;
                 }
+                field(Remarks; Rec.Remarks)
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Remarks field.';
+                }
                 // field("Line Created"; Rec."Line Created")
                 // {
                 //     ApplicationArea = All;

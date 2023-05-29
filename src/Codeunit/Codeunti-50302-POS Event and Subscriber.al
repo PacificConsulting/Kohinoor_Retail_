@@ -144,7 +144,7 @@ codeunit 50302 "POS Event and Subscriber"
                 end;
             'ADDCOM':  //<<<<** Add Comment on Live level new Line Insert **>>>>
                 begin
-                    IsResult := POSProcedure.AddComment(documentno, lineno, parameter1);
+                    IsResult := POSProcedure.AddComment(documentno, parameter1);
                     IF IsResult = '' then
                         exit('Success');
                     // Else
@@ -243,7 +243,6 @@ codeunit 50302 "POS Event and Subscriber"
             end else
                 Error('Warranty not found');
             Saleslineinit.Modify();
-
         End;
     end;
 

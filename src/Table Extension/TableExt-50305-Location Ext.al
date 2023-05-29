@@ -27,11 +27,16 @@ tableextension 50305 "Location_Ext_retail" extends Location
             DataClassification = ToBeClassified;
             TableRelation = Bin.Code WHERE("Location Code" = FIELD(Code));
         }
-        // field(50306; "Sales Order Nos"; Code[10])
-        // {
-        //     DataClassification = ToBeClassified;
-        //     TableRelation = "No. Series";
-        // }
+        field(50306; "Sales Order Nos"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
+        field(50307; "Payment QR"; Blob)
+        {
+            DataClassification = ToBeClassified;
+            SubType = Bitmap;
+        }
     }
 
     var

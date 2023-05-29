@@ -64,6 +64,10 @@ table 50313 "Expense Booking Lines"
             Caption = 'Expense Limit Amount';
             // Editable = false;
         }
+        field(8; Remarks; Text[150])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

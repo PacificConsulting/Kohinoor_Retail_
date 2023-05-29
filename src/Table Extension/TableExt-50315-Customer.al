@@ -21,5 +21,6 @@ tableextension 50315 Customer_ext extends Customer
             TableRelation = "Customer Reference".Code;
 
         }
+
     }
 }

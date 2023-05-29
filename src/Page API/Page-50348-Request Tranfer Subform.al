@@ -50,6 +50,10 @@ page 50348 "Request Tranfer Subform"
                 {
                     Caption = 'Unit of Measure Code';
                 }
+                field(remarks; Rec.Remarks)
+                {
+                    Caption = 'Remarks';
+                }
                 field(systemId; Rec.SystemId)
                 {
                     Caption = 'SystemId';

@@ -64,12 +64,17 @@ page 50355 "Store Card"
                 }
                 field("Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
                 {
-
+                    ToolTip = 'Specifies the value of the Global Dimension 1 Code field.';
                 }
                 field("Global Dimension 2 Code"; Rec."Global Dimension 2 Code")
                 {
-
+                    ToolTip = 'Specifies the value of the Global Dimension 2 Code field.';
                 }
+                field("Payment QR"; Rec."Payment QR")
+                {
+                    ToolTip = 'Specifies the value of the Payment QR field.';
+                }
+
             }
         }
     }

@@ -244,7 +244,7 @@ codeunit 50303 "POS Procedure"
     /// <summary>
     /// Post ship and Invoice for a Complete order with Auto updare Qty Ship from Sales Line Qty
     /// </summary>
-    procedure AddComment(DocumentNo: Code[20]; LineNo: Integer; parameter: Text[200]): text
+    procedure AddComment(DocumentNo: Code[20]; parameter: Text[200]): text
     var
         SalesLineInit: Record 37;
         SL: Record 37;
@@ -255,6 +255,11 @@ codeunit 50303 "POS Procedure"
         CopyStr: Text;
 
     begin
+        SalesLineInit.Reset();
+        SalesLineInit.SetRange("Document No.", DocumentNo);
+        IF not SalesLineInit.FindFirst() then
+            exit('Document No. does not exist');
+
         Clear(LenCnt);
         Clear(CopyStr);
         LenCnt := StrLen(parameter);
@@ -317,20 +322,22 @@ codeunit 50303 "POS Procedure"
                     SalesLine.Validate("Qty. to Invoice", SalesLine.Quantity);
                     SalesLine.Modify();
                 until SalesLine.Next() = 0;
-            //<< Comment Mandetory so We have to pass Order Comment
-            SalesCommLine.Reset();
-            SalesCommLine.SetCurrentKey("No.");
-            SalesCommLine.SetRange("No.", SalesHdr."No.");
-            IF Not SalesCommLine.FindFirst() then begin
-                SalesCommLine.Init();
-                SalesCommLine."Document Type" := SalesCommLine."Document Type"::Order;
-                SalesCommLine."No." := SalesHdr."No.";
-                SalesCommLine."Line No." := SalesLine."Line No.";
-                SalesCommLine."Document Line No." := SalesLine."Line No.";
-                SalesCommLine.Insert();
-                SalesCommLine.Comment := 'Document Processed from POS';
-                SalesCommLine.Modify();
-            end;
+            /*
+        //<< Comment Mandetory so We have to pass Order Comment
+        SalesCommLine.Reset();
+        SalesCommLine.SetCurrentKey("No.");
+        SalesCommLine.SetRange("No.", SalesHdr."No.");
+        IF Not SalesCommLine.FindFirst() then begin
+            SalesCommLine.Init();
+            SalesCommLine."Document Type" := SalesCommLine."Document Type"::Order;
+            SalesCommLine."No." := SalesHdr."No.";
+            SalesCommLine."Line No." := SalesLine."Line No.";
+            SalesCommLine."Document Line No." := SalesLine."Line No.";
+            SalesCommLine.Insert();
+            SalesCommLine.Comment := 'Document Processed from POS';
+            SalesCommLine.Modify();
+        end;
+        */
             //>> Comment Mandetory so We have to pass Order Comment
             //SalesHdr.Status := SalesHdr.Status::Released;
             //SalesHdr.Modify();
@@ -373,6 +380,7 @@ codeunit 50303 "POS Procedure"
                 SaleLinerInv.validate("Qty. to Ship", SaleLinerInv."Qty. to Ship");
                 SaleLinerInv.Validate("Qty. to Invoice", SaleLinerInv."Qty. to Ship");
                 SaleLinerInv.Modify(true);
+                /*
                 //<< Comment Mandetory so We have to pass Order Comment
                 SalesCommLine.Reset();
                 SalesCommLine.SetRange("No.", SaleHeaderInv."No.");
@@ -386,6 +394,7 @@ codeunit 50303 "POS Procedure"
                     SalesCommLine.Comment := 'Document Processed from POS';
                     SalesCommLine.Modify();
                 end;
+                */
                 //>> Comment Mandetory so We have to pass Order Comment
                 //SaleHeaderInv.Status := SaleHeaderInv.Status::Released;
                 ReleaseSalesDoc.PerformManualRelease(SaleHeaderInv);
@@ -427,6 +436,7 @@ codeunit 50303 "POS Procedure"
             PurchLine.SetCurrentKey("Document No.");
             PurchLine.SetRange("Document No.", PurchHeader."No.");
             IF PurchLine.FindFirst() then begin
+                /*
                 //<< Comment Mandetory so We have to pass Order Comment
                 PurchCommLine.Reset();
                 PurchCommLine.SetCurrentKey("No.");
@@ -441,6 +451,7 @@ codeunit 50303 "POS Procedure"
                     PurchCommLine.Comment := 'Document Processed from POS';
                     PurchCommLine.Modify();
                 end;
+                */
                 //>> Comment Mandetory so We have to pass Order Comment
                 PurchHeader.Receive := true;
                 PurchHeader.Invoice := false;
@@ -887,10 +898,12 @@ codeunit 50303 "POS Procedure"
                 repeat
                     TotalPayemtamt += PaymentLine.Amount;
                 until PaymentLine.Next() = 0;
-
+            /* Temp Comment
             IF TotalPayemtamt <> SalesHeader."Amount To Customer" then
                 Error('Sales Order amount is not match with Payment amount %1 with %2', TotalPayemtamt, SalesHeader."Amount To Customer")
-            else begin
+            else
+            */
+            begin
                 BankPayentReceiptAutoPost(SalesHeader);
                 SalesHeader.Reset();
                 SalesHeader.SetRange("No.", SalesHeader."No.");
@@ -979,11 +992,16 @@ codeunit 50303 "POS Procedure"
                 SalesLine.TestField("Salesperson Code");
             until SalesLine.Next() = 0;
 
+
         SalesHdr.Reset();
         SalesHdr.SetCurrentKey("No.");
         SalesHdr.SetRange("No.", DocumentNo);
         IF SalesHdr.FindFirst() then begin
-            SalesHdr.TestField(Status, SalesHdr.Status::Open);
+            //SalesHdr.TestField(Status, SalesHdr.Status::Open);
+            IF SalesHdr.Status = SalesHdr.Status::Released then begin
+                SalesHdr.Status := SalesHdr.Status::Open;
+                SalesHdr.Modify();
+            end;
         end;
 
         SalesHdr.Reset();
@@ -1005,11 +1023,12 @@ codeunit 50303 "POS Procedure"
                 repeat
                     TotalPayemtamt += PaymentLine.Amount;
                 until PaymentLine.Next() = 0;
-
-            IF TotalPayemtamt <> SalesHdr."Amount To Customer" then
-                Error('Sales Order amount is not match with Payment amount')
-            else begin
-                BankPayentReceiptAutoPost(SalesHdr);
+            begin
+                PaymentLine.Reset();
+                PaymentLine.SetRange("Document No.", documentno);
+                PaymentLine.SetRange(Posted, false);
+                if PaymentLine.FindFirst() then
+                    BankPayentReceiptAutoPost(SalesHdr);
                 SalesHdr.Reset();
                 SalesHdr.SetCurrentKey("No.");
                 SalesHdr.SetRange("No.", SalesHdr."No.");
@@ -1031,20 +1050,22 @@ codeunit 50303 "POS Procedure"
                         SalesLine.Validate("Shortcut Dimension 1 Code", SalesHdr."Shortcut Dimension 1 Code");
                         SalesLine.Validate("Shortcut Dimension 2 Code", SalesHdr."Shortcut Dimension 2 Code");
                         SalesLine.Modify();
-                        //<< Comment Mandetory so We have to pass Order Comment
-                        SalesCommLine.Reset();
-                        SalesCommLine.SetRange("No.", SalesHdr."No.");
-                        IF Not SalesCommLine.FindFirst() then begin
-                            SalesCommLine.Init();
-                            SalesCommLine."Document Type" := SalesCommLine."Document Type"::Order;
-                            SalesCommLine."No." := SalesHdr."No.";
-                            SalesCommLine."Line No." := SalesLine."Line No.";
-                            SalesCommLine."Document Line No." := SalesLine."Line No.";
-                            SalesCommLine.Insert();
-                            SalesCommLine.Comment := 'Document Processed from POS';
-                            SalesCommLine.Modify();
-                            //>> Comment Mandetory so We have to pass Order Comment
-                        end;
+                    /*
+                    //<< Comment Mandetory so We have to pass Order Comment
+                    SalesCommLine.Reset();
+                    SalesCommLine.SetRange("No.", SalesHdr."No.");
+                    IF Not SalesCommLine.FindFirst() then begin
+                        SalesCommLine.Init();
+                        SalesCommLine."Document Type" := SalesCommLine."Document Type"::Order;
+                        SalesCommLine."No." := SalesHdr."No.";
+                        SalesCommLine."Line No." := SalesLine."Line No.";
+                        SalesCommLine."Document Line No." := SalesLine."Line No.";
+                        SalesCommLine.Insert();
+                        SalesCommLine.Comment := 'Document Processed from POS';
+                        SalesCommLine.Modify();
+                        //>> Comment Mandetory so We have to pass Order Comment
+                    end;
+                    */
                     until SalesLine.Next() = 0;
 
 
@@ -1553,7 +1574,7 @@ codeunit 50303 "POS Procedure"
         Emailmessage.AppendToBody('<p><font face="Georgia"> <B>!!!Greetings!!!</B></font></p>');
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
-        Emailmessage.AppendToBody('<p><font face="Georgia"><BR> in this Sales Order ' + FORMAT(SL."Document No.") + ' Price Approval is requested from Store ' + FORMAT(LOC.Name) +
+        Emailmessage.AppendToBody('<p><font face="Georgia"><BR> In this Sales Order ' + FORMAT(SL."Document No.") + ' Price Approval is requested from Store ' + FORMAT(LOC.Name) +
       ' for ' + FORMAT(SL.Description) + ', Old price ' + FORMAT(SL."Old Unit Price") + ', New price ' + FORMAT(SL."Unit Price Incl. of Tax") + ', FNNLC Price ' + FORMAT(TradAgg.FNNLC) +
       ', NNLC Price ' + FORMAT(TradAgg.NNLC) + '</BR></font></p>');
 

@@ -48,57 +48,68 @@ table 50302 "Posted Payment Lines"
         {
             DataClassification = ToBeClassified;
             Caption = 'Card Type';
+            Editable = false;
         }
         field(9; "Owner Name"; Text[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'Owner Name';
+            Editable = false;
         }
         field(10; "Credit Card No. Last 4 digit"; Integer)
         {
             DataClassification = ToBeClassified;
             Caption = 'Owner Name';
+            Editable = false;
 
         }
         field(11; "Card Expiry Date"; Date)
         {
             DataClassification = ToBeClassified;
             Caption = 'Card Expiry Date';
+            Editable = false;
         }
         field(12; "Approval Code"; Code[10])
         {
             DataClassification = ToBeClassified;
             Caption = 'Approval Code';
+            Editable = false;
         }
         field(13; "Approval Date"; Date)
         {
             DataClassification = ToBeClassified;
             Caption = 'Approval Date';
+            Editable = false;
         }
         field(14; "DO Number"; Code[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'DO Number';
+            Editable = false;
         }
         field(15; "Subvention by Dealer"; Text[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'Subvention by Dealer';
+            Editable = false;
         }
         field(16; "MFR Sub. to be born by Dealer"; Text[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'MFR Subvention Borne to be born by Dealer';
+            Editable = false;
         }
         field(17; "Deliver Order Copy Upload"; Code[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'Deliver Order Copy Upload';
+            Editable = false;
         }
         field(18; "Cheque No 6 Digit"; Integer)
         {
             DataClassification = ToBeClassified;
             Caption = 'Cheque No 6 Digit';
+            Editable = false;
 
         }
         field(19; "Store No."; Code[20])
@@ -106,20 +117,42 @@ table 50302 "Posted Payment Lines"
             Caption = 'Store No.';
             DataClassification = ToBeClassified;
             TableRelation = Location.Code;
+            Editable = false;
 
         }
         field(20; "Staff Id"; Code[10])
         {
             DataClassification = ToBeClassified;
             TableRelation = "Staff Master".ID;
+            Editable = false;
         }
         field(21; "Payment Attachment"; Text[250])
         {
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(22; "Transaction ID"; Text[50])
         {
             DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(23; "Salesperson Code"; Code[20])
+        {
+            Caption = 'Salesperson Code';
+            DataClassification = ToBeClassified;
+            Editable = false;
+
+        }
+        field(24; "Salesperson Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+
+        }
+        field(25; Attachment; Text[10])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
         }
     }
 

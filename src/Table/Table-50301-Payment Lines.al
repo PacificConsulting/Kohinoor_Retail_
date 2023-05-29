@@ -71,7 +71,7 @@ table 50301 "Payment Lines"
             DataClassification = ToBeClassified;
             Caption = 'Card Expiry Date';
         }
-        field(12; "Approval Code"; Code[10])
+        field(12; "Approval Code"; Code[30])
         {
             DataClassification = ToBeClassified;
             Caption = 'Approval Code';
@@ -152,6 +152,11 @@ table 50301 "Payment Lines"
             DataClassification = ToBeClassified;
             Editable = false;
 
+        }
+        field(25; Attachment; Text[10])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
         }
     }
 

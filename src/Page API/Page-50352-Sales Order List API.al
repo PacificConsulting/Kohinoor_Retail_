@@ -11,7 +11,6 @@ page 50352 "Sales Order List API"
     PageType = API;
     SourceTable = "Sales Header";
     ODataKeyFields = SystemId;
-    // SourceTableView = where("Document Type" = filter(Order));
 
     layout
     {
@@ -91,7 +90,6 @@ page 50352 "Sales Order List API"
                 field(SelltoPhoneNo; Rec."Sell-to Phone No.")
                 {
                     Caption = 'Sell to Phone No.';
-
                 }
                 field(shipToCode; Rec."Ship-to Code")
                 {
@@ -110,7 +108,5 @@ page 50352 "Sales Order List API"
             ID := Cust.SystemId;
         end;
     end;
-
-
 
 }

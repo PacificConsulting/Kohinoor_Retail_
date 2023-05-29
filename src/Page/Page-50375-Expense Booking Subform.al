@@ -43,6 +43,10 @@ page 50375 "Expense Booking Subform"
                 {
                     ToolTip = 'Specifies the value of the Amount field.';
                 }
+                field(Remarks; Rec.Remarks)
+                {
+                    ToolTip = 'Specifies the value of the Remarks field.';
+                }
             }
         }
     }

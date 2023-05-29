@@ -1,7 +1,6 @@
 {
     "version": "0.2.0",
     "configurations": [
-        
         {
             "name": "Microsoft cloud sandbox",
             "request": "launch",
@@ -17,7 +16,8 @@
             "enableSqlInformationDebugger": true,
             "schemaUpdateMode": "ForceSync",
             
-        },
+        }
+        /*
         {
             "name": "snapshotInitialize: Microsoft production cloud",
             "type": "al",
@@ -29,5 +29,6 @@
             "userId": "PCPLDEVELOPER",
             "snapshotVerbosity": "Full"
         }
+        */
     ]
 }

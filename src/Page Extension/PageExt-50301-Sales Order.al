@@ -201,7 +201,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //     until res.Next() = 0;
                     Tx := 'This Is test';
 
-                    result := CU.AddComment(Rec."No.", 10000, Tx);
+                    result := CU.AddComment(Rec."No.", Tx);
 
                 end;
             }
@@ -220,14 +220,14 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     result: Text;
                 begin
                     //result := POS.POSAction('KTPLSO23240091', 10000, 'INVLINE', '1', '', '');
-                    //result := cu.OrderConfirmationforWH(rec."No.");
+                    result := cu.OrderConfirmationforWH(rec."No.");
                     //result := Cu.OrderConfirmationforDelivery(rec."No.");
                     //result := CU.ItemReceipt('KTPLPO23240011', 20000, '');
                     //result := POS.AddWarranty('KTPLSO23240121', 10000, 'ZOPPER', '12');
                     //result := POS.ShipTransferLine('KTRO029', 10000, '1');
                     //result := cu.InvoiceComplete(Rec."No.");
                     //result := POS.AzureStorageReport();
-                    result := cu.ChangeUnitPrice(Rec."No.", 10000, rec."External Document No.");
+                    //result := cu.ChangeUnitPrice(Rec."No.", 10000, rec."External Document No.");
 
                     Message(result);
                 end;

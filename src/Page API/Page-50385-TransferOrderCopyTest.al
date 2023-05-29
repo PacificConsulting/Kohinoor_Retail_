@@ -1,13 +1,13 @@
-page 50337 "Transfer Order Subform API"
+page 50385 "Transfer Order Line Copy"
 {
     APIGroup = 'Transfer';
     APIPublisher = 'Pacific';
-    APIVersion = 'v3.0';
+    APIVersion = 'v11.0';
     ApplicationArea = All;
-    Caption = 'transferOrderSubform';
+    Caption = 'transferOrderLine';
     DelayedInsert = true;
-    EntityName = 'TransferOrderSubform';
-    EntitySetName = 'TransferOrderSubforms';
+    EntityName = 'TransferOrderLine';
+    EntitySetName = 'TransferOrderLines';
     PageType = API;
     SourceTable = "Transfer Line";
     ODataKeyFields = SystemId;
@@ -91,7 +91,7 @@ page 50337 "Transfer Order Subform API"
                 {
                     Caption = 'HSN/SAC Code';
                 }
-                field(remarks; Rec.Remarks)
+                field(remark1; Rec.Remarks)
                 {
                     Caption = 'Remarks';
                 }

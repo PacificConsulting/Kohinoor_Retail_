@@ -74,6 +74,10 @@ table 50315 "Request Transfer Line"
             Caption = 'Line Created';
             Editable = false;
         }
+        field(10; Remarks; Text[150])
+        {
+            DataClassification = ToBeClassified;
+        }
 
 
 

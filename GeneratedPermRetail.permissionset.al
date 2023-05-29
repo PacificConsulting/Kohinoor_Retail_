@@ -1,8 +1,9 @@
-permissionset 50301 GeneratedPermRetail
+permissionset 50301 GeneratedPermretail
 {
     Assignable = true;
     Permissions = tabledata "Azure Storage Container Setup"=RIMD,
         tabledata "Bank Drop Entry"=RIMD,
+        tabledata "Block Item List"=RIMD,
         tabledata "Customer Reference"=RIMD,
         tabledata "Expense Booking Header"=RIMD,
         tabledata "Expense Booking Lines"=RIMD,
@@ -27,6 +28,7 @@ permissionset 50301 GeneratedPermRetail
         tabledata "Warranty Month Master"=RIMD,
         table "Azure Storage Container Setup"=X,
         table "Bank Drop Entry"=X,
+        table "Block Item List"=X,
         table "Customer Reference"=X,
         table "Expense Booking Header"=X,
         table "Expense Booking Lines"=X,
@@ -60,6 +62,7 @@ permissionset 50301 GeneratedPermRetail
         page "Azure Storage Container Setup"=X,
         page "Bank Drop Entry"=X,
         page "Bank Drop Entry "=X,
+        page "Block Item List"=X,
         page "Country List"=X,
         page "Customer Adv. Payment"=X,
         page "Customer Card API"=X,

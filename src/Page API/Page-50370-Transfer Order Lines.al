@@ -91,6 +91,10 @@ page 50370 "Transfer Order Line API"
                 {
                     Caption = 'HSN/SAC Code';
                 }
+                field(remark1; Rec.Remarks)
+                {
+                    Caption = 'Remarks';
+                }
             }
         }
     }

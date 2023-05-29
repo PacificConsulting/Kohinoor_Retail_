@@ -50,6 +50,10 @@ page 50324 "Expense Booking Lines"
                 {
                     Caption = 'Status';
                 }
+                field(remarks; Rec.Remarks)
+                {
+                    Caption = 'Remarks';
+                }
             }
         }
     }

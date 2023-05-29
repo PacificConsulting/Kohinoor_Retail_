@@ -66,6 +66,10 @@ page 50333 "Purchase Order List API"
                 {
                     Caption = 'LR Date';
                 }
+                field(attachment; Rec.Attachment)
+                {
+                    Caption = 'Attachment';
+                }
             }
         }
     }

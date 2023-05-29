@@ -31,6 +31,14 @@ page 50380 ItemTrackingPurchase
                 {
                     Caption = 'Quantity';
                 }
+                field(documentNo; Rec."Source ID")
+                {
+                    Caption = 'Source ID';
+                }
+                field(lineNo; Rec."Source Ref. No.")
+                {
+                    Caption = 'Source Ref. No.';
+                }
             }
         }
     }

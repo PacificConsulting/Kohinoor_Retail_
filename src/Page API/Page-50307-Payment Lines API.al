@@ -122,6 +122,10 @@ page 50307 "Payment Lines API"
                 {
                     Caption = 'Salesperson Name';
                 }
+                field(attachment; Rec.Attachment)
+                {
+                    Caption = 'Attachment';
+                }
 
             }
         }

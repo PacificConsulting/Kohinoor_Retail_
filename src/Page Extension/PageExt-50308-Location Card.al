@@ -2,16 +2,16 @@ pageextension 50308 Location_Card extends "Location Card"
 {
     layout
     {
-        // addafter(Dimensions)
-        // {
-        //     group("No. Series")
-        //     {
-        //         field("Sales Order Nos"; Rec."Sales Order Nos")
-        //         {
-        //             ApplicationArea = all;
-        //         }
-        //     }
-        //}
+        addafter(Dimensions)
+        {
+            group("No. Series")
+            {
+                field("Sales Order Nos"; Rec."Sales Order Nos")
+                {
+                    ApplicationArea = all;
+                }
+            }
+        }
         addafter("Receipt Bin Code")
         {
             field("Default Receipt Bin"; Rec."Default Receipt Bin")

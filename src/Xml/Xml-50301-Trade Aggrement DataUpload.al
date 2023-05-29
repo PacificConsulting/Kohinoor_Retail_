@@ -15,6 +15,7 @@ xmlport 50301 "Trade Aggrement Data Upload"
                 fieldelement(Item; TradeAggrement."Item No.")
                 {
                 }
+
                 fieldelement(FromDate; TradeAggrement."From Date")
                 {
                 }
