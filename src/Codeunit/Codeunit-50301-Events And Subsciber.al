@@ -5,6 +5,17 @@ codeunit 50301 "Event and Subscribers"
 
     end;
 
+    //<<<<<<<START********************************CU-90*****************************************
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnAfterInsertReceiptHeader', '', false, false)]
+    local procedure OnAfterInsertReceiptHeader(var PurchHeader: Record "Purchase Header"; var PurchRcptHeader: Record "Purch. Rcpt. Header"; var TempWhseRcptHeader: Record "Warehouse Receipt Header" temporary; WhseReceive: Boolean; CommitIsSuppressed: Boolean)
+    begin
+
+        // PurchRcptHeader."Vendor Invoice No." := TempWhseRcptHeader."Vendor Invoice No.";
+        // PurchRcptHeader."LR No." := TempWhseRcptHeader."LR No.";
+        // PurchRcptHeader."LR Date" := TempWhseRcptHeader."LR Date";
+        // PurchRcptHeader.Modify();
+    end;
+    //<<<<<<<END********************************CU-90*****************************************
 
     //START**********************************CU-5708*******************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Transfer Document", 'OnAfterReleaseTransferDoc', '', false, false)]

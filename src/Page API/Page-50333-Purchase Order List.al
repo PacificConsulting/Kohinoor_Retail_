@@ -66,10 +66,11 @@ page 50333 "Purchase Order List API"
                 {
                     Caption = 'LR Date';
                 }
-                field(attachment; Rec.Attachment)
+                field(remarks; Rec.Remarks)
                 {
-                    Caption = 'Attachment';
+                    Caption = 'Remarks';
                 }
+
             }
         }
     }
