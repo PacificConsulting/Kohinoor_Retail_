@@ -20,6 +20,10 @@ page 50304 "Menu Card"
                 {
                     ToolTip = 'Specifies the value of the Menu Name field.';
                 }
+                field("Store No."; Rec."Store No.")
+                {
+                    ToolTip = 'Specifies the value of the Store No. field.';
+                }
             }
             part(Lines; "Menu Line Subform")
             {

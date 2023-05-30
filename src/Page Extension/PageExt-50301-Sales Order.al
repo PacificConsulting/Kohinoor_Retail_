@@ -20,6 +20,12 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field("Order Reference"; Rec."Order Reference")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Order Reference field.';
+            }
+
             group(POS)
             {
                 field("Store No."; Rec."Store No.")
@@ -220,7 +226,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     result: Text;
                 begin
                     //result := POS.POSAction('KTPLSO23240091', 10000, 'INVLINE', '1', '', '');
-                    result := cu.OrderConfirmationforWH(rec."No.");
+                    // result := cu.OrderConfirmationforWH(rec."No.");
                     //result := Cu.OrderConfirmationforDelivery(rec."No.");
                     //result := CU.ItemReceipt('KTPLPO23240011', 20000, '');
                     //result := POS.AddWarranty('KTPLSO23240121', 10000, 'ZOPPER', '12');
@@ -228,7 +234,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //result := cu.InvoiceComplete(Rec."No.");
                     //result := POS.AzureStorageReport();
                     //result := cu.ChangeUnitPrice(Rec."No.", 10000, rec."External Document No.");
-
+                    result := CU.CancelNewSO(Rec."No.");
                     Message(result);
                 end;
             }

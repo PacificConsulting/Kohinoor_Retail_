@@ -5,6 +5,18 @@ codeunit 50301 "Event and Subscribers"
 
     end;
 
+
+    //<<<<<<<START********************************CU-12*****************************************
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitBankAccLedgEntry', '', false, false)]
+    local procedure OnAfterInitBankAccLedgEntry(var BankAccountLedgerEntry: Record "Bank Account Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")
+    begin
+        IF GenJournalLine."Approval Code" <> '' then begin
+            BankAccountLedgerEntry."Approval Code" := GenJournalLine."Approval Code";
+            //BankAccountLedgerEntry.Modify();
+        end;
+    end;
+    //<<<<<<<END********************************CU-12*****************************************
+
     //<<<<<<<START********************************CU-90*****************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnAfterInsertReceiptHeader', '', false, false)]
     local procedure OnAfterInsertReceiptHeader(var PurchHeader: Record "Purchase Header"; var PurchRcptHeader: Record "Purch. Rcpt. Header"; var TempWhseRcptHeader: Record "Warehouse Receipt Header" temporary; WhseReceive: Boolean; CommitIsSuppressed: Boolean)

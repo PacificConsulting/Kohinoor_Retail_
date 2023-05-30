@@ -96,7 +96,9 @@ codeunit 50303 "POS Procedure"
         SalesLineDel: Record "Sales Line";
         SalesHeder: Record "Sales Header";
         ResultError: text;
+        ArchiveSO: Codeunit ArchiveManagement;
     begin
+
         SalesHeder.Reset();
         SalesHeder.SetCurrentKey("No.");
         SalesHeder.SetRange("No.", "Document No.");
@@ -105,6 +107,9 @@ codeunit 50303 "POS Procedure"
                 SalesHeder.Status := SalesHeder.Status::Open;
                 SalesHeder.Modify();
             end;
+            // Archive SO 
+            ArchiveSO.StoreSalesDocument(SalesHeder, true);
+
             SalesLineDel.Reset();
             SalesLineDel.SetCurrentKey("Document No.", "Line No.");
             SalesLineDel.SetRange("Document No.", SalesHeder."No.");
@@ -134,11 +139,15 @@ codeunit 50303 "POS Procedure"
         SalesHeaderDelete: Record 36;
         PaymentLineDelete: record "Payment Lines";
         SalesLineDelete: Record 37;
+        ArchiveSO: Codeunit ArchiveManagement;
     begin
         SalesHeaderDelete.Reset();
         SalesHeaderDelete.SetCurrentKey("No.");
         SalesHeaderDelete.SetRange("No.", documentno);
         if SalesHeaderDelete.FindFirst() then begin
+            //******Archive SO********
+            ArchiveSO.StoreSalesDocument(SalesHeaderDelete, true);
+
             SalesHeaderDelete.Delete();
             SalesLineDelete.Reset();
             SalesLineDelete.SetCurrentKey("Document No.");
@@ -278,7 +287,6 @@ codeunit 50303 "POS Procedure"
             SalesLineInit.Init();
             SalesLineInit."Document Type" := SalesLineInit."Document Type"::Order;
             SalesLineInit."Document No." := DocumentNo;
-
             SL.Reset();
             SL.SetRange("Document No.", DocumentNo);
             IF SL.FindLast() then
@@ -286,7 +294,7 @@ codeunit 50303 "POS Procedure"
             else
                 SalesLineInit."Line No." := 10000;
 
-            SalesLineInit.Insert();
+            SalesLineInit.Insert(true);
             SalesLineInit.Type := SalesLineInit.Type::" ";
             SalesLineInit.Description := CopyStr;
             SalesLineInit.Modify();
@@ -536,6 +544,8 @@ codeunit 50303 "POS Procedure"
             SalesLineunitPrice.SetRange("Document No.", SaleHeaderUnitPrice."No.");
             SalesLineunitPrice.SetRange("Line No.", LineNo);
             IF SalesLineunitPrice.FindFirst() then begin
+                IF SalesLineunitPrice.Type <> SalesLineunitPrice.Type::Item then
+                    exit('Unit price should be change only for Item');
                 //<< New Condtion add after with kunal Discussion to Send for Approval befor Modification Unit Price before price line level new field Add and Update first
                 IF SalesLineunitPrice."Unit Price Incl. of Tax" <> NewUnitPrice then begin
                     SalesLineunitPrice."Old Unit Price" := SalesLineunitPrice."Unit Price Incl. of Tax";
@@ -1103,6 +1113,57 @@ codeunit 50303 "POS Procedure"
     end;
 
 
+    /// <summary>
+    /// Delete Current SO and create new SO
+    /// </summary>
+    procedure CancelNewSO(documentno: Code[20]): Text
+    var
+        SalesHeaderDelete: Record 36;
+        SalesLineDelete: Record 37;
+        PaymentLineDelete: Record 50301;
+        ArchiveSO: Codeunit ArchiveManagement;
+        SalesHdrInit: Record 36;
+        Noseriesmgt: Codeunit NoSeriesManagement;
+        SR: Record 311;
+    begin
+        //exit('Success First Line');
+        SR.Get();
+        SalesHeaderDelete.Reset();
+        SalesHeaderDelete.SetCurrentKey("No.");
+        SalesHeaderDelete.SetRange("No.", documentno);
+        if SalesHeaderDelete.FindFirst() then begin
+            //********New SO Create with only header same as Deleted SO*******
+            SalesHdrInit.Init();
+            SalesHdrInit.TransferFields(SalesHeaderDelete);
+            SalesHdrInit."No." := Noseriesmgt.GetNextNo(SR."Order Nos.", Today, true);
+            SalesHdrInit."Order Reference" := SalesHeaderDelete."No.";
+            SalesHdrInit.Insert();
+            //exit('Success;' + SalesHdrInit."No.");
+
+            //******Archive SO********
+            ArchiveSO.StoreSalesDocument(SalesHeaderDelete, true);
+
+            //******Delete the old SO with header,line,payment line.*******
+            SalesHeaderDelete.Delete();
+            SalesLineDelete.Reset();
+            SalesLineDelete.SetCurrentKey("Document No.");
+            SalesLineDelete.SetRange("Document No.", documentno);
+            IF SalesLineDelete.FindFirst() then
+                SalesLineDelete.DeleteAll();
+            PaymentLineDelete.reset();
+            PaymentLineDelete.SetCurrentKey("Document No.");
+            PaymentLineDelete.SetRange("Document No.", DocumentNo);
+            IF PaymentLineDelete.FindFirst() then begin
+                PaymentLineDelete.DeleteAll();
+            end;
+            exit('Success;' + SalesHdrInit."No.");
+        end else
+            exit('Order does not exist');
+
+
+    end;
+
+
 
     /*
     /// <summary>
@@ -1408,6 +1469,7 @@ codeunit 50303 "POS Procedure"
         GenJnlPostBatch: Codeunit "Gen. Jnl.-Post Batch";
         GenBatch: Record 232;
         TenderPOSSetup: Record "Tender POS No.Series Setup";
+        CheqNo: Code[10];
 
     begin
         // IF RecLocation.Get(Salesheader."Location Code") then begin
@@ -1468,6 +1530,9 @@ codeunit 50303 "POS Procedure"
                 GenJourLineInit.validate(Amount, PaymentLine.Amount);
                 GenJourLineInit.Validate("Shortcut Dimension 1 Code", Salesheader."Shortcut Dimension 1 Code");
                 GenJourLineInit.Validate("Shortcut Dimension 2 Code", Salesheader."Shortcut Dimension 2 Code");
+                GenJourLineInit."Approval Code" := PaymentLine."Approval Code";
+                Evaluate(CheqNo, Format(PaymentLine."Cheque No 6 Digit"));
+                GenJourLineInit."Cheque No." := CheqNo;
                 GenJourLineInit.Comment := 'Auto Post';
                 // if PaymentLine."Payment Method Code" = 'CASH' then
                 //     GenJourLineInit.Validate("Posting No. Series", TenderPOSSetup."Cash Voucher No. Series")

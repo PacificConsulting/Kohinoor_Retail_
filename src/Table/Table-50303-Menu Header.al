@@ -23,10 +23,12 @@ table 50303 "Menu Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        // field(5; "Menu Code"; Code[20];)
-        // {
-
-        // }
+        field(5; "Store No."; Code[20])
+        {
+            Caption = 'Store No.';
+            DataClassification = ToBeClassified;
+            TableRelation = Location.Code;
+        }
     }
 
     keys

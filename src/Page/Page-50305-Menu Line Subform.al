@@ -34,6 +34,11 @@ page 50305 "Menu Line Subform"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Description field.';
                 }
+                field("Store No."; Rec."Store No.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Store No. field.';
+                }
                 field("Action"; Rec."Action")
                 {
                     ApplicationArea = All;
@@ -51,7 +56,7 @@ page 50305 "Menu Line Subform"
                     begin
                         IF Rec.Action = 'MENU' then begin
                             Menu.Reset();
-                            //Menu.SetRange("Menu ID", rec."Menu ID");
+                            Menu.SetRange("Store No.", rec."Store No.");
                             IF Menu.Find() then;
                             IF (Page.RunModal(Page::"Menu List", Menu, Menu."Menu ID") = Action::LookupOK) then begin
                                 Rec.Parameter := Menu."Menu ID";

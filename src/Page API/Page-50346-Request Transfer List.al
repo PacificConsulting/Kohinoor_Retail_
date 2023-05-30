@@ -25,7 +25,10 @@ page 50346 "Request Transfer List"
                     var
                         NoSeries: Codeunit NoSeriesManagement;
                         InvtSetup: Record "Inventory Setup";
+                        SR: Record "Sales & Receivables Setup";
+
                     begin
+                        SR.Get();
                         InvtSetup.Get();
                         InvtSetup.TestField("Request Tran. Order Nos.");
                         Rec."No." := NoSeries.GetNextNo(InvtSetup."Request Tran. Order Nos.", rec."Posting Date", true);
@@ -36,7 +39,9 @@ page 50346 "Request Transfer List"
                     var
                         NoSeries: Codeunit NoSeriesManagement;
                         InvtSetup: Record "Inventory Setup";
+                        SR: Record "Sales & Receivables Setup";
                     begin
+                        SR.Get();
                         InvtSetup.Get();
                         InvtSetup.TestField("Request Tran. Order Nos.");
                         Rec."No." := NoSeries.GetNextNo(InvtSetup."Request Tran. Order Nos.", rec."Posting Date", true);
@@ -78,4 +83,5 @@ page 50346 "Request Transfer List"
             }
         }
     }
+
 }

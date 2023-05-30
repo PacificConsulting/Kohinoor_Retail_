@@ -120,12 +120,12 @@ page 50362 "Sales Line New Subform"
 
     trigger OnAfterGetRecord()
     begin
+        Clear(TotalLineAmount);
         IF Rec.Type = rec.Type::"G/L Account" then
             TotalLineAmount := rec."Line Amount"
         else
             IF Rec.Type = rec.Type::Item then
                 TotalLineAmount := rec."Total UPIT Amount";
-
     end;
 
     var

@@ -25,11 +25,22 @@ page 50352 "Sales Order List API"
                     var
                         NoSeries: Codeunit NoSeriesManagement;
                         SR: Record "Sales & Receivables Setup";
+                        RecLoc: Record Location;
+                        Staff: Record "Staff Master";
                     begin
+
                         SR.Get();
                         SR.TestField("Order Nos.");
                         Rec."No." := NoSeries.GetNextNo(SR."Order Nos.", rec."Posting Date", true);
                         Rec.Modify();
+                        /*
+                        IF Staff.Get(rec."Staff Id") then begin
+                            IF RecLoc.Get(Staff."Store No.") then begin
+                                Rec."No." := NoSeries.GetNextNo(RecLoc."Sales Order Nos", rec."Posting Date", true);
+                                Rec.Modify();
+                            end;
+                        end;
+                        */
                     end;
                 }
                 field(DocumentType; Rec."Document Type")

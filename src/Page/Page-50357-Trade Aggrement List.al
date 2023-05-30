@@ -169,6 +169,29 @@ page 50357 "Trade Aggrement List"
                     ToolTip = 'Specifies the value of the UOM field.';
                 }
             }
+
+        }
+
+
+    }
+    actions
+    {
+        area(Creation)
+        {
+            action("Import Data")
+            {
+                ApplicationArea = all;
+                Image = Import;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+                trigger OnAction()
+                var
+                    TD: XmlPort "Trade Aggrement Data Upload";
+                begin
+                    TD.Run();
+                end;
+            }
         }
     }
 }

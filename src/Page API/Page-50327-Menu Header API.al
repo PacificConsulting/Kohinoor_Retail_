@@ -30,6 +30,10 @@ page 50327 "Menu Header API"
                 {
                     Caption = 'Menu Name';
                 }
+                field(storeNo; Rec."Store No.")
+                {
+                    Caption = 'Store No.';
+                }
                 field(creationID; Rec."Creation ID")
                 {
                     Caption = 'Creation ID';

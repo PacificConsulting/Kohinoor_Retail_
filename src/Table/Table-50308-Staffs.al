@@ -39,6 +39,50 @@ table 50308 "Staff Master"
         {
             DataClassification = ToBeClassified;
         }
+        field(7; "Customer View"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(8; "Expense Booking Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(9; "Item requisition Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(10; "GRN Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(11; "Transfer Shipment Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(12; "Transfer Receipt Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(13; "Tender Declaration Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(14; "Customer Enquiry Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(15; "Direct Transfer Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(16; "Sales Shipment Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(17; "Invoice List View"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

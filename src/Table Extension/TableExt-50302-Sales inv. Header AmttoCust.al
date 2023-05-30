@@ -23,6 +23,11 @@ tableextension 50302 "Sales Inv Hdr AmtToCust" extends "Sales Invoice Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50305; "Order Reference"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
 }

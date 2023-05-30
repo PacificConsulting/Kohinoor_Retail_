@@ -23,6 +23,7 @@ table 50304 "Menu Line"
                 MH.SetRange("Menu ID", "Menu ID");
                 IF MH.FindFirst() then begin
                     "Menu Name" := MH."Menu Name";
+                    "Store No." := Mh."Store No.";
                 end;
             end;
         }
@@ -52,6 +53,13 @@ table 50304 "Menu Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(10; "Store No."; Code[20])
+        {
+            Caption = 'Store No.';
+            DataClassification = ToBeClassified;
+            TableRelation = Location.Code;
+            Editable = false;
+        }
 
     }
 
@@ -67,6 +75,8 @@ table 50304 "Menu Line"
         myInt: Integer;
 
     trigger OnInsert()
+    var
+
     begin
 
     end;

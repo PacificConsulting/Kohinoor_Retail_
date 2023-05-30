@@ -57,6 +57,7 @@ page 50374 "Expense Booking"
                 begin
                     IF GuiAllowed then begin
                         IF Confirm('Do you want submit expense booking', true) then begin
+
                             ExpBook.Reset();
                             ExpBook.SetRange("Staff ID", rec."Staff ID");
                             ExpBook.SetRange("Store No.", rec."Store No.");

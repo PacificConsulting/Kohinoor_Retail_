@@ -23,6 +23,10 @@ page 50303 "Menu List"
                 {
                     ToolTip = 'Specifies the value of the Menu Name field.';
                 }
+                field("Store No."; Rec."Store No.")
+                {
+                    ToolTip = 'Specifies the value of the Store No. field.';
+                }
                 field("Creation Date"; Rec."Creation Date")
                 {
                     ToolTip = 'Specifies the value of the Creation Date field.';

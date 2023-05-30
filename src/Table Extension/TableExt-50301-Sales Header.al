@@ -2,6 +2,7 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
 {
     fields
     {
+
         modify("Location Code")
         {
             trigger OnAfterValidate()
@@ -64,6 +65,11 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
             TableRelation = "Staff Master".ID;
         }
         field(50304; "POS Released Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(50305; "Order Reference"; Code[20])
         {
             DataClassification = ToBeClassified;
             Editable = false;
