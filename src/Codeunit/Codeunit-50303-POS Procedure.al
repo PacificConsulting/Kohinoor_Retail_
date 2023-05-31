@@ -461,6 +461,7 @@ codeunit 50303 "POS Procedure"
                 end;
                 */
                 //>> Comment Mandetory so We have to pass Order Comment
+
                 PurchHeader.Receive := true;
                 PurchHeader.Invoice := false;
                 PurchHeader.Modify();
@@ -1534,11 +1535,6 @@ codeunit 50303 "POS Procedure"
                 Evaluate(CheqNo, Format(PaymentLine."Cheque No 6 Digit"));
                 GenJourLineInit."Cheque No." := CheqNo;
                 GenJourLineInit.Comment := 'Auto Post';
-                // if PaymentLine."Payment Method Code" = 'CASH' then
-                //     GenJourLineInit.Validate("Posting No. Series", TenderPOSSetup."Cash Voucher No. Series")
-                // else
-                //     GenJourLineInit.Validate("Posting No. Series", TenderPOSSetup."Tender Voucher No. Series");
-                //GenJourLineInit.modify();
                 GenJourLineInit.Insert();
             Until PaymentLine.Next() = 0;
         GenJnlPostBatch.Run(GenJourLineInit);
@@ -1584,8 +1580,10 @@ codeunit 50303 "POS Procedure"
         RecUser6: Record "User Setup";
         RecUser7: Record "User Setup";
         Loc: Record 14;
+        GetEnvior: Codeunit "Environment Information";
     begin
         Clear(Pagelink);
+
         Sl.Reset();
         sl.SetCurrentKey("Document No.", "Line No.");
         SL.SetRange("Document No.", SalesLine."Document No.");
@@ -1604,7 +1602,9 @@ codeunit 50303 "POS Procedure"
         SL.SetRange("Document No.", SalesLine."Document No.");
         SL.SetRange("Line No.", SalesLine."Line No.");
         IF SL.FindFirst() then
-            Pagelink := GETURL(CURRENTCLIENTTYPE, 'Kohinoor Televideo Pvt. Ltd.', ObjectType::Page, 50361, SL, true);
+            Pagelink += 'https://businesscentral.dynamics.com/abc87ed0-4014-486f-afd8-1577c92442a6/' + GetEnvior.GetEnvironmentName() + '/?company=Kohinoor%20Televideo%20Pvt.%20Ltd.&page=50361&filter=%27Document%20No.%27%20IS%20%27' + SalesLine."Document No." + '%27%20AND%20%27Line%20No.%27%20IS%20%27' + Format(SalesLine."Line No.") + '%27';
+        //Pagelink := GETURL(CLIENTTYPE::OData, 'Kohinoor Televideo Pvt. Ltd.', ObjectType::Page, 50361, SL, true);
+
 
 
         IF RecUser1.Get(GLSetup."Slab Approval User 1") then begin
@@ -1633,31 +1633,51 @@ codeunit 50303 "POS Procedure"
         IF Loc.Get(SL."Store No.") then;
 
         Emailmessage.Create(ToRecipients/*'niwagh16@gmail.com'*/, 'Approval Slab', '', true);
-        Emailmessage.AppendToBody('<p><font face="Georgia">Dear <B>Sir,</B></font></p>');
+        Emailmessage.AppendToBody('<p><font face="Calibri">Dear <B>Sir,</B></font></p>');
         Char := 13;
         Emailmessage.AppendToBody(FORMAT(Char));
-        Emailmessage.AppendToBody('<p><font face="Georgia"> <B>!!!Greetings!!!</B></font></p>');
+        Emailmessage.AppendToBody('<p><font face="Calibri"> <B>!!!Greetings!!!</B></font></p>');
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
-        Emailmessage.AppendToBody('<p><font face="Georgia"><BR> In this Sales Order ' + FORMAT(SL."Document No.") + ' Price Approval is requested from Store ' + FORMAT(LOC.Name) +
-      ' for ' + FORMAT(SL.Description) + ', Old price ' + FORMAT(SL."Old Unit Price") + ', New price ' + FORMAT(SL."Unit Price Incl. of Tax") + ', FNNLC Price ' + FORMAT(TradAgg.FNNLC) +
-      ', NNLC Price ' + FORMAT(TradAgg.NNLC) + '</BR></font></p>');
+        Emailmessage.AppendToBody('<p><font face="Calibri"><BR>Sales Order ' + FORMAT(SL."Document No.") + ' Price Approval is requested for slab between last selling price to NNLC from store ' + FORMAT(LOC.Name) +
+       ' for ' + FORMAT(SL.Description) + ' (With Second hand item which mention by user)' + '</BR></font></p>');
 
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
-        Emailmessage.AppendToBody('<p><font face="Georgia"><BR>Please find below Approval Link to Approve Price</BR></font></p>');
+        //**********Table Code**********
+
+        //Emailmessage.AppendToBody('<tr style="background-color:#507CD1;color:#fff";align="center">');
+        // Emailmessage.AppendToBody('<th>');
+
+        Emailmessage.AppendToBody('<table border="1">');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<th>DP Price</th>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + Format(TradAgg.DP) + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+
+        Emailmessage.AppendToBody('<tr>');
+        Emailmessage.AppendToBody('<th>Sold Price</th>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + '12,000' + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('</tr>');
+        //**********Table Code**********
+
+        /*
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
-        //Emailmessage.AppendToBody('<a href=' + Pagelink + '/">Web Link!</a>');
+        Emailmessage.AppendToBody('<p><font face="Calibri"><BR>Please find below Approval Link to Approve Price</BR></font></p>');
+        Emailmessage.AppendToBody(FORMAT(Char));
+        Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(Pagelink);
-        Emailmessage.AppendToBody('<p><font face="Georgia"><BR>POWER APPS</BR></font></p>');
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
-        Emailmessage.AppendToBody('<p><font face="Georgia"><BR>Thanking you,</BR></font></p>');
-
-        // Window.UPDATE(1, STRSUBSTNO('%1', 'Mail Sent'));
+        Emailmessage.AppendToBody('<p><font face="Calibri"><BR>Thanking you,</BR></font></p>');
+        */
         EMail.Send(Emailmessage, Enum::"Email Scenario"::Default);
-        //Window.CLOSE;
+
         Sl.Reset();
         SL.SetCurrentKey("Document No.", "Line No.");
         SL.SetRange("Document No.", SalesLine."Document No.");

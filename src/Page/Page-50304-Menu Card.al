@@ -28,7 +28,7 @@ page 50304 "Menu Card"
             part(Lines; "Menu Line Subform")
             {
                 ApplicationArea = Basic, Suite;
-                SubPageLink = "Menu ID" = field("Menu ID");
+                SubPageLink = "Menu ID" = field("Menu ID");//, "Store No." = field("Store No.");
 
             }
 

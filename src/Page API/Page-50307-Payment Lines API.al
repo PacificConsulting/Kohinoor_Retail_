@@ -126,6 +126,15 @@ page 50307 "Payment Lines API"
                 {
                     Caption = 'Attachment';
                 }
+                field(financePromoter; Rec."Finance Promoter")
+                {
+                    Caption = 'Finance Promoter';
+                }
+                field(financePromoterName; Rec."Finance Promoter Name")
+                {
+                    Caption = 'Finance Promoter Name';
+                }
+
 
             }
         }

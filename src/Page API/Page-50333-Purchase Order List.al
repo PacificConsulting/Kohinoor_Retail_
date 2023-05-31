@@ -70,6 +70,10 @@ page 50333 "Purchase Order List API"
                 {
                     Caption = 'Remarks';
                 }
+                field(receive; Rec.Receive)
+                {
+                    Caption = 'Receive';
+                }
 
             }
         }

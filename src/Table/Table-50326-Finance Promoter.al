@@ -2,6 +2,8 @@ table 50326 "Finance Promoter "
 {
     Caption = 'Finance Promoter ';
     DataClassification = ToBeClassified;
+    LookupPageId = "Finance Promoters";
+    DrillDownPageId = "Finance Promoters";
 
     fields
     {

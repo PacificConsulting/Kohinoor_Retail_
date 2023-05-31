@@ -234,7 +234,8 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //result := cu.InvoiceComplete(Rec."No.");
                     //result := POS.AzureStorageReport();
                     //result := cu.ChangeUnitPrice(Rec."No.", 10000, rec."External Document No.");
-                    result := CU.CancelNewSO(Rec."No.");
+                    //result := CU.CancelNewSO(Rec."No.");
+                    result := CU.ChangeUnitPrice(rec."No.", 10000, rec."External Document No.");
                     Message(result);
                 end;
             }

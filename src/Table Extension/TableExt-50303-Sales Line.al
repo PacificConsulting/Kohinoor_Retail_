@@ -45,7 +45,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
         {
             trigger OnAfterValidate()
             var
-                Item: Record 27;
+                Item: Record 27;//
                 GetItem: Record 27;
                 SLInit: Record 37;
                 SalesLine: Record 37;

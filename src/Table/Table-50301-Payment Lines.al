@@ -158,6 +158,23 @@ table 50301 "Payment Lines"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(26; "Finance Promoter"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Finance Promoter ".Code;
+            trigger OnValidate()
+            var
+                FP: Record "Finance Promoter ";
+            begin
+                IF FP.Get("Finance Promoter") then
+                    "Finance Promoter Name" := FP.Name;
+            end;
+        }
+        field(27; "Finance Promoter Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
 

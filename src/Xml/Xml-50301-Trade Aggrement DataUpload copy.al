@@ -89,6 +89,20 @@ xmlport 50301 "Trade Aggrement Data Upload"
                         TDInit."Purchase Price" := PurcpriceDecimal;
                         TDInit."Customer Group" := Custgroup;
                         TDInit.Insert();
+                    end else begin
+                        TDInit.Init();
+                        TDInit."Item No." := ItemNo;
+                        TDInit."From Date" := FromdateD;
+                        TDInit."To Date" := 20500101D;
+                        TDInit."Location Code" := TDInit."Location Code";
+                        TDInit."Amount In INR" := AMTINR;
+                        TDInit.DP := DPDeci;
+                        TDInit.FNNLC := FNNLCDecim;
+                        TDInit."Last Selling Price" := LastSellDecimal;
+                        TDInit.NNLC := NNLCdeci;
+                        TDInit."Purchase Price" := PurcpriceDecimal;
+                        TDInit."Customer Group" := Custgroup;
+                        TDInit.Insert();
                     end;
                 end;
 

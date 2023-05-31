@@ -120,4 +120,19 @@ page 50352 "Sales Order List API"
         end;
     end;
 
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    var
+        RecLoc: Record 14;
+        Staff: Record "Staff Master";
+        NoSeries: Codeunit NoSeriesManagement;
+        SR: Record "Sales & Receivables Setup";
+    begin
+        IF Staff.Get(rec."Staff Id") then begin
+            IF RecLoc.Get(Staff."Store No.") then begin
+                RecLoc.TestField("Sales Order Nos");
+                Rec."No." := NoSeries.GetNextNo(RecLoc."Sales Order Nos", rec."Posting Date", true);
+            end;
+        end;
+    end;
+
 }

@@ -43,6 +43,10 @@ page 50328 "Menu Line API"
                 {
                     Caption = 'Description';
                 }
+                field(storeNo; Rec."Store No.")
+                {
+                    Caption = 'Store No.';
+                }
                 field("action"; Rec."Action")
                 {
                     Caption = 'Action';

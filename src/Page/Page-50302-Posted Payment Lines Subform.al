@@ -99,6 +99,18 @@ page 50302 "Posted Payment Lines Subform"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Subvention by Dealer field.';
                 }
+                field("Finance Promoter"; Rec."Finance Promoter")
+                {
+                    ToolTip = 'Specifies the value of the Finance Promoter field.';
+                }
+                field("Finance Promoter Name"; Rec."Finance Promoter Name")
+                {
+                    ToolTip = 'Specifies the value of the Finance Promoter Name field.';
+                }
+                field(Attachment; Rec.Attachment)
+                {
+                    ToolTip = 'Specifies the value of the Attachment field.';
+                }
             }
         }
     }

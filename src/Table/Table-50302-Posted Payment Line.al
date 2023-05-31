@@ -154,6 +154,17 @@ table 50302 "Posted Payment Lines"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(26; "Finance Promoter"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Finance Promoter ".Code;
+            Editable = false;
+        }
+        field(27; "Finance Promoter Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
     keys
