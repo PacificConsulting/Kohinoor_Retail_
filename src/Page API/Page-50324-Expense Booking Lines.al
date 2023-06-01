@@ -46,6 +46,10 @@ page 50324 "Expense Booking Lines"
                 {
                     Caption = 'Amount';
                 }
+                field(maxAllowedExpAmount; Rec."Max Allowed Exp.Amount")
+                {
+                    Caption = 'Expense Limit Amount';
+                }
                 field(Status; Status)
                 {
                     Caption = 'Status';

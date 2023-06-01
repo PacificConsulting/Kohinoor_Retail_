@@ -563,9 +563,9 @@ codeunit 50303 "POS Procedure"
                     TradeAggre.SetFilter("To Date", '>=%1', SalesHeder."Posting Date");
                     IF TradeAggre.FindFirst() then begin
                         IF TradeAggre."M.R.P" < SalesLineunitPrice."Unit Price Incl. of Tax" then
-                            Exit('Amount should not be more than %1 INR ' + Format(TradeAggre."M.R.P"));
+                            Exit('Amount should not be more than %1 M.R.P INR ' + Format(TradeAggre."M.R.P"));
                         IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
-                            Exit('Amount should not be less than %1 INR ' + Format(TradeAggre.FNNLC));
+                            Exit('Amount should not be less than %1 FNNLC INR ' + Format(TradeAggre.FNNLC));
                         IF TradeAggre."Last Selling Price" > SalesLineunitPrice."Unit Price Incl. of Tax" then begin
                             ApprovalMailSent(SalesLineunitPrice, TradeAggre);
                         end;
@@ -573,9 +573,9 @@ codeunit 50303 "POS Procedure"
                         TradeAggre.SetRange("Location Code");
                         IF TradeAggre.FindFirst() then begin
                             IF TradeAggre."M.R.P" < SalesLineunitPrice."Unit Price Incl. of Tax" then
-                                Exit('Amount should not be more than %1 INR ' + Format(TradeAggre."M.R.P"));
+                                Exit('Amount should not be more than %1 M.R.P INR ' + Format(TradeAggre."M.R.P"));
                             IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
-                                Exit('Amount should not be less than %1 INR ' + Format(TradeAggre.FNNLC));
+                                Exit('Amount should not be less than %1 FNNLC INR ' + Format(TradeAggre.FNNLC));
                             IF TradeAggre."Last Selling Price" > SalesLineunitPrice."Unit Price Incl. of Tax" then begin
                                 ApprovalMailSent(SalesLineunitPrice, TradeAggre);
                             end;
@@ -1533,7 +1533,7 @@ codeunit 50303 "POS Procedure"
                 GenJourLineInit.Validate("Shortcut Dimension 2 Code", Salesheader."Shortcut Dimension 2 Code");
                 GenJourLineInit."Approval Code" := PaymentLine."Approval Code";
                 Evaluate(CheqNo, Format(PaymentLine."Cheque No 6 Digit"));
-                GenJourLineInit."Cheque No." := CheqNo;
+                GenJourLineInit.validate("Cheque No.", CheqNo);
                 GenJourLineInit.Comment := 'Auto Post';
                 GenJourLineInit.Insert();
             Until PaymentLine.Next() = 0;
@@ -1637,35 +1637,74 @@ codeunit 50303 "POS Procedure"
         Char := 13;
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody('<p><font face="Calibri"> <B>!!!Greetings!!!</B></font></p>');
-        Emailmessage.AppendToBody(FORMAT(Char));
-        Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody('<p><font face="Calibri"><BR>Sales Order ' + FORMAT(SL."Document No.") + ' Price Approval is requested for slab between last selling price to NNLC from store ' + FORMAT(LOC.Name) +
        ' for ' + FORMAT(SL.Description) + ' (With Second hand item which mention by user)' + '</BR></font></p>');
 
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
-        //**********Table Code**********
 
-        //Emailmessage.AppendToBody('<tr style="background-color:#507CD1;color:#fff";align="center">');
-        // Emailmessage.AppendToBody('<th>');
-
+        //**********Email Table Code**********
         Emailmessage.AppendToBody('<table border="1">');
-        Emailmessage.AppendToBody('<tc>');
-        Emailmessage.AppendToBody('<th>DP Price</th>');
+        Emailmessage.AppendToBody('<tc >');
+        Emailmessage.AppendToBody('<th align="Left">DP Price</th>');
         Emailmessage.AppendToBody('</tc>');
         Emailmessage.AppendToBody('<tc>');
         Emailmessage.AppendToBody('<td>' + Format(TradAgg.DP) + '</td>');
         Emailmessage.AppendToBody('</tc>');
 
         Emailmessage.AppendToBody('<tr>');
-        Emailmessage.AppendToBody('<th>Sold Price</th>');
+        Emailmessage.AppendToBody('<th align="Left">Sold Price</th>');
         Emailmessage.AppendToBody('<tc>');
-        Emailmessage.AppendToBody('<td>' + '12,000' + '</td>');
+        Emailmessage.AppendToBody('<td>' + Format(TradAgg.Sellout) + '</td>');
         Emailmessage.AppendToBody('</tc>');
         Emailmessage.AppendToBody('</tr>');
+
+        Emailmessage.AppendToBody('<tr>');
+        Emailmessage.AppendToBody('<th align="Left">Manager Discection</th>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + Format(TradAgg."Manager Discection") + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('</tr>');
+
+        Emailmessage.AppendToBody('<tr>');
+        Emailmessage.AppendToBody('<th align="Left">Last Selling Price</th>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + Format(TradAgg."Last Selling Price") + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('</tr>');
+
+        Emailmessage.AppendToBody('<tr>');
+        Emailmessage.AppendToBody('<th align="Left">NNLC</th>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + Format(TradAgg.NNLC) + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('</tr>');
+
+        Emailmessage.AppendToBody('<tr>');
+        Emailmessage.AppendToBody('<th align="Left">FNNLC</th>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + Format(TradAgg.FNNLC) + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('</tr>');
+
+        Emailmessage.AppendToBody('<tr>');
+        Emailmessage.AppendToBody('<th align="Left">Column 1</th>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + ' ' + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('</tr>');
+
+
+        Emailmessage.AppendToBody('<tr>');
+        Emailmessage.AppendToBody('<th align="Left">Column 2</th>');
+        Emailmessage.AppendToBody('<tc>');
+        Emailmessage.AppendToBody('<td>' + ' ' + '</td>');
+        Emailmessage.AppendToBody('</tc>');
+        Emailmessage.AppendToBody('</tr>');
+        Emailmessage.AppendToBody('</table>');
         //**********Table Code**********
 
-        /*
+
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody('<p><font face="Calibri"><BR>Please find below Approval Link to Approve Price</BR></font></p>');
@@ -1675,7 +1714,7 @@ codeunit 50303 "POS Procedure"
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody('<p><font face="Calibri"><BR>Thanking you,</BR></font></p>');
-        */
+
         EMail.Send(Emailmessage, Enum::"Email Scenario"::Default);
 
         Sl.Reset();
