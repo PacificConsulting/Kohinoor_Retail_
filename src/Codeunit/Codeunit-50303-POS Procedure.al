@@ -1537,7 +1537,16 @@ codeunit 50303 "POS Procedure"
                 GenJourLineInit.Comment := 'Auto Post';
                 GenJourLineInit.Insert();
             Until PaymentLine.Next() = 0;
-        GenJnlPostBatch.Run(GenJourLineInit);
+        //****Advanced payment below filter add***
+        PaymentLine.Reset();
+        PaymentLine.SetCurrentKey("Document Type", "Document No.", "Payment Method Code");
+        PaymentLine.SetRange("Document Type", Salesheader."Document Type");
+        PaymentLine.SetRange("Document No.", Salesheader."No.");
+        PaymentLine.SetFilter("Payment Method Code", '<>%1', 'ADVANCE');
+        PaymentLine.SetRange(Posted, false); //NSW 240523 New filter
+        if Not PaymentLine.IsEmpty then
+            GenJnlPostBatch.Run(GenJourLineInit);
+
         PaymentLine.Reset();
         PaymentLine.SetCurrentKey("Document Type", "Document No.");
         PaymentLine.SetRange("Document Type", Salesheader."Document Type");

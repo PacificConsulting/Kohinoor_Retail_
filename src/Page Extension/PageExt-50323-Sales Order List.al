@@ -18,7 +18,7 @@ pageextension 50323 "Sales Order List" extends "Sales Order List"
                 Image = UpdateXML;
                 trigger OnAction()
                 var
-                    SO: XmlPort 50301;
+                    SO: XmlPort 50302;
                 begin
                     So.Run();
                 end;
