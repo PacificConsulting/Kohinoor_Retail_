@@ -2,6 +2,32 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
 {
     fields
     {
+        modify("Unit Price Incl. of Tax")
+        {
+            trigger OnAfterValidate()
+            var
+                SH: Record 36;
+            begin
+                SH.Reset();
+                SH.SetRange("No.", "Document No.");
+                SH.SetFilter("POS Released Date", '<>%1', 0D);
+                IF SH.FindFirst() then
+                    Error('You can not change the unit price incl. of tax when order is Confirmed');
+            end;
+        }
+        modify("Unit Price")
+        {
+            trigger OnAfterValidate()
+            var
+                SH: Record 36;
+            begin
+                SH.Reset();
+                SH.SetRange("No.", "Document No.");
+                SH.SetFilter("POS Released Date", '<>%1', 0D);
+                IF SH.FindFirst() then
+                    Error('You can not change the unit price when order is Confirmed');
+            end;
+        }
         modify("No.")
         {
             trigger OnAfterValidate()
@@ -50,8 +76,14 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 SLInit: Record 37;
                 SalesLine: Record 37;
                 SalesLineFilter: Record 37;
+                SH: Record 36;
             begin
-                //IF GetItem.Get(rec."No.") then;
+                SH.Reset();
+                SH.SetRange("No.", "Document No.");
+                SH.SetFilter("POS Released Date", '<>%1', 0D);
+                IF SH.FindFirst() then
+                    Error('You can not change the quantity when order is Confirmed');
+
                 IF Quantity > 0 then begin
                     Item.Reset();
                     Item.SetRange("Parent Item No.", Rec."No.");
@@ -188,12 +220,20 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 IF RecLoc.FindFirst() then begin
                     Validate("Location Code", RecLoc.Code);
                     "Store No." := RecLoc.Code;
-
                 end;
             end;
         end;
         IF "Approval Status" = "Approval Status"::"Pending for Approval" then
             Error('You can not modify Lines if Approval Status is Pending for Approval ');
+
+        SalesHeader.Reset();
+        SalesHeader.SetRange("No.", "Document No.");
+        SalesHeader.SetFilter("POS Released Date", '<>%1', 0D);
+        IF SalesHeader.FindFirst() then begin
+            if rec.Type <> rec.Type::" " then
+                Error('You can not insert new line when order is Confirmed');
+        end;
+
     end;
 
 

@@ -22,6 +22,9 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
                 ShiptoAdd: record 222;
                 Cust: Record 18;
             begin
+                IF rec."POS Released Date" <> 0D then
+                    Error('You can not change the Customer when order is Confirmed');
+
                 IF Cust.get("Sell-to Customer No.") then begin
                     If Cust."GST Customer Type" = Cust."GST Customer Type"::" " then
                         Error('GST Customer type should not be blank for Customer No. %1', Cust."No.");

@@ -106,6 +106,10 @@ page 50352 "Sales Order List API"
                 {
                     Caption = 'Ship-to Code';
                 }
+                field(orderConfirmedDate; Rec."POS Released Date")
+                {
+                    Caption = 'order Confirmed Date';
+                }
             }
         }
     }

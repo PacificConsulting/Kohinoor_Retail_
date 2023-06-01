@@ -29,9 +29,8 @@ page 50386 "Copy Menu"
                     begin
                         Storeno := Storeno;
                     end;
-
-
                 }
+
             }
         }
         area(Factboxes)

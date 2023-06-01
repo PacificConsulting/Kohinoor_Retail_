@@ -1664,7 +1664,7 @@ codeunit 50303 "POS Procedure"
         Emailmessage.AppendToBody('<tr>');
         Emailmessage.AppendToBody('<th align="Left">Sold Price</th>');
         Emailmessage.AppendToBody('<tc>');
-        Emailmessage.AppendToBody('<td>' + Format(TradAgg.Sellout) + '</td>');
+        Emailmessage.AppendToBody('<td>' + Format(SL."Unit Price Incl. of Tax") + '</td>');
         Emailmessage.AppendToBody('</tc>');
         Emailmessage.AppendToBody('</tr>');
 
@@ -1702,7 +1702,6 @@ codeunit 50303 "POS Procedure"
         Emailmessage.AppendToBody('<td>' + ' ' + '</td>');
         Emailmessage.AppendToBody('</tc>');
         Emailmessage.AppendToBody('</tr>');
-
 
         Emailmessage.AppendToBody('<tr>');
         Emailmessage.AppendToBody('<th align="Left">Column 2</th>');
