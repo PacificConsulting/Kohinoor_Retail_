@@ -14,20 +14,38 @@ page 50386 "Copy Menu"
                 field("Menu ID"; MenuID)
                 {
                     ApplicationArea = All;
+                    ShowMandatory = true;
 
                 }
                 field("Menu Name"; MenuName)
                 {
                     ApplicationArea = All;
+                    ShowMandatory = true;
 
                 }
                 field("Store No."; Storeno)
                 {
                     ApplicationArea = All;
-                    TableRelation = Location.Code where(Store = filter(true));
-                    trigger OnValidate()
+                    ShowMandatory = true;
+
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        Loc: Record 14;
                     begin
-                        Storeno := Storeno;
+                        Loc.Reset();
+                        Loc.FILTERGROUP(10);
+                        Loc.SETRANGE(Store, true);
+                        Loc.FILTERGROUP(0);
+                        IF PAGE.RUNMODAL(15, Loc) = ACTION::LookupOK THEN
+                            Storeno := Loc.Code;
+
+                        Loc.Reset();
+                        Loc.SetRange(code, Storeno);
+                        IF Not loc.FindFirst() then
+                            Error('Selected Store does not exist');
+
+
+
                     end;
                 }
 

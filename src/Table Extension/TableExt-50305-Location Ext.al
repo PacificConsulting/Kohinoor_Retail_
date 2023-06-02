@@ -37,6 +37,11 @@ tableextension 50305 "Location_Ext_retail" extends Location
             DataClassification = ToBeClassified;
             SubType = Bitmap;
         }
+        field(50308; "Startup Menu "; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Menu Header"."Menu ID";
+        }
     }
 
     var

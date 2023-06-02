@@ -110,6 +110,10 @@ page 50352 "Sales Order List API"
                 {
                     Caption = 'order Confirmed Date';
                 }
+                field(vehicleNo; Rec."Vehicle No.")
+                {
+                    Caption = 'Vehicle No.';
+                }
             }
         }
     }

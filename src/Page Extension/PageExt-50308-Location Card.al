@@ -39,6 +39,11 @@ pageextension 50308 Location_Card extends "Location Card"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Payment Journal Batch Name field.';
             }
+            field("Startup Menu "; Rec."Startup Menu ")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Startup Menu  field.';
+            }
 
 
         }

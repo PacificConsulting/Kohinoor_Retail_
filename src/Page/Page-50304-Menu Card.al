@@ -2,8 +2,8 @@ page 50304 "Menu Card"
 {
     PageType = Card;
     Caption = 'Menu Card';
-    ApplicationArea = All;
-    UsageCategory = Administration;
+    //ApplicationArea = All;
+    //UsageCategory = Administration;
     SourceTable = "Menu Header";
     RefreshOnActivate = true;
     layout
@@ -15,19 +15,22 @@ page 50304 "Menu Card"
                 field("Menu ID"; Rec."Menu ID")
                 {
                     ToolTip = 'Specifies the value of the Menu ID field.';
+                    ApplicationArea = all;
                 }
                 field("Menu Name"; Rec."Menu Name")
                 {
                     ToolTip = 'Specifies the value of the Menu Name field.';
+                    ApplicationArea = all;
                 }
                 field("Store No."; Rec."Store No.")
                 {
                     ToolTip = 'Specifies the value of the Store No. field.';
+                    ApplicationArea = all;
                 }
             }
             part(Lines; "Menu Line Subform")
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 SubPageLink = "Menu ID" = field("Menu ID");//, "Store No." = field("Store No.");
 
             }
@@ -55,11 +58,23 @@ page 50304 "Menu Card"
                     MenuID: Code[20];
                     ML: Record "Menu Line";
                     MLInit: Record "Menu Line";
+                    MenuName: Code[20];
+                    StoreNo: Code[20];
                 begin
                     CLEAR(CopyPage);//PCPL
                     CopyPage.LOOKUPMODE(TRUE);//PCPL
                     IF CopyPage.RUNMODAL = ACTION::Yes then begin
+
                         MenuID := CopyPage.MenuIDF();
+                        MenuName := CopyPage.MenunameF();
+                        StoreNo := CopyPage.StoreNoF();
+                        IF MenuID = '' then
+                            Error('Menu should not be blank');
+                        if MenuName = '' then
+                            Error('Menu name not be blank');
+                        if StoreNo = '' then
+                            Error('Store No. should not be blank');
+
                         MH.Reset();
                         MH.SetFilter("Menu ID", '%1', rec."Menu ID");
                         IF MH.FindFirst() then begin

@@ -87,12 +87,15 @@ page 50345 "Bank Drop Entry "
         GLSetup: Record 98;
         Staff: Record "Staff Master";
         Loc: Record 14;
+        GenJournalBatch: Record "Gen. Journal Batch";
     begin
+
         GLSetup.Get();
         IF Staff.Get(rec."Staff ID") then
             IF Loc.Get(Staff."Store No.") then;
 
         GLSetup.TestField("Bank Drop Batch");
+
         GenJourLineFilter.Reset();
         GenJourLineFilter.SetRange("Journal Template Name", 'CONTRA VO');
         GenJourLineFilter.SetRange("Journal Batch Name", GLSetup."Bank Drop Batch");
@@ -116,10 +119,14 @@ page 50345 "Bank Drop Entry "
         GenJourLine.Validate(Amount, rec.Amount * -1);
         GenJourLine."Bal. Account Type" := GenJourLine."Bal. Account Type"::"Bank Account";
         GenJourLine.Validate("Bal. Account No.", rec."Bank Account");
-        //GenJourLine."External Document No.":=Rec.
+
         GenJourLine.validate("Shortcut Dimension 1 Code", loc."Global Dimension 1 Code");
         GenJourLine.validate("Shortcut Dimension 2 Code", loc."Global Dimension 2 Code");
+        // IF GenJournalBatch.Get(GenJourLine."Journal Template Name", GenJourLine."Journal Batch Name") then
+        //     GenJournalBatch.TestField("Posting No. Series");
+        // GenJourLine."Posting No. Series" := GenJournalBatch."Posting No. Series";
         GenJourLine.Comment := 'Auto Post';
+
         GenJourLine.Modify();
         Message('Contra Voucher Created with Docuemt No. %1 and Batch Name %2', GenJourLine."Document No.", GenJourLine."Journal Batch Name");
         Codeunit.Run(Codeunit::"Gen. Jnl.-Post", GenJourLine);

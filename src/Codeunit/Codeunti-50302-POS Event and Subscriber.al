@@ -76,9 +76,9 @@ codeunit 50302 "POS Event and Subscriber"
                 begin
                     IsResult := POSProcedure.ItemReceipt(documentno, lineno, input);
                     IF IsResult = '' then
-                        exit('Success');
-                    //Else
-                    //  exit(IsResult);
+                        exit('Success')
+                    Else
+                        exit(IsResult);
                 end;
             'DELDET':  //<<<<** Sales Order Transport Method Update Function **>>>>
                 begin

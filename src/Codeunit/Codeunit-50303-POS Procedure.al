@@ -428,6 +428,8 @@ codeunit 50303 "POS Procedure"
         TranspostReceived: Codeunit "TransferOrder-Post Receipt";
         ReleasePurch: codeunit "Release Purchase Document";
         PurchCommLine: Record "Purch. Comment Line";
+        PostedPurRec: Record "Purch. Rcpt. Header";
+        TRH: Record "Transfer Receipt Header";
     begin
         //Clear(InputData);
         // Evaluate(QtyToReceive, InputData);
@@ -467,6 +469,10 @@ codeunit 50303 "POS Procedure"
                 PurchHeader.Modify();
                 ReleasePurch.PerformManualRelease(PurchHeader);
                 Purchpost.Run(PurchHeader);
+                PostedPurRec.Reset();
+                PostedPurRec.SetRange("Order No.", PurchHeader."No.");
+                IF PostedPurRec.FindFirst() then
+                    exit('Success;' + PostedPurRec."No.");
 
             end
         end else begin
@@ -487,6 +493,10 @@ codeunit 50303 "POS Procedure"
                     TransferHeader.Status := TransferHeader.Status::Released;
                     TransferHeader.Modify();
                     TranspostReceived.Run(TransferHeader);
+                    TRH.Reset();
+                    TRH.SetRange("Transfer Order No.", TransferHeader."No.");
+                    IF TRH.FindFirst() then
+                        Error('Success;' + TRH."No.");
                 end;
             end //else
                 //exit('Failed');

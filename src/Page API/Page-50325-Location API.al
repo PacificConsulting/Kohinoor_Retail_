@@ -42,6 +42,10 @@ page 50325 "Location API"
                 {
                     Caption = 'Use As In-Transit';
                 }
+                field(startupMenu; Rec."Startup Menu ")
+                {
+                    Caption = 'Startup Menu ';
+                }
             }
         }
     }
