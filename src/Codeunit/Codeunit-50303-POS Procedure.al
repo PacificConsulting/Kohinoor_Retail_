@@ -1208,7 +1208,6 @@ codeunit 50303 "POS Procedure"
         ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
         FileName := SH."No." + '.' + 'pdf';
         ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-
     end;
 
 
