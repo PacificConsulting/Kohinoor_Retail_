@@ -207,7 +207,7 @@ table 50317 "Trade Aggrement"
     }
     keys
     {
-        key(PK; "Item No.", "From Date", "To Date", "Location Code")
+        key(PK; "Item No.", "From Date", "To Date", "Location Code", "Customer Group")
         {
             Clustered = true;
         }

@@ -206,20 +206,24 @@ codeunit 50301 "Event and Subscribers"
     end;
     //END**********************************Codeunit-5704***************************************
 
-    //START**********************************Table-18***************************************
-    [EventSubscriber(ObjectType::Table, Database::Customer, 'OnBeforeValidatePostCode', '', false, false)]
-    local procedure OnBeforeValidatePostCode(var Customer: Record Customer; var PostCodeRec: Record "Post Code"; CurrentFieldNo: Integer; var IsHandled: Boolean)
+    //START**********************************Table-23***************************************
+
+    [EventSubscriber(ObjectType::Table, Database::Vendor, 'OnAfterLookupPostCode', '', false, false)]
+    local procedure OnAfterLookupPostCode(var Vendor: Record Vendor; var PostCodeRec: Record "Post Code")
     begin
-        // Customer."State Code" := PostCodeRec."State Code";
+        Vendor."State Code" := PostCodeRec."State Code";
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::Customer, 'OnAfterLookupPostCode', '', false, false)]
-    local procedure OnAfterLookupPostCode(var Customer: Record Customer; xCustomer: Record Customer; var PostCodeRec: Record "Post Code")
+    [EventSubscriber(ObjectType::Table, Database::Vendor, 'OnBeforeValidatePostCode', '', false, false)]
+    local procedure OnBeforeValidatePostCode(var Vendor: Record Vendor; var PostCodeRec: Record "Post Code")
     begin
-        //Customer."State Code" := PostCodeRec."State Code";
+        Vendor."State Code" := PostCodeRec."State Code"
     end;
 
-    //END**********************************Table-18***************************************
+
+
+    //END**********************************Table-23***************************************
+
 
     //******************* Local Function Created ***************************************
     local procedure DeletePayemntLines(salesHeaderRec: record "Sales Header"; RecPaymentLine: Record "Payment Lines")

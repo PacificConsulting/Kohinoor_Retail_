@@ -84,42 +84,44 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 IF SH.FindFirst() then
                     Error('You can not change the quantity when order is Confirmed');
 
-                IF Quantity > 0 then begin
-                    Item.Reset();
-                    Item.SetRange("Parent Item No.", Rec."No.");
-                    IF Item.FindSet() then
-                        repeat
-                            SalesLineFilter.Reset();
-                            SalesLineFilter.SetRange("Document No.", "Document No.");
-                            SalesLineFilter.SetRange("No.", Item."No.");
-                            if Not SalesLineFilter.FindFirst() then begin
-                                //*********New Line Insert*******
-                                SLInit.Init();
-                                SLInit."Document Type" := rec."Document Type";
-                                SLInit."Document No." := rec."Document No.";
+                IF Rec.Type <> rec.Type::" " then begin
+                    IF Quantity > 0 then begin
+                        Item.Reset();
+                        Item.SetRange("Parent Item No.", Rec."No.");
+                        IF Item.FindSet() then
+                            repeat
+                                SalesLineFilter.Reset();
+                                SalesLineFilter.SetRange("Document No.", "Document No.");
+                                SalesLineFilter.SetRange("No.", Item."No.");
+                                if Not SalesLineFilter.FindFirst() then begin
+                                    //*********New Line Insert*******
+                                    SLInit.Init();
+                                    SLInit."Document Type" := rec."Document Type";
+                                    SLInit."Document No." := rec."Document No.";
 
-                                SalesLine.Reset();
-                                SalesLine.SetRange("Document No.", "Document No.");
-                                if SalesLine.FindLast() then
-                                    SLInit."Line No." := SalesLine."Line No." + 10000;
+                                    SalesLine.Reset();
+                                    SalesLine.SetRange("Document No.", "Document No.");
+                                    if SalesLine.FindLast() then
+                                        SLInit."Line No." := SalesLine."Line No." + 10000;
 
-                                SLInit.Insert();
-                                SLInit.Type := SLInit.Type::Item;
-                                SLInit.Validate("No.", item."No.");
-                                SLInit.Validate(Quantity, SalesLine.Quantity);
-                                SLInit.Validate("Location Code", SalesLine."Location Code");
-                                SLInit.Validate("Store No.", SalesLine."Store No.");
-                                SLInit.Validate("Salesperson Code", SalesLine."Salesperson Code");
-                                SLInit.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
-                                SLInit.Validate("Shortcut Dimension 2 Code", SalesLine."Shortcut Dimension 2 Code");
-                                SLInit."Warranty Parent Line No." := SalesLine."Line No.";
-                                SLInit.Modify();
-                            end else begin
-                                //**********Modify Qty only**********
-                                SalesLineFilter.Validate(Quantity, Rec.Quantity);
-                                SalesLineFilter.Modify();
-                            end;
-                        until item.Next() = 0;
+                                    SLInit.Insert();
+                                    SLInit.Type := SLInit.Type::Item;
+                                    SLInit.Validate("No.", item."No.");
+                                    SLInit.Validate(Quantity, SalesLine.Quantity);
+                                    SLInit.Validate("Location Code", SalesLine."Location Code");
+                                    SLInit.Validate("Store No.", SalesLine."Store No.");
+                                    SLInit.Validate("Salesperson Code", SalesLine."Salesperson Code");
+                                    SLInit.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
+                                    SLInit.Validate("Shortcut Dimension 2 Code", SalesLine."Shortcut Dimension 2 Code");
+                                    SLInit."Warranty Parent Line No." := SalesLine."Line No.";
+                                    SLInit.Modify();
+                                end else begin
+                                    //**********Modify Qty only**********
+                                    SalesLineFilter.Validate(Quantity, Rec.Quantity);
+                                    SalesLineFilter.Modify();
+                                end;
+                            until item.Next() = 0;
+                    end;
                 end;
             end;
         }
