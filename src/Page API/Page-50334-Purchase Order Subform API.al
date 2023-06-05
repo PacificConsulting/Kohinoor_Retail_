@@ -11,6 +11,7 @@ page 50334 "Purchase Order Subform API"
     PageType = API;
     SourceTable = "Purchase Line";
     ODataKeyFields = SystemId;
+    SourceTableView = where("Document Type" = filter(Order));
 
     layout
     {

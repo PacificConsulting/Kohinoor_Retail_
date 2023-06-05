@@ -149,7 +149,7 @@ table 50302 "Posted Payment Lines"
             Editable = false;
 
         }
-        field(25; Attachment; Text[10])
+        field(25; Attachment; Text[250])
         {
             DataClassification = ToBeClassified;
             Editable = false;

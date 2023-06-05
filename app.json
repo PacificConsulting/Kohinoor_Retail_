@@ -2,7 +2,7 @@
   "id": "4ba22a4e-fc4f-4f0b-9a57-5874849a493e",
   "name": "Kohinoor_Retail",
   "publisher": "Pacific",
-  "version": "1.0.0.63",
+  "version": "1.0.0.65",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -70,6 +70,12 @@
       "id": "b320ec9f-af2e-4ae4-a5be-18d84cf24d01",
       "publisher": "Pacific",
       "name": "Kohinoor_Purchase",
+      "version": "1.0.0.0"
+    },
+    {
+      "id": "24937c30-9452-4e24-8995-0bd84fa56b5e",
+      "name": "Kohinoor_Reports",
+      "publisher": "Pacific",
       "version": "1.0.0.0"
     }
     

@@ -153,10 +153,10 @@ table 50301 "Payment Lines"
             Editable = false;
 
         }
-        field(25; Attachment; Text[10])
+        field(25; Attachment; Text[250])
         {
             DataClassification = ToBeClassified;
-            Editable = false;
+            //Editable = false;
         }
         field(26; "Finance Promoter"; Code[10])
         {

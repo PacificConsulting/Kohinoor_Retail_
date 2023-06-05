@@ -160,15 +160,15 @@ codeunit 50302 "POS Event and Subscriber"
                         exit(IsResult);
 
                 end;
-        // 'CANNEW1':  //<<<<** Add Comment on Live level new Line Insert **>>>>
-        //     begin
-        //         IsResult := POSProcedure.CancelNewSO1(documentno);
-        //         IF IsResult = '' then
-        //             exit('Success');
-        //         Else
-        //            exit(IsResult);
+            'SOPRINT':  //<<<<** Add Comment on Live level new Line Insert **>>>>
+                begin
+                    IsResult := POSProcedure.SOPrint(documentno);
+                    IF IsResult = '' then
+                        exit('Success')
+                    Else
+                        exit(IsResult);
 
-        //     end;
+                end;
         end;
 
     end;
@@ -525,32 +525,6 @@ codeunit 50302 "POS Event and Subscriber"
         end;
     end;
 
-    //Azure Integration with BC 
-    procedure AzureStorageReport(): Text
-    var
-        ABSBlobClient: Codeunit "ABS Blob Client";
-        Authorization: Interface "Storage Service Authorization";
-        ABSCSetup: Record "Azure Storage Container Setup";
-        StorageServiceAuth: Codeunit "Storage Service Authorization";
-        Instrm: InStream;
-        OutStrm: OutStream;
-        TempBlob: Codeunit "Temp Blob";
-        FileName: Text;
-        PH: record 38;
-    begin
-        PH.RESET;
-        PH.SETRANGE("No.", 'KTPLPO23240002');
-        IF PH.FINDFIRST THEN;
-        Recref.GetTable(PH);
-        TempBlob.CreateOutStream(OutStrm);
-        Report.SaveAs(Report::Order, '', ReportFormat::Pdf, OutStrm, Recref);
-        TempBlob.CreateInStream(Instrm);
-        ABSCSetup.Get();
-        Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-        ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
-        FileName := 'Purchase Order' + '-' + PH."No.";
-        ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-    end;
 
 
 

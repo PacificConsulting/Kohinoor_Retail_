@@ -22,6 +22,7 @@ page 50336 "Transfer Order Card"
                 {
                     Caption = 'Area';
                 }
+
                 field(assignedUserID; Rec."Assigned User ID")
                 {
                     Caption = 'Assigned User ID';
@@ -254,6 +255,7 @@ page 50336 "Transfer Order Card"
                 {
                     Caption = 'Vendor No.';
                 }
+
             }
         }
     }

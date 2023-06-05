@@ -131,6 +131,11 @@ page 50301 "Payment Lines Subform"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Finance Promoter Name field.';
                 }
+                field(Attachment; Rec.Attachment)
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Attachment field.';
+                }
 
             }
         }

@@ -11,6 +11,7 @@ page 50333 "Purchase Order List API"
     PageType = API;
     SourceTable = "Purchase Header";
     ODataKeyFields = SystemId;
+    SourceTableView = where("Document Type" = filter(Order));
 
     layout
     {

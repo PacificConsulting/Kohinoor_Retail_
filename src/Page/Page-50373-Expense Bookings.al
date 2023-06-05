@@ -46,7 +46,7 @@ page 50373 "Expense Bookings"
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedIsBig = true;
-                Image = Image;
+                Image = Delete;
 
                 trigger OnAction()
                 var

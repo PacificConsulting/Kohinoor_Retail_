@@ -408,8 +408,7 @@ codeunit 50303 "POS Procedure"
                 ReleaseSalesDoc.PerformManualRelease(SaleHeaderInv);
                 SaleHeaderInv.Modify(true);
                 Salespost.Run(SaleHeaderInv);
-                //Message(FORMAT(ReturnBool));
-                //exit('Failed');
+
             end
         end;
     end;
@@ -617,6 +616,7 @@ codeunit 50303 "POS Procedure"
         IF SNlist.FindFirst() then
             Error('Serial No. does not exist');
 
+
         SalesHeader.Reset();
         SalesHeader.SetCurrentKey("Document Type", "No.");
         SalesHeader.SetRange("No.", documentno);
@@ -645,6 +645,13 @@ codeunit 50303 "POS Procedure"
                 SalesLineInit.Validate(Description, RecItem.Description);
                 SalesLineInit.Validate("Unit Price", RecItem."Unit Price" * -1);
             end;
+            SalesLine.Reset();
+            SalesLine.SetRange("Document No.", SalesLineInit."Document No.");
+            SalesLine.SetRange("Line No.", SalesLineInit."Line No.");
+            SalesLine.SetRange("Serial No.", serialno);
+            IF SalesLine.FindFirst() then
+                Error('Serial No. already exist');
+
             SalesLineInit."Serial No." := serialno;
             SalesLineInit."Exchange Item No." := exchangeitem;
             SalesLineInit."Store No." := SalesLine."Store No.";
@@ -817,14 +824,14 @@ codeunit 50303 "POS Procedure"
             SNlist.Reset();
             SNlist.SetRange("Serial No.", SerialNo);
             IF SNlist.FindFirst() then
-                Error('Serial No. does not exist in Serial No information');
+                Error('Serial No. already exist in Serial No information');
 
             ReservEntry.Reset();
             ReservEntry.SetCurrentKey("Source Type", "Serial No.");
             ReservEntry.SetRange("Source Type", 39);
             ReservEntry.SetRange("Serial No.", SerialNo);
             IF ReservEntry.FindFirst() then
-                Error('Serial No. does not exist in reservation entry');
+                Error('Serial No. already exist in reservation entry');
 
             //PurchLine.Validate("Bin Code", 'BACKPACK'); //Comment 170523 Kunal Ask to and modify on Item No selection of Purchase line
             PurchLine.Validate("Qty. to Receive", PurchLine."Qty. to Receive" + 1);
@@ -1171,8 +1178,39 @@ codeunit 50303 "POS Procedure"
         end else
             exit('Order does not exist');
 
+    end;
+
+    //Azure Integration with BC SO Print
+    procedure SOPrint(documentno: Code[20]): Text
+    var
+        ABSBlobClient: Codeunit "ABS Blob Client";
+        Authorization: Interface "Storage Service Authorization";
+        ABSCSetup: Record "Azure Storage Container Setup";
+        StorageServiceAuth: Codeunit "Storage Service Authorization";
+        Instrm: InStream;
+        OutStrm: OutStream;
+        TempBlob: Codeunit "Temp Blob";
+        FileName: Text;
+        SH: record 36;
+        Recref: RecordRef;
+    begin
+        //*********Report SaveasPDF code********
+        SH.RESET;
+        SH.SETRANGE("No.", documentno);
+        IF SH.FINDFIRST THEN;
+        Recref.GetTable(SH);
+        TempBlob.CreateOutStream(OutStrm);
+        Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
+        TempBlob.CreateInStream(Instrm);
+        //*************Azure upload Code**************
+        ABSCSetup.Get();
+        Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
+        ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
+        FileName := SH."No." + '.' + 'pdf';
+        ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
 
     end;
+
 
 
 
@@ -1570,7 +1608,7 @@ codeunit 50303 "POS Procedure"
     end;
     // <summary>
     /// Update the Unit Price Sales Line
-    /// </summary>
+    // <summary>
 
 
     local procedure ApprovalMailSent(SalesLine: Record "Sales Line"; TradAgg: Record "Trade Aggrement")
