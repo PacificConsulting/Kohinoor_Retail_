@@ -869,6 +869,87 @@ codeunit 50303 "POS Procedure"
             exit('No document found')
     end;
 
+
+    /// <summary>
+    /// Item Tracking Delete for sales,purchase,Transfer
+    /// </summary>
+    procedure SerialTrackingDeallocation(documentno: code[20]; lineno: integer; input: text[50]): text
+    var
+        ReservEntry: Record 337;
+        ReservEntryInit: Record 337;
+        LastEntryNo: Integer;
+        SalesLine: Record 37;
+        SerialNo: Code[50];
+        ItemLedgEntry: Record 32;
+        TranLine: Record "Transfer Line";
+        PurchLine: Record 39;
+        DocFound: Boolean;
+        BincodeEvaluate: code[20];
+        SNlist: record 6504;
+    begin
+        Evaluate(SerialNo, input);
+        DocFound := false;
+
+        ReservEntry.RESET;
+        ReservEntry.SetRange("Source ID", documentno);
+        ReservEntry.SetRange("Source Ref. No.", lineno);
+        ReservEntry.SetRange("Serial No.", SerialNo);
+        if ReservEntry.FindFirst() then begin
+            ReservEntry.Delete();
+        end;
+        SalesLine.Reset();
+        SalesLine.SetRange("Document No.", documentno);
+        SalesLine.SetRange("Line No.", lineno);
+        IF SalesLine.FindFirst() then begin
+            DocFound := true;
+            SalesLine.Validate("Qty. to Ship", SalesLine."Qty. to Ship" - 1);
+            SalesLine.Modify();
+        end
+        else begin
+            Evaluate(SerialNo, input);
+            ReservEntry.RESET;
+            ReservEntry.SetRange("Source ID", documentno);
+            ReservEntry.SetRange("Source Ref. No.", lineno);
+            ReservEntry.SetRange("Serial No.", SerialNo);
+            if ReservEntry.FindFirst() then begin
+                ReservEntry.Delete();
+            end;
+
+            TranLine.Reset();
+            TranLine.SetCurrentKey("Document No.", "Line No.");
+            TranLine.SetRange("Document No.", documentno);
+            TranLine.SetRange("Line No.", lineno);
+            IF TranLine.FindFirst() then begin
+                DocFound := true;
+                IF TranLine."Qty. to Ship" = 0 then begin
+                    TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
+                    TranLine.Modify();
+                end;
+            end;
+        end;
+        Evaluate(SerialNo, input);
+        ReservEntry.RESET;
+        ReservEntry.SetRange("Source ID", documentno);
+        ReservEntry.SetRange("Source Ref. No.", lineno);
+        ReservEntry.SetRange("Serial No.", SerialNo);
+        if ReservEntry.FindFirst() then begin
+            ReservEntry.Delete();
+        end;
+        PurchLine.Reset();
+        PurchLine.SetCurrentKey("Document No.", "Line No.");
+        PurchLine.SetRange("Document No.", documentno);
+        PurchLine.SetRange("Line No.", lineno);
+        IF PurchLine.FindFirst() then begin
+            DocFound := true;
+            PurchLine.Validate("Qty. to Receive", PurchLine."Qty. to Receive" - 1);
+            //            PurchLine.Validate("Qty. to Invoice", 0);
+            PurchLine.Modify();
+        end;
+        IF DocFound = false then
+            exit('No document found')
+    end;
+
+
     /// <summary>
     /// Order Confirmation for Delivery function POS.
     /// </summary>
@@ -1402,7 +1483,8 @@ codeunit 50303 "POS Procedure"
     end;
     */
     //<<<<<******************************** Local function created depending on original function*************
-    Local procedure InvoiceDiscountAmountSO(DocumentType: enum "Sales Document Type"; DocumentNo: Code[20]; InvoiceDiscountAmount: decimal)
+    Local procedure InvoiceDiscountAmountSO(DocumentType: enum "Sales Document Type"; DocumentNo: Code[20];
+                                                              InvoiceDiscountAmount: decimal)
     var
         SalesHeader: Record "Sales Header";
         ConfirmManagement: Codeunit "Confirm Management";

@@ -115,6 +115,15 @@ codeunit 50302 "POS Event and Subscriber"
                         exit(IsResult);
 
                 end;
+            'SDTRCK':  //<<<<** Item Tracking for Sales Line,Transfer Line and GRN Function **>>>>
+                begin
+                    IsResult := POSProcedure.SerialTrackingDeallocation(documentno, lineno, input);
+                    IF IsResult = '' then
+                        exit('Success')
+                    Else
+                        exit(IsResult);
+
+                end;
             'ORDWH':  //<<<<** Order Confirm for Warehouse **>>>>
                 begin
                     IsResult := POSProcedure.OrderConfirmationforWH(documentno);

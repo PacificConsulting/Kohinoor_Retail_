@@ -75,6 +75,10 @@ page 50333 "Purchase Order List API"
                 {
                     Caption = 'Receive';
                 }
+                field(vehicleNo; Rec."Vehicle No.")
+                {
+                    Caption = 'Vehicle No.';
+                }
 
             }
         }
