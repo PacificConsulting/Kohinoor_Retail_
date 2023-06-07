@@ -2,7 +2,7 @@ table 50324 "Azure Storage Container Setup"
 {
     Caption = 'Azure Storage Container Setup';
     DataClassification = ToBeClassified;
-    
+
     fields
     {
         field(1; "Primary Key"; Code[10])
@@ -25,6 +25,12 @@ table 50324 "Azure Storage Container Setup"
             Caption = 'Access key';
             DataClassification = ToBeClassified;
         }
+        field(5; "Container Name Invoice"; Text[250])
+        {
+            Caption = 'Container Name Invoice';
+            DataClassification = ToBeClassified;
+        }
+
     }
     keys
     {

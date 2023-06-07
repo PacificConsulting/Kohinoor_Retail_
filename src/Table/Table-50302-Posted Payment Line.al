@@ -69,7 +69,7 @@ table 50302 "Posted Payment Lines"
             Caption = 'Card Expiry Date';
             Editable = false;
         }
-        field(12; "Approval Code"; Code[10])
+        field(12; "Approval Code"; Code[30])
         {
             DataClassification = ToBeClassified;
             Caption = 'Approval Code';

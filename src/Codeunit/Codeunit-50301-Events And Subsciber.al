@@ -31,11 +31,11 @@ codeunit 50301 "Event and Subscribers"
         TempBlob.CreateInStream(Instrm);
         //*************Azure upload Code**************
         ABSCSetup.Get();
+        // ABSCSetup.TestField("Container Name Invoice");
         Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
         ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
         FileName := SIH."No." + '.' + 'pdf';
         ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-
     end;
     //<<<<<<<END********************************CU-80*****************************************
 
@@ -244,17 +244,29 @@ codeunit 50301 "Event and Subscribers"
     [EventSubscriber(ObjectType::Table, Database::Vendor, 'OnAfterLookupPostCode', '', false, false)]
     local procedure OnAfterLookupPostCode(var Vendor: Record Vendor; var PostCodeRec: Record "Post Code")
     begin
-        Vendor."State Code" := PostCodeRec."State Code";
+        IF PostCodeRec.get(Vendor."Post Code", Vendor.City) then
+            Vendor."State Code" := PostCodeRec."State Code";
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::Vendor, 'OnBeforeValidatePostCode', '', false, false)]
-    local procedure OnBeforeValidatePostCode(var Vendor: Record Vendor; var PostCodeRec: Record "Post Code")
+    [EventSubscriber(ObjectType::Table, Database::Vendor, 'OnAfterValidatePostCode', '', false, false)]
+    local procedure OnAfterValidatePostCode(var Vendor: Record Vendor)
+    var
+        PostCodeRec: Record "Post Code";
     begin
-        Vendor."State Code" := PostCodeRec."State Code"
+        IF PostCodeRec.get(Vendor."Post Code", Vendor.City) then
+            Vendor."State Code" := PostCodeRec."State Code"
     end;
 
     //END**********************************Table-23***************************************
 
+    //START**********************************Table-224***************************************
+
+    [EventSubscriber(ObjectType::Table, Database::"Order Address", 'OnAfterLookupPostCode', '', false, false)]
+    local procedure OnAfterLookupPostCodeOrderAddress(var OrderAddress: Record "Order Address"; var PostCode: Record "Post Code"; FieldNo: Integer)
+    begin
+        IF PostCode.get(OrderAddress."Post Code", OrderAddress.City) then
+            OrderAddress."State" := PostCode."State Code";
+    end;
 
     //******************* Local Function Created ***************************************
     local procedure DeletePayemntLines(salesHeaderRec: record "Sales Header"; RecPaymentLine: Record "Payment Lines")

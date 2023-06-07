@@ -24,6 +24,10 @@ page 50383 "Azure Storage Container Setup"
                 {
                     ToolTip = 'Specifies the value of the Container Name field.';
                 }
+                field("Container Name Invoice"; Rec."Container Name Invoice")
+                {
+                    ToolTip = 'Specifies the value of the Container Name Invoice field.';
+                }
                 field("Access key"; Rec."Access key")
                 {
                     ToolTip = 'Specifies the value of the Access key field.';

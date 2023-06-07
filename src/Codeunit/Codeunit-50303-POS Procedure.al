@@ -614,7 +614,7 @@ codeunit 50303 "POS Procedure"
         SNlist.Reset();
         SNlist.SetRange("Serial No.", serialno);
         IF SNlist.FindFirst() then
-            Error('Serial No. does not exist');
+            Error('Serial No. already exist');
 
 
         SalesHeader.Reset();
@@ -1193,21 +1193,42 @@ codeunit 50303 "POS Procedure"
         FileName: Text;
         SH: record 36;
         Recref: RecordRef;
+        response: Codeunit "ABS Operation Response";
+        fileMgt: codeunit "File Management";
+        FromFile: Text;
     begin
         //*********Report SaveasPDF code********
-        SH.RESET;
-        SH.SETRANGE("No.", documentno);
-        IF SH.FINDFIRST THEN;
-        Recref.GetTable(SH);
-        TempBlob.CreateOutStream(OutStrm);
-        Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
-        TempBlob.CreateInStream(Instrm);
+
+        /*
+            SH.RESET;
+            SH.SETRANGE("No.", documentno);
+            IF SH.FINDFIRST THEN;
+            Recref.GetTable(SH);
+            TempBlob.CreateOutStream(OutStrm);
+            Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
+            TempBlob.CreateInStream(Instrm);
+            //FileName := SH."No." + '.' + 'PDF';
+            //DownloadFromStream(Instrm, 'Download', '', '', FileName);
+            //UploadIntoStream('Please choose any file.', '', '', FromFile, Instrm);
+            //FileName := fileMgt.GetFileName(FromFile);
+            exit('Success');
+        */
+
         //*************Azure upload Code**************
+
         ABSCSetup.Get();
         Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
         ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
-        FileName := SH."No." + '.' + 'pdf';
-        ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+        // FileName := SH."No." + '.' + 'PDF';
+        FileName := 'Text' + '.' + 'pdf';
+        TempBlob.CreateInStream(Instrm);
+        UploadIntoStream('', Instrm);
+        //UploadIntoStream('UPLOAD','','','',Instrm);
+        response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+        // ABSBlobClient.GetBlobAsFile(FileName);
+        exit(Format(response.IsSuccessful()));
+
+
     end;
 
 

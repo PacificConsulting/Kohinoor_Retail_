@@ -49,7 +49,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     ToolTip = 'Specifies the date on the bank account statement.';
                     trigger OnValidate()
                     begin
-                        CurrPage.ApplyBankLedgerEntries.Page.SetBankRecDateFilter(MatchCandidateFilterDate()); //PCPL/NSW/07
+                        //   CurrPage.ApplyBankLedgerEntries.Page.SetBankRecDateFilter(MatchCandidateFilterDate()); //PCPL/NSW/07
                     end;
                 }
                 field(BalanceLastStatement; Rec."Balance Last Statement")

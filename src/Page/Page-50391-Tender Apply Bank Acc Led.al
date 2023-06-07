@@ -281,7 +281,7 @@ page 50391 "Tender Apply Bank Acc Leder"
         Rec.Reset();
         ShowingNonMatched := false;
         if BankAccReconciliation.Get(BankAccReconciliation."Statement Type", BankAccReconciliation."Bank Account No.", BankAccReconciliation."Statement No.") then;
-        ApplyDateFilter(BankAccReconciliation.MatchCandidateFilterDate());
+        //ApplyDateFilter(BankAccReconciliation.MatchCandidateFilterDate()); //PCPL/NSW/07
         ApplyControledFilters();
         CurrPage.Update(false);
     end;
@@ -344,7 +344,7 @@ page 50391 "Tender Apply Bank Acc Leder"
             Rec.SetRange(Reversed);
         OnAfterApplyControledFilters(Rec);
 #if not CLEAN22
-        BankAccReconciliationPage.UpdateBankAccountLedgerEntrySubpageOnAfterSetFilters(Rec);
+        // BankAccReconciliationPage.UpdateBankAccountLedgerEntrySubpageOnAfterSetFilters(Rec); //PCPL/NSW/07
 #endif
     end;
 

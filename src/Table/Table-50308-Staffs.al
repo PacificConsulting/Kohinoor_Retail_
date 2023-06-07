@@ -1,5 +1,7 @@
 table 50308 "Staff Master"
+
 {
+
     DataClassification = ToBeClassified;
 
     fields
@@ -7,6 +9,13 @@ table 50308 "Staff Master"
         field(1; ID; Code[10])
         {
             DataClassification = ToBeClassified;
+            TableRelation = Employee."No.";
+            trigger
+            OnValidate()
+            begin
+                IF recEmployee.Get(ID) then
+                    Name := recEmployee.FullName();
+            end;
         }
         field(2; Name; Text[30])
         {
@@ -95,6 +104,7 @@ table 50308 "Staff Master"
 
     var
         myInt: Integer;
+        recEmployee: Record Employee;
 
     trigger OnInsert()
     begin
