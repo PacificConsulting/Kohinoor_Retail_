@@ -77,6 +77,12 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50306; "Posted By"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Staff Master".ID;
+            Editable = false;
+        }
 
     }
 

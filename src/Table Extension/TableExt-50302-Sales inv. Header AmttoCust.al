@@ -28,6 +28,12 @@ tableextension 50302 "Sales Inv Hdr AmtToCust" extends "Sales Invoice Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50306; "Posted By"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Staff Master".ID;
+            Editable = false;
+        }
     }
 
 }

@@ -2,6 +2,22 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debugg Sandbox",
+            "type": "al",
+            "request": "attach",
+            "environmentType": "Sandbox",
+            "environmentName": "KohinoorUAT",
+            "tenant": "abc87ed0-4014-486f-afd8-1577c92442a6",
+            "breakOnError": "All",
+            "breakOnRecordWrite": "None",
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10,
+            "breakOnNext": "WebClient",
+            "sessionId": 148607
+        },
+        {
             "name": "Microsoft cloud sandbox",
             "request": "launch",
             "type": "al",
@@ -17,18 +33,6 @@
             "schemaUpdateMode": "ForceSync",
             
         }
-        /*
-        {
-            "name": "snapshotInitialize: Microsoft production cloud",
-            "type": "al",
-            "request": "snapshotInitialize",
-            "environmentType": "Sandbox",
-            "environmentName": "KohinoorSandbox",
-            "breakOnNext": "WebClient",
-            "executionContext": "DebugAndProfile",
-            "userId": "PCPLDEVELOPER",
-            "snapshotVerbosity": "Full"
-        }
-        */
+       
     ]
 }

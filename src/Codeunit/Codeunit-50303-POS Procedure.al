@@ -305,7 +305,7 @@ codeunit 50303 "POS Procedure"
     /// <summary>
     /// Post ship and Invoice for a Complete order with Auto updare Qty Ship from Sales Line Qty
     /// </summary>
-    procedure InvoiceComplete(DocumentNo: Code[20]): text
+    procedure InvoiceComplete(DocumentNo: Code[20]; staffid: Code[10]): text
     var
         SalesHdr: Record 36;
         SalesLine: Record 37;
@@ -317,6 +317,8 @@ codeunit 50303 "POS Procedure"
         SalesHdr.SetCurrentKey("No.");
         SalesHdr.SetRange("No.", DocumentNo);
         IF SalesHdr.FindFirst() then begin
+            SalesHdr."Posted By" := staffid;
+            SalesHdr.Modify();
             IF SalesHdr.Status = SalesHdr.Status::Released then begin
                 SalesHdr.Status := SalesHdr.Status::Open;
                 SalesHdr.Modify();
@@ -330,25 +332,6 @@ codeunit 50303 "POS Procedure"
                     SalesLine.Validate("Qty. to Invoice", SalesLine.Quantity);
                     SalesLine.Modify();
                 until SalesLine.Next() = 0;
-            /*
-        //<< Comment Mandetory so We have to pass Order Comment
-        SalesCommLine.Reset();
-        SalesCommLine.SetCurrentKey("No.");
-        SalesCommLine.SetRange("No.", SalesHdr."No.");
-        IF Not SalesCommLine.FindFirst() then begin
-            SalesCommLine.Init();
-            SalesCommLine."Document Type" := SalesCommLine."Document Type"::Order;
-            SalesCommLine."No." := SalesHdr."No.";
-            SalesCommLine."Line No." := SalesLine."Line No.";
-            SalesCommLine."Document Line No." := SalesLine."Line No.";
-            SalesCommLine.Insert();
-            SalesCommLine.Comment := 'Document Processed from POS';
-            SalesCommLine.Modify();
-        end;
-        */
-            //>> Comment Mandetory so We have to pass Order Comment
-            //SalesHdr.Status := SalesHdr.Status::Released;
-            //SalesHdr.Modify();
             ReleaseSalesDoc.PerformManualRelease(SalesHdr);
             Salespost.Run(SalesHdr);
             //exit('Failed');
@@ -358,7 +341,7 @@ codeunit 50303 "POS Procedure"
     /// <summary>
     /// Post ship and Invoice for a specific Order line
     /// </summary>
-    procedure InvoiceLine(DocumentNo: Code[20]; LineNo: Integer; parameter: Text; InputData: Text): text
+    procedure InvoiceLine(DocumentNo: Code[20]; LineNo: Integer; parameter: Text; InputData: Text; staffid: Code[10]): text
     var
         SaleHeaderInv: Record "Sales Header";
         SaleLinerInv: Record "Sales Line";
@@ -375,7 +358,8 @@ codeunit 50303 "POS Procedure"
         SaleHeaderInv.SetRange("No.", DocumentNo);
         SaleHeaderInv.SetCurrentKey("No.");
         IF SaleHeaderInv.FindFirst() then begin
-            //  EXIT('Found');
+            SaleHeaderInv."Posted By" := staffid;
+            SaleHeaderInv.Modify();
             IF SaleHeaderInv.Status = SaleHeaderInv.Status::Released then begin
                 SaleHeaderInv.Status := SaleHeaderInv.Status::Open;
                 SaleHeaderInv.Modify(true);
@@ -388,23 +372,6 @@ codeunit 50303 "POS Procedure"
                 SaleLinerInv.validate("Qty. to Ship", SaleLinerInv."Qty. to Ship");
                 SaleLinerInv.Validate("Qty. to Invoice", SaleLinerInv."Qty. to Ship");
                 SaleLinerInv.Modify(true);
-                /*
-                //<< Comment Mandetory so We have to pass Order Comment
-                SalesCommLine.Reset();
-                SalesCommLine.SetRange("No.", SaleHeaderInv."No.");
-                IF Not SalesCommLine.FindFirst() then begin
-                    SalesCommLine.Init();
-                    SalesCommLine."Document Type" := SalesCommLine."Document Type"::Order;
-                    SalesCommLine."No." := SaleHeaderInv."No.";
-                    SalesCommLine."Line No." := SaleLinerInv."Line No.";
-                    SalesCommLine."Document Line No." := SaleLinerInv."Line No.";
-                    SalesCommLine.Insert();
-                    SalesCommLine.Comment := 'Document Processed from POS';
-                    SalesCommLine.Modify();
-                end;
-                */
-                //>> Comment Mandetory so We have to pass Order Comment
-                //SaleHeaderInv.Status := SaleHeaderInv.Status::Released;
                 ReleaseSalesDoc.PerformManualRelease(SaleHeaderInv);
                 SaleHeaderInv.Modify(true);
                 Salespost.Run(SaleHeaderInv);
@@ -416,7 +383,7 @@ codeunit 50303 "POS Procedure"
     /// <summary>
     /// Receive GRN or Transfer Receipt
     /// </summary>
-    procedure ItemReceipt(documentNo: Code[20]; lineNo: Integer; inputData: Text): text
+    procedure ItemReceipt(documentNo: Code[20]; lineNo: Integer; inputData: Text; staffid: Code[10]): text
     var
         PurchHeader: Record 38;
         PurchLine: Record 39;
@@ -445,26 +412,9 @@ codeunit 50303 "POS Procedure"
             PurchLine.SetCurrentKey("Document No.");
             PurchLine.SetRange("Document No.", PurchHeader."No.");
             IF PurchLine.FindFirst() then begin
-                /*
-                //<< Comment Mandetory so We have to pass Order Comment
-                PurchCommLine.Reset();
-                PurchCommLine.SetCurrentKey("No.");
-                PurchCommLine.SetRange("No.", PurchHeader."No.");
-                IF Not PurchCommLine.FindFirst() then begin
-                    PurchCommLine.Init();
-                    PurchCommLine."Document Type" := PurchCommLine."Document Type"::Order;
-                    PurchCommLine."No." := PurchHeader."No.";
-                    PurchCommLine."Line No." := PurchLine."Line No.";
-                    PurchCommLine."Document Line No." := PurchLine."Line No.";
-                    PurchCommLine.Insert();
-                    PurchCommLine.Comment := 'Document Processed from POS';
-                    PurchCommLine.Modify();
-                end;
-                */
-                //>> Comment Mandetory so We have to pass Order Comment
-
                 PurchHeader.Receive := true;
                 PurchHeader.Invoice := false;
+                PurchHeader."Posted By" := staffid;
                 PurchHeader.Modify();
                 ReleasePurch.PerformManualRelease(PurchHeader);
                 Purchpost.Run(PurchHeader);
@@ -490,6 +440,7 @@ codeunit 50303 "POS Procedure"
                     //   Transferline.Validate("Qty. to Receive", Transferline.Quantity);
                     //Transferline.Modify();
                     TransferHeader.Status := TransferHeader.Status::Released;
+                    TransferHeader."Posted By" := staffid;
                     TransferHeader.Modify();
                     TranspostReceived.Run(TransferHeader);
                     TRH.Reset();
@@ -1280,33 +1231,22 @@ codeunit 50303 "POS Procedure"
     begin
         //*********Report SaveasPDF code********
 
-        /*
-            SH.RESET;
-            SH.SETRANGE("No.", documentno);
-            IF SH.FINDFIRST THEN;
-            Recref.GetTable(SH);
-            TempBlob.CreateOutStream(OutStrm);
-            Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
-            TempBlob.CreateInStream(Instrm);
-            //FileName := SH."No." + '.' + 'PDF';
-            //DownloadFromStream(Instrm, 'Download', '', '', FileName);
-            //UploadIntoStream('Please choose any file.', '', '', FromFile, Instrm);
-            //FileName := fileMgt.GetFileName(FromFile);
-            exit('Success');
-        */
+
+        SH.RESET;
+        SH.SETRANGE("No.", documentno);
+        IF SH.FINDFIRST THEN;
+        Recref.GetTable(SH);
+        TempBlob.CreateOutStream(OutStrm);
+        Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
+        TempBlob.CreateInStream(Instrm);
 
         //*************Azure upload Code**************
 
         ABSCSetup.Get();
         Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
         ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
-        // FileName := SH."No." + '.' + 'PDF';
-        FileName := 'Text' + '.' + 'pdf';
-        TempBlob.CreateInStream(Instrm);
-        UploadIntoStream('', Instrm);
-        //UploadIntoStream('UPLOAD','','','',Instrm);
+        FileName := SH."No." + '.' + 'PDF';
         response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-        // ABSBlobClient.GetBlobAsFile(FileName);
         exit(Format(response.IsSuccessful()));
 
 

@@ -66,7 +66,7 @@ codeunit 50302 "POS Event and Subscriber"
                 end;
             'INVLINE':  //<<<<** Sales Order's Perticuller line Ship and Invoice **>>>>
                 begin
-                    IsResult := POSProcedure.InvoiceLine(documentno, lineno, parameter1, input);
+                    IsResult := POSProcedure.InvoiceLine(documentno, lineno, parameter1, input, parameter2);
                     IF IsResult = '' then
                         exit('Success');
                     // Else
@@ -74,7 +74,7 @@ codeunit 50302 "POS Event and Subscriber"
                 end;
             'RECEIPT': //<<<<** Purchase Order or Tranfer Order Receive Function **>>>>
                 begin
-                    IsResult := POSProcedure.ItemReceipt(documentno, lineno, input);
+                    IsResult := POSProcedure.ItemReceipt(documentno, lineno, input, parameter2);
                     IF IsResult = '' then
                         exit('Success')
                     Else
@@ -144,7 +144,7 @@ codeunit 50302 "POS Event and Subscriber"
                 end;
             'INVCOM':  //<<<<** compelete Invoice Auto Qty to ship Update **>>>>
                 begin
-                    IsResult := POSProcedure.InvoiceComplete(documentno);
+                    IsResult := POSProcedure.InvoiceComplete(documentno, parameter2);
                     IF IsResult = '' then
                         exit('Success');
                     // Else
@@ -313,9 +313,9 @@ codeunit 50302 "POS Event and Subscriber"
     end;
 
     /// <summary>
-    /// Post Shipment TO Line
+    /// Post Transfer Shipment Line
     /// </summary>
-    procedure ShipTransferLine(documentno: Code[20]; lineno: Integer; inputdata: Text): text
+    procedure ShipTransferLine(documentno: Code[20]; lineno: Integer; inputdata: Text; staffid: Code[10]): text
     var
         TransferHeaderShip: record "Transfer Header";
         TransferlineShip: Record "Transfer Line";
@@ -326,6 +326,8 @@ codeunit 50302 "POS Event and Subscriber"
         TransferHeaderShip.SetCurrentKey("No.");
         TransferHeaderShip.SetRange("No.", DocumentNo);
         IF TransferHeaderShip.FindFirst() then begin
+            TransferHeaderShip."Posted By" := staffid;
+            TransferHeaderShip.Modify();
             Transpostship.Run(TransferHeaderShip);
             Transferrelease.Run(TransferHeaderShip);
         end;
@@ -499,8 +501,8 @@ codeunit 50302 "POS Event and Subscriber"
                 TranHdr.Status := TranHdr.Status::Released;
                 TranHdr.Modify(true);
             end;
-            IF not TransShip.Run(TranHdr) then
-                exit('Failed');
+            TransShip.Run(TranHdr);
+
 
         end;
     end;

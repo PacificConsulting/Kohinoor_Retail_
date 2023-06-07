@@ -23,6 +23,11 @@ pageextension 50302 "Posted Sales invoice Retail" extends "Posted Sales Invoice"
             {
                 ApplicationArea = all;
             }
+            field("Posted By"; Rec."Posted By")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Posted By field.';
+            }
         }
     }
 

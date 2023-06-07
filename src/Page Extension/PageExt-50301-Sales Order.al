@@ -42,6 +42,11 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the POS Released Date field.';
                 }
+                field("Posted By"; Rec."Posted By")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Posted By field.';
+                }
 
             }
         }
@@ -268,7 +273,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 begin
                     Message('hi');
                     result := POS.POSAction('KTPLSO23240091', 0, 'INVLINE', '', '', '');
-                    result := CU.InvoiceLine('KTPLSO23240019', 0, '', '');
+                    // result := CU.InvoiceLine('KTPLSO23240019', 0, '', '');
                     //if recCust.get
                     DecryptedValue := GetUrl(ClientType::Current, Rec.CurrentCompany, ObjectType::Page, Page::"Slab Approval List");
                     Window.OPEN(
