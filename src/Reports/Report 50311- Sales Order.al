@@ -145,6 +145,10 @@ report 50311 "Sales Order"
             {
 
             }
+            column(ReLocation; ReLocation."Payment QR")
+            {
+
+            }
 
 
             dataitem("Sales Line"; "Sales Line")
@@ -261,7 +265,6 @@ report 50311 "Sales Order"
                 //PCPL-064<< 8june2023
                 PaymentLines.Reset();
                 PaymentLines.setrange("Document No.", "No.");
-
                 PaymentLines.setrange("Document Type", "Sales Line"."Document Type"::Order);
                 if PaymentLines.findfirst() then begin
                     repeat
@@ -272,6 +275,10 @@ report 50311 "Sales Order"
                     until PaymentLines.Next = 0;
 
                 end;
+
+                if ReLocation.Get("Location Code") then;
+                Reclocation.CalcFields("Payment QR");
+
                 //PCPL-064<< 8june2023
             end;
 
@@ -360,6 +367,7 @@ report 50311 "Sales Order"
         TotalAmount: decimal;
         PaymentLines: Record "Payment Lines";
         Paymentmethod: Code[50];
+        ReLocation: Record Location;
 
 
 

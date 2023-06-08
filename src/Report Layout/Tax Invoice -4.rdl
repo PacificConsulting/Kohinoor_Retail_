@@ -336,6 +336,56 @@ DD.</Value>
                   <PaddingBottom>2pt</PaddingBottom>
                 </Style>
               </Textbox>
+              <Image Name="Image1">
+                <Source>Database</Source>
+                <Value>=First(Fields!ReLocation.Value, "DataSet_Result")</Value>
+                <MIMEType>image/jpeg</MIMEType>
+                <Sizing>FitProportional</Sizing>
+                <Top>10.26549cm</Top>
+                <Left>16.8358cm</Left>
+                <Height>2.90416cm</Height>
+                <Width>3.09741cm</Width>
+                <ZIndex>3</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                </Style>
+              </Image>
+              <Textbox Name="Textbox1">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>QR Code</Value>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox1</rd:DefaultName>
+                <Top>9.54259cm</Top>
+                <Left>16.8358cm</Left>
+                <Height>0.7229cm</Height>
+                <Width>3.09746cm</Width>
+                <ZIndex>4</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>10.18363cm</Top>
@@ -6078,7 +6128,7 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Received the goods ingood condition &amp; order          For KOHINOOR TELEVIDEO PVT. LTD           QR Code       E-Invoice QR Code</Value>
+                    <Value>Received the goods ingood condition &amp; order          For KOHINOOR TELEVIDEO PVT. LTD             E-Invoice QR Code</Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -6120,7 +6170,7 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Customer Signature                                                                     Authorized Signatory                                                            IRN</Value>
+                    <Value>Customer Signature                                                                     Authorized Signatory                                   IRN</Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -6290,7 +6340,7 @@ invoice.</Value>
             <Top>19.72622cm</Top>
             <Left>0.00001cm</Left>
             <Height>3.62706cm</Height>
-            <Width>19.93326cm</Width>
+            <Width>16.8358cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -6432,6 +6482,9 @@ End Function
         </Field>
         <Field Name="Paymentmethod">
           <DataField>Paymentmethod</DataField>
+        </Field>
+        <Field Name="ReLocation">
+          <DataField>ReLocation</DataField>
         </Field>
         <Field Name="SrNo">
           <DataField>SrNo</DataField>

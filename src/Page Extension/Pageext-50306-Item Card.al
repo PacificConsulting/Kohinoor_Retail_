@@ -74,8 +74,7 @@ pageextension 50306 "ItemCArdExtension" extends "Item Card"
                         // VResult := 'All Files (*.*)|*.*';
                         // UploadIntoStream(VResult, Instr);
                         //DownloadFromCloud();
-
-
+                        
                         // Result := 'C:\temp\test.pdf';
                         Recref.GetTable(recCust);
                         TempBlob.CreateOutStream(OutStr);
@@ -91,7 +90,7 @@ pageextension 50306 "ItemCArdExtension" extends "Item Card"
                         // Message(Result);
 
                         //  Clear(APIManagment);
-                        */
+                        
                         Base64text := CreateImgOpenAI(Rec.Description);
 
                         TempBlob.CreateOutStream(outstream);
@@ -101,6 +100,7 @@ pageextension 50306 "ItemCArdExtension" extends "Item Card"
                         Clear(rec.Picture);
                         Rec.Picture.ImportStream(instream, '');
                         Rec.Modify()
+                            */
 
                     end;
                 }

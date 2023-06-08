@@ -193,8 +193,9 @@ page 50329 "Request Transfer Order"
                     IF RH.FindFirst() then
                         RH.Delete(true);
 
-                    // if InstructionMgt.IsEnabled(InstructionMgt.ShowPostesdConfirmationMessageCode()) then
-                    //     ShowPostedConfirmationMessage(TransferHeader."No.");
+                    if InstructionMgt.IsEnabled(InstructionMgt.ShowPostedConfirmationMessageCode()) then
+                        ShowPostedConfirmationMessage(TransferHeader."No.");
+
                 end;
             }
 

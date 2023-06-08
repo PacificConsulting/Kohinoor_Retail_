@@ -125,6 +125,10 @@ report 50310 "Tax Invoice"
             {
 
             }
+            column(ReLocation; ReLocation."Payment QR")
+            {
+
+            }
 
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
             {
@@ -314,8 +318,11 @@ report 50310 "Tax Invoice"
                         else
                             Paymentmethod := PostedPaymentLines."Payment Method Code";
                     until PostedPaymentLines.Next = 0;
-
                 end;
+
+                if ReLocation.Get("Location Code") then;
+                Reclocation.CalcFields("Payment QR");
+
                 //PCPL-064<< 8june2023
             end;
 
@@ -405,6 +412,7 @@ report 50310 "Tax Invoice"
         Notext: Text[20];
         PostedPaymentLines: Record "Posted Payment Lines";
         Paymentmethod: Code[50];
+        ReLocation: Record Location;
 
     //GLE:Record 
 }
