@@ -6,7 +6,7 @@ page 50388 "Tender Bank Acc. Rec List"
     Editable = false;
     PageType = List;
     SourceTable = "Bank Acc. Reconciliation";
-    SourceTableView = WHERE("Statement Type" = CONST("Bank Reconciliation"));
+    SourceTableView = WHERE("Statement Type" = CONST("Bank Reconciliation"), Tender = filter(true));
     UsageCategory = Lists;
     RefreshOnActivate = true;
 

@@ -4,7 +4,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
     PageType = ListPlus;
     SaveValues = false;
     SourceTable = "Bank Acc. Reconciliation";
-    SourceTableView = WHERE("Statement Type" = CONST("Bank Reconciliation"));
+    SourceTableView = WHERE("Statement Type" = CONST("Bank Reconciliation"), Tender = filter(true));
     RefreshOnActivate = true;
 
     layout
@@ -502,6 +502,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     begin
         RecallEmptyListNotification();
+        Rec.Tender := true;
     end;
 
     trigger OnAfterGetCurrRecord()

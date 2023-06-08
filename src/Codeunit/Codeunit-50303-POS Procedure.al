@@ -103,6 +103,7 @@ codeunit 50303 "POS Procedure"
         SalesHeder.SetCurrentKey("No.");
         SalesHeder.SetRange("No.", "Document No.");
         IF SalesHeder.FindFirst() then begin
+            SalesHeder.TestField(Status, SalesHeder.Status::Open);
             IF SalesHeder.Status = SalesHeder.Status::Released then begin
                 SalesHeder.Status := SalesHeder.Status::Open;
                 SalesHeder.Modify();
@@ -1228,6 +1229,7 @@ codeunit 50303 "POS Procedure"
         response: Codeunit "ABS Operation Response";
         fileMgt: codeunit "File Management";
         FromFile: Text;
+        cduabsoption: Codeunit "ABS Optional Parameters";
     begin
         //*********Report SaveasPDF code********
 
@@ -1247,7 +1249,9 @@ codeunit 50303 "POS Procedure"
         ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
         FileName := SH."No." + '.' + 'PDF';
         response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-        exit(Format(response.IsSuccessful()));
+        //response := ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
+        //response := ABSBlobClient.PutBlobAppendBlob(FileName, 'application/pdf', cduabsoption);
+        exit(Format(response.GetError()));
 
 
     end;

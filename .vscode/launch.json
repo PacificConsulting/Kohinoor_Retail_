@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+        /*
         {
             "name": "Debugg Sandbox",
             "type": "al",
@@ -16,7 +17,7 @@
             "numberOfSqlStatements": 10,
             "breakOnNext": "WebClient",
             "sessionId": 148607
-        },
+        }*/
         {
             "name": "Microsoft cloud sandbox",
             "request": "launch",

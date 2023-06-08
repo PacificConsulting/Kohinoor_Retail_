@@ -12,6 +12,13 @@ pageextension 50308 Location_Card extends "Location Card"
                 }
             }
         }
+        // addafter("Home Page")
+        // {
+        //     field("Payment QR"; Rec."Payment QR")
+        //     {
+        //         ApplicationArea = all;
+        //     }
+        // }
         addafter("Receipt Bin Code")
         {
             field("Default Receipt Bin"; Rec."Default Receipt Bin")

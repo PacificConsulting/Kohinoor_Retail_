@@ -35,7 +35,7 @@ page 50382 ItemTrackingTransferReceive
                 {
                     Caption = 'Source ID';
                 }
-                field(lineNo; Rec."Source Ref. No.")
+                field(lineNo; rec."Source Prod. Order Line")
                 {
                     Caption = 'Source Ref. No.';
                 }

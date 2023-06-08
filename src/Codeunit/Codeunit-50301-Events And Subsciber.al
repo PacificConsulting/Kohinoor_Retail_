@@ -31,11 +31,14 @@ codeunit 50301 "Event and Subscribers"
         TempBlob.CreateInStream(Instrm);
         //*************Azure upload Code**************
         ABSCSetup.Get();
-        // ABSCSetup.TestField("Container Name Invoice");
+        ABSCSetup.TestField("Container Name Invoice");
         Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-        ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
+        ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Invoice", Authorization);
         FileName := SIH."No." + '.' + 'pdf';
+        // ABSBlobClient.
         ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+        ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
+
     end;
     //<<<<<<<END********************************CU-80*****************************************
 
