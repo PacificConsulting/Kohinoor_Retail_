@@ -1213,6 +1213,52 @@ codeunit 50303 "POS Procedure"
 
     end;
 
+    local procedure UploadAzure(Azurestream: InStream)
+    var
+        ABSOperationResponse: Codeunit "ABS Operation Response";
+        // Operation: Enum "ABS Operation";
+        HttpContent: HttpContent;
+        SourceInStream: InStream;
+        SourceText: Text;
+        Headers: HttpHeaders;
+        ContentType: Text;
+        ContentHeaders: Dictionary of [Text, Text];
+        ContentLengthLbl: Label '%1', Comment = '%1 = Length', Locked = true;
+        HttpRequestMessage: HttpRequestMessage;
+    // BlobServiceAPIOperation: Enum "ABS Operation";
+    begin
+        /*ABSOperationPayload.SetOperation(Operation::PutBlob);
+        ABSOperationPayload.SetBlobName(BlobName);
+        ABSOperationPayload.SetOptionalParameters(ABSOptionalParameters);
+*//*
+
+        SourceInStream := Azurestream;
+        //ABSHttpContentHelper.AddBlobPutBlockBlobContentHeaders(HttpContent, ABSOperationPayload, SourceInStream);
+        //if ContentType = '' then
+        ContentType := 'application/pdf';
+
+        HttpContent.GetHeaders(Headers);
+
+        //if not (ABSOperationPayload.GetOperation() in [BlobServiceAPIOperation::PutPage]) then
+        //ABSOperationPayload.AddContentHeader('HttpContent-Type', ContentType);
+        //  if ContentHeaders.Remove(ContentType) then;
+        ContentHeaders.Add('HttpContent-Type', ContentType);
+
+        ContentHeaders.Add('HttpContent-Length', StrSubstNo(ContentLengthLbl, 512));
+         HttpRequestMessage.Content := HttpContent;
+        // ABSOperationPayload.AddContentHeader('HttpContent-Length', StrSubstNo(ContentLengthLbl, ContentLength));
+     HttpRequestMessage.Method('PUT');
+     //HttpRequestMessage.SetRequestUri(ABSOperationPayload.ConstructUri());
+     ContentHeaders.Add('x-ms-date',FormatDateTime(MyDateTime, 'R'))
+
+
+
+        ABSOperationResponse := ABSWebRequestHelper.PutOperation(ABSOperationPayload, HttpContent, StrSubstNo(UploadBlobOperationNotSuccessfulErr, ABSOperationPayload.GetBlobName(), ABSOperationPayload.GetContainerName()));
+        exit(ABSOperationResponse);
+
+*/
+    end;
+
     //Azure Integration with BC SO Print
     procedure SOPrint(documentno: Code[20]): Text
     var
@@ -1230,6 +1276,16 @@ codeunit 50303 "POS Procedure"
         fileMgt: codeunit "File Management";
         FromFile: Text;
         cduabsoption: Codeunit "ABS Optional Parameters";
+        Client: HttpClient;
+        Request: HttpRequestMessage;
+        Response1: HttpResponseMessage;
+        Content: HttpContent;
+        JsonEinvObject: JsonObject;
+        Jsontext: Text;
+        Einvcontent: HttpContent;
+        Result: Text;
+        VResult: Text;
+        B64: Codeunit "Base64 Convert";
     begin
         //*********Report SaveasPDF code********
 
@@ -1241,18 +1297,30 @@ codeunit 50303 "POS Procedure"
         TempBlob.CreateOutStream(OutStrm);
         Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
         TempBlob.CreateInStream(Instrm);
+        VResult := B64.ToBase64(Instrm);
+        //Instrm.ReadText(Jsontext);
+        JsonEinvObject.Add('filepath', VResult);
+        Content.ReadAs(Jsontext);
+        //DownloadFromStream()
+
+        If Client.Post('https://kohinoorazeinvoiceintegration.azurewebsites.net/api/Function1', Content, Response1) then
+            IF Response1.IsSuccessStatusCode() then begin
+                Einvcontent := Response1.Content;
+                Einvcontent.ReadAs(Result);
+                exit(Result);
+            end;
 
         //*************Azure upload Code**************
-
-        ABSCSetup.Get();
-        Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-        ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
-        FileName := SH."No." + '.' + 'PDF';
-        response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-        //response := ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
-        //response := ABSBlobClient.PutBlobAppendBlob(FileName, 'application/pdf', cduabsoption);
-        exit(Format(response.GetError()));
-
+        /*
+            ABSCSetup.Get();
+            Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
+            ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
+            FileName := SH."No." + '.' + 'PDF';
+            response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+            //response := ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
+            //response := ABSBlobClient.PutBlobAppendBlob(FileName, 'application/pdf', cduabsoption);
+            exit(Format(response.GetError()));
+        */
 
     end;
 
