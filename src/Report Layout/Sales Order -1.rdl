@@ -336,54 +336,6 @@ DD.</Value>
                   <PaddingBottom>2pt</PaddingBottom>
                 </Style>
               </Textbox>
-              <Image Name="Image3">
-                <Source>Database</Source>
-                <Value>=First(Fields!ReLocation.Value, "DataSet_Result")</Value>
-                <MIMEType>image/jpeg</MIMEType>
-                <Sizing>FitProportional</Sizing>
-                <Top>10.05853cm</Top>
-                <Left>16.83757cm</Left>
-                <Height>2.72218cm</Height>
-                <Width>3.09569cm</Width>
-                <ZIndex>3</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                </Style>
-              </Image>
-              <Textbox Name="Textbox6">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>QR Code</Value>
-                        <Style>
-                          <FontWeight>Bold</FontWeight>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style />
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox6</rd:DefaultName>
-                <Top>9.52936cm</Top>
-                <Left>16.83757cm</Left>
-                <Height>0.52917cm</Height>
-                <Width>3.09562cm</Width>
-                <ZIndex>4</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>10.18363cm</Top>
@@ -3973,7 +3925,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!SGST.Value, "DataSet_Result")</Value>
+                                  <Value>=Fields!SGSTAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>f2</Format>
@@ -4028,7 +3980,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!CGST.Value, "DataSet_Result")</Value>
+                                  <Value>=Fields!CGSTAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>f2</Format>
@@ -4083,7 +4035,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!IGST.Value, "DataSet_Result")</Value>
+                                  <Value>=Fields!IGSTAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>f2</Format>
@@ -4571,16 +4523,16 @@ DD.</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TotalAmount1">
+                        <Textbox Name="Textbox81">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalAmount1.Value</Value>
+                                  <Value>=SUM(Fields!Amount.Value + Fields!SGST.Value + Fields!CGST.Value + Fields!IGST.Value)</Value>
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
+                                    <FontSize>9pt</FontSize>
                                     <Format>n2</Format>
                                   </Style>
                                 </TextRun>
@@ -4590,11 +4542,12 @@ DD.</Value>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TotalAmount1</rd:DefaultName>
+                          <rd:DefaultName>Textbox77</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <BackgroundColor>White</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -5755,18 +5708,6 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value />
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
                     <Value xml:space="preserve">                                                     </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
@@ -5805,6 +5746,22 @@ invoice.</Value>
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Image Name="Image1">
+            <Source>Database</Source>
+            <Value>=First(Fields!ReLocation.Value, "DataSet_Result")</Value>
+            <MIMEType>image/jpeg</MIMEType>
+            <Sizing>FitProportional</Sizing>
+            <Top>19.71299cm</Top>
+            <Left>16.83758cm</Left>
+            <Height>3.25135cm</Height>
+            <Width>3.09563cm</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
         </ReportItems>
         <Height>22.96434cm</Height>
         <Style />
@@ -5869,6 +5826,9 @@ End Function
         </Field>
         <Field Name="CompName">
           <DataField>CompName</DataField>
+        </Field>
+        <Field Name="Compinfo_picture">
+          <DataField>Compinfo_picture</DataField>
         </Field>
         <Field Name="CompName2">
           <DataField>CompName2</DataField>
@@ -5969,6 +5929,18 @@ End Function
         <Field Name="ReLocation">
           <DataField>ReLocation</DataField>
         </Field>
+        <Field Name="TotalAmount1">
+          <DataField>TotalAmount1</DataField>
+        </Field>
+        <Field Name="TotalAmount1Format">
+          <DataField>TotalAmount1Format</DataField>
+        </Field>
+        <Field Name="TotalGSTAmountFinal">
+          <DataField>TotalGSTAmountFinal</DataField>
+        </Field>
+        <Field Name="TotalGSTAmountFinalFormat">
+          <DataField>TotalGSTAmountFinalFormat</DataField>
+        </Field>
         <Field Name="SrNo">
           <DataField>SrNo</DataField>
         </Field>
@@ -6002,17 +5974,29 @@ End Function
         <Field Name="AmountFormat">
           <DataField>AmountFormat</DataField>
         </Field>
-        <Field Name="TotalAmount1">
-          <DataField>TotalAmount1</DataField>
-        </Field>
-        <Field Name="TotalAmount1Format">
-          <DataField>TotalAmount1Format</DataField>
-        </Field>
         <Field Name="AmountInWords1">
           <DataField>AmountInWords1</DataField>
         </Field>
         <Field Name="HSNSACCode_SalesLine">
           <DataField>HSNSACCode_SalesLine</DataField>
+        </Field>
+        <Field Name="SGSTAmount">
+          <DataField>SGSTAmount</DataField>
+        </Field>
+        <Field Name="SGSTAmountFormat">
+          <DataField>SGSTAmountFormat</DataField>
+        </Field>
+        <Field Name="CGSTAmount">
+          <DataField>CGSTAmount</DataField>
+        </Field>
+        <Field Name="CGSTAmountFormat">
+          <DataField>CGSTAmountFormat</DataField>
+        </Field>
+        <Field Name="IGSTAmount">
+          <DataField>IGSTAmount</DataField>
+        </Field>
+        <Field Name="IGSTAmountFormat">
+          <DataField>IGSTAmountFormat</DataField>
         </Field>
         <Field Name="Serial_No_">
           <DataField>Serial_No_</DataField>

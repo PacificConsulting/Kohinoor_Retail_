@@ -20,6 +20,8 @@ codeunit 50301 "Event and Subscribers"
         FileName: Text;
         SIH: record 112;
         Recref: RecordRef;
+        VResult: Text;
+        B64: Codeunit "Base64 Convert";
     begin
         //*********Report SaveasPDF code********
         SIH.RESET;
@@ -29,6 +31,9 @@ codeunit 50301 "Event and Subscribers"
         TempBlob.CreateOutStream(OutStrm);
         Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStrm, Recref);
         TempBlob.CreateInStream(Instrm);
+        VResult := B64.ToBase64(Instrm);
+        UploadonAzurBlobStorage(SIH."No." + '.PDF', VResult);
+        /*
         //*************Azure upload Code**************
         ABSCSetup.Get();
         ABSCSetup.TestField("Container Name Invoice");
@@ -38,6 +43,7 @@ codeunit 50301 "Event and Subscribers"
         // ABSBlobClient.
         ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
         ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
+        */
 
     end;
     //<<<<<<<END********************************CU-80*****************************************
@@ -71,13 +77,13 @@ codeunit 50301 "Event and Subscribers"
     var
         TL: Record "Transfer Line";
     begin
-        TL.Reset();
-        TL.SetRange("Document No.", TransferHeader."No.");
-        IF TL.FindSet() then
-            repeat
-                TL.Validate("Qty. to Ship", 0);
-                TL.Modify();
-            until TL.Next() = 0;
+        // TL.Reset();
+        // TL.SetRange("Document No.", TransferHeader."No.");
+        // IF TL.FindSet() then
+        //     repeat
+        //         TL.Validate("Qty. to Ship", 0);
+        //         TL.Modify();
+        //     until TL.Next() = 0;
     end;
     //END**********************************CU-5708*******************************************
 
@@ -235,12 +241,21 @@ codeunit 50301 "Event and Subscribers"
     //     end;
     // end;
     //START**********************************Codeunit-5704***************************************
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnBeforeTransferOrderPostShipment', '', false, false)]
-    local procedure OnBeforeTransferOrderPostShipment(var TransferHeader: Record "Transfer Header"; var CommitIsSuppressed: Boolean)
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnAfterInsertTransShptHeader', '', false, false)]
+    local procedure OnAfterInsertTransShptHeader(var TransferHeader: Record "Transfer Header"; var TransferShipmentHeader: Record "Transfer Shipment Header")
     begin
-
+        TransferShipmentHeader."Posted By" := TransferHeader."Posted By";
     end;
     //END**********************************Codeunit-5704***************************************
+
+    //START**********************************Codeunit-5705***************************************
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", 'OnAfterInsertTransRcptHeader', '', false, false)]
+    local procedure OnAfterInsertTransRcptHeader(var TransRcptHeader: Record "Transfer Receipt Header"; var TransHeader: Record "Transfer Header")
+    begin
+        TransRcptHeader."Posted By" := TransHeader."Posted By";
+    end;
+    //END**********************************Codeunit-5705***************************************
+
 
     //START**********************************Table-23***************************************
 
@@ -282,6 +297,31 @@ codeunit 50301 "Event and Subscribers"
             RecPaymentLine.DeleteAll();
     end;
 
-    var
+    local procedure UploadonAzurBlobStorage(FileName: Text; Base64: Text)
 
+    Var
+        client: HttpClient;
+        cont: HttpContent;
+        header: HttpHeaders;
+        response: HttpResponseMessage;
+        Jobject: JsonObject;
+        tmpString: Text;
+        token: Text;
+        URL: text;
+        AzurBlobSetup: Record "Azure Storage Container Setup";
+    Begin
+        AzurBlobSetup.Get();
+        AzurBlobSetup.TestField("Azure Invoice URL");
+        URL := AzurBlobSetup."Azure Invoice URL";//'https://prod-05.centralindia.logic.azure.com:443/workflows/c6dd57d4a8814ad0bd3e43bae6ecd6fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dq8NlkzznvjIz9F1aYbWcaxHyGAgqaWBQjkCczmrLeg';
+        //Jobject.Add('ApiToken', 'testapi');
+        Jobject.Add('Document', Base64);
+        Jobject.Add('FileName', FileName);
+        Jobject.WriteTo(tmpString);
+        cont.WriteFrom(tmpString);
+        cont.ReadAs(tmpString);
+        cont.GetHeaders(header);
+        header.Remove('Content-Type');
+        header.Add('Content-Type', 'application/json');
+        client.Post(URL, cont, response);
+    end;
 }

@@ -58,7 +58,7 @@ pageextension 50306 "ItemCArdExtension" extends "Item Card"
                         B64: Codeunit "Base64 Convert";
                         base64convert: Codeunit "Base64 Convert";
                     begin
-                        /*
+                        /* 
                         Recref.GetTable(recCust);
                         TempBlob.CreateOutStream(OutStr);
                         Report.SaveAs(Report::"Customer - List", '', ReportFormat::Pdf, OutStr, Recref);

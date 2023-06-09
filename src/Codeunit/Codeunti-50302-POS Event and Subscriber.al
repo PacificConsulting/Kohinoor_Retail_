@@ -172,10 +172,7 @@ codeunit 50302 "POS Event and Subscriber"
             'SOPRINT':  //<<<<** Add Comment on Live level new Line Insert **>>>>
                 begin
                     IsResult := POSProcedure.SOPrint(documentno);
-                    IF IsResult = '' then
-                        exit('Success')
-                    Else
-                        exit(IsResult);
+                    exit(IsResult);
 
                 end;
         end;
@@ -331,6 +328,34 @@ codeunit 50302 "POS Event and Subscriber"
             Transpostship.Run(TransferHeaderShip);
             Transferrelease.Run(TransferHeaderShip);
         end;
+    end;
+
+    procedure TransferShipQtyUpdate(documentno: Code[20]): Text
+    var
+        transferHdr: Record "Transfer Header";
+        transferLine: record "Transfer Line";
+        Reservation: Record 337;
+    begin
+        transferHdr.Reset();
+        transferHdr.SetRange("No.", documentno);
+        if transferHdr.FindFirst() then begin
+            transferLine.Reset();
+            transferLine.SetRange("Document No.", transferHdr."No.");
+            IF transferLine.FindSet() then
+                repeat
+                    Reservation.Reset();
+                    Reservation.SetRange("Source ID", transferHdr."No.");
+                    Reservation.SetRange("Source Ref. No.", transferLine."Line No.");
+                    Reservation.SetRange(Positive, false);
+                    IF Reservation.FindSet() then
+                        repeat
+                            transferLine."Qty. to Ship" += ABS(Reservation."Quantity (Base)");
+                        until Reservation.Next() = 0;
+                    transferLine.Validate("Qty. to Ship");
+                    transferLine.Modify();
+                until transferLine.Next() = 0;
+        end else
+            exit('Document not found')
     end;
 
 

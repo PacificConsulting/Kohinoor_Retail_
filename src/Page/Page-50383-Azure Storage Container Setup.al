@@ -32,6 +32,14 @@ page 50383 "Azure Storage Container Setup"
                 {
                     ToolTip = 'Specifies the value of the Access key field.';
                 }
+                field("Azure Invoice URL"; Rec."Azure Invoice URL")
+                {
+                    ToolTip = 'Specifies the value of the Azure Invoice URL field.';
+                }
+                field("Azure Order URL"; Rec."Azure Order URL")
+                {
+                    ToolTip = 'Specifies the value of the Azure Order URL field.';
+                }
             }
         }
     }

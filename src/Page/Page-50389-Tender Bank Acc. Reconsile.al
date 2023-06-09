@@ -17,7 +17,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                 field(BankAccountNo; rec."Bank Account No.")
                 {
                     ApplicationArea = Basic, Suite;
-                    Caption = 'Bank Account No.';
+                    Caption = 'Tender Account No.';
                     ToolTip = 'Specifies the number of the bank account that you want to reconcile with the bank''s statement.';
                     Editable = BankAccountNoIsEditable;
 

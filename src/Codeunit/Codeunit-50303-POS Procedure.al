@@ -1259,6 +1259,40 @@ codeunit 50303 "POS Procedure"
 */
     end;
 
+    procedure UploadonAzurBlobStorage(FileName: Text; Base64: Text): Text
+
+    Var
+        client: HttpClient;
+        cont: HttpContent;
+        header: HttpHeaders;
+        response: HttpResponseMessage;
+        Jobject: JsonObject;
+        tmpString: Text;
+        token: Text;
+        URL: text;
+        AzureStorage: Record "Azure Storage Container Setup";
+        Content: HttpContent;
+    Begin
+        AzureStorage.Get();
+        AzureStorage.TestField("Azure Order URL");
+        URL := AzureStorage."Azure Order URL"; //'https://prod-07.centralindia.logic.azure.com:443/workflows/6ded9ed45ffa4a10ad45618763a6a8bb/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=eUvULr4Qfqilcpnb9XTULKPoZxPrscWcWRP7Gg0r41s';
+        //Jobject.Add('ApiToken', 'testapi');
+        Jobject.Add('Document', Base64);
+        Jobject.Add('FileName', FileName);
+        Jobject.WriteTo(tmpString);
+        cont.WriteFrom(tmpString);
+        cont.ReadAs(tmpString);
+        cont.GetHeaders(header);
+        header.Remove('Content-Type');
+        header.Add('Content-Type', 'application/json');
+        IF client.Post(URL, cont, response) then
+            if response.IsSuccessStatusCode() then begin
+                exit('Sucess')
+            end else
+                exit(Format(response.IsSuccessStatusCode));
+
+    end;
+
     //Azure Integration with BC SO Print
     procedure SOPrint(documentno: Code[20]): Text
     var
@@ -1286,10 +1320,9 @@ codeunit 50303 "POS Procedure"
         Result: Text;
         VResult: Text;
         B64: Codeunit "Base64 Convert";
+        ReturnData: Text;
     begin
         //*********Report SaveasPDF code********
-
-
         SH.RESET;
         SH.SETRANGE("No.", documentno);
         IF SH.FINDFIRST THEN;
@@ -1298,18 +1331,16 @@ codeunit 50303 "POS Procedure"
         Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
         TempBlob.CreateInStream(Instrm);
         VResult := B64.ToBase64(Instrm);
-        //Instrm.ReadText(Jsontext);
-        JsonEinvObject.Add('filepath', VResult);
-        Content.ReadAs(Jsontext);
-        //DownloadFromStream()
-
+        ReturnData := UploadonAzurBlobStorage(SH."No." + '.PDF', VResult);
+        exit(ReturnData);
+        /*
         If Client.Post('https://kohinoorazeinvoiceintegration.azurewebsites.net/api/Function1', Content, Response1) then
             IF Response1.IsSuccessStatusCode() then begin
                 Einvcontent := Response1.Content;
                 Einvcontent.ReadAs(Result);
                 exit(Result);
             end;
-
+        */
         //*************Azure upload Code**************
         /*
             ABSCSetup.Get();

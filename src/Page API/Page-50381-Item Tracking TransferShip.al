@@ -11,7 +11,7 @@ page 50381 ItemTrackingTransferShip
     PageType = API;
     SourceTable = "Reservation Entry";
     ODataKeyFields = SystemId;
-    SourceTableView = where("Source Type" = filter(5741));
+    SourceTableView = where("Source Type" = filter(5741), Positive = filter(true));
 
     layout
     {

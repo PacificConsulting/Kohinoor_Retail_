@@ -30,6 +30,14 @@ table 50324 "Azure Storage Container Setup"
             Caption = 'Container Name Invoice';
             DataClassification = ToBeClassified;
         }
+        field(6; "Azure Invoice URL"; Text[1024])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(7; "Azure Order URL"; Text[1024])
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys
