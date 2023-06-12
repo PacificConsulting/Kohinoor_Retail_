@@ -2959,30 +2959,13 @@ DD.</Value>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox61</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -3557,30 +3540,13 @@ DD.</Value>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SrNo1</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>White</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -3588,6 +3554,7 @@ DD.</Value>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -4083,14 +4050,14 @@ DD.</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox77">
+                        <Textbox Name="Amount_To_Customer">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value</Value>
+                                  <Value>=(Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value)</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>n2</Format>
@@ -4102,7 +4069,7 @@ DD.</Value>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox77</rd:DefaultName>
+                          <rd:DefaultName>Amount_To_Customer</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -4530,7 +4497,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=SUM(Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value)</Value>
+                                  <Value>=SUM (Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value)</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>n2</Format>
@@ -5738,7 +5705,7 @@ invoice.</Value>
             <Top>19.71299cm</Top>
             <Left>0.00001cm</Left>
             <Height>3.25135cm</Height>
-            <Width>16.83757cm</Width>
+            <Width>19.9332cm</Width>
             <ZIndex>6</ZIndex>
             <Style>
               <Border>
@@ -5755,10 +5722,10 @@ invoice.</Value>
             <Value>=First(Fields!ReLocationQrcode.Value, "DataSet_Result")</Value>
             <MIMEType>image/jpeg</MIMEType>
             <Sizing>FitProportional</Sizing>
-            <Top>19.69899cm</Top>
-            <Left>16.83758cm</Left>
-            <Height>3.26534cm</Height>
-            <Width>3.09563cm</Width>
+            <Top>19.71299cm</Top>
+            <Left>15.8057cm</Left>
+            <Height>3.25135cm</Height>
+            <Width>4.1275cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
@@ -5849,6 +5816,15 @@ End Function
         <Field Name="ComHomepage">
           <DataField>ComHomepage</DataField>
         </Field>
+        <Field Name="Compinfo_bankname">
+          <DataField>Compinfo_bankname</DataField>
+        </Field>
+        <Field Name="Compinfo_AccountNo">
+          <DataField>Compinfo_AccountNo</DataField>
+        </Field>
+        <Field Name="Compinfo_IFSC">
+          <DataField>Compinfo_IFSC</DataField>
+        </Field>
         <Field Name="StoreAddress1">
           <DataField>StoreAddress1</DataField>
         </Field>
@@ -5914,6 +5890,12 @@ End Function
         </Field>
         <Field Name="TotalGSTAmountFinalFormat">
           <DataField>TotalGSTAmountFinalFormat</DataField>
+        </Field>
+        <Field Name="Amount_To_Customer">
+          <DataField>Amount_To_Customer</DataField>
+        </Field>
+        <Field Name="Amount_To_CustomerFormat">
+          <DataField>Amount_To_CustomerFormat</DataField>
         </Field>
         <Field Name="SrNo">
           <DataField>SrNo</DataField>

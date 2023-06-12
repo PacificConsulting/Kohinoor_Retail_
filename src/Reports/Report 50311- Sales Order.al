@@ -50,6 +50,18 @@ report 50311 "Sales Order"
             {
 
             }
+            column(Compinfo_bankname; Compinfo."Bank Name")
+            {
+
+            }
+            column(Compinfo_AccountNo; Compinfo."Bank Account No.")
+            {
+
+            }
+            column(Compinfo_IFSC; Compinfo.IBAN)
+            {
+
+            }
 
             column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + ',' + 'PANNO.' + Compinfo."P.A.N. No." + ',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {
@@ -161,6 +173,14 @@ report 50311 "Sales Order"
             {
 
             }
+            column(Amount_To_Customer; "Amount To Customer")
+            {
+
+            }
+            column(TotalPaidAmount; TotalPaidAmount)
+            {
+
+            }
 
 
 
@@ -244,7 +264,7 @@ report 50311 "Sales Order"
                     //AoumntInWords
                     //TotalAmount1 += Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount1 + TotalGSTAmountFinal), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ("Sales Header"."Amount To Customer"), '');
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
@@ -339,6 +359,14 @@ report 50311 "Sales Order"
                 //     TotalGSTAmountFinal := GSTFooterTotal(SalesHedr);
                 // Message(format(TotalGSTAmountFinal));
                 //PCPL-064<<9june2023
+
+                //PaidAmount
+                RecPaymentlines.Reset();
+                RecPaymentlines.SetRange("Document No.", "No.");
+                RecPaymentlines.SetRange("Document Type", RecPaymentlines."Document Type"::Order);
+                if RecPaymentlines.FindFirst() then begin
+                    TotalPaidAmount += RecPaymentlines.Amount;
+                end;
             end;
 
             trigger OnPreDataItem() //SH
@@ -438,6 +466,8 @@ report 50311 "Sales Order"
         SalesHedr: record "Sales Header";
         TotalGSTAmountFinal: Decimal;
         TotalGSTAmountlinewise: Decimal;
+        RecPaymentlines: Record "Payment Lines";
+        TotalPaidAmount: Decimal;
 
 
     //GST calculate 

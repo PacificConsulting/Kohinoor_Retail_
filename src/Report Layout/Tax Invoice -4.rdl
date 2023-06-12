@@ -225,7 +225,7 @@ DD.</Value>
                 <Top>1.36407cm</Top>
                 <Left>0cm</Left>
                 <Height>6.06296cm</Height>
-                <Width>19.93326cm</Width>
+                <Width>20.27721cm</Width>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -269,7 +269,7 @@ DD.</Value>
                 <Top>0.49752cm</Top>
                 <Left>0cm</Left>
                 <Height>0.89987cm</Height>
-                <Width>19.93326cm</Width>
+                <Width>20.27721cm</Width>
                 <ZIndex>1</ZIndex>
                 <Style>
                   <Border>
@@ -324,7 +324,7 @@ DD.</Value>
                 <Top>0cm</Top>
                 <Left>0cm</Left>
                 <Height>0.49752cm</Height>
-                <Width>19.93326cm</Width>
+                <Width>20.27721cm</Width>
                 <ZIndex>2</ZIndex>
                 <Style>
                   <Border>
@@ -341,10 +341,10 @@ DD.</Value>
                 <Value>=First(Fields!ReLocation.Value, "DataSet_Result")</Value>
                 <MIMEType>image/jpeg</MIMEType>
                 <Sizing>FitProportional</Sizing>
-                <Top>10.26549cm</Top>
-                <Left>16.8358cm</Left>
-                <Height>2.90416cm</Height>
-                <Width>3.09741cm</Width>
+                <Top>9.54259cm</Top>
+                <Left>16.97691cm</Left>
+                <Height>4.12977cm</Height>
+                <Width>3.3003cm</Width>
                 <ZIndex>3</ZIndex>
                 <Style>
                   <Border>
@@ -352,46 +352,12 @@ DD.</Value>
                   </Border>
                 </Style>
               </Image>
-              <Textbox Name="Textbox1">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>QR Code</Value>
-                        <Style>
-                          <FontWeight>Bold</FontWeight>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Center</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox1</rd:DefaultName>
-                <Top>9.54259cm</Top>
-                <Left>16.8358cm</Left>
-                <Height>0.7229cm</Height>
-                <Width>3.09746cm</Width>
-                <ZIndex>4</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>10.18363cm</Top>
             <Left>0.00001cm</Left>
-            <Height>13.16965cm</Height>
-            <Width>19.93326cm</Width>
+            <Height>13.67236cm</Height>
+            <Width>20.27721cm</Width>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -422,19 +388,19 @@ DD.</Value>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.69029cm</Width>
+                  <Width>3.75909cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.97602cm</Width>
+                  <Width>5.04482cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.75086cm</Width>
+                  <Width>3.81966cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.05616cm</Width>
+                  <Width>4.12496cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.45988cm</Width>
+                  <Width>3.52868cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1346,7 +1312,9 @@ DD.</Value>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox197</rd:DefaultName>
@@ -1365,6 +1333,7 @@ DD.</Value>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -1533,7 +1502,9 @@ DD.</Value>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox29</rd:DefaultName>
@@ -1581,7 +1552,7 @@ DD.</Value>
             <Top>3.88532cm</Top>
             <Left>0.00001cm</Left>
             <Height>2.9662cm</Height>
-            <Width>19.93321cm</Width>
+            <Width>20.27721cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -1613,19 +1584,19 @@ DD.</Value>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>4.65452cm</Width>
+                  <Width>4.72331cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.01707cm</Width>
+                  <Width>4.08586cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.53823cm</Width>
+                  <Width>3.60702cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.2635cm</Width>
+                  <Width>4.33229cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.45993cm</Width>
+                  <Width>3.52872cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -3043,7 +3014,7 @@ DD.</Value>
             <Top>0.0271cm</Top>
             <Left>0.00001cm</Left>
             <Height>3.8582cm</Height>
-            <Width>19.93325cm</Width>
+            <Width>20.27721cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -3105,7 +3076,7 @@ DD.</Value>
                   <Width>1.52268cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.57477cm</Width>
+                  <Width>1.91873cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -6029,7 +6000,7 @@ DD.</Value>
             <Top>6.85152cm</Top>
             <Left>0.00001cm</Left>
             <Height>3.15573cm</Height>
-            <Width>19.93325cm</Width>
+            <Width>20.27721cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -6104,7 +6075,7 @@ invoice.</Value>
             <Top>17.61066cm</Top>
             <Left>0cm</Left>
             <Height>2.11555cm</Height>
-            <Width>19.93327cm</Width>
+            <Width>20.27722cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -6339,7 +6310,7 @@ invoice.</Value>
             <rd:DefaultName>Textbox122</rd:DefaultName>
             <Top>19.72622cm</Top>
             <Left>0.00001cm</Left>
-            <Height>3.62706cm</Height>
+            <Height>4.12977cm</Height>
             <Width>16.8358cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
@@ -6353,13 +6324,13 @@ invoice.</Value>
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>23.35328cm</Height>
+        <Height>23.85599cm</Height>
         <Style />
       </Body>
-      <Width>19.93327cm</Width>
+      <Width>20.27722cm</Width>
       <Page>
-        <PageHeight>29.7cm</PageHeight>
-        <PageWidth>21cm</PageWidth>
+        <PageHeight>32cm</PageHeight>
+        <PageWidth>22cm</PageWidth>
         <LeftMargin>0.6cm</LeftMargin>
         <RightMargin>0cm</RightMargin>
         <TopMargin>0.5cm</TopMargin>

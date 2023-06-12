@@ -6,27 +6,46 @@ pageextension 50329 "Transfer Order" extends "Transfer Order"
     }
     actions
     {
+        addafter("Re&lease")
+        {
+            action(QtyShip)
+            {
+                ApplicationArea = all;
+                Image = AddAction;
+                trigger OnAction()
+                var
+                    CU: Codeunit 50302;
+                begin
+                    CU.TransferShipQtyUpdate(Rec."No.");
+                end;
+            }
+        }
         modify("Re&lease")
         {
             Trigger OnAfterAction()
             var
                 transferLine: record "Transfer Line";
                 Reservation: Record 337;
+                found: Boolean;
             begin
                 transferLine.Reset();
                 transferLine.SetRange("Document No.", Rec."No.");
                 IF transferLine.FindSet() then
                     repeat
+                        Clear(found);
                         Reservation.Reset();
                         Reservation.SetRange("Source ID", Rec."No.");
                         Reservation.SetRange("Source Ref. No.", transferLine."Line No.");
                         Reservation.SetRange(Positive, false);
                         IF Reservation.FindSet() then
                             repeat
+                                Found := true;
                                 transferLine."Qty. to Ship" += ABS(Reservation."Quantity (Base)");
                             until Reservation.Next() = 0;
-                        transferLine.Validate("Qty. to Ship");
-                        transferLine.Modify();
+                        IF Found then begin
+                            transferLine.Validate("Qty. to Ship");
+                            transferLine.Modify();
+                        end;
                     until transferLine.Next() = 0;
             end;
         }

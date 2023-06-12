@@ -341,6 +341,7 @@ codeunit 50302 "POS Event and Subscriber"
         transferHdr: Record "Transfer Header";
         transferLine: record "Transfer Line";
         Reservation: Record 337;
+        Found: Boolean;
     begin
         transferHdr.Reset();
         transferHdr.SetRange("No.", documentno);
@@ -349,16 +350,20 @@ codeunit 50302 "POS Event and Subscriber"
             transferLine.SetRange("Document No.", transferHdr."No.");
             IF transferLine.FindSet() then
                 repeat
+                    Clear(Found);
                     Reservation.Reset();
                     Reservation.SetRange("Source ID", transferHdr."No.");
                     Reservation.SetRange("Source Ref. No.", transferLine."Line No.");
                     Reservation.SetRange(Positive, false);
                     IF Reservation.FindSet() then
                         repeat
+                            Found := true;
                             transferLine."Qty. to Ship" += ABS(Reservation."Quantity (Base)");
                         until Reservation.Next() = 0;
-                    transferLine.Validate("Qty. to Ship");
-                    transferLine.Modify();
+                    IF Found then begin
+                        transferLine.Validate("Qty. to Ship");
+                        transferLine.Modify();
+                    end;
                 until transferLine.Next() = 0;
         end else
             exit('Document not found')

@@ -245,6 +245,7 @@ codeunit 50301 "Event and Subscribers"
     local procedure OnAfterInsertTransShptHeader(var TransferHeader: Record "Transfer Header"; var TransferShipmentHeader: Record "Transfer Shipment Header")
     begin
         TransferShipmentHeader."Posted By" := TransferHeader."Posted By";
+        TransferShipmentHeader.Modify();
     end;
     //END**********************************Codeunit-5704***************************************
 
@@ -253,6 +254,7 @@ codeunit 50301 "Event and Subscribers"
     local procedure OnAfterInsertTransRcptHeader(var TransRcptHeader: Record "Transfer Receipt Header"; var TransHeader: Record "Transfer Header")
     begin
         TransRcptHeader."Posted By" := TransHeader."Posted By";
+        TransRcptHeader.Modify();
     end;
     //END**********************************Codeunit-5705***************************************
 
