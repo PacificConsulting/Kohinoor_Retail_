@@ -181,6 +181,10 @@ report 50311 "Sales Order"
             {
 
             }
+            column(PaymentAmount; PaymentAmount)
+            {
+
+            }
 
 
 
@@ -268,6 +272,10 @@ report 50311 "Sales Order"
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
+                    if Type = Type::"G/L Account" then
+                        "Exchange Item No." := "Exchange Item No.";
+
+
 
 
 
@@ -277,6 +285,7 @@ report 50311 "Sales Order"
             var
                 SL: Record "Sales Line";
             begin
+
                 //pcpl-064 10june2023
                 SL.Reset;
                 Sl.SetRange("Document No.", "No.");
@@ -321,17 +330,27 @@ report 50311 "Sales Order"
                 //GetSalesStatisticsAmount("Sales Header", TotalGSTAmount, TotalGSTPercent);
 
                 //PCPL-064<< 8june2023
+                //PaymentAmount
                 PaymentLines.Reset();
                 PaymentLines.setrange("Document No.", "No.");
                 PaymentLines.setrange("Document Type", "Sales Line"."Document Type"::Order);
                 if PaymentLines.findfirst() then begin
                     repeat
                         if Paymentmethod <> '' then
-                            Paymentmethod := Paymentmethod + ',' + PaymentLines."Payment Method Code"
+                            Paymentmethod := Paymentmethod + ',' + ' ' + PaymentLines."Payment Method Code" + '-' + format(PaymentLines.Amount)
                         else
                             Paymentmethod := PaymentLines."Payment Method Code";
                     until PaymentLines.Next = 0;
 
+                end;
+
+                Paylines.Reset();
+                Paylines.SetRange("Document No.", "No.");
+                Paylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
+                if Paylines.FindFirst() then begin
+                    repeat
+                        PaymentAmount := Paylines.Amount;
+                    until Paylines.Next = 0;
                 end;
 
                 if ReLocation.Get("Sales Header"."Location Code") then;
@@ -367,6 +386,7 @@ report 50311 "Sales Order"
                 if RecPaymentlines.FindFirst() then begin
                     TotalPaidAmount += RecPaymentlines.Amount;
                 end;
+
             end;
 
             trigger OnPreDataItem() //SH
@@ -468,6 +488,8 @@ report 50311 "Sales Order"
         TotalGSTAmountlinewise: Decimal;
         RecPaymentlines: Record "Payment Lines";
         TotalPaidAmount: Decimal;
+        PaymentAmount: Decimal;
+        Paylines: Record "Payment Lines";
 
 
     //GST calculate 
