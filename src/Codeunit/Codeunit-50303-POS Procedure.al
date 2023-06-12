@@ -1293,7 +1293,9 @@ codeunit 50303 "POS Procedure"
 
     end;
 
-    //Azure Integration with BC SO Print
+    /// <summary>
+    /// Azure Integration with BC SO Print
+    /// </summary>
     procedure SOPrint(documentno: Code[20]): Text
     var
         ABSBlobClient: Codeunit "ABS Blob Client";
@@ -1356,7 +1358,213 @@ codeunit 50303 "POS Procedure"
     end;
 
 
+    /// <summary>
+    /// Sales Order Staticstic Calculate function
+    /// </summary>
+    procedure RefreshSaleOrder(documentno: Code[20]): text
+    var
+        SH: Record 36;
+        Stat: Page "Sales Order Statistics";
+        TotalGSTAmount1: Decimal;
+        TotalTCSAmt: Decimal;
+        TotalAmt: Decimal;
+    begin
+        SH.Reset();
+        SH.SetRange("No.", documentno);
+        IF SH.FindFirst() then begin
+            CalcInvDiscForHeader(SH);
+            RefreshOnAfterGetRecord(SH);
+            GetGSTAmountTotal(SH, TotalGSTAmount1);
+            GetTCSAmountTotal(SH, TotalTCSAmt);
+            GetSalesorderStatisticsAmount(SH, TotalAmt);
+            SH."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt);
+            SH.Modify();
 
+        end;
+    end;
+
+    procedure CalcInvDiscForHeader(SH: Record 36)
+    var
+        SalesInvDisc: Codeunit "Sales-Calc. Discount";
+    begin
+        if SalesSetup."Calc. Inv. Discount" then
+            SalesInvDisc.CalculateIncDiscForHeader(SH);
+    end;
+
+    local procedure RefreshOnAfterGetRecord(SaleHdr: Record 36)
+    var
+        SalesLine: Record "Sales Line";
+        TempSalesLine: Record "Sales Line" temporary;
+        SalesPostPrepayments: Codeunit "Sales-Post Prepayments";
+        OptionValueOutOfRange: Integer;
+
+    begin
+        //CurrPage.Caption(StrSubstNo(Text000, "Document Type"));
+
+        if PrevNo = SaleHdr."No." then
+            exit;
+        PrevNo := SaleHdr."No.";
+        SaleHdr.FilterGroup(2);
+        SaleHdr.SetRange("No.", PrevNo);
+        SaleHdr.FilterGroup(0);
+
+
+        Clear(SalesLine);
+        Clear(TotalSalesLine);
+        Clear(TotalSalesLineLCY);
+        Clear(TotalAmount1);
+        Clear(TotalAmount2);
+        Clear(VATAmount);
+        Clear(ProfitLCY);
+        Clear(ProfitPct);
+        Clear(AdjProfitLCY);
+        Clear(AdjProfitPct);
+        Clear(TotalAdjCostLCY);
+        Clear(TempVATAmountLine1);
+        Clear(TempVATAmountLine2);
+        Clear(TempVATAmountLine3);
+        Clear(TempVATAmountLine4);
+        Clear(PrepmtTotalAmount);
+        Clear(PrepmtVATAmount);
+        Clear(PrepmtTotalAmount2);
+        Clear(VATAmountText);
+        Clear(PrepmtVATAmountText);
+        Clear(CreditLimitLCYExpendedPct);
+        Clear(PrepmtInvPct);
+        Clear(PrepmtDeductedPct);
+
+        // 1 to 3, so that it does calculations for all 3 tabs, General,Invoicing,Shipping
+        for i := 1 to 3 do begin
+
+            TempSalesLine.DeleteAll();
+            Clear(TempSalesLine);
+            Clear(SalesPost);
+            SalesPost.GetSalesLines(SaleHdr, TempSalesLine, i - 1, false);
+            Clear(SalesPost);
+            case i of
+                1:
+                    SalesLine.CalcVATAmountLines(0, SaleHdr, TempSalesLine, TempVATAmountLine1);
+                2:
+                    SalesLine.CalcVATAmountLines(0, SaleHdr, TempSalesLine, TempVATAmountLine2);
+                3:
+                    SalesLine.CalcVATAmountLines(0, SaleHdr, TempSalesLine, TempVATAmountLine3);
+            end;
+
+            SalesPost.SumSalesLinesTemp(
+              SaleHdr, TempSalesLine, i - 1, TotalSalesLine[i], TotalSalesLineLCY[i],
+              VATAmount[i], VATAmountText[i], ProfitLCY[i], ProfitPct[i], TotalAdjCostLCY[i], false);
+
+            if i = 3 then
+                TotalAdjCostLCY[i] := TotalSalesLineLCY[i]."Unit Cost (LCY)";
+
+            AdjProfitLCY[i] := TotalSalesLineLCY[i].Amount - TotalAdjCostLCY[i];
+            if TotalSalesLineLCY[i].Amount <> 0 then
+                AdjProfitPct[i] := Round(AdjProfitLCY[i] / TotalSalesLineLCY[i].Amount * 100, 0.1);
+
+            if SaleHdr."Prices Including VAT" then begin
+                TotalAmount2[i] := TotalSalesLine[i].Amount;
+                TotalAmount1[i] := TotalAmount2[i] + VATAmount[i];
+                TotalSalesLine[i]."Line Amount" := TotalAmount1[i] + TotalSalesLine[i]."Inv. Discount Amount";
+            end else begin
+                TotalAmount1[i] := TotalSalesLine[i].Amount;
+                TotalAmount2[i] := TotalSalesLine[i]."Amount Including VAT";
+            end;
+        end;
+
+
+
+        TempSalesLine.DeleteAll();
+        Clear(TempSalesLine);
+        SalesPostPrepayments.GetSalesLines(SaleHdr, 0, TempSalesLine);
+        SalesPostPrepayments.SumPrepmt(
+          SaleHdr, TempSalesLine, TempVATAmountLine4, PrepmtTotalAmount, PrepmtVATAmount, PrepmtVATAmountText);
+        PrepmtInvPct :=
+          Pct(TotalSalesLine[1]."Prepmt. Amt. Inv.", PrepmtTotalAmount);
+        PrepmtDeductedPct :=
+          Pct(TotalSalesLine[1]."Prepmt Amt Deducted", TotalSalesLine[1]."Prepmt. Amt. Inv.");
+        if SaleHdr."Prices Including VAT" then begin
+            PrepmtTotalAmount2 := PrepmtTotalAmount;
+            PrepmtTotalAmount := PrepmtTotalAmount + PrepmtVATAmount;
+        end else
+            PrepmtTotalAmount2 := PrepmtTotalAmount + PrepmtVATAmount;
+
+        if Cust.Get(SaleHdr."Bill-to Customer No.") then
+            Cust.CalcFields("Balance (LCY)")
+        else
+            Clear(Cust);
+
+        case true of
+            Cust."Credit Limit (LCY)" = 0:
+                CreditLimitLCYExpendedPct := 0;
+            Cust."Balance (LCY)" / Cust."Credit Limit (LCY)" < 0:
+                CreditLimitLCYExpendedPct := 0;
+            Cust."Balance (LCY)" / Cust."Credit Limit (LCY)" > 1:
+                CreditLimitLCYExpendedPct := 10000;
+            else
+                CreditLimitLCYExpendedPct := Round(Cust."Balance (LCY)" / Cust."Credit Limit (LCY)" * 10000, 1);
+        end;
+
+        TempVATAmountLine1.ModifyAll(Modified, false);
+        TempVATAmountLine2.ModifyAll(Modified, false);
+        TempVATAmountLine3.ModifyAll(Modified, false);
+        TempVATAmountLine4.ModifyAll(Modified, false);
+
+        OptionValueOutOfRange := -1;
+        PrevTab := OptionValueOutOfRange;
+
+        UpdateHeaderInfo(2, TempVATAmountLine2, SaleHdr);
+    end;
+
+    local procedure Pct(Numerator: Decimal; Denominator: Decimal): Decimal
+    begin
+        if Denominator = 0 then
+            exit(0);
+        exit(Round(Numerator / Denominator * 10000, 1));
+    end;
+
+    procedure UpdateHeaderInfo(IndexNo: Integer; var VATAmountLine: Record "VAT Amount Line"; SH: Record 36)
+    var
+        CurrExchRate: Record "Currency Exchange Rate";
+        UseDate: Date;
+    begin
+        TotalSalesLine[IndexNo]."Inv. Discount Amount" := VATAmountLine.GetTotalInvDiscAmount();
+        TotalAmount1[IndexNo] := TotalSalesLine[IndexNo]."Line Amount" - TotalSalesLine[IndexNo]."Inv. Discount Amount";
+        VATAmount[IndexNo] := VATAmountLine.GetTotalVATAmount();
+        if SH."Prices Including VAT" then begin
+            TotalAmount1[IndexNo] := VATAmountLine.GetTotalAmountInclVAT();
+            TotalAmount2[IndexNo] := TotalAmount1[IndexNo] - VATAmount[IndexNo];
+            TotalSalesLine[IndexNo]."Line Amount" :=
+              TotalAmount1[IndexNo] + TotalSalesLine[IndexNo]."Inv. Discount Amount";
+        end else
+            TotalAmount2[IndexNo] := TotalAmount1[IndexNo] + VATAmount[IndexNo];
+
+
+        if SH."Prices Including VAT" then
+            TotalSalesLineLCY[IndexNo].Amount := TotalAmount2[IndexNo]
+        else
+            TotalSalesLineLCY[IndexNo].Amount := TotalAmount1[IndexNo];
+        if SH."Currency Code" <> '' then
+            if SH."Posting Date" = 0D then
+                UseDate := WorkDate()
+            else
+                UseDate := SH."Posting Date";
+
+        TotalSalesLineLCY[IndexNo].Amount :=
+          CurrExchRate.ExchangeAmtFCYToLCY(
+            UseDate, SH."Currency Code", TotalSalesLineLCY[IndexNo].Amount, SH."Currency Factor");
+
+        ProfitLCY[IndexNo] := TotalSalesLineLCY[IndexNo].Amount - TotalSalesLineLCY[IndexNo]."Unit Cost (LCY)";
+        if TotalSalesLineLCY[IndexNo].Amount = 0 then
+            ProfitPct[IndexNo] := 0
+        else
+            ProfitPct[IndexNo] := Round(100 * ProfitLCY[IndexNo] / TotalSalesLineLCY[IndexNo].Amount, 0.01);
+
+        AdjProfitLCY[IndexNo] := TotalSalesLineLCY[IndexNo].Amount - TotalAdjCostLCY[IndexNo];
+        if TotalSalesLineLCY[IndexNo].Amount = 0 then
+            AdjProfitPct[IndexNo] := 0
+        else
+            AdjProfitPct[IndexNo] := Round(100 * AdjProfitLCY[IndexNo] / TotalSalesLineLCY[IndexNo].Amount, 0.01);
+    end;
 
     /*
     /// <summary>
@@ -1930,6 +2138,43 @@ codeunit 50303 "POS Procedure"
 
         Message('Approval mail sent successfully');
     end;
+
+    var
+        TotalSalesLine: array[3] of Record "Sales Line";
+        TotalSalesLineLCY: array[3] of Record "Sales Line";
+        SalesPost: Codeunit "Sales-Post";
+        TotalAmount1: array[3] of Decimal;
+        TotalAmount2: array[3] of Decimal;
+        VATAmount: array[3] of Decimal;
+        ProfitLCY: array[3] of Decimal;
+        ProfitPct: array[3] of Decimal;
+        AdjProfitLCY: array[3] of Decimal;
+        AdjProfitPct: array[3] of Decimal;
+        TotalAdjCostLCY: array[3] of Decimal;
+        DynamicEditable: Boolean;
+        VATLinesFormIsEditable: Boolean;
+        Cust: Record Customer;
+        TempVATAmountLine1: Record "VAT Amount Line" temporary;
+        TempVATAmountLine2: Record "VAT Amount Line" temporary;
+        TempVATAmountLine3: Record "VAT Amount Line" temporary;
+        TempVATAmountLine4: Record "VAT Amount Line" temporary;
+        SalesSetup: Record "Sales & Receivables Setup";
+        VATLinesForm: Page "VAT Amount Lines";
+        PrepmtTotalAmount: Decimal;
+        PrepmtVATAmount: Decimal;
+        PrepmtTotalAmount2: Decimal;
+        VATAmountText: array[3] of Text[30];
+        PrepmtVATAmountText: Text[30];
+        CreditLimitLCYExpendedPct: Decimal;
+        PrepmtInvPct: Decimal;
+        PrepmtDeductedPct: Decimal;
+        i: Integer;
+        PrevNo: Code[20];
+        ActiveTab: Option General,Invoicing,Shipping,Prepayment;
+        PrevTab: Option General,Invoicing,Shipping,Prepayment;
+        AllowInvDisc: Boolean;
+        AllowVATDifference: Boolean;
+
 
 
 

@@ -6,6 +6,7 @@ report 50311 "Sales Order"
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
     EnableHyperlinks = true;
+    EnableExternalImages = true;
 
     dataset
     {
@@ -121,35 +122,35 @@ report 50311 "Sales Order"
             {
 
             }
-            column(SGST; SGST)
-            {
+            // column(SGST; SGST)
+            // {
 
-            }
-            column(SGSTPer; SGSTPer)
-            {
+            // }
+            // column(SGSTPer; SGSTPer)
+            // {
 
-            }
-            column(CGST; CGST)
-            {
+            // }
+            // column(CGST; CGST)
+            // {
 
-            }
-            column(CGSTPer; CGSTPer)
-            {
+            // }
+            // column(CGSTPer; CGSTPer)
+            // {
 
-            }
-            column(IGST; IGST)
-            {
+            // }
+            // column(IGST; IGST)
+            // {
 
-            }
-            column(IGSTPer; IGSTPer)
-            {
+            // }
+            // column(IGSTPer; IGSTPer)
+            // {
 
-            }
+            // }
             column(Paymentmethod; Paymentmethod)
             {
 
             }
-            column(ReLocation; ReLocation."Payment QR")
+            column(ReLocationQrcode; ReLocation."Payment QR")
             {
 
             }
@@ -160,6 +161,7 @@ report 50311 "Sales Order"
             {
 
             }
+
 
 
             dataitem("Sales Line"; "Sales Line")
@@ -207,16 +209,14 @@ report 50311 "Sales Order"
                 {
 
                 }
-                column(SGSTAmount; SGSTAmount)
-                {
-
-                }
                 column(CGSTAmount; CGSTAmount)
+                {
+                }
+                column(SGSTAmount; SGSTAmount)
                 {
                 }
                 column(IGSTAmount; IGSTAmount)
                 {
-
                 }
 
 
@@ -244,7 +244,7 @@ report 50311 "Sales Order"
                     //AoumntInWords
                     //TotalAmount1 += Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount1), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount1 + TotalGSTAmountFinal), '');
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
@@ -257,7 +257,7 @@ report 50311 "Sales Order"
             var
                 SL: Record "Sales Line";
             begin
-                //PCPL-0070
+                //pcpl-064 10june2023
                 SL.Reset;
                 Sl.SetRange("Document No.", "No.");
                 if SL.FindSet() then
@@ -266,9 +266,10 @@ report 50311 "Sales Order"
                     until SL.next() = 0;
 
                 TotalGSTAmountFinal := ROUND(TotalGSTAmountFinal, 1, '>');
+                //pcpl-064 10june2023
+                //Message('%1', TotalGSTAmountFinal);
 
-                Message('%1', TotalGSTAmountFinal);
-                //PCPl-0070
+
                 if RecCust.get("Sales Header"."Sell-to Customer No.") then
                     Mail := RecCust."E-Mail";
                 PhoneNo := RecCust."Phone No.";
@@ -313,8 +314,10 @@ report 50311 "Sales Order"
 
                 end;
 
-                if ReLocation.Get("Location Code") then
-                    Reclocation.CalcFields("Payment QR");
+                if ReLocation.Get("Sales Header"."Location Code") then;
+                Relocation.CalcFields("Payment QR");
+
+                //GetPurchaseStatisticsAmount("Sales Header", TotalGSTAmount, TotalGSTPercent);
 
 
 
@@ -326,10 +329,10 @@ report 50311 "Sales Order"
                 recsalesline.SETRANGE(Type, recsalesline.Type::Item);
                 IF recsalesline.FINDSET THEN
                     REPEAT
-                        TotalAmount1 += recsalesline.Amount + TotalGSTAmountFinal;
+                        TotalAmount1 += recsalesline.Amount;
 
                     UNTIL recsalesline.NEXT = 0;
-                Message(format(TotalAmount1));
+                //Message(format(TotalAmount1));
 
                 // //PCPL-064<<9june2023
                 // IF SalesHedr.get("Sales Line"."Document Type", "Sales Line"."Document No.") then
@@ -412,7 +415,7 @@ report 50311 "Sales Order"
         AmountInwords: codeunit "Amount In Words";
         AmountInWords1: array[2] of Text[200];
         TotalAmount1: decimal;
-        ShiptoAdd: Text[100];
+        ShiptoAdd: Text[200];
         ShiptoName: Text[50];
         Shiptocity: Text[20];
         Notext: text[20];
@@ -438,25 +441,21 @@ report 50311 "Sales Order"
 
 
     //GST calculate 
-    procedure GetSalesStatisticsAmount(
-SalesHeader: Record "Sales Header";
-var GSTAmount: Decimal; var GSTPercent: Decimal)
+    procedure GetPurchaseStatisticsAmount(
+        SalesHeader: Record "Sales Header";
+        var GSTAmount: Decimal; var GSTPercent: Decimal)
     var
         SalesLine: Record "Sales Line";
     begin
-        CGST := 0;
-        IGST := 0;
-        SGST := 0;
-        CGSTPer := 0;
-        SGSTPer := 0;
-        IGSTPer := 0;
-        Clear(CGST);
-        Clear(IGST);
-        Clear(SGST);
-        // Clear(IGSTAmt);
-        // Clear(IGSTPercent);
-        // Clear(SGSTPercent);
-        // Clear(CGSTPercent);
+        Clear(GSTAmount);
+        Clear(GSTPercent);
+        Clear(TotalAmount);
+        Clear(CGSTAmount);
+        Clear(SGSTAmount);
+        Clear(IGSTAmount);
+        Clear(IGSTPer);
+        Clear(SGSTPer);
+        Clear(CGSTPer);
 
         SalesLine.SetRange("Document Type", SalesHeader."Document Type");
         SalesLine.SetRange("Document no.", SalesHeader."No.");
@@ -464,8 +463,8 @@ var GSTAmount: Decimal; var GSTPercent: Decimal)
             repeat
                 GSTAmount += GetGSTAmount(SalesLine.RecordId());
                 GSTPercent += GetGSTPercent(SalesLine.RecordId());
-                TotalAmount += SalesLine."Line Amount" - SalesLine."Line Discount Amount";
-                GetGSTAmounts(SalesLine);
+                TotalAmount += SalesLine."Line Amount" /*- PurchaseLine."Line Discount Amount"*/ - SalesLine."Inv. Discount Amount";//PCPL/NSW/170222
+                GetGSTAmountsTotal(SalesLine);
             until SalesLine.Next() = 0;
     end;
 
@@ -487,19 +486,24 @@ var GSTAmount: Decimal; var GSTPercent: Decimal)
         if not TaxTransactionValue.IsEmpty() then begin
             TaxTransactionValue.CalcSums(Amount);
             TaxTransactionValue.CalcSums(Percent);
-            /*  if TaxTransactionValue."Value ID" = 6 then begin
-                 SGSTAmt += TaxTransactionValue.Amount;
-                 SGSTPercent += TaxTransactionValue.Percent;
-             end;
-             if TaxTransactionValue."Value ID" = 2 then begin
-                 CGSTAmt += TaxTransactionValue.Amount;
-                 CGSTPercent += TaxTransactionValue.Percent;
-             end;
-             if TaxTransactionValue."Value ID" = 3 then begin
-                 IGSTAmt += TaxTransactionValue.Amount;
-                 IGSTPercent += TaxTransactionValue.Percent;
-             end; */
+            /*
+            if TaxTransactionValue."Value ID" = 6 then begin
+                SGSTAmount += TaxTransactionValue.Amount;
+                SGSTPer += TaxTransactionValue.Percent;
+                // message('%1', SGSTAmt);
+            end;
+            if TaxTransactionValue."Value ID" = 2 then begin
+                CGSTAmount += TaxTransactionValue.Amount;
+                CGSTPer += TaxTransactionValue.Percent;
+            end;
+            if TaxTransactionValue."Value ID" = 3 then begin
+                IGSTAmount += TaxTransactionValue.Amount;
+                IGSTPer += TaxTransactionValue.Percent;
+            end;
+            */
         end;
+
+
         exit(TaxTransactionValue.Amount);
     end;
 
@@ -524,48 +528,7 @@ var GSTAmount: Decimal; var GSTPercent: Decimal)
         exit(TaxTransactionValue.Percent);
     end;
 
-    local procedure GetGSTAmounts(Salesline: Record "Sales Line")
-    var
-        ComponentName: Code[30];
-        TaxTransactionValue: Record "Tax Transaction Value";
-        GSTSetup: Record "GST Setup";
-    begin
-        if not GSTSetup.Get() then
-            exit;
-
-        ComponentName := GetComponentName(Salesline, GSTSetup);
-
-        if (Salesline.Type <> Salesline.Type::" ") then begin
-            TaxTransactionValue.Reset();
-            TaxTransactionValue.SetRange("Tax Record ID", Salesline.RecordId);
-            TaxTransactionValue.SetRange("Tax Type", GSTSetup."GST Tax Type");
-            TaxTransactionValue.SetRange("Value Type", TaxTransactionValue."Value Type"::COMPONENT);
-            TaxTransactionValue.SetFilter(Percent, '<>%1', 0);
-            if TaxTransactionValue.FindSet() then
-                repeat
-                    case TaxTransactionValue."Value ID" of
-                        6:
-                            begin
-                                CGST += Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
-                                SGSTPer := TaxTransactionValue.Percent;
-                            end;
-                        2:
-                            begin
-                                SGST += Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
-                                CGSTPer := TaxTransactionValue.Percent;
-                            end;
-                        3:
-                            begin
-                                IGST += Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
-                                IGSTPer := TaxTransactionValue.Percent;
-                            end;
-                    end;
-                until TaxTransactionValue.Next() = 0;
-        end;
-    end;
-
-
-    local procedure GetGSTAmountsTotal(Salesline: Record "Sales Line")
+    local procedure GetGSTAmounts(SalesLine: Record "Sales Line")
     var
         ComponentName: Code[30];
         TaxTransactionValue: Record "Tax Transaction Value";
@@ -579,6 +542,46 @@ var GSTAmount: Decimal; var GSTPercent: Decimal)
         if (SalesLine.Type <> SalesLine.Type::" ") then begin
             TaxTransactionValue.Reset();
             TaxTransactionValue.SetRange("Tax Record ID", SalesLine.RecordId);
+            TaxTransactionValue.SetRange("Tax Type", GSTSetup."GST Tax Type");
+            TaxTransactionValue.SetRange("Value Type", TaxTransactionValue."Value Type"::COMPONENT);
+            TaxTransactionValue.SetFilter(Percent, '<>%1', 0);
+            if TaxTransactionValue.FindSet() then
+                repeat
+                    case TaxTransactionValue."Value ID" of
+                        6:
+                            begin
+                                SGSTAmount := Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
+                                SGSTPer := TaxTransactionValue.Percent;
+                            end;
+                        2:
+                            begin
+                                CGSTAmount := Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
+                                CGSTPer := TaxTransactionValue.Percent;
+                            end;
+                        3:
+                            begin
+                                IGSTAmount := Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
+                                IGSTPer := TaxTransactionValue.Percent;
+                            end;
+                    end;
+                until TaxTransactionValue.Next() = 0;
+        end;
+    end;
+
+    local procedure GetGSTAmountsTotal(PurchaseLine: Record "Sales Line")
+    var
+        ComponentName: Code[30];
+        TaxTransactionValue: Record "Tax Transaction Value";
+        GSTSetup: Record "GST Setup";
+    begin
+        if not GSTSetup.Get() then
+            exit;
+
+        ComponentName := GetComponentName("Sales Line", GSTSetup);
+
+        if (PurchaseLine.Type <> PurchaseLine.Type::" ") then begin
+            TaxTransactionValue.Reset();
+            TaxTransactionValue.SetRange("Tax Record ID", PurchaseLine.RecordId);
             TaxTransactionValue.SetRange("Tax Type", GSTSetup."GST Tax Type");
             TaxTransactionValue.SetRange("Value Type", TaxTransactionValue."Value Type"::COMPONENT);
             TaxTransactionValue.SetFilter(Percent, '<>%1', 0);
@@ -623,7 +626,7 @@ var GSTAmount: Decimal; var GSTPercent: Decimal)
     end;
 
     local procedure GetGSTCaptions(TaxTransactionValue: Record "Tax Transaction Value";
-SalesLine: Record "Sales Line";
+        SalesLine: Record "Sales Line";
         GSTSetup: Record "GST Setup")
     begin
         TaxTransactionValue.Reset();
@@ -643,6 +646,40 @@ SalesLine: Record "Sales Line";
                 end;
             until TaxTransactionValue.Next() = 0;
     end;
+
+    local procedure GetComponentName(SalesLine: Record "Sales Line";
+        GSTSetup: Record "GST Setup"): Code[30]
+    var
+        ComponentName: Code[30];
+    begin
+        if GSTSetup."GST Tax Type" = GSTLbl then
+            if SalesLine."GST Jurisdiction Type" = SalesLine."GST Jurisdiction Type"::Interstate then
+                ComponentName := IGSTLbl
+            else
+                ComponentName := CGSTLbl
+        else
+            if GSTSetup."Cess Tax Type" = GSTCESSLbl then
+                ComponentName := CESSLbl;
+        exit(ComponentName)
+    end;
+
+    // local procedure GetTDSAmount(TaxTransactionValue: Record "Tax Transaction Value";
+    //    SalesLine: Record "Sales Line";
+    //     TDSSetup: Record "TDS Setup")
+    // begin
+    //     if (SalesLine.Type <>SalesLine.Type::" ") then begin
+    //         TaxTransactionValue.Reset();
+    //         TaxTransactionValue.SetRange("Tax Record ID", PurchaseLine.RecordId);
+    //         TaxTransactionValue.SetRange("Tax Type", TDSSetup."Tax Type");
+    //         TaxTransactionValue.SetRange("Value Type", TaxTransactionValue."Value Type"::COMPONENT);
+    //         TaxTransactionValue.SetFilter(Percent, '<>%1', 0);
+    //         if TaxTransactionValue.FindSet() then
+    //             repeat
+    //                 TDSAmt += TaxTransactionValue.Amount;
+    //             until TaxTransactionValue.Next() = 0;
+    //     end;
+    //     TDSAmt := Round(TDSAmt, 1);
+    // end;
 
     procedure GetGSTRoundingPrecision(ComponentName: Code[30]): Decimal
     var
@@ -664,27 +701,11 @@ SalesLine: Record "Sales Line";
         exit(GSTRoundingPrecision);
     end;
 
-    local procedure GetComponentName(SalesLine: Record "Sales Line";
-        GSTSetup: Record "GST Setup"): Code[30]
-    var
-        ComponentName: Code[30];
-    begin
-        if GSTSetup."GST Tax Type" = GSTLbl then
-            if SalesLine."GST Jurisdiction Type" = SalesLine."GST Jurisdiction Type"::Interstate then
-                ComponentName := IGSTLbl
-            else
-                ComponentName := CGSTLbl
-        else
-            if GSTSetup."Cess Tax Type" = GSTCESSLbl then
-                ComponentName := CESSLbl;
-        exit(ComponentName)
-    end;
-
     procedure GetGSTAmountLinewise(
         SalesLine: Record "Sales Line";
         var GSTAmount: Decimal; var GSTPercent: Decimal)
     var
-        PurchaseLine1: Record "Purchase Line";
+        SalesLine1: Record "Sales Line";
     begin
         Clear(GSTAmount);
         Clear(GSTPercent);
@@ -708,11 +729,10 @@ SalesLine: Record "Sales Line";
             until SalesLine.Next() = 0;
     end;
 
-
-    procedure GSTFooterTotal(SalesHedr: Record "Sales Header"): Decimal
+    procedure GSTFooterTotal(SalesHeader: Record "Sales Header"): Decimal
 
     var
-        SalesLines: Record "Sales Line";
+        SalesLine: Record "Sales Line";
         GSTAmountFooter: Decimal;
     begin
         // Clear(GSTAmount);
@@ -725,13 +745,12 @@ SalesLine: Record "Sales Line";
         // Clear(SGSTPer);
         // Clear(CGSTPer);
 
-        SalesLines.SetRange("Document Type", SalesLines."Document Type");
-        SalesLines.SetRange("Document no.", SalesLines."No.");
-        if SalesLines.FindSet() then
+        SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+        SalesLine.SetRange("Document no.", SalesHeader."No.");
+        if SalesLine.FindSet() then
             repeat
-                GSTAmountFooter += GetGSTAmountFooter(SalesLines.RecordId());
-            //TotalGSTAmountFinal += SGSTAmount + CGSTAmount + IGSTAmount;
-            until SalesLines.Next() = 0;
+                GSTAmountFooter += GetGSTAmountFooter(SalesLine.RecordId());
+            until SalesLine.Next() = 0;
         exit(GSTAmountFooter);
     end;
 
@@ -759,6 +778,8 @@ SalesLine: Record "Sales Line";
 
         exit(TaxTransactionValue.Amount);
     end;
+
+
 
 
 

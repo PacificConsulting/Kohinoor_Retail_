@@ -3918,7 +3918,7 @@ DD.</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="SGST">
+                        <Textbox Name="SGSTAmount">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -3937,7 +3937,7 @@ DD.</Value>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>SGST</rd:DefaultName>
+                          <rd:DefaultName>SGSTAmount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -3973,7 +3973,7 @@ DD.</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="CGST">
+                        <Textbox Name="CGSTAmount">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -3992,7 +3992,7 @@ DD.</Value>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>CGST</rd:DefaultName>
+                          <rd:DefaultName>CGSTAmount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -4028,7 +4028,7 @@ DD.</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="IGST">
+                        <Textbox Name="IGSTAmount">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -4047,7 +4047,7 @@ DD.</Value>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>IGST</rd:DefaultName>
+                          <rd:DefaultName>IGSTAmount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -4090,7 +4090,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Amount.Value +Fields!SGST.Value +Fields!CGST.Value+Fields!IGST.Value</Value>
+                                  <Value>=Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>n2</Format>
@@ -4530,7 +4530,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=SUM(Fields!Amount.Value + Fields!SGST.Value + Fields!CGST.Value + Fields!IGST.Value)</Value>
+                                  <Value>=SUM(Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value)</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>n2</Format>
@@ -5612,14 +5612,16 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Received the goods in good condition &amp; order            For KOHINOOR TELEVIDEO PVT. LTD                                          </Value>
+                    <Value>Received the goods in good condition &amp; order                For KOHINOOR TELEVIDEO PVT. LTD                                          </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style />
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
               </Paragraph>
               <Paragraph>
                 <TextRuns>
@@ -5648,14 +5650,16 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Customer Signature                                                            Authorized Signatory   </Value>
+                    <Value>Customer Signature                                                                          Authorized Signatory   </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style />
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
               </Paragraph>
               <Paragraph>
                 <TextRuns>
@@ -5748,18 +5752,24 @@ invoice.</Value>
           </Textbox>
           <Image Name="Image1">
             <Source>Database</Source>
-            <Value>=First(Fields!ReLocation.Value, "DataSet_Result")</Value>
+            <Value>=First(Fields!ReLocationQrcode.Value, "DataSet_Result")</Value>
             <MIMEType>image/jpeg</MIMEType>
             <Sizing>FitProportional</Sizing>
-            <Top>19.71299cm</Top>
+            <Top>19.69899cm</Top>
             <Left>16.83758cm</Left>
-            <Height>3.25135cm</Height>
+            <Height>3.26534cm</Height>
             <Width>3.09563cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <TopBorder>
+                <Style>Solid</Style>
+              </TopBorder>
+              <RightBorder>
+                <Style>Solid</Style>
+              </RightBorder>
             </Style>
           </Image>
         </ReportItems>
@@ -5887,47 +5897,11 @@ End Function
         <Field Name="Notext">
           <DataField>Notext</DataField>
         </Field>
-        <Field Name="SGST">
-          <DataField>SGST</DataField>
-        </Field>
-        <Field Name="SGSTFormat">
-          <DataField>SGSTFormat</DataField>
-        </Field>
-        <Field Name="SGSTPer">
-          <DataField>SGSTPer</DataField>
-        </Field>
-        <Field Name="SGSTPerFormat">
-          <DataField>SGSTPerFormat</DataField>
-        </Field>
-        <Field Name="CGST">
-          <DataField>CGST</DataField>
-        </Field>
-        <Field Name="CGSTFormat">
-          <DataField>CGSTFormat</DataField>
-        </Field>
-        <Field Name="CGSTPer">
-          <DataField>CGSTPer</DataField>
-        </Field>
-        <Field Name="CGSTPerFormat">
-          <DataField>CGSTPerFormat</DataField>
-        </Field>
-        <Field Name="IGST">
-          <DataField>IGST</DataField>
-        </Field>
-        <Field Name="IGSTFormat">
-          <DataField>IGSTFormat</DataField>
-        </Field>
-        <Field Name="IGSTPer">
-          <DataField>IGSTPer</DataField>
-        </Field>
-        <Field Name="IGSTPerFormat">
-          <DataField>IGSTPerFormat</DataField>
-        </Field>
         <Field Name="Paymentmethod">
           <DataField>Paymentmethod</DataField>
         </Field>
-        <Field Name="ReLocation">
-          <DataField>ReLocation</DataField>
+        <Field Name="ReLocationQrcode">
+          <DataField>ReLocationQrcode</DataField>
         </Field>
         <Field Name="TotalAmount1">
           <DataField>TotalAmount1</DataField>
@@ -5980,17 +5954,17 @@ End Function
         <Field Name="HSNSACCode_SalesLine">
           <DataField>HSNSACCode_SalesLine</DataField>
         </Field>
-        <Field Name="SGSTAmount">
-          <DataField>SGSTAmount</DataField>
-        </Field>
-        <Field Name="SGSTAmountFormat">
-          <DataField>SGSTAmountFormat</DataField>
-        </Field>
         <Field Name="CGSTAmount">
           <DataField>CGSTAmount</DataField>
         </Field>
         <Field Name="CGSTAmountFormat">
           <DataField>CGSTAmountFormat</DataField>
+        </Field>
+        <Field Name="SGSTAmount">
+          <DataField>SGSTAmount</DataField>
+        </Field>
+        <Field Name="SGSTAmountFormat">
+          <DataField>SGSTAmountFormat</DataField>
         </Field>
         <Field Name="IGSTAmount">
           <DataField>IGSTAmount</DataField>

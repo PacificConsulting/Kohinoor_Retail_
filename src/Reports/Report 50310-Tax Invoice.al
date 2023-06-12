@@ -321,7 +321,7 @@ report 50310 "Tax Invoice"
                 end;
 
                 if ReLocation.Get("Location Code") then;
-                Reclocation.CalcFields("Payment QR");
+                Relocation.CalcFields("Payment QR");
 
                 //PCPL-064<< 8june2023
             end;

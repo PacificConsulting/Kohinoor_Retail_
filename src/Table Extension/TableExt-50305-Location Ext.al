@@ -34,7 +34,6 @@ tableextension 50305 "Location_Ext_retail" extends Location
         }
         field(50307; "Payment QR"; Blob)
         {
-            DataClassification = ToBeClassified;
             SubType = Bitmap;
         }
         field(50308; "Startup Menu "; Code[20])

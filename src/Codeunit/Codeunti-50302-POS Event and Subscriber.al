@@ -175,6 +175,12 @@ codeunit 50302 "POS Event and Subscriber"
                     exit(IsResult);
 
                 end;
+            'REFRESHSO':  //<<<<** Add Comment on Live level new Line Insert **>>>>
+                begin
+                    IsResult := POSProcedure.RefreshSaleOrder(documentno);
+                    exit(IsResult);
+
+                end;
         end;
 
     end;
