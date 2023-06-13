@@ -182,6 +182,11 @@ report 50311 "Sales Order"
             {
 
             }
+            column(TotalPaidAmount; TotalPaidAmount)
+            {
+
+            }
+
 
 
 
@@ -198,10 +203,11 @@ report 50311 "Sales Order"
                 {
 
                 }
-                column(Item_No_; "Sales Line"."No.")
+                column(Item_No_; ItemNo)
                 {
 
                 }
+
                 column(Document_No_; "Document No.")
                 {
 
@@ -239,11 +245,6 @@ report 50311 "Sales Order"
                 column(IGSTAmount; IGSTAmount)
                 {
                 }
-                column(TotalPaidAmount; TotalPaidAmount)
-                {
-
-                }
-
 
 
                 dataitem("Value Entry"; "Value Entry")
@@ -274,18 +275,9 @@ report 50311 "Sales Order"
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
                     if Type = Type::"G/L Account" then
-                        "Exchange Item No." := "Exchange Item No.";
-
-                    //PaidAmount
-                    RecPaymentlines.Reset();
-                    RecPaymentlines.SetRange("Document No.", "No.");
-                    RecPaymentlines.SetRange("Document Type", RecPaymentlines."Document Type"::Order);
-                    RecPaymentlines.SetRange("Line No.", "Line No.");
-                    if RecPaymentlines.FindFirst() then begin
-                        TotalPaidAmount += RecPaymentlines.Amount;
-                    end;
-
-
+                        ItemNo := "Exchange Item No."
+                    else
+                        ItemNo := "No.";
 
 
 
@@ -369,7 +361,6 @@ report 50311 "Sales Order"
                 //GetPurchaseStatisticsAmount("Sales Header", TotalGSTAmount, TotalGSTPercent);
 
 
-
                 //PCPL-064<< 8june2023
 
                 //TotalAmount
@@ -389,6 +380,14 @@ report 50311 "Sales Order"
                 // Message(format(TotalGSTAmountFinal));
                 //PCPL-064<<9june2023
 
+                //PaidAmount
+                RecPaymentlines.Reset();
+                RecPaymentlines.SetRange("Document No.", "No.");
+                RecPaymentlines.SetRange("Document Type", RecPaymentlines."Document Type"::Order);
+                // RecPaymentlines.SetRange("Line No.", "Line No.");
+                if RecPaymentlines.FindFirst() then begin
+                    TotalPaidAmount += RecPaymentlines.Amount;
+                end;
 
 
             end;
@@ -494,6 +493,7 @@ report 50311 "Sales Order"
         TotalPaidAmount: Decimal;
         PaymentAmount: Decimal;
         Paylines: Record "Payment Lines";
+        ItemNo: Code[20];
 
 
     //GST calculate 

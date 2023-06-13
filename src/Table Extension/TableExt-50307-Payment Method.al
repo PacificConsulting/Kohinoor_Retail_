@@ -15,6 +15,7 @@ tableextension 50307 "Payment Method" extends "Payment Method"
                 BankAccFilter: Record "Bank Account";
                 Noseries: Codeunit NoSeriesManagement;
                 GL: Record "General Ledger Setup";
+                BankAccposting: Record "Bank Account Posting Group";
             begin
                 IF Rec.Tender = true then begin
                     GL.Get();
@@ -23,10 +24,16 @@ tableextension 50307 "Payment Method" extends "Payment Method"
                         BankAccFilter.Reset();
                         BankAccFilter.SetFilter("No.", '%1', rec.Code);
                         IF Not BankAccFilter.FindFirst() then begin
+                            //****Bank Acc Posting Group reation*******
+                            BankAccposting.Init();
+                            BankAccposting.Code := Rec.Code;
+                            BankAccposting.Insert(true);
+                            //******Bank Account Creation********
                             BankAcc.Init();
                             BankAcc."No." := rec.Code;
                             BankAcc.Name := rec.Description;
-                            BankAcc.Insert();
+                            BankAcc."Bank Acc. Posting Group" := BankAccposting.Code;
+                            BankAcc.Insert(true);
                             Message('New bank Account Created with No. %1', BankAcc."No.");
                         end;
 

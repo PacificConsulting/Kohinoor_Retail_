@@ -8,5 +8,6 @@ tableextension 50309 "Ship To Address Ext" extends "Ship-to Address"
             Caption = 'Address Type';
             DataClassification = ToBeClassified;
         }
+
     }
 }

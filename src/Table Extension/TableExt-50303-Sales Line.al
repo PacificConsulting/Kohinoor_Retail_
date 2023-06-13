@@ -11,6 +11,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 SH.Reset();
                 SH.SetRange("No.", "Document No.");
                 SH.SetFilter("POS Released Date", '<>%1', 0D);
+                SH.SetRange("Document Type", "Document Type"::Order);
                 IF SH.FindFirst() then
                     Error('You can not change the unit price incl. of tax when order is Confirmed');
             end;
@@ -24,6 +25,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 SH.Reset();
                 SH.SetRange("No.", "Document No.");
                 SH.SetFilter("POS Released Date", '<>%1', 0D);
+                SH.SetRange("Document Type", "Document Type"::Order);
                 IF SH.FindFirst() then
                     Error('You can not change the unit price when order is Confirmed');
             end;
@@ -80,6 +82,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             begin
                 SH.Reset();
                 SH.SetRange("No.", "Document No.");
+                SH.SetRange("Document Type", "Document Type"::Order);
                 SH.SetFilter("POS Released Date", '<>%1', 0D);
                 IF SH.FindFirst() then
                     Error('You can not change the quantity when order is Confirmed');
@@ -231,6 +234,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
         SalesHeader.Reset();
         SalesHeader.SetRange("No.", "Document No.");
         SalesHeader.SetFilter("POS Released Date", '<>%1', 0D);
+        SalesHeader.SetRange("Document Type", "Document Type"::Order);
         IF SalesHeader.FindFirst() then begin
             if rec.Type <> rec.Type::" " then
                 Error('You can not insert new line when order is Confirmed');

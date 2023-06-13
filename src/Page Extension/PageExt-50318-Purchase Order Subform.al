@@ -7,5 +7,6 @@ pageextension 50318 "Purchase Order Subform Ext" extends "Purchase Order Subform
             Visible = true;
         }
 
+
     }
 }

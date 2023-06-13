@@ -101,7 +101,7 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                                     PLInit.Validate("No.", item."No.");
                                     PLInit.Validate(Quantity, PurchaseLine.Quantity);
                                     PLInit.Validate("Location Code", PH."Location Code");
-                                    //PLInit.Validate("Store No.", PurchaseLine."Store No.");
+                                    PLInit.Validate("Bin Code", PurchaseLine."Bin Code");
                                     // PLInit.Validate("Salesperson Code", PurchaseLine."Salesperson Code");
                                     PLInit.Validate("Shortcut Dimension 1 Code", PurchaseLine."Shortcut Dimension 1 Code");
                                     PLInit.Validate("Shortcut Dimension 2 Code", PurchaseLine."Shortcut Dimension 2 Code");
