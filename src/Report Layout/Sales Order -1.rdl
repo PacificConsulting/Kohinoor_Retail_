@@ -2074,7 +2074,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Paymentmethod.Value &amp; "+" &amp; Fields!PaymentAmount.Value</Value>
+                                  <Value>=Fields!Paymentmethod.Value  &amp; Fields!PaymentAmount.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -5896,12 +5896,6 @@ End Function
         <Field Name="Amount_To_CustomerFormat">
           <DataField>Amount_To_CustomerFormat</DataField>
         </Field>
-        <Field Name="TotalPaidAmount">
-          <DataField>TotalPaidAmount</DataField>
-        </Field>
-        <Field Name="TotalPaidAmountFormat">
-          <DataField>TotalPaidAmountFormat</DataField>
-        </Field>
         <Field Name="PaymentAmount">
           <DataField>PaymentAmount</DataField>
         </Field>
@@ -5964,6 +5958,12 @@ End Function
         </Field>
         <Field Name="IGSTAmountFormat">
           <DataField>IGSTAmountFormat</DataField>
+        </Field>
+        <Field Name="TotalPaidAmount">
+          <DataField>TotalPaidAmount</DataField>
+        </Field>
+        <Field Name="TotalPaidAmountFormat">
+          <DataField>TotalPaidAmountFormat</DataField>
         </Field>
         <Field Name="Serial_No_">
           <DataField>Serial_No_</DataField>

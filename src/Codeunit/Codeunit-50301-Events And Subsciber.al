@@ -7,45 +7,45 @@ codeunit 50301 "Event and Subscribers"
 
 
     //<<<<<<<START********************************CU-80*****************************************
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
-    local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
-    var
-        ABSBlobClient: Codeunit "ABS Blob Client";
-        Authorization: Interface "Storage Service Authorization";
-        ABSCSetup: Record "Azure Storage Container Setup";
-        StorageServiceAuth: Codeunit "Storage Service Authorization";
-        Instrm: InStream;
-        OutStrm: OutStream;
-        TempBlob: Codeunit "Temp Blob";
-        FileName: Text;
-        SIH: record 112;
-        Recref: RecordRef;
-        VResult: Text;
-        B64: Codeunit "Base64 Convert";
-    begin
-        //*********Report SaveasPDF code********
-        SIH.RESET;
-        SIH.SETRANGE("No.", SalesInvHdrNo);
-        IF SIH.FINDFIRST THEN;
-        Recref.GetTable(SIH);
-        TempBlob.CreateOutStream(OutStrm);
-        Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStrm, Recref);
-        TempBlob.CreateInStream(Instrm);
-        VResult := B64.ToBase64(Instrm);
-        UploadonAzurBlobStorage(SIH."No." + '.PDF', VResult);
-        /*
-        //*************Azure upload Code**************
-        ABSCSetup.Get();
-        ABSCSetup.TestField("Container Name Invoice");
-        Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-        ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Invoice", Authorization);
-        FileName := SIH."No." + '.' + 'pdf';
-        // ABSBlobClient.
-        ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-        ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
-        */
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
+    // local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
+    // var
+    //     ABSBlobClient: Codeunit "ABS Blob Client";
+    //     Authorization: Interface "Storage Service Authorization";
+    //     ABSCSetup: Record "Azure Storage Container Setup";
+    //     StorageServiceAuth: Codeunit "Storage Service Authorization";
+    //     Instrm: InStream;
+    //     OutStrm: OutStream;
+    //     TempBlob: Codeunit "Temp Blob";
+    //     FileName: Text;
+    //     SIH: record 112;
+    //     Recref: RecordRef;
+    //     VResult: Text;
+    //     B64: Codeunit "Base64 Convert";
+    // begin
+    //     //*********Report SaveasPDF code********
+    //     SIH.RESET;
+    //     SIH.SETRANGE("No.", SalesInvHdrNo);
+    //     IF SIH.FINDFIRST THEN;
+    //     Recref.GetTable(SIH);
+    //     TempBlob.CreateOutStream(OutStrm);
+    //     Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStrm, Recref);
+    //     TempBlob.CreateInStream(Instrm);
+    //     VResult := B64.ToBase64(Instrm);
+    //     UploadonAzurBlobStorage(SIH."No." + '.PDF', VResult);
+    //     /*
+    //     //*************Azure upload Code**************
+    //     ABSCSetup.Get();
+    //     ABSCSetup.TestField("Container Name Invoice");
+    //     Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
+    //     ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Invoice", Authorization);
+    //     FileName := SIH."No." + '.' + 'pdf';
+    //     // ABSBlobClient.
+    //     ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+    //     ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
+    //     */
+    // end;
 
-    end;
     //<<<<<<<END********************************CU-80*****************************************
 
     //<<<<<<<START********************************CU-12*****************************************

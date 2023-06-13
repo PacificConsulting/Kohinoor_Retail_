@@ -1259,7 +1259,7 @@ codeunit 50303 "POS Procedure"
 */
     end;
 
-    procedure UploadonAzurBlobStorage(FileName: Text; Base64: Text): Text
+    procedure UploadonAzurBlobStorageOrder(FileName: Text; Base64: Text): Text
 
     Var
         client: HttpClient;
@@ -1333,7 +1333,7 @@ codeunit 50303 "POS Procedure"
         Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
         TempBlob.CreateInStream(Instrm);
         VResult := B64.ToBase64(Instrm);
-        ReturnData := UploadonAzurBlobStorage(SH."No." + '.PDF', VResult);
+        ReturnData := UploadonAzurBlobStorageOrder(SH."No." + '.PDF', VResult);
         exit(ReturnData);
         /*
         If Client.Post('https://kohinoorazeinvoiceintegration.azurewebsites.net/api/Function1', Content, Response1) then
@@ -1357,6 +1357,64 @@ codeunit 50303 "POS Procedure"
 
     end;
 
+    procedure SIPrint(documentno: Code[20]): Text
+    var
+        ABSBlobClient: Codeunit "ABS Blob Client";
+        Authorization: Interface "Storage Service Authorization";
+        ABSCSetup: Record "Azure Storage Container Setup";
+        StorageServiceAuth: Codeunit "Storage Service Authorization";
+        Instrm: InStream;
+        OutStrm: OutStream;
+        TempBlob: Codeunit "Temp Blob";
+        FileName: Text;
+        SIH: record 112;
+        Recref: RecordRef;
+        VResult: Text;
+        B64: Codeunit "Base64 Convert";
+    begin
+        //*********Report SaveasPDF code********
+        SIH.RESET;
+        SIH.SETRANGE("No.", documentno);
+        IF SIH.FINDFIRST THEN;
+        Recref.GetTable(SIH);
+        TempBlob.CreateOutStream(OutStrm);
+        Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStrm, Recref);
+        TempBlob.CreateInStream(Instrm);
+        VResult := B64.ToBase64(Instrm);
+        UploadonAzurBlobStorageInvoice(SIH."No." + '.PDF', VResult);
+
+    end;
+
+    /// <summary>
+    /// Posted Sales Inv Azur Upload Storage
+    /// </summary>
+    local procedure UploadonAzurBlobStorageInvoice(FileName: Text; Base64: Text)
+
+    Var
+        client: HttpClient;
+        cont: HttpContent;
+        header: HttpHeaders;
+        response: HttpResponseMessage;
+        Jobject: JsonObject;
+        tmpString: Text;
+        token: Text;
+        URL: text;
+        AzurBlobSetup: Record "Azure Storage Container Setup";
+    Begin
+        AzurBlobSetup.Get();
+        AzurBlobSetup.TestField("Azure Invoice URL");
+        URL := AzurBlobSetup."Azure Invoice URL";//'https://prod-05.centralindia.logic.azure.com:443/workflows/c6dd57d4a8814ad0bd3e43bae6ecd6fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dq8NlkzznvjIz9F1aYbWcaxHyGAgqaWBQjkCczmrLeg';
+        //Jobject.Add('ApiToken', 'testapi');
+        Jobject.Add('Document', Base64);
+        Jobject.Add('FileName', FileName);
+        Jobject.WriteTo(tmpString);
+        cont.WriteFrom(tmpString);
+        cont.ReadAs(tmpString);
+        cont.GetHeaders(header);
+        header.Remove('Content-Type');
+        header.Add('Content-Type', 'application/json');
+        client.Post(URL, cont, response);
+    end;
 
     /// <summary>
     /// Sales Order Staticstic Calculate function

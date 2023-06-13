@@ -177,10 +177,7 @@ report 50311 "Sales Order"
             {
 
             }
-            column(TotalPaidAmount; TotalPaidAmount)
-            {
 
-            }
             column(PaymentAmount; PaymentAmount)
             {
 
@@ -242,6 +239,10 @@ report 50311 "Sales Order"
                 column(IGSTAmount; IGSTAmount)
                 {
                 }
+                column(TotalPaidAmount; TotalPaidAmount)
+                {
+
+                }
 
 
 
@@ -274,6 +275,15 @@ report 50311 "Sales Order"
 
                     if Type = Type::"G/L Account" then
                         "Exchange Item No." := "Exchange Item No.";
+
+                    //PaidAmount
+                    RecPaymentlines.Reset();
+                    RecPaymentlines.SetRange("Document No.", "No.");
+                    RecPaymentlines.SetRange("Document Type", RecPaymentlines."Document Type"::Order);
+                    RecPaymentlines.SetRange("Line No.", "Line No.");
+                    if RecPaymentlines.FindFirst() then begin
+                        TotalPaidAmount += RecPaymentlines.Amount;
+                    end;
 
 
 
@@ -379,13 +389,7 @@ report 50311 "Sales Order"
                 // Message(format(TotalGSTAmountFinal));
                 //PCPL-064<<9june2023
 
-                //PaidAmount
-                RecPaymentlines.Reset();
-                RecPaymentlines.SetRange("Document No.", "No.");
-                RecPaymentlines.SetRange("Document Type", RecPaymentlines."Document Type"::Order);
-                if RecPaymentlines.FindFirst() then begin
-                    TotalPaidAmount += RecPaymentlines.Amount;
-                end;
+
 
             end;
 
