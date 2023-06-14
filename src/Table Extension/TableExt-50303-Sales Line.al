@@ -73,7 +73,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
         {
             trigger OnAfterValidate()
             var
-                Item: Record 27;//
+                Item: Record 27;
                 GetItem: Record 27;
                 SLInit: Record 37;
                 SalesLine: Record 37;
@@ -89,6 +89,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
 
                 IF Rec.Type <> rec.Type::" " then begin
                     IF Quantity > 0 then begin
+                        IF Item.Get(Rec."No.") then;
                         Item.Reset();
                         Item.SetRange("Parent Item No.", Rec."No.");
                         IF Item.FindSet() then

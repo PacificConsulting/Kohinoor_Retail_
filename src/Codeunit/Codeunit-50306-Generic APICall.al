@@ -1,10 +1,10 @@
 codeunit 50306 GenericApiCalls
 {
-    [EventSubscriber(ObjectType::Table, Database::"Ship-to Address", 'OnAfterLookupPostCode', '', false, false)]
-    local procedure OnAfterLookupPostCode(var ShipToAddress: Record "Ship-to Address"; var PostCodeRec: Record "Post Code"; xShipToAddress: Record "Ship-to Address");
-    begin
-        ShipToAddress.State := PostCodeRec."State Code";
-    end;
+    // [EventSubscriber(ObjectType::Table, Database::"Ship-to Address", 'OnAfterLookupPostCode', '', false, false)]
+    // local procedure OnAfterLookupPostCode(var ShipToAddress: Record "Ship-to Address"; var PostCodeRec: Record "Post Code"; xShipToAddress: Record "Ship-to Address");
+    // begin
+    //     ShipToAddress.State := PostCodeRec."State Code";
+    // end;
 
     procedure CreateRequest(RequestUrl: Text; AccessToken: Text): Text
     var
