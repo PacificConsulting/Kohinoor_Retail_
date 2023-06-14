@@ -107,6 +107,7 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
                 ToolTip = 'Specifies the value of the Warranty Parent Line No. field.';
             }
 
+
         }
         addafter("Unit Price Incl. of Tax")
         {

@@ -65,5 +65,6 @@ tableextension 50304 "Sales inv. Line Retail" extends "Sales Invoice Line"
         }
 
 
+
     }
 }

@@ -43,6 +43,7 @@ pageextension 50305 "Sales Inv Line Subform" extends "Posted Sales Invoice Subfo
                 ToolTip = 'Specifies the value of the GST Tax Amount.';
 
             }
+
         }
 
 

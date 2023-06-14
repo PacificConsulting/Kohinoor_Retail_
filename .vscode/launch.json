@@ -3,7 +3,7 @@
     "configurations": [
         
         {
-            "name": "Debugg Sandbox",
+            "name": "Debugg UAT Sandbox",
             "type": "al",
             "request": "attach",
             "environmentType": "Sandbox",
@@ -16,7 +16,7 @@
             "longRunningSqlStatementsThreshold": 500,
             "numberOfSqlStatements": 10,
             "breakOnNext": "WebClient",
-            "sessionId": 56471
+            "sessionId": 118082
             
         },
         {

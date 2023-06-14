@@ -48,6 +48,7 @@ codeunit 50301 "Event and Subscribers"
 
     //<<<<<<<END********************************CU-80*****************************************
 
+
     //<<<<<<<START********************************CU-12*****************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitBankAccLedgEntry', '', false, false)]
     local procedure OnAfterInitBankAccLedgEntry(var BankAccountLedgerEntry: Record "Bank Account Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")

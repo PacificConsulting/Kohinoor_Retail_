@@ -40,12 +40,18 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 TradeAggre: record "Trade Aggrement";
                 SalesHeder: record 36;
                 BlockItem: Record "Block Item List";
+
             begin
-                BlockItem.Reset();
-                BlockItem.SetRange("Store No.", "Store No.");
-                BlockItem.SetRange("Item No.", "No.");
-                if BlockItem.FindFirst() then
-                    Error('This %1 Item No. is block', BlockItem."Item No.");
+                SalesHeder.Reset();
+                SalesHeder.SetRange("No.", rec."Document No.");
+                SalesHeder.SetFilter("Document Type", '%1|%2', "Document Type"::Order, "Document Type"::Invoice);
+                IF SalesHeder.FindFirst() then begin
+                    BlockItem.Reset();
+                    BlockItem.SetRange("Store No.", SalesHeder."Store No.");
+                    BlockItem.SetRange("Item No.", "No.");
+                    if BlockItem.FindFirst() then
+                        Error('This %1 Item No. is block', BlockItem."Item No.");
+                end;
 
                 IF SalesHeder.Get(rec."Document Type", rec."Document No.") then;
                 TradeAggre.Reset();
@@ -96,8 +102,8 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                     IF Quantity > 0 then begin
                         IF NewItem.Get(Rec."No.") then;
                         Item.Reset();
-                        Item.SetRange("Parent Item No.", Rec."No.");
-                        //Item.SetRange("No.", NewItem."Parent Item No.");
+                        //Item.SetRange("Parent Item No.", Rec."No.");
+                        Item.SetRange("No.", NewItem."Parent Item No.");
                         IF Item.FindSet() then
                             repeat
                                 SalesLineFilter.Reset();
@@ -200,7 +206,6 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
         {
             DataClassification = ToBeClassified;
             Editable = false;
-
         }
         field(50313; "Warranty Parent Line No."; Integer)
         {
@@ -208,6 +213,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             Editable = false;
 
         }
+
 
     }
 

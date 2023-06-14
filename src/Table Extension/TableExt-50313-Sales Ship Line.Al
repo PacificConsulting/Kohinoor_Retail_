@@ -53,6 +53,18 @@ tableextension 50313 "Sales Ship Line" extends "Sales Shipment Line"
             Editable = false;
 
         }
+        field(50312; "Salesperson Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(50313; "Warranty Parent Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+
+        }
+
 
     }
 }
