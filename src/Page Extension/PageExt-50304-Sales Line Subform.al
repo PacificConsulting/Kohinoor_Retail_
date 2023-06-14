@@ -2,6 +2,20 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
 {
     layout
     {
+        modify(Quantity)
+        {
+            trigger OnAfterValidate()
+            var
+                SH: Record 36;
+            begin
+                SH.Reset();
+                SH.SetRange("No.", Rec."Document No.");
+                SH.SetRange("Document Type", SH."Document Type"::Order);
+                SH.SetFilter("POS Released Date", '<>%1', 0D);
+                IF SH.FindFirst() then
+                    Error('You can not change the quantity when order is Confirmed');
+            end;
+        }
         modify("Unit Price Incl. of Tax")
         {
             trigger OnAfterValidate()
@@ -9,7 +23,15 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
                 TradeAggre: record "Trade Aggrement";
                 SalesHeder: record 36;
                 SL: Record 37;
+                SH: Record 36;
             begin
+                SH.Reset();
+                SH.SetRange("No.", Rec."Document No.");
+                SH.SetFilter("POS Released Date", '<>%1', 0D);
+                SH.SetRange("Document Type", SH."Document Type"::Order);
+                IF SH.FindFirst() then
+                    Error('You can not change the unit price when order is Confirmed');
+
                 IF xRec."Unit Price Incl. of Tax" <> Rec."Unit Price Incl. of Tax" then begin
                     Rec."Old Unit Price" := Rec."Unit Price Incl. of Tax";
                     //Rec.Modify();

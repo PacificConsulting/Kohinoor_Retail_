@@ -8,12 +8,15 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             var
                 SH: Record 36;
             begin
+                //****Below code commened due to Sales Statictic page run same error coming now same code done on Sales line Page
+                /*
                 SH.Reset();
                 SH.SetRange("No.", "Document No.");
                 SH.SetFilter("POS Released Date", '<>%1', 0D);
                 SH.SetRange("Document Type", "Document Type"::Order);
                 IF SH.FindFirst() then
                     Error('You can not change the unit price incl. of tax when order is Confirmed');
+                    */
             end;
         }
         modify("Unit Price")
@@ -22,12 +25,12 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             var
                 SH: Record 36;
             begin
-                SH.Reset();
-                SH.SetRange("No.", "Document No.");
-                SH.SetFilter("POS Released Date", '<>%1', 0D);
-                SH.SetRange("Document Type", "Document Type"::Order);
-                IF SH.FindFirst() then
-                    Error('You can not change the unit price when order is Confirmed');
+                // SH.Reset();
+                // SH.SetRange("No.", "Document No.");
+                // SH.SetFilter("POS Released Date", '<>%1', 0D);
+                // SH.SetRange("Document Type", "Document Type"::Order);
+                // IF SH.FindFirst() then
+                //     Error('You can not change the unit price when order is Confirmed');
             end;
         }
         modify("No.")
@@ -79,19 +82,22 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 SalesLine: Record 37;
                 SalesLineFilter: Record 37;
                 SH: Record 36;
+                NewItem: Record 27;
             begin
-                SH.Reset();
-                SH.SetRange("No.", "Document No.");
-                SH.SetRange("Document Type", "Document Type"::Order);
-                SH.SetFilter("POS Released Date", '<>%1', 0D);
-                IF SH.FindFirst() then
-                    Error('You can not change the quantity when order is Confirmed');
+                //****Below code commened due to Sales Statictic page run same error coming now same code done on Sales line Page
+                // SH.Reset();
+                // SH.SetRange("No.", "Document No.");
+                // SH.SetRange("Document Type", "Document Type"::Order);
+                // SH.SetFilter("POS Released Date", '<>%1', 0D);
+                // IF SH.FindFirst() then
+                //     Error('You can not change the quantity when order is Confirmed');
 
                 IF Rec.Type <> rec.Type::" " then begin
                     IF Quantity > 0 then begin
-                        IF Item.Get(Rec."No.") then;
+                        IF NewItem.Get(Rec."No.") then;
                         Item.Reset();
                         Item.SetRange("Parent Item No.", Rec."No.");
+                        //Item.SetRange("No.", NewItem."Parent Item No.");
                         IF Item.FindSet() then
                             repeat
                                 SalesLineFilter.Reset();

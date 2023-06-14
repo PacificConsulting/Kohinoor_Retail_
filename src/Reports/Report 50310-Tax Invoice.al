@@ -26,6 +26,19 @@ report 50310 "Tax Invoice"
             {
 
             }
+            column(Compinfo_bankname; Compinfo."Bank Name")
+            {
+
+            }
+            column(Compinfo_AccountNo; Compinfo."Bank Account No.")
+            {
+
+            }
+            column(Compinfo_IFSC; Compinfo.IBAN)
+            {
+
+            }
+
             // column(CompAddress; Compinfo.Address + '' + Compinfo."Address 2" + '' + Compinfo.City + '' + Compinfo."Post Code" + '' + Compinfo."Country/Region Code")
             // {
             // }
@@ -129,6 +142,18 @@ report 50310 "Tax Invoice"
             {
 
             }
+            column(TotalPaidAmount; TotalPaidAmount)
+            {
+
+            }
+            column(PaymentAmount; PaymentAmount)
+            {
+
+            }
+            column(balanceamount; balanceamount)
+            {
+
+            }
 
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
             {
@@ -143,7 +168,7 @@ report 50310 "Tax Invoice"
                 {
 
                 }
-                column(Item_No_; "Sales Invoice Line"."No.")
+                column(Item_No_; ItemNo)
                 {
 
                 }
@@ -267,7 +292,14 @@ report 50310 "Tax Invoice"
                     //AoumntInWords
                     TotalAmount += Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ROUND("Sales Invoice Header"."Amount To Customer" - TotalPaidAmount), '');
+
+
+                    if Type = Type::"G/L Account" then
+                        ItemNo := "Exchange Item No."
+                    else
+                        ItemNo := "No.";
+
 
 
                 end;
@@ -314,16 +346,38 @@ report 50310 "Tax Invoice"
                 if PostedPaymentLines.findfirst() then begin
                     repeat
                         if Paymentmethod <> '' then
-                            Paymentmethod := Paymentmethod + ',' + PostedPaymentLines."Payment Method Code"
+                            Paymentmethod := PostedPaymentLines."Payment Method Code" + ' ' + '-' + format(PostedPaymentLines.Amount) + ',' + ' ' + Paymentmethod
                         else
                             Paymentmethod := PostedPaymentLines."Payment Method Code";
                     until PostedPaymentLines.Next = 0;
                 end;
 
+                PostedPaylines.Reset();
+                PostedPaylines.SetRange("Document No.", "No.");
+                //PostedPaylines.SetRange("Document Type", "Sales Invoice Header".);
+                if PostedPaylines.FindFirst() then begin
+
+                    PaymentAmount := PostedPaylines.Amount;
+
+                end;
+
+                //PaidAmount
+                RecPaymentlines.Reset();
+                RecPaymentlines.SetRange("Document No.", "No.");
+                RecPaymentlines.SetRange("Document Type", RecPaymentlines."Document Type"::Order);
+                // RecPaymentlines.SetRange("Line No.", "Line No.");
+                if RecPaymentlines.FindFirst() then begin
+                    repeat
+                        TotalPaidAmount += RecPaymentlines.Amount;
+                    until RecPaymentlines.Next = 0;
+                end;
+
+
                 if ReLocation.Get("Location Code") then;
                 Relocation.CalcFields("Payment QR");
 
-                //PCPL-064<< 8june2023
+                balanceamount := (TotalAmount) - (TotalPaidAmount);
+
             end;
 
             trigger OnPreDataItem() //SIH
@@ -380,6 +434,11 @@ report 50310 "Tax Invoice"
 
     var
         myInt: Integer;
+        RecPaymentlines: Record "Posted Payment Lines";
+        TotalPaidAmount: Decimal;
+        PaymentAmount: Decimal;
+        PostedPaylines: record "Posted Payment Lines";
+        ItemNo: Code[20];
         Compinfo: record "Company Information";
         SrNo: Integer;
         recSalesInvoiceLine: Record 113;
@@ -413,6 +472,7 @@ report 50310 "Tax Invoice"
         PostedPaymentLines: Record "Posted Payment Lines";
         Paymentmethod: Code[50];
         ReLocation: Record Location;
+        balanceamount: Decimal;
 
     //GLE:Record 
 }

@@ -247,6 +247,12 @@ codeunit 50301 "Event and Subscribers"
         TransferShipmentHeader."Posted By" := TransferHeader."Posted By";
         TransferShipmentHeader.Modify();
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnAfterTransferOrderPostShipment', '', false, false)]
+    local procedure OnAfterTransferOrderPostShipment(var TransferHeader: Record "Transfer Header"; CommitIsSuppressed: Boolean; var TransferShipmentHeader: Record "Transfer Shipment Header"; InvtPickPutaway: Boolean)
+    begin
+
+    end;
     //END**********************************Codeunit-5704***************************************
 
     //START**********************************Codeunit-5705***************************************

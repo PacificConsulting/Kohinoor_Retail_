@@ -186,7 +186,10 @@ report 50311 "Sales Order"
             {
 
             }
+            column(BalanceAmount; BalanceAmount)
+            {
 
+            }
 
 
 
@@ -270,7 +273,7 @@ report 50311 "Sales Order"
                     //AoumntInWords
                     //TotalAmount1 += Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, ("Sales Header"."Amount To Customer"), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ("Sales Header"."Amount To Customer" - TotalPaidAmount), '');
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
@@ -279,7 +282,8 @@ report 50311 "Sales Order"
                     else
                         ItemNo := "No.";
 
-
+                    // mybalance := ("Sales Line".Amount + CGSTAmount + SGSTAmount + IGSTAmount);
+                    // Message(format(mybalance));
 
                 end;
             }
@@ -339,7 +343,7 @@ report 50311 "Sales Order"
                 if PaymentLines.findfirst() then begin
                     repeat
                         if Paymentmethod <> '' then
-                            Paymentmethod := Paymentmethod + ',' + ' ' + PaymentLines."Payment Method Code" + '-' + format(PaymentLines.Amount)
+                            Paymentmethod := Paymentmethod + ' ' + '-' + format(PaymentLines.Amount) + ',' + ' ' + PaymentLines."Payment Method Code"
                         else
                             Paymentmethod := PaymentLines."Payment Method Code";
                     until PaymentLines.Next = 0;
@@ -350,9 +354,9 @@ report 50311 "Sales Order"
                 Paylines.SetRange("Document No.", "No.");
                 Paylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
                 if Paylines.FindFirst() then begin
-                    repeat
-                        PaymentAmount := Paylines.Amount;
-                    until Paylines.Next = 0;
+
+                    PaymentAmount := Paylines.Amount;
+
                 end;
 
                 if ReLocation.Get("Sales Header"."Location Code") then;
@@ -386,9 +390,14 @@ report 50311 "Sales Order"
                 RecPaymentlines.SetRange("Document Type", RecPaymentlines."Document Type"::Order);
                 // RecPaymentlines.SetRange("Line No.", "Line No.");
                 if RecPaymentlines.FindFirst() then begin
-                    TotalPaidAmount += RecPaymentlines.Amount;
+                    repeat
+                        TotalPaidAmount += RecPaymentlines.Amount;
+                    until RecPaymentlines.Next = 0;
                 end;
+                TotalAmt += Amount + TotalGSTAmountFinal;
 
+                // BalanceAmount := ("Amount To Customer") - (TotalPaidAmount);
+                //BalanceAmount := (TotalAmt) - (TotalPaidAmount);
 
             end;
 
@@ -436,7 +445,9 @@ report 50311 "Sales Order"
     end;
 
     var
+        mybalance: Decimal;
         myInt: Integer;
+        TotalAmt: Decimal;
         Compinfo: record "Company Information";
         SrNo: Integer;
         recSalesInvoiceLine: Record 113;
@@ -484,7 +495,6 @@ report 50311 "Sales Order"
         IGSTAmount: Decimal;
 
         GSTComponentCodeName: array[20] of Code[20];
-
         CessAmount: Decimal;
         SalesHedr: record "Sales Header";
         TotalGSTAmountFinal: Decimal;
@@ -494,6 +504,7 @@ report 50311 "Sales Order"
         PaymentAmount: Decimal;
         Paylines: Record "Payment Lines";
         ItemNo: Code[20];
+        BalanceAmount: Decimal;
 
 
     //GST calculate 

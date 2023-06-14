@@ -340,7 +340,7 @@ DD.</Value>
             <KeepTogether>true</KeepTogether>
             <Top>10.18363cm</Top>
             <Left>0.00001cm</Left>
-            <Height>12.78071cm</Height>
+            <Height>13.28342cm</Height>
             <Width>19.93326cm</Width>
             <Style>
               <Border>
@@ -2895,7 +2895,7 @@ DD.</Value>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.64072cm</Height>
+                  <Height>0.69364cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -3440,7 +3440,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.61359cm</Height>
+                  <Height>0.66651cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -3971,7 +3971,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.53489cm</Height>
+                  <Height>0.58781cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -4362,7 +4362,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.48197cm</Height>
+                  <Height>0.53489cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -4725,10 +4725,14 @@ DD.</Value>
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Last(Fields!TotalPaidAmount.Value)</Value>
-                                  <Style />
+                                  <Style>
+                                    <Format>0.00;(0.00)</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>TotalPaidAmount</rd:DefaultName>
@@ -4767,7 +4771,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.42905cm</Height>
+                  <Height>0.48197cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5122,21 +5126,25 @@ DD.</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox74">
+                        <Textbox Name="BalanceAmount">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
-                                  <Style />
+                                  <Value>=(SUM (Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value))-Last(Fields!TotalPaidAmount.Value)</Value>
+                                  <Style>
+                                    <Format>0.00;(0.00)</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox74</rd:DefaultName>
+                          <rd:DefaultName>BalanceAmount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -5213,7 +5221,7 @@ DD.</Value>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>6.85152cm</Top>
             <Left>0.00001cm</Left>
-            <Height>2.70022cm</Height>
+            <Height>2.9648cm</Height>
             <Width>19.93325cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
@@ -5354,7 +5362,7 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Customer Signature                                                                          Authorized Signatory   </Value>
+                    <Value>Customer Signature                                                                     Authorized Signatory                               </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -5368,80 +5376,22 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value />
+                    <Value xml:space="preserve">                                        </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value />
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value />
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value xml:space="preserve">             </Value>
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value xml:space="preserve">                                                     </Value>
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value />
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
             <Top>19.71299cm</Top>
             <Left>0.00001cm</Left>
-            <Height>3.25135cm</Height>
+            <Height>3.75406cm</Height>
             <Width>19.9332cm</Width>
             <ZIndex>6</ZIndex>
             <Style>
@@ -5466,7 +5416,7 @@ invoice.</Value>
             <Sizing>FitProportional</Sizing>
             <Top>19.71299cm</Top>
             <Left>15.8057cm</Left>
-            <Height>3.25135cm</Height>
+            <Height>3.75406cm</Height>
             <Width>4.1275cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
@@ -5478,6 +5428,11 @@ invoice.</Value>
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </TopBorder>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
               <RightBorder>
                 <Style>Solid</Style>
               </RightBorder>
@@ -5595,7 +5550,7 @@ invoice.</Value>
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>22.96434cm</Height>
+        <Height>23.46705cm</Height>
         <Style />
       </Body>
       <Width>19.93327cm</Width>
@@ -5763,6 +5718,12 @@ End Function
         </Field>
         <Field Name="TotalPaidAmountFormat">
           <DataField>TotalPaidAmountFormat</DataField>
+        </Field>
+        <Field Name="BalanceAmount">
+          <DataField>BalanceAmount</DataField>
+        </Field>
+        <Field Name="BalanceAmountFormat">
+          <DataField>BalanceAmountFormat</DataField>
         </Field>
         <Field Name="SrNo">
           <DataField>SrNo</DataField>

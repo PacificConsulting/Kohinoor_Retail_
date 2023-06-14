@@ -102,6 +102,13 @@ codeunit 50303 "POS Procedure"
         SalesHeder.Reset();
         SalesHeder.SetCurrentKey("No.");
         SalesHeder.SetRange("No.", "Document No.");
+        SalesHeder.SetFilter("POS Released Date", '<>%1', 0D);
+        IF SalesHeder.FindFirst() then begin
+            Error('You can not void line if order is confirm');
+        end;
+        SalesHeder.Reset();
+        SalesHeder.SetCurrentKey("No.");
+        SalesHeder.SetRange("No.", "Document No.");
         IF SalesHeder.FindFirst() then begin
             SalesHeder.TestField(Status, SalesHeder.Status::Open);
             IF SalesHeder.Status = SalesHeder.Status::Released then begin
@@ -175,7 +182,15 @@ codeunit 50303 "POS Procedure"
     procedure PaymentLineDeletion(documentNo: Code[20]; lineNo: Integer): Text
     var
         PayLineDelete: Record "Payment Lines";
+        SalesHeder: Record 36;
     begin
+        SalesHeder.Reset();
+        SalesHeder.SetCurrentKey("No.");
+        SalesHeder.SetRange("No.", documentNo);
+        SalesHeder.SetFilter("POS Released Date", '<>%1', 0D);
+        IF SalesHeder.FindFirst() then begin
+            Error('You can not void Payment if order is confirm');
+        end;
         PayLineDelete.Reset();
         PayLineDelete.SetCurrentKey("Document No.", "Line No.", Posted);
         PayLineDelete.SetRange("Document No.", DocumentNo);
@@ -568,6 +583,12 @@ codeunit 50303 "POS Procedure"
         IF SNlist.FindFirst() then
             Error('Serial No. already exist');
 
+        SalesLine.Reset();
+        SalesLine.SetRange("Document No.", documentno);
+        SalesLine.SetFilter("Exchange Item No.", '<>%1', '');
+        SalesLine.SetRange("Serial No.", serialno);
+        IF SalesLine.FindFirst() then
+            Error('Serial No. %1 is already exist for line No. %2', SalesLine."Serial No.", SalesLine."Line No.");
 
         SalesHeader.Reset();
         SalesHeader.SetCurrentKey("Document Type", "No.");
@@ -597,12 +618,14 @@ codeunit 50303 "POS Procedure"
                 SalesLineInit.Validate(Description, RecItem.Description);
                 SalesLineInit.Validate("Unit Price", RecItem."Unit Price" * -1);
             end;
+            /*
             SalesLine.Reset();
             SalesLine.SetRange("Document No.", SalesLineInit."Document No.");
-            SalesLine.SetRange("Line No.", SalesLineInit."Line No.");
+            //SalesLine.SetRange("Line No.", SalesLineInit."Line No.");
             SalesLine.SetRange("Serial No.", serialno);
             IF SalesLine.FindFirst() then
                 Error('Serial No. already exist');
+            */
 
             SalesLineInit."Serial No." := serialno;
             SalesLineInit."Exchange Item No." := exchangeitem;
@@ -1176,6 +1199,7 @@ codeunit 50303 "POS Procedure"
         SalesHdrInit: Record 36;
         Noseriesmgt: Codeunit NoSeriesManagement;
         SR: Record 311;
+        Location: Record 14;
     begin
         //exit('Success First Line');
         SR.Get();
@@ -1184,10 +1208,14 @@ codeunit 50303 "POS Procedure"
         SalesHeaderDelete.SetRange("No.", documentno);
         if SalesHeaderDelete.FindFirst() then begin
             //********New SO Create with only header same as Deleted SO*******
+            IF Location.Get(SalesHeaderDelete."Location Code") then;
             SalesHdrInit.Init();
             SalesHdrInit.TransferFields(SalesHeaderDelete);
-            SalesHdrInit."No." := Noseriesmgt.GetNextNo(SR."Order Nos.", Today, true);
+            SalesHdrInit."No." := Noseriesmgt.GetNextNo(Location."Sales Order Nos", Today, true);
             SalesHdrInit."Order Reference" := SalesHeaderDelete."No.";
+            SalesHdrInit."Amount To Customer" := 0;
+            SalesHdrInit.Status := SalesHdrInit.Status::Open;
+            SalesHdrInit."POS Released Date" := 0D;
             SalesHdrInit.Insert();
             //exit('Success;' + SalesHdrInit."No.");
 

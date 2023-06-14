@@ -6,6 +6,13 @@ pageextension 50318 "Purchase Order Subform Ext" extends "Purchase Order Subform
         {
             Visible = true;
         }
+        addafter(Quantity)
+        {
+            field("Outstanding Quantity"; Rec."Outstanding Quantity")
+            {
+                ApplicationArea = all;
+            }
+        }
 
 
     }

@@ -36,6 +36,12 @@ pageextension 50308 Location_Card extends "Location Card"
             {
                 ApplicationArea = all;
             }
+            field("Bank Account No."; Rec."Bank Account No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Bank Account No. field.';
+            }
+
             field("Payment Journal Template Name"; Rec."Payment Journal Template Name")
             {
                 ApplicationArea = All;

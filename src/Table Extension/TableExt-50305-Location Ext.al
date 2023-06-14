@@ -41,6 +41,11 @@ tableextension 50305 "Location_Ext_retail" extends Location
             DataClassification = ToBeClassified;
             TableRelation = "Menu Header"."Menu ID";
         }
+        field(50309; "Bank Account No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Bank Account"."No.";
+        }
     }
 
     var
