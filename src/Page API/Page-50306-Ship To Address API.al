@@ -42,8 +42,6 @@ page 50306 "Ship To Address API"
                 field("code"; Rec."Code")
                 {
                     Caption = 'Code';
-
-
                 }
                 field(consignee; Rec.Consignee)
                 {

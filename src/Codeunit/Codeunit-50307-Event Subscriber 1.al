@@ -15,7 +15,6 @@ codeunit 50307 "Event & Subscriber 1"
             ShipToAddress.State := PC."State Code";
             ShipToAddress.Modify();
         end;
-        //ShipToAddress.State := PostCodeRec."State Code";
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Ship-to Address", 'OnAfterValidatePostCode', '', false, false)]
@@ -23,10 +22,13 @@ codeunit 50307 "Event & Subscriber 1"
     var
         PC: Record "Post Code";
     begin
+        /*  This code comment due to Ship to address not craeted from power apps with kamal and kunal
         IF PC.Get(ShipToAddress."Post Code", ShipToAddress.City) then begin
             ShipToAddress.State := PC."State Code";
             ShipToAddress.Modify();
         end;
-        //ShipToAddress.State := PostCode."State Code";
+        
+        */
+
     end;
 }

@@ -8,6 +8,11 @@ pageextension 50321 "Bank Receipt Voucher Ext" extends "Bank Receipt Voucher"
             {
                 ApplicationArea = all;
             }
+            field("Card No."; Rec."Card No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Card No. field.';
+            }
         }
     }
 }

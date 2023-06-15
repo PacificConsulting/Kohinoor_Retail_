@@ -89,6 +89,11 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 SalesLineFilter: Record 37;
                 SH: Record 36;
                 NewItem: Record 27;
+                I: Integer;
+                J: Integer;
+                Itemvar: Code[20];
+                RecItem: Record 27;
+                ItemConfig: Record "Item Component";
             begin
                 //****Below code commened due to Sales Statictic page run same error coming now same code done on Sales line Page
                 // SH.Reset();
@@ -97,19 +102,16 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 // SH.SetFilter("POS Released Date", '<>%1', 0D);
                 // IF SH.FindFirst() then
                 //     Error('You can not change the quantity when order is Confirmed');
-
                 IF Rec.Type <> rec.Type::" " then begin
-                    IF Quantity > 0 then begin
-                        IF NewItem.Get(Rec."No.") then;
-                        Item.Reset();
-                        //Item.SetRange("Parent Item No.", Rec."No.");
-                        Item.SetRange("No.", NewItem."Parent Item No.");
-                        IF Item.FindSet() then
+                    IF Rec.Quantity > 0 then begin
+                        ItemConfig.Reset();
+                        ItemConfig.SetRange("Item No.", Rec."No.");
+                        IF ItemConfig.FindSet() then
                             repeat
                                 SalesLineFilter.Reset();
                                 SalesLineFilter.SetRange("Document No.", "Document No.");
-                                SalesLineFilter.SetRange("No.", Item."No.");
-                                if Not SalesLineFilter.FindFirst() then begin
+                                SalesLineFilter.SetRange("No.", ItemConfig."Item Child No.");
+                                if not SalesLineFilter.FindFirst() then begin
                                     //*********New Line Insert*******
                                     SLInit.Init();
                                     SLInit."Document Type" := rec."Document Type";
@@ -122,7 +124,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
 
                                     SLInit.Insert();
                                     SLInit.Type := SLInit.Type::Item;
-                                    SLInit.Validate("No.", item."No.");
+                                    SLInit.Validate("No.", ItemConfig."Item Child No.");
                                     SLInit.Validate(Quantity, SalesLine.Quantity);
                                     SLInit.Validate("Location Code", SalesLine."Location Code");
                                     SLInit.Validate("Store No.", SalesLine."Store No.");
@@ -136,13 +138,15 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                                     SalesLineFilter.Validate(Quantity, Rec.Quantity);
                                     SalesLineFilter.Modify();
                                 end;
-                            until item.Next() = 0;
+                            until ItemConfig.Next() = 0;
                     end;
                 end;
             end;
         }
 
-        field(50301; "Store No."; Code[20])
+        field(50301;
+        "Store No.";
+        Code[20])
         {
             Caption = 'Store No.';
             DataClassification = ToBeClassified;

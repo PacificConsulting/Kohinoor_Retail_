@@ -59,7 +59,7 @@ report 50310 "Tax Invoice"
 
             }
 
-            column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + ',' + 'PANNO.' + Compinfo."P.A.N. No." + ',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
+            column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {
 
             }
@@ -151,6 +151,10 @@ report 50310 "Tax Invoice"
 
             }
             column(balanceamount; balanceamount)
+            {
+
+            }
+            column(Financecode; Financecode)
             {
 
             }
@@ -358,6 +362,7 @@ report 50310 "Tax Invoice"
                 if PostedPaylines.FindFirst() then begin
 
                     PaymentAmount := PostedPaylines.Amount;
+                    Financecode := PostedPaylines."Approval Code";
 
                 end;
 
@@ -434,6 +439,7 @@ report 50310 "Tax Invoice"
 
     var
         myInt: Integer;
+        Financecode: Code[50];
         RecPaymentlines: Record "Posted Payment Lines";
         TotalPaidAmount: Decimal;
         PaymentAmount: Decimal;

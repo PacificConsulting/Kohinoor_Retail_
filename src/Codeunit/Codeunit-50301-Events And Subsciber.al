@@ -6,57 +6,14 @@ codeunit 50301 "Event and Subscribers"
     end;
 
 
-    //<<<<<<<START********************************CU-80*****************************************
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
-    // local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
-    // var
-    //     ABSBlobClient: Codeunit "ABS Blob Client";
-    //     Authorization: Interface "Storage Service Authorization";
-    //     ABSCSetup: Record "Azure Storage Container Setup";
-    //     StorageServiceAuth: Codeunit "Storage Service Authorization";
-    //     Instrm: InStream;
-    //     OutStrm: OutStream;
-    //     TempBlob: Codeunit "Temp Blob";
-    //     FileName: Text;
-    //     SIH: record 112;
-    //     Recref: RecordRef;
-    //     VResult: Text;
-    //     B64: Codeunit "Base64 Convert";
-    // begin
-    //     //*********Report SaveasPDF code********
-    //     SIH.RESET;
-    //     SIH.SETRANGE("No.", SalesInvHdrNo);
-    //     IF SIH.FINDFIRST THEN;
-    //     Recref.GetTable(SIH);
-    //     TempBlob.CreateOutStream(OutStrm);
-    //     Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStrm, Recref);
-    //     TempBlob.CreateInStream(Instrm);
-    //     VResult := B64.ToBase64(Instrm);
-    //     UploadonAzurBlobStorage(SIH."No." + '.PDF', VResult);
-    //     /*
-    //     //*************Azure upload Code**************
-    //     ABSCSetup.Get();
-    //     ABSCSetup.TestField("Container Name Invoice");
-    //     Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-    //     ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Invoice", Authorization);
-    //     FileName := SIH."No." + '.' + 'pdf';
-    //     // ABSBlobClient.
-    //     ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-    //     ABSBlobClient.PutBlobPageBlob(FileName, 'application/pdf');//Sourav-New code added
-    //     */
-    // end;
-
-    //<<<<<<<END********************************CU-80*****************************************
-
-
     //<<<<<<<START********************************CU-12*****************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitBankAccLedgEntry', '', false, false)]
     local procedure OnAfterInitBankAccLedgEntry(var BankAccountLedgerEntry: Record "Bank Account Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")
     begin
-        IF GenJournalLine."Approval Code" <> '' then begin
+        IF GenJournalLine."Approval Code" <> '' then
             BankAccountLedgerEntry."Approval Code" := GenJournalLine."Approval Code";
-            //BankAccountLedgerEntry.Modify();
-        end;
+        if GenJournalLine."Card No." <> 0 then
+            BankAccountLedgerEntry."Card No." := GenJournalLine."Card No.";
     end;
     //<<<<<<<END********************************CU-12*****************************************
 
@@ -111,6 +68,10 @@ codeunit 50301 "Event and Subscribers"
     var
         PostedPayemntLine: Record "Posted Payment Lines";
         PaymentLine: Record "Payment Lines";
+        CalcStatistics: Codeunit "Calculate Statistics";
+        TotalInvoiceAmt: Decimal;
+        TotalPaymentAmt: Decimal;
+
     begin
         PostedPayemntLine.Reset();
         PostedPayemntLine.SetRange("Document No.", SalesInvHeader."No.");
@@ -123,6 +84,17 @@ codeunit 50301 "Event and Subscribers"
                     PostedPayemntLine.InitFromPaymentLine(PostedPayemntLine, PaymentLine, SalesInvHeader);
                 until PaymentLine.Next() = 0;
             DeletePayemntLines(SalesHeader, PaymentLine);
+
+            //*****************New Code for Check Payment Should not be more then Invoice Amt ******
+            CalcStatistics.GetPostedsalesInvStatisticsAmount(SalesInvHeader, TotalInvoiceAmt);
+            PostedPayemntLine.Reset();
+            PostedPayemntLine.SetRange("Document No.", SalesInvHeader."No.");
+            IF PostedPayemntLine.FindSet() then
+                repeat
+                    TotalPaymentAmt += PostedPayemntLine.Amount;
+                until PostedPayemntLine.Next() = 0;
+            IF TotalInvoiceAmt > TotalPaymentAmt then
+                Error('You can not do Invoice %1 more then payment %2', TotalInvoiceAmt, TotalPaymentAmt);
         end;
     end;
 

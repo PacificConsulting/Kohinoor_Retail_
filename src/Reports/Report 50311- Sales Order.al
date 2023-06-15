@@ -63,7 +63,7 @@ report 50311 "Sales Order"
 
             }
 
-            column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + ',' + 'PANNO.' + Compinfo."P.A.N. No." + ',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
+            column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + /*',' + 'PANNO.' + Compinfo."P.A.N. No." + */',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {
 
             }
@@ -190,6 +190,10 @@ report 50311 "Sales Order"
             {
 
             }
+            column(Financecode; Financecode)
+            {
+
+            }
 
 
 
@@ -273,7 +277,7 @@ report 50311 "Sales Order"
                     //AoumntInWords
                     //TotalAmount1 += Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, ("Sales Header"."Amount To Customer" - TotalPaidAmount), '');
+                    AmountInwords.FormatNoText(AmountInWords1, (AmountIValue - TotalPaidAmount), '');
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
@@ -356,6 +360,7 @@ report 50311 "Sales Order"
                 if Paylines.FindFirst() then begin
 
                     PaymentAmount := Paylines.Amount;
+                    Financecode := Paylines."Approval Code";
 
                 end;
 
@@ -373,7 +378,7 @@ report 50311 "Sales Order"
                 recsalesline.SETRANGE(Type, recsalesline.Type::Item);
                 IF recsalesline.FINDSET THEN
                     REPEAT
-                        TotalAmount1 += recsalesline.Amount;
+                        TotalAmount1 += Round(recsalesline.Amount);
 
                     UNTIL recsalesline.NEXT = 0;
                 //Message(format(TotalAmount1));
@@ -394,10 +399,12 @@ report 50311 "Sales Order"
                         TotalPaidAmount += RecPaymentlines.Amount;
                     until RecPaymentlines.Next = 0;
                 end;
-                TotalAmt += Amount + TotalGSTAmountFinal;
+                //TotalAmt += Amount + TotalGSTAmountFinal;
 
                 // BalanceAmount := ("Amount To Customer") - (TotalPaidAmount);
                 //BalanceAmount := (TotalAmt) - (TotalPaidAmount);
+                // AmountIValue := TotalAmount1 + IGSTAmount + CGSTAmount + SGSTAmount;
+                AmountIValue := TotalAmount1 + TotalGSTAmountFinal;
 
             end;
 
@@ -446,7 +453,12 @@ report 50311 "Sales Order"
 
     var
         mybalance: Decimal;
+
         myInt: Integer;
+
+        AmountIValue: Decimal;
+
+        Financecode: Code[50];
         TotalAmt: Decimal;
         Compinfo: record "Company Information";
         SrNo: Integer;

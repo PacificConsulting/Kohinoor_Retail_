@@ -367,9 +367,12 @@ codeunit 50303 "POS Procedure"
         SalesCommLine: Record 44;
         ReturnBool: Boolean;
         ReleaseSalesDoc: Codeunit "Release Sales Document";
+        OrderNo: Code[20];
+        SIH: Record 112;
     begin
         // Clear(InputData);
         //Evaluate(ShipInvtoQty, InputData);
+        Clear(OrderNo);
         SaleHeaderInv.Reset();
         SaleHeaderInv.SetRange("No.", DocumentNo);
         SaleHeaderInv.SetCurrentKey("No.");
@@ -390,8 +393,12 @@ codeunit 50303 "POS Procedure"
                 SaleLinerInv.Modify(true);
                 ReleaseSalesDoc.PerformManualRelease(SaleHeaderInv);
                 SaleHeaderInv.Modify(true);
+                OrderNo := SaleHeaderInv."No.";
                 Salespost.Run(SaleHeaderInv);
-
+                SIH.Reset();
+                SIH.SetRange("Order No.", OrderNo);
+                IF SIH.FindFirst() then
+                    exit('Success;' + SIH."No.");
             end
         end;
     end;
@@ -462,7 +469,7 @@ codeunit 50303 "POS Procedure"
                     TRH.Reset();
                     TRH.SetRange("Transfer Order No.", TransferHeader."No.");
                     IF TRH.FindFirst() then
-                        Error('Success;' + TRH."No.");
+                        exit('Success;' + TRH."No.");
                 end;
             end //else
                 //exit('Failed');
@@ -2019,6 +2026,7 @@ codeunit 50303 "POS Procedure"
                 GenJourLineInit.Validate("Shortcut Dimension 1 Code", Salesheader."Shortcut Dimension 1 Code");
                 GenJourLineInit.Validate("Shortcut Dimension 2 Code", Salesheader."Shortcut Dimension 2 Code");
                 GenJourLineInit."Approval Code" := PaymentLine."Approval Code";
+                GenJourLineInit."Card No." := PaymentLine."Credit Card No. Last 4 digit";
                 Evaluate(CheqNo, Format(PaymentLine."Cheque No 6 Digit"));
                 GenJourLineInit.validate("Cheque No.", CheqNo);
                 GenJourLineInit.Comment := 'Auto Post';

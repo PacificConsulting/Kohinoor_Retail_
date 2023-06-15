@@ -14,13 +14,48 @@ tableextension 50315 Customer_ext extends Customer
                     Error('P.A.N No. required 10 Character only.');
             end;
         }
+
         field(50301; "Customer Reference"; Code[10])
         {
             Caption = 'Customer Reference';
             DataClassification = ToBeClassified;
             TableRelation = "Customer Reference".Code;
-
         }
 
     }
+    trigger OnInsert()
+    begin
+
+    end;
+
+    local procedure ShipToAddressInsert(Cust: Record Customer)
+    var
+        ShipToAddInit: record "Ship-to Address";
+        SR: record 311;
+        NoSeries: Codeunit NoSeriesManagement;
+        ShipAdd: Record "Ship-to Address";
+    begin
+        ShipAdd.Reset();
+        ShipAdd.SetRange("Customer No.", Rec."No.");
+        ShipAdd.SetRange("Address Type", ShipAdd."Address Type"::Primary);
+        IF not ShipAdd.FindFirst() then begin
+            SR.Get();
+            ShipToAddInit.init;
+            ShipToAddInit."Customer No." := Rec."No.";
+            SR.TestField("Ship To address No Series");
+            ShipToAddInit.Code := NoSeries.GetNextNo(SR."Ship To address No Series", Today, true);
+            ShipToAddInit.Name := rec.Name;
+            ShipToAddInit.Address := Rec.Address;
+            ShipToAddInit."Address 2" := rec."Address 2";
+            ShipToAddInit.Validate(City, rec.City);
+            // ShipToAddInit.State := rec."State Code";
+            ShipToAddInit.validate("Post Code", rec."Post Code");
+            ShipToAddInit.Validate("Country/Region Code", Rec."Country/Region Code");
+            ShipToAddInit."E-Mail" := Rec."E-Mail";
+            ShipToAddInit."Phone No." := Rec."Phone No.";
+            ShipToAddInit."Address Type" := ShipToAddInit."Address Type"::Primary;
+            ShipToAddInit.Validate("GST Registration No.", rec."GST Registration No.");
+            ShipToAddInit.Insert();
+        end;
+    end;
 }

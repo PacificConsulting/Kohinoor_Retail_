@@ -146,10 +146,9 @@ codeunit 50302 "POS Event and Subscriber"
                 begin
                     IsResult := POSProcedure.InvoiceComplete(documentno, parameter2);
                     IF IsResult = '' then
-                        exit('Success');
-                    // Else
-                    //   exit(IsResult);
-
+                        exit('Success')
+                    Else
+                        exit(IsResult);
                 end;
             'ADDCOM':  //<<<<** Add Comment on Live level new Line Insert With type comment**>>>>
                 begin
@@ -173,7 +172,6 @@ codeunit 50302 "POS Event and Subscriber"
                 begin
                     IsResult := POSProcedure.SOPrint(documentno);
                     exit(IsResult);
-
                 end;
             'SIPRINT':  //<<<<** Add Comment on Live level new Line Insert **>>>>
                 begin

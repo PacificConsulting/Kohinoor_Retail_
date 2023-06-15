@@ -21,7 +21,6 @@ tableextension 50309 "Ship To Address Ext" extends "Ship-to Address"
         //             rec.State := PostCodeRec."State Code";
 
         //     end;
-
         // }
 
     }

@@ -65,22 +65,19 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
         {
             trigger OnAfterValidate()
             var
-                Item: Record 27;//
+                Item: Record 27;
                 GetItem: Record 27;
                 PLInit: Record 39;
                 PurchaseLine: Record 39;
                 PurchLineFilter: Record 39;
                 PH: Record 38;
+                ItemConfig: record "Item Component";
             begin
-                //IF GetItem.Get(rec."No.") then;
                 IF Rec."Document Type" = Rec."Document Type"::Order then begin
-                    IF Quantity > 0 then begin
-                        PH.Reset();
-                        PH.SetRange("No.", Rec."Document No.");
-                        IF Ph.FindFirst() then;
-                        Item.Reset();
-                        Item.SetRange("Parent Item No.", Rec."No.");
-                        IF Item.FindSet() then
+                    IF Rec.Quantity > 0 then begin
+                        ItemConfig.Reset();
+                        ItemConfig.SetRange("Item No.", Rec."No.");
+                        IF ItemConfig.FindSet() then
                             repeat
                                 PurchLineFilter.Reset();
                                 PurchLineFilter.SetRange("Document No.", "Document No.");
@@ -112,7 +109,8 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                                     PurchLineFilter.Validate(Quantity, Rec.Quantity);
                                     PurchLineFilter.Modify();
                                 end;
-                            until item.Next() = 0;
+
+                            until ItemConfig.Next() = 0;
                     end;
                 end;
             end;

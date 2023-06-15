@@ -8,6 +8,12 @@ pageextension 50322 "Bank Account Led Entries" extends "Bank Account Ledger Entr
             {
                 ApplicationArea = all;
             }
+            field("Card No."; Rec."Card No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Card No. field.';
+            }
+
         }
     }
 }

@@ -120,14 +120,12 @@ page 50341 "Customer List API"
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     var
         Cust: record 18;
-
     begin
 
         Rec."Gen. Bus. Posting Group" := 'DOMESTIC';
         Rec."Customer Posting Group" := 'GOODS';
-        // ShipToAddressInsert(Rec);
+        //ShipToAddressInsert(Rec); // This code is comment due to This functionality create by kamal in Powerapps
     end;
-
 
     local procedure ShipToAddressInsert(Cust: Record Customer)
     var
@@ -144,7 +142,6 @@ page 50341 "Customer List API"
         ShipToAddInit.Address := Rec.Address;
         ShipToAddInit."Address 2" := rec."Address 2";
         ShipToAddInit.Validate(City, rec.City);
-        // ShipToAddInit.State := rec."State Code";
         ShipToAddInit.validate("Post Code", rec."Post Code");
         ShipToAddInit.Validate("Country/Region Code", Rec."Country/Region Code");
         ShipToAddInit."E-Mail" := Rec."E-Mail";

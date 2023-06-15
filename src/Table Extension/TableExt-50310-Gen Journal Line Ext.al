@@ -6,6 +6,11 @@ tableextension 50310 "Gen. Journal Line Ext" extends "Gen. Journal Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(50302; "Card No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+
 
         modify("Location Code")
         {

@@ -8,5 +8,11 @@ tableextension 50321 "Bank Account Led. Entry" extends "Bank Account Ledger Entr
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50302; "Card No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+            Caption = 'Card No.';
+        }
     }
 }
