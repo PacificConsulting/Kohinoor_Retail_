@@ -68,9 +68,9 @@ codeunit 50302 "POS Event and Subscriber"
                 begin
                     IsResult := POSProcedure.InvoiceLine(documentno, lineno, parameter1, input, parameter2);
                     IF IsResult = '' then
-                        exit('Success');
-                    // Else
-                    //   exit(IsResult);
+                        exit('Success')
+                    Else
+                        exit(IsResult);
                 end;
             'RECEIPT': //<<<<** Purchase Order or Tranfer Order Receive Function **>>>>
                 begin
@@ -200,7 +200,7 @@ codeunit 50302 "POS Event and Subscriber"
         Instr: InStream;
         FileManagement_lCdu: Codeunit "File Management";
         NewStr: text;
-        POSProcedure: Codeunit 50303;
+        POSProcedure    : Codeunit 50303;
         IsResult: Text;
     begin
 
@@ -218,7 +218,29 @@ codeunit 50302 "POS Event and Subscriber"
         Report.Run(101, false, false, recCust);
     end;
 
-    //Add Warranty
+    /// <summary>
+    /// Add Exchange Comment on line
+    /// </summary>
+    procedure AddExchangeComment(documentno: Code[20]; lineno: Integer; Comment: text[150]): Text
+    var
+        SH: Record 36;
+        SL: Record 37;
+    begin
+        IF Comment <> '' then begin
+            SL.Reset();
+            SL.SetRange("Document No.", documentno);
+            SL.SetRange("Line No.", lineno);
+            IF SL.FindFirst() then begin
+                SL."Exchange Comment" := Comment;
+                SL.Modify();
+            end else
+                exit('Order does not exist');
+        end;
+    end;
+
+    /// <summary>
+    /// Add Warranty
+    /// </summary>
     procedure AddWarranty(documentno: Code[20]; lineno: Integer; brand: Code[20]; month: text): Text
     var
         SalesLine: Record "Sales Line";

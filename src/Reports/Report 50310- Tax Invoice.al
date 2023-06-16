@@ -58,6 +58,9 @@ report 50310 "Tax Invoice"
             {
 
             }
+            column(Store_name; Reclocation.Name)
+            {
+            }
 
             column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {

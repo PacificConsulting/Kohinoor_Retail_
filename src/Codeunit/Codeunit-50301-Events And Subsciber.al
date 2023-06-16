@@ -5,7 +5,6 @@ codeunit 50301 "Event and Subscribers"
 
     end;
 
-
     //<<<<<<<START********************************CU-12*****************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitBankAccLedgEntry', '', false, false)]
     local procedure OnAfterInitBankAccLedgEntry(var BankAccountLedgerEntry: Record "Bank Account Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")
@@ -63,6 +62,33 @@ codeunit 50301 "Event and Subscribers"
 
 
     //START**********************************Codeunit-80***************************************
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
+    local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
+    var
+        CalcStatistics: Codeunit "Calculate Statistics";
+        TotalInvoiceAmt: Decimal;
+        TotalPaymentAmt: Decimal;
+        PostedPayemntLine: Record "Posted Payment Lines";
+        SIH: Record 112;
+        GLSetup: Record "General Ledger Setup";
+    begin
+        //*****************New Code for Check Payment Should not be more then Invoice Amt ******
+
+        SIH.Reset();
+        SIH.SetRange("No.", SalesInvHdrNo);
+        IF SIH.FindFirst() then;
+        //CalcStatistics.GetPostedsalesInvStatisticsAmount(SIH, TotalInvoiceAmt);
+        PostedPayemntLine.Reset();
+        PostedPayemntLine.SetRange("Document No.", SIH."No.");
+        IF PostedPayemntLine.FindSet() then
+            repeat
+                TotalPaymentAmt += PostedPayemntLine.Amount;
+            until PostedPayemntLine.Next() = 0;
+        IF SIH."Amount To Customer" > TotalPaymentAmt then
+            Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', SIH."Amount To Customer", TotalPaymentAmt);
+
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterSalesInvLineInsert', '', false, false)]
     local procedure OnAfterSalesInvLineInsert(var SalesInvLine: Record "Sales Invoice Line"; SalesInvHeader: Record "Sales Invoice Header"; SalesLine: Record "Sales Line"; ItemLedgShptEntryNo: Integer; WhseShip: Boolean; WhseReceive: Boolean; CommitIsSuppressed: Boolean; var SalesHeader: Record "Sales Header"; var TempItemChargeAssgntSales: Record "Item Charge Assignment (Sales)" temporary; var TempWhseShptHeader: Record "Warehouse Shipment Header" temporary; var TempWhseRcptHeader: Record "Warehouse Receipt Header" temporary; PreviewMode: Boolean)
     var
@@ -85,18 +111,10 @@ codeunit 50301 "Event and Subscribers"
                 until PaymentLine.Next() = 0;
             DeletePayemntLines(SalesHeader, PaymentLine);
 
-            //*****************New Code for Check Payment Should not be more then Invoice Amt ******
-            CalcStatistics.GetPostedsalesInvStatisticsAmount(SalesInvHeader, TotalInvoiceAmt);
-            PostedPayemntLine.Reset();
-            PostedPayemntLine.SetRange("Document No.", SalesInvHeader."No.");
-            IF PostedPayemntLine.FindSet() then
-                repeat
-                    TotalPaymentAmt += PostedPayemntLine.Amount;
-                until PostedPayemntLine.Next() = 0;
-            IF TotalInvoiceAmt > TotalPaymentAmt then
-                Error('You can not do Invoice %1 more then payment %2', TotalInvoiceAmt, TotalPaymentAmt);
+
         end;
     end;
+
 
     //[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforeSetPostingFlags', '', false, false)]
 
@@ -130,9 +148,11 @@ codeunit 50301 "Event and Subscribers"
         ReservEntry: Record 337;
         ItemJnlPostBatch: Codeunit "Item Jnl.-Post Batch";
         SR: Record "Sales & Receivables Setup";
+        GL: Record "General Ledger Setup";
     begin
         //<<***********Auto Postive Item Journal Line Created and Post*************
-
+        GL.Get();
+        GL.TestField("Exchange Batch");
         SR.Get();
         SalesLine.reset();
         SalesLine.SetRange("Document No.", SalesHeader."No.");
@@ -144,10 +164,10 @@ codeunit 50301 "Event and Subscribers"
                 // IF SalesLine."Exchange Item No." <> '' then begin
                 ItemJInit.Init();
                 ItemJInit."Journal Template Name" := 'ITEM';
-                ItemJInit."Journal Batch Name" := 'TEST';
+                ItemJInit."Journal Batch Name" := GL."Exchange Batch";
                 ItemJ.Reset();
                 ItemJ.SetRange("Journal Template Name", 'ITEM');
-                ItemJ.SetRange("Journal Batch Name", 'TEST');
+                ItemJ.SetRange("Journal Batch Name", GL."Exchange Batch");
                 IF ItemJ.FindLast() then
                     ItemJInit."Line No." := ItemJ."Line No." + 10000
                 else
@@ -223,8 +243,27 @@ codeunit 50301 "Event and Subscribers"
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnAfterTransferOrderPostShipment', '', false, false)]
     local procedure OnAfterTransferOrderPostShipment(var TransferHeader: Record "Transfer Header"; CommitIsSuppressed: Boolean; var TransferShipmentHeader: Record "Transfer Shipment Header"; InvtPickPutaway: Boolean)
+    var
+        TSH: Record "Transfer Shipment Header";
+        Instrm: InStream;
+        OutStrm: OutStream;
+        TempBlob: Codeunit "Temp Blob";
+        FileName: Text;
+        Recref: RecordRef;
+        VResult: Text;
+        B64: Codeunit "Base64 Convert";
+        ReturnData: Text;
     begin
-
+        //*********Report SaveasPDF code********
+        TSH.RESET;
+        TSH.SETRANGE("No.", TransferShipmentHeader."No.");
+        IF TSH.FINDFIRST THEN;
+        Recref.GetTable(TSH);
+        TempBlob.CreateOutStream(OutStrm);
+        Report.SaveAs(Report::"Sales Order", '', ReportFormat::Pdf, OutStrm, Recref);
+        TempBlob.CreateInStream(Instrm);
+        VResult := B64.ToBase64(Instrm);
+        UploadonAzurBlobStorageTransferreport(TSH."No." + '.PDF', VResult);
     end;
     //END**********************************Codeunit-5704***************************************
 
@@ -278,7 +317,7 @@ codeunit 50301 "Event and Subscribers"
             RecPaymentLine.DeleteAll();
     end;
 
-    local procedure UploadonAzurBlobStorage(FileName: Text; Base64: Text)
+    procedure UploadonAzurBlobStorageTransferreport(FileName: Text; Base64: Text): Text
 
     Var
         client: HttpClient;
@@ -292,9 +331,8 @@ codeunit 50301 "Event and Subscribers"
         AzurBlobSetup: Record "Azure Storage Container Setup";
     Begin
         AzurBlobSetup.Get();
-        AzurBlobSetup.TestField("Azure Invoice URL");
-        URL := AzurBlobSetup."Azure Invoice URL";//'https://prod-05.centralindia.logic.azure.com:443/workflows/c6dd57d4a8814ad0bd3e43bae6ecd6fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dq8NlkzznvjIz9F1aYbWcaxHyGAgqaWBQjkCczmrLeg';
-        //Jobject.Add('ApiToken', 'testapi');
+        AzurBlobSetup.TestField("Azure Transfer Order URL");
+        URL := AzurBlobSetup."Azure Transfer Order URL";//'https://prod-05.centralindia.logic.azure.com:443/workflows/c6dd57d4a8814ad0bd3e43bae6ecd6fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dq8NlkzznvjIz9F1aYbWcaxHyGAgqaWBQjkCczmrLeg';
         Jobject.Add('Document', Base64);
         Jobject.Add('FileName', FileName);
         Jobject.WriteTo(tmpString);

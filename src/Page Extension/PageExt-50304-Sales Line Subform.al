@@ -101,6 +101,17 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Exchange Item No. field.';
             }
+            field("Serial No."; Rec."Serial No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Serial No. field.';
+            }
+            field("Exchange Comment"; Rec."Exchange Comment")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Exchange Comment field.';
+            }
+
             field("Warranty Parent Line No."; Rec."Warranty Parent Line No.")
             {
                 ApplicationArea = All;

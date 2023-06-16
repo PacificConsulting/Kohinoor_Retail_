@@ -2,8 +2,18 @@ pageextension 50313 "General led Setup Ext" extends "General Ledger Setup"
 {
     layout
     {
+        addafter(EnableDataCheck)
+        {
+
+            field("Exchange Batch"; Rec."Exchange Batch")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Exchange Batch field.';
+            }
+        }
         addafter("Tax Information")
         {
+
             Group("Bank Drop")
             {
                 field("Bank Drop Batch"; Rec."Bank Drop Batch")

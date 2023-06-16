@@ -5,6 +5,7 @@ page 50345 "Bank Drop Entry "
     PageType = List;
     SourceTable = "Bank Drop Entry";
     UsageCategory = Lists;
+    InsertAllowed = false;
 
     layout
     {
@@ -61,10 +62,10 @@ page 50345 "Bank Drop Entry "
     {
         area(Processing)
         {
-            action("Create Contra Voucher")
+            action("Create and Post Voucher")
             {
                 ApplicationArea = all;
-                Caption = 'Create Contra Voucher';
+                Caption = 'Create and Post Voucher';
                 Image = Entry;
                 PromotedCategory = Process;
                 PromotedIsBig = true;

@@ -51,7 +51,6 @@ tableextension 50313 "Sales Ship Line" extends "Sales Shipment Line"
         {
             DataClassification = ToBeClassified;
             Editable = false;
-
         }
         field(50312; "Salesperson Name"; Text[50])
         {
@@ -62,7 +61,11 @@ tableextension 50313 "Sales Ship Line" extends "Sales Shipment Line"
         {
             DataClassification = ToBeClassified;
             Editable = false;
-
+        }
+        field(50314; "Exchange Comment"; Text[150])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
         }
 
 

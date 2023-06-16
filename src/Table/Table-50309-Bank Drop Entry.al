@@ -22,12 +22,22 @@ table 50309 "Bank Drop Entry"
             DataClassification = ToBeClassified;
             Caption = 'Store No.';
             //Editable = false;
+            trigger OnValidate()
+            var
+                Loc: Record Location;
+            begin
+                IF Loc.Get("Store No.") then begin
+                    "Cash Account" := Loc."Cash Account No.";
+                    "Bank Account" := loc."Bank Account No.";
+                end;
+            end;
         }
         field(3; "Store Date"; Date)
         {
             DataClassification = ToBeClassified;
             Caption = 'Date';
             //Editable = false;
+
 
         }
         field(4; "Staff ID"; code[10])

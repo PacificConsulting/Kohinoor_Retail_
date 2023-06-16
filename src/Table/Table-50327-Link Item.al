@@ -1,6 +1,6 @@
-table 50327 "Item Component"
+table 50327 "Link Item"
 {
-    Caption = 'Item Component';
+    Caption = 'Link Item';
     DataClassification = ToBeClassified;
 
     fields

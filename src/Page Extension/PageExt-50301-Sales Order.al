@@ -243,7 +243,8 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //result := CU.ChangeUnitPrice(rec."No.", 10000, rec."External Document No.");
                     //result := CU.SOPrint(Rec."No.");
                     //POS.TransferOrderShipment('KTVTO232400000017')
-                    pos.ShipTransferLine('KTRO024', 10000, '', 'S001');
+                    // pos.ShipTransferLine('KTRO024', 10000, '', 'S001');
+                    result := CU.InvoiceLine(Rec."No.", 10000, '', '', '');
                     //cu.RefreshSaleOrder(Rec."No.");
                     Message(result);
                 end;

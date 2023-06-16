@@ -38,6 +38,10 @@ table 50324 "Azure Storage Container Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(8; "Azure Transfer Order URL"; Text[1024])
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys

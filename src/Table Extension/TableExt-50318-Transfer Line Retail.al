@@ -7,5 +7,13 @@ tableextension 50318 "Transfer Line Retail" extends "Transfer Line"
             Caption = 'Remarks';
             DataClassification = ToBeClassified;
         }
+
+        modify(Quantity)
+        {
+            trigger OnAfterValidate()
+            begin
+
+            end;
+        }
     }
 }

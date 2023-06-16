@@ -62,7 +62,9 @@ report 50311 "Sales Order"
             {
 
             }
-
+            column(Store_name; Reclocation.Name)
+            {
+            }
             column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + /*',' + 'PANNO.' + Compinfo."P.A.N. No." + */',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {
 
@@ -277,7 +279,7 @@ report 50311 "Sales Order"
                     //AoumntInWords
                     //TotalAmount1 += Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, (AmountIValue - TotalPaidAmount), '');
+                    AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount, 1, '>'), '');
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
@@ -304,7 +306,6 @@ report 50311 "Sales Order"
                         TotalGSTAmountFinal += GetGSTAmount(SL.RecordId)
                     until SL.next() = 0;
 
-                TotalGSTAmountFinal := ROUND(TotalGSTAmountFinal, 1, '>');
                 //pcpl-064 10june2023
                 //Message('%1', TotalGSTAmountFinal);
 
@@ -358,10 +359,19 @@ report 50311 "Sales Order"
                 Paylines.SetRange("Document No.", "No.");
                 Paylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
                 if Paylines.FindFirst() then begin
-
                     PaymentAmount := Paylines.Amount;
-                    Financecode := Paylines."Approval Code";
+                end;
 
+                RPaylines.Reset();
+                RPaylines.SetRange("Document No.", "No.");
+                RPaylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
+                if RPaylines.FindFirst() then begin
+                    repeat
+                        if Financecode <> '' then
+                            Financecode := Financecode + ',' + RPaylines."Approval Code"
+                        else
+                            Financecode := RPaylines."Approval Code";
+                    until RPaylines.Next = 0;
                 end;
 
                 if ReLocation.Get("Sales Header"."Location Code") then;
@@ -378,9 +388,10 @@ report 50311 "Sales Order"
                 recsalesline.SETRANGE(Type, recsalesline.Type::Item);
                 IF recsalesline.FINDSET THEN
                     REPEAT
-                        TotalAmount1 += Round(recsalesline.Amount);
+                        TotalAmount1 += recsalesline.Amount;
 
                     UNTIL recsalesline.NEXT = 0;
+                TotalAmount1 := ROUND(TotalAmount1, 0.01, '>');
                 //Message(format(TotalAmount1));
 
                 // //PCPL-064<<9june2023
@@ -401,10 +412,11 @@ report 50311 "Sales Order"
                 end;
                 //TotalAmt += Amount + TotalGSTAmountFinal;
 
-                // BalanceAmount := ("Amount To Customer") - (TotalPaidAmount);
+
                 //BalanceAmount := (TotalAmt) - (TotalPaidAmount);
                 // AmountIValue := TotalAmount1 + IGSTAmount + CGSTAmount + SGSTAmount;
                 AmountIValue := TotalAmount1 + TotalGSTAmountFinal;
+                BalanceAmount := AmountIValue - TotalPaidAmount;
 
             end;
 
@@ -453,12 +465,15 @@ report 50311 "Sales Order"
 
     var
         mybalance: Decimal;
+        bal: Decimal;
 
         myInt: Integer;
+        rate: Decimal;
 
         AmountIValue: Decimal;
+        RPaylines: RECORD "Payment Lines";
 
-        Financecode: Code[50];
+        Financecode: Code[200];
         TotalAmt: Decimal;
         Compinfo: record "Company Information";
         SrNo: Integer;

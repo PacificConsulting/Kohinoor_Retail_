@@ -71,8 +71,9 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                 PurchaseLine: Record 39;
                 PurchLineFilter: Record 39;
                 PH: Record 38;
-                ItemConfig: record "Item Component";
+                ItemConfig: record "Link Item";
             begin
+
                 IF Rec."Document Type" = Rec."Document Type"::Order then begin
                     IF Rec.Quantity > 0 then begin
                         ItemConfig.Reset();
@@ -81,7 +82,7 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                             repeat
                                 PurchLineFilter.Reset();
                                 PurchLineFilter.SetRange("Document No.", "Document No.");
-                                PurchLineFilter.SetRange("No.", Item."No.");
+                                PurchLineFilter.SetRange("No.", ItemConfig."Item Child No.");
                                 if Not PurchLineFilter.FindFirst() then begin
                                     //*********New Line Insert*******
                                     PLInit.Init();
@@ -95,11 +96,10 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
 
                                     PLInit.Insert();
                                     PLInit.Type := PLInit.Type::Item;
-                                    PLInit.Validate("No.", item."No.");
-                                    PLInit.Validate(Quantity, PurchaseLine.Quantity);
-                                    PLInit.Validate("Location Code", PH."Location Code");
+                                    PLInit.Validate("No.", ItemConfig."Item Child No.");//
+                                    PLInit.Validate(Quantity, Rec.Quantity);
+                                    PLInit.Validate("Location Code", PurchaseLine."Location Code");
                                     PLInit.Validate("Bin Code", PurchaseLine."Bin Code");
-                                    // PLInit.Validate("Salesperson Code", PurchaseLine."Salesperson Code");
                                     PLInit.Validate("Shortcut Dimension 1 Code", PurchaseLine."Shortcut Dimension 1 Code");
                                     PLInit.Validate("Shortcut Dimension 2 Code", PurchaseLine."Shortcut Dimension 2 Code");
                                     //PLInit."Warranty Parent Line No." := SalesLine."Line No.";

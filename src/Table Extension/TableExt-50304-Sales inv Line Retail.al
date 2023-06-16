@@ -61,7 +61,11 @@ tableextension 50304 "Sales inv. Line Retail" extends "Sales Invoice Line"
         {
             DataClassification = ToBeClassified;
             Editable = false;
-
+        }
+        field(50314; "Exchange Comment"; Text[150])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
         }
 
 

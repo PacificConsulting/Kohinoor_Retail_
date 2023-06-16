@@ -93,7 +93,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 J: Integer;
                 Itemvar: Code[20];
                 RecItem: Record 27;
-                ItemConfig: Record "Item Component";
+                ItemConfig: Record "Link Item";
             begin
                 //****Below code commened due to Sales Statictic page run same error coming now same code done on Sales line Page
                 // SH.Reset();
@@ -215,6 +215,10 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
         {
             DataClassification = ToBeClassified;
             Editable = false;
+        }
+        field(50314; "Exchange Comment"; Text[150])
+        {
+            DataClassification = ToBeClassified;
 
         }
 

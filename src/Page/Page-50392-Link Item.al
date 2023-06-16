@@ -1,9 +1,9 @@
-page 50392 "Item Component"
+page 50392 "Link Item"
 {
     ApplicationArea = All;
-    Caption = 'Item configuration';
+    Caption = 'Link Item';
     PageType = List;
-    SourceTable = "Item Component";
+    SourceTable = "Link Item";
     UsageCategory = Lists;
 
 

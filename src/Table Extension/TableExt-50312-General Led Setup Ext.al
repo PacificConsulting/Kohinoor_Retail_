@@ -110,5 +110,10 @@ tableextension 50312 "General Led.Setup Ext" extends "General Ledger Setup"
                 end;
             end;
         }
+        field(50310; "Exchange Batch"; Code[10])
+        {
+            Caption = 'Exchange Batch';
+            DataClassification = ToBeClassified;
+        }
     }
 }

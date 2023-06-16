@@ -72,7 +72,7 @@ pageextension 50315 Cust_card extends "Customer Card"
             ShipToAddInit.Address := Rec.Address;
             ShipToAddInit."Address 2" := rec."Address 2";
             ShipToAddInit.Validate(City, rec.City);
-            // ShipToAddInit.State := rec."State Code";
+            ShipToAddInit.State := rec."State Code";
             ShipToAddInit.validate("Post Code", rec."Post Code");
             ShipToAddInit.Validate("Country/Region Code", Rec."Country/Region Code");
             ShipToAddInit."E-Mail" := Rec."E-Mail";

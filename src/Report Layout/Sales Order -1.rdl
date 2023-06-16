@@ -1522,7 +1522,150 @@ DD.</Value>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.44534cm</Height>
+                  <Height>0.31664cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Store_name">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Store Name:   </Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!Store_name.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Store_name</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Sales Order No. :   </Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!SH_No_.Value</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Delivery Date:</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.45302cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1577,17 +1720,18 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Sales Order No. :   </Value>
+                                  <Value>Date:  </Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!SH_No_.Value</Value>
+                                  <Value>=Fields!Order_Date.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
+                                    <Format>d MMM yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1625,10 +1769,11 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Delivery Date:</Value>
+                                  <Value>=Fields!Shipment_Date.Value</Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
+                                    <Format>d MMM yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1658,7 +1803,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.4718cm</Height>
+                  <Height>0.29428cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1708,18 +1853,10 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Date:  </Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!Order_Date.Value</Value>
-                                  <Style>
-                                    <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Format>d MMM yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1767,7 +1904,7 @@ DD.</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Shipment_Date.Value</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1806,7 +1943,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.49825cm</Height>
+                  <Height>0.37364cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1904,7 +2041,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.4718cm</Height>
+                  <Height>0.40011cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2064,7 +2201,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.49825cm</Height>
+                  <Height>0.4001cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2179,7 +2316,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.33951cm</Height>
+                  <Height>0.50595cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2364,7 +2501,7 @@ DD.</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.47179cm</Height>
+                  <Height>0.47947cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2524,12 +2661,13 @@ DD.</Value>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.6621cm</Top>
             <Left>0.00001cm</Left>
-            <Height>3.19674cm</Height>
+            <Height>3.22321cm</Height>
             <Width>19.93325cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
@@ -4922,10 +5060,13 @@ DD.</Value>
               <SortExpression>
                 <Value>=Fields!Item_No_.Value</Value>
               </SortExpression>
+              <SortExpression>
+                <Value>=Fields!Line_No_.Value</Value>
+              </SortExpression>
             </SortExpressions>
             <Top>6.85152cm</Top>
             <Left>0.00001cm</Left>
-            <Height>2.98815cm</Height>
+            <Height>2.98817cm</Height>
             <Width>19.93325cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
@@ -5223,7 +5364,7 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Account No.  </Value>
+                    <Value>Account No.  : </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -5240,7 +5381,7 @@ invoice.</Value>
             <rd:DefaultName>Textbox134</rd:DefaultName>
             <Top>22.34558cm</Top>
             <Left>0cm</Left>
-            <Height>0.35418cm</Height>
+            <Height>0.43356cm</Height>
             <Width>14.14167cm</Width>
             <ZIndex>10</ZIndex>
             <Style>
@@ -5338,6 +5479,9 @@ End Function
         </Field>
         <Field Name="Compinfo_IFSC">
           <DataField>Compinfo_IFSC</DataField>
+        </Field>
+        <Field Name="Store_name">
+          <DataField>Store_name</DataField>
         </Field>
         <Field Name="StoreAddress1">
           <DataField>StoreAddress1</DataField>
