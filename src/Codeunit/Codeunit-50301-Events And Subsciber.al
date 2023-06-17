@@ -256,6 +256,7 @@ codeunit 50301 "Event and Subscribers"
         ReturnData: Text;
     begin
         //*********Report SaveasPDF code********
+        /*
         TSH.RESET;
         TSH.SETRANGE("No.", TransferShipmentHeader."No.");
         IF TSH.FINDFIRST THEN;
@@ -265,6 +266,7 @@ codeunit 50301 "Event and Subscribers"
         TempBlob.CreateInStream(Instrm);
         VResult := B64.ToBase64(Instrm);
         UploadonAzurBlobStorageTransferreport(TSH."No." + '.PDF', VResult);
+        */
     end;
     //END**********************************Codeunit-5704***************************************
 

@@ -741,11 +741,11 @@ codeunit 50303 "POS Procedure"
             TranLine.SetRange("Line No.", lineno);
             IF TranLine.FindFirst() then begin
                 DocFound := true;
-                IF TranLine."Qty. to Ship" = 0 then begin
-                    TranLine.Validate("Transfer-from Bin Code", 'BACKPACK');
-                    TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" + 1);
-                    TranLine.Modify();
-                end;
+
+                TranLine.Validate("Transfer-from Bin Code", 'BACKPACK');
+                TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" + 1);
+                TranLine.Modify();
+
                 ReservEntry.RESET;
                 ReservEntry.LOCKTABLE;
                 IF ReservEntry.FINDLAST THEN
@@ -947,10 +947,8 @@ codeunit 50303 "POS Procedure"
             TranLine.SetRange("Line No.", lineno);
             IF TranLine.FindFirst() then begin
                 DocFound := true;
-                IF TranLine."Qty. to Ship" = 0 then begin
-                    TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
-                    TranLine.Modify();
-                end;
+                TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
+                TranLine.Modify();
             end;
         end;
         Evaluate(SerialNo, input);

@@ -322,10 +322,10 @@ report 50310 "Tax Invoice"
 
 
                     //AoumntInWords
-
+                    TotalAmount += Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
                     //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
-                    AmountInwords.FormatNoText(AmountInWords1, ROUND("Sales Invoice Header"."Amount To Customer" - TotalPaidAmount), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ROUND("Sales Invoice Header"."Amount To Customer"), '');
 
                 end;
             }

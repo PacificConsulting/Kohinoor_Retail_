@@ -442,7 +442,7 @@ report 50311 "Sales Order"
                 //Message('%1', BalanceAmount);
                 AmountInwords.InitTextVariable();
                 //AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount, 0.01, '>'), '');
-                AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount), '');
+                AmountInwords.FormatNoText(AmountInWords1, Round(AmountIValue), '');
 
 
             end;

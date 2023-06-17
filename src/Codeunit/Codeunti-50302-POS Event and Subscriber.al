@@ -368,6 +368,7 @@ codeunit 50302 "POS Event and Subscriber"
         transferLine: record "Transfer Line";
         Reservation: Record 337;
         Found: Boolean;
+        QtyShip: Decimal;
     begin
         transferHdr.Reset();
         transferHdr.SetRange("No.", documentno);
@@ -377,6 +378,7 @@ codeunit 50302 "POS Event and Subscriber"
             IF transferLine.FindSet() then
                 repeat
                     Clear(Found);
+                    Clear(QtyShip);
                     Reservation.Reset();
                     Reservation.SetRange("Source ID", transferHdr."No.");
                     Reservation.SetRange("Source Ref. No.", transferLine."Line No.");
@@ -384,10 +386,11 @@ codeunit 50302 "POS Event and Subscriber"
                     IF Reservation.FindSet() then
                         repeat
                             Found := true;
-                            transferLine."Qty. to Ship" += ABS(Reservation."Quantity (Base)");
+                            QtyShip += ABS(Reservation."Quantity (Base)");
+                            Message('Qty SHip %1', QtyShip);
                         until Reservation.Next() = 0;
                     IF Found then begin
-                        transferLine.Validate("Qty. to Ship");
+                        transferLine.Validate("Qty. to Ship", QtyShip);
                         transferLine.Modify();
                     end else begin
                         transferLine.Validate("Qty. to Ship", 0);
