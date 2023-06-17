@@ -105,7 +105,7 @@ table 50302 "Posted Payment Lines"
             Caption = 'Deliver Order Copy Upload';
             Editable = false;
         }
-        field(18; "Cheque No 6 Digit"; Integer)
+        field(18; "Cheque No 6 Digit"; Code[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'Cheque No 6 Digit';
@@ -165,6 +165,11 @@ table 50302 "Posted Payment Lines"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(28; "Invoice Created"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
     keys
@@ -181,6 +186,7 @@ table 50302 "Posted Payment Lines"
         PostedpaymentLine.Init();
         PostedpaymentLine.TransferFields(PaymentLine);
         PostedpaymentLine."Document No." := SalesInvHdr."No.";
+        PostedpaymentLine."Invoice Created" := true;
         PostedpaymentLine.Insert();
     end;
 

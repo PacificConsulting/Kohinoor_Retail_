@@ -2,6 +2,11 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
 {
     fields
     {
+        field(50301; "Warranty Parent Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
 
         modify("No.")
         {
@@ -82,7 +87,8 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                             repeat
                                 PurchLineFilter.Reset();
                                 PurchLineFilter.SetRange("Document No.", "Document No.");
-                                PurchLineFilter.SetRange("No.", ItemConfig."Item Child No.");
+                                //PurchLineFilter.SetRange("No.", ItemConfig."Item Child No.");
+                                PurchLineFilter.SetRange("Warranty Parent Line No.", "Line No.");
                                 if Not PurchLineFilter.FindFirst() then begin
                                     //*********New Line Insert*******
                                     PLInit.Init();
@@ -102,7 +108,7 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                                     PLInit.Validate("Bin Code", PurchaseLine."Bin Code");
                                     PLInit.Validate("Shortcut Dimension 1 Code", PurchaseLine."Shortcut Dimension 1 Code");
                                     PLInit.Validate("Shortcut Dimension 2 Code", PurchaseLine."Shortcut Dimension 2 Code");
-                                    //PLInit."Warranty Parent Line No." := SalesLine."Line No.";
+                                    PLInit."Warranty Parent Line No." := PurchaseLine."Line No.";
                                     PLInit.Modify();
                                 end else begin
                                     //**********Modify Qty only**********

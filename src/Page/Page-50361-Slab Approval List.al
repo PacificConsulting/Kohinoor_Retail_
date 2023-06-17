@@ -63,7 +63,7 @@ page 50361 "Slab Approval List"
         {
             action("Approved Status")
             {
-                Caption = 'Approved';
+                Caption = 'Approve';
                 ApplicationArea = all;
                 PromotedCategory = Process;
                 Promoted = true;

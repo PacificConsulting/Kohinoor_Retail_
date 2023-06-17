@@ -101,25 +101,16 @@ table 50301 "Payment Lines"
             DataClassification = ToBeClassified;
             Caption = 'Deliver Order Copy Upload';
         }
-        field(18; "Cheque No 6 Digit"; Integer)
+        field(18; "Cheque No 6 Digit"; Code[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'Cheque No 6 Digit';
-            // trigger OnValidate()
-            // var
-            //     Icount: Integer;
-            // begin
-            //     Icount := StrLen(Format("Cheque No 6 Digit"));
-            //     IF Icount <> 6 then
-            //         error('6 digit of Cheque No. is allowed only')
-            // end;
-        }//
+        }
         field(19; "Store No."; Code[20])
         {
             Caption = 'Store No.';
             DataClassification = ToBeClassified;
             TableRelation = Location.Code;
-
         }
         field(20; "Staff Id"; Code[10])
         {
@@ -171,6 +162,11 @@ table 50301 "Payment Lines"
             end;
         }
         field(27; "Finance Promoter Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(28; "Invoice Created"; Boolean)
         {
             DataClassification = ToBeClassified;
             Editable = false;

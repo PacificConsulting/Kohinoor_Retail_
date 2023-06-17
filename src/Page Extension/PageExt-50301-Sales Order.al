@@ -59,14 +59,18 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
         modify(Statistics)
         {
             Trigger OnAfterAction()
+            var
+                CalcStatistics: Codeunit "Calculate Statistics";
+                AmtCust: Decimal;
             begin
-                clear(TotalGSTAmount1);
-                Clear(TotalTCSAmt);
-                Clear(TotalAmt);
-                GetGSTAmountTotal(Rec, TotalGSTAmount1);
-                GetTCSAmountTotal(Rec, TotalTCSAmt);
-                GetSalesorderStatisticsAmount(Rec, TotalAmt);
-                Rec."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt);
+                //clear(TotalGSTAmount1);
+                //Clear(TotalTCSAmt);
+                Clear(AmtCust);
+                //GetGSTAmountTotal(Rec, TotalGSTAmount1);
+                //GetTCSAmountTotal(Rec, TotalTCSAmt);
+                //GetSalesorderStatisticsAmount(Rec, TotalAmt);
+                CalcStatistics.GetSalesStatisticsAmount(Rec, AmtCust);
+                Rec."Amount To Customer" := ROUND(AmtCust, 1);
                 Rec.Modify();
                 CurrPage.Update(true);
             end;
@@ -240,11 +244,11 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
 
                     //result := cu.ChangeUnitPrice(Rec."No.", 10000, rec."External Document No.");
                     //result := CU.CancelNewSO(Rec."No.");
-                    //result := CU.ChangeUnitPrice(rec."No.", 10000, rec."External Document No.");
+                    result := CU.ChangeUnitPrice(rec."No.", 10000, rec."External Document No.");
                     //result := CU.SOPrint(Rec."No.");
                     //POS.TransferOrderShipment('KTVTO232400000017')
                     // pos.ShipTransferLine('KTRO024', 10000, '', 'S001');
-                    result := CU.InvoiceLine(Rec."No.", 10000, '', '', '');
+                    //result := CU.InvoiceLine(Rec."No.", 10000, '', '', '');
                     //cu.RefreshSaleOrder(Rec."No.");
                     Message(result);
                 end;
@@ -325,6 +329,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
     begin
         Clear(GSTAmount);
         SalesLine.SetRange("Document no.", SalesHeader."No.");
+        SalesLine.SetFilter("Qty. to Invoice", '<>%1', 0);
         if SalesLine.FindSet() then
             repeat
                 GSTAmount += GetGSTAmount11(SalesLine.RecordId());
@@ -368,6 +373,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
 
         SalesLine.SetRange("Document Type", SalesHeader."Document Type");
         SalesLine.SetRange("Document no.", SalesHeader."No.");
+        SalesLine.SetFilter("Qty. to Invoice", '<>%1', 0);
         if SalesLine.FindSet() then
             repeat
                 RecordIDList.Add(SalesLine.RecordId());
@@ -410,6 +416,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
         Clear(TotalInclTaxAmount);
 
         SalesLine.SetRange("Document No.", SalesHeader."No.");
+        SalesLine.SetFilter("Qty. to Invoice", '<>%1', 0);
         if SalesLine.FindSet() then
             repeat
                 RecordIDList.Add(SalesLine.RecordId());

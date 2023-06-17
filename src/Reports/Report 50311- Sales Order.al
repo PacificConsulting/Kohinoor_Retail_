@@ -62,10 +62,10 @@ report 50311 "Sales Order"
             {
 
             }
-            column(Store_name; Reclocation.Name)
+            column(Store_name; loc.Name)
             {
             }
-            column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + /*',' + 'PANNO.' + Compinfo."P.A.N. No." + */',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
+            column(StoreAddress1; loc.Address + '' + loc."Address 2" + '' + loc.City + ',' + loc."Post Code" + /*',' + 'PANNO.' + Compinfo."P.A.N. No." + */',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {
 
             }
@@ -128,10 +128,10 @@ report 50311 "Sales Order"
             {
 
             }
-            column(Salesperson_Code; "Salesperson Code")
-            {
+            // column(Salesperson_Code; "Salesperson Code")
+            // {
 
-            }
+            // }
             column(Notext; Notext)
             {
 
@@ -203,8 +203,13 @@ report 50311 "Sales Order"
             {
                 DataItemLink = "Document No." = FIELD("No.");
                 DataItemLinkReference = "Sales Header";
+                //DataItemTableView=sorting
 
                 column(SrNo; SrNo)
+                {
+
+                }
+                column(Salesperson_Code; "Salesperson Name")
                 {
 
                 }
@@ -278,8 +283,6 @@ report 50311 "Sales Order"
 
                     //AoumntInWords
                     //TotalAmount1 += Amount + SGST + CGST + IGST;
-                    AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount, 1, '>'), '');
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
@@ -287,6 +290,15 @@ report 50311 "Sales Order"
                         ItemNo := "Exchange Item No."
                     else
                         ItemNo := "No.";
+
+                    // SL.Reset();
+                    // SL.SetRange("Document No.", "No.");
+                    // SL.SetRange(Type, recsalesline.Type::item);
+                    // if SL.FindSet then
+                    //     ////repeat
+                    //     rate := SL."Unit Price" * SL.Quantity;
+                    // Message('%1', rate);
+                    //until SL.Next = 0;
 
                     // mybalance := ("Sales Line".Amount + CGSTAmount + SGSTAmount + IGSTAmount);
                     // Message(format(mybalance));
@@ -305,7 +317,9 @@ report 50311 "Sales Order"
                     repeat
                         TotalGSTAmountFinal += GetGSTAmount(SL.RecordId)
                     until SL.next() = 0;
-
+                //TotalGSTAmountFinal := Round(TotalGSTAmountFinal, 0.01, '>');
+                //Message('%1', TotalGSTAmountFinal);
+                //;
                 //pcpl-064 10june2023
                 //Message('%1', TotalGSTAmountFinal);
 
@@ -316,6 +330,7 @@ report 50311 "Sales Order"
                 CustGSTIN := RecCust."GST Registration No.";
 
                 Reclocation.get("Location Code");
+                loc.get("Store No.");
                 //     StoreAddress := Reclocation.Address;
                 // StoreAddress2 := Reclocation."Address 2";
                 // StorePostCode := Reclocation."Post Code";
@@ -391,8 +406,9 @@ report 50311 "Sales Order"
                         TotalAmount1 += recsalesline.Amount;
 
                     UNTIL recsalesline.NEXT = 0;
-                TotalAmount1 := ROUND(TotalAmount1, 0.01, '>');
-                //Message(format(TotalAmount1));
+                //TotalAmount1 := ROUND(TotalAmount1, 0.01, '>');
+                //Message('%1', TotalAmount1);
+
 
                 // //PCPL-064<<9june2023
                 // IF SalesHedr.get("Sales Line"."Document Type", "Sales Line"."Document No.") then
@@ -409,14 +425,25 @@ report 50311 "Sales Order"
                     repeat
                         TotalPaidAmount += RecPaymentlines.Amount;
                     until RecPaymentlines.Next = 0;
+                    // TotalPaidAmount := Round(TotalPaidAmount);
+                    // Message('%1', TotalPaidAmount);
                 end;
+
                 //TotalAmt += Amount + TotalGSTAmountFinal;
 
 
                 //BalanceAmount := (TotalAmt) - (TotalPaidAmount);
                 // AmountIValue := TotalAmount1 + IGSTAmount + CGSTAmount + SGSTAmount;
                 AmountIValue := TotalAmount1 + TotalGSTAmountFinal;
+                //AmountIValue := Round(AmountIValue);
+                //Message('%1', AmountIValue);
                 BalanceAmount := AmountIValue - TotalPaidAmount;
+                //BalanceAmount := Round(BalanceAmount, 0.01, '>');
+                //Message('%1', BalanceAmount);
+                AmountInwords.InitTextVariable();
+                //AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount, 0.01, '>'), '');
+                AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount), '');
+
 
             end;
 
@@ -466,7 +493,8 @@ report 50311 "Sales Order"
     var
         mybalance: Decimal;
         bal: Decimal;
-
+        SL: Record "Sales Line";
+        loc: Record Location;
         myInt: Integer;
         rate: Decimal;
 
@@ -477,7 +505,7 @@ report 50311 "Sales Order"
         TotalAmt: Decimal;
         Compinfo: record "Company Information";
         SrNo: Integer;
-        recSalesInvoiceLine: Record 113;
+        recSalesInvoiceLine: Record "Sales Line";
         RecCust: Record Customer;
         Mail: Text[80];
         PhoneNo: Code[30];
@@ -514,7 +542,7 @@ report 50311 "Sales Order"
         customer: Record Customer;
         TotalAmount: decimal;
         PaymentLines: Record "Payment Lines";
-        Paymentmethod: Code[50];
+        Paymentmethod: Code[200];
         ReLocation: Record Location;
         recsalesline: record "Sales Line";
         CGSTAmount: Decimal;

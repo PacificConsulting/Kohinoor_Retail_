@@ -546,9 +546,9 @@ codeunit 50303 "POS Procedure"
                     TradeAggre.SetFilter("To Date", '>=%1', SalesHeder."Posting Date");
                     IF TradeAggre.FindFirst() then begin
                         IF TradeAggre."M.R.P" < SalesLineunitPrice."Unit Price Incl. of Tax" then
-                            Exit('Amount should not be more than %1 M.R.P INR ' + Format(TradeAggre."M.R.P"));
+                            Error('Amount should not be more than M.R.P INR ' + Format(TradeAggre."M.R.P"));
                         IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
-                            Exit('Amount should not be less than %1 FNNLC INR ' + Format(TradeAggre.FNNLC));
+                            Error('Amount should not be less than FNNLC INR ' + Format(TradeAggre.FNNLC));
                         IF TradeAggre."Last Selling Price" > SalesLineunitPrice."Unit Price Incl. of Tax" then begin
                             ApprovalMailSent(SalesLineunitPrice, TradeAggre);
                         end;
@@ -556,9 +556,9 @@ codeunit 50303 "POS Procedure"
                         TradeAggre.SetRange("Location Code");
                         IF TradeAggre.FindFirst() then begin
                             IF TradeAggre."M.R.P" < SalesLineunitPrice."Unit Price Incl. of Tax" then
-                                Exit('Amount should not be more than %1 M.R.P INR ' + Format(TradeAggre."M.R.P"));
+                                Error('Amount should not be more than %1 M.R.P INR ' + Format(TradeAggre."M.R.P"));
                             IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
-                                Exit('Amount should not be less than %1 FNNLC INR ' + Format(TradeAggre.FNNLC));
+                                Error('Amount should not be less than %1 FNNLC INR ' + Format(TradeAggre.FNNLC));
                             IF TradeAggre."Last Selling Price" > SalesLineunitPrice."Unit Price Incl. of Tax" then begin
                                 ApprovalMailSent(SalesLineunitPrice, TradeAggre);
                             end;
@@ -661,6 +661,9 @@ codeunit 50303 "POS Procedure"
         DocFound: Boolean;
         BincodeEvaluate: code[20];
         SNlist: record 6504;
+        ChildSalesLine: Record 37;
+        RecItem: Record 27;
+        ChilPurchLine: Record 39;
     begin
         Evaluate(SerialNo, input);
         Clear(LastEntryNo);
@@ -673,6 +676,20 @@ codeunit 50303 "POS Procedure"
             SalesLine.Validate("Bin Code", 'BACKPACK');
             SalesLine.Validate("Qty. to Ship", SalesLine."Qty. to Ship" + 1);
             SalesLine.Modify();
+            //**Child item ****//
+            ChildSalesLine.SetRange("Document No.", SalesLine."Document No.");
+            ChildSalesLine.SetRange("Warranty Parent Line No.", SalesLine."Line No.");
+            IF ChildSalesLine.FindSet() then
+                Repeat
+                    IF RecItem.Get(ChildSalesLine."No.") then;
+                    IF RecItem."Item Tracking Code" = '' then begin
+                        IF RecItem.Type = RecItem.Type::Inventory then
+                            ChildSalesLine.Validate("Bin Code", 'BACKPACK');
+                        ChildSalesLine.Validate("Qty. to Ship", SalesLine."Qty. to Ship");
+                        ChildSalesLine.Modify();
+
+                    end;
+                until ChildSalesLine.Next() = 0;
 
             //exit('Error');
             ReservEntry.RESET;
@@ -696,7 +713,7 @@ codeunit 50303 "POS Procedure"
                 ReservEntryInit."Item No." := SalesLine."No.";
                 ReservEntryInit."Location Code" := ItemLedgEntry."Location Code";  //SalesLine."Location Code";
                 ReservEntryInit."Qty. per Unit of Measure" := SalesLine."Qty. per Unit of Measure";
-                ReservEntryInit.VALIDATE("Quantity (Base)", SalesLine.Quantity * -1);
+                ReservEntryInit.VALIDATE("Quantity (Base)", 1 * -1);
                 ReservEntryInit."Source Type" := DATABASE::"Sales Line";
                 ReservEntryInit."Source ID" := SalesLine."Document No.";
                 ReservEntryInit."Source Ref. No." := SalesLine."Line No.";
@@ -805,6 +822,7 @@ codeunit 50303 "POS Procedure"
             //IF PurchLine."Qty. to Receive" = 0 then begin
             SNlist.Reset();
             SNlist.SetRange("Serial No.", SerialNo);
+            SNlist.setrange("Item No.", PurchLine."No.");
             IF SNlist.FindFirst() then
                 Error('Serial No. already exist in Serial No information');
 
@@ -812,6 +830,7 @@ codeunit 50303 "POS Procedure"
             ReservEntry.SetCurrentKey("Source Type", "Serial No.");
             ReservEntry.SetRange("Source Type", 39);
             ReservEntry.SetRange("Serial No.", SerialNo);
+            ReservEntry.SetRange("Item No.", PurchLine."No.");
             IF ReservEntry.FindFirst() then
                 Error('Serial No. already exist in reservation entry');
 
@@ -819,6 +838,21 @@ codeunit 50303 "POS Procedure"
             PurchLine.Validate("Qty. to Receive", PurchLine."Qty. to Receive" + 1);
             PurchLine.Validate("Qty. to Invoice", 0);
             PurchLine.Modify();
+
+            //**Child item ****//
+            ChilPurchLine.SetRange("Document No.", PurchLine."Document No.");
+            ChilPurchLine.SetRange("Warranty Parent Line No.", PurchLine."Line No.");
+            IF ChilPurchLine.FindSet() then
+                Repeat
+                    IF RecItem.Get(ChilPurchLine."No.") then;
+                    IF RecItem."Item Tracking Code" = '' then begin
+                        IF RecItem.Type = RecItem.Type::Inventory then
+                            ChilPurchLine.Validate("Bin Code", 'BACKPACK');
+                        ChilPurchLine.Validate("Qty. to Receive", PurchLine."Qty. to Receive");
+                        ChilPurchLine.Modify();
+                    end;
+                until ChilPurchLine.Next() = 0;
+
 
             ReservEntry.RESET;
             ReservEntry.LOCKTABLE;
@@ -868,6 +902,8 @@ codeunit 50303 "POS Procedure"
         DocFound: Boolean;
         BincodeEvaluate: code[20];
         SNlist: record 6504;
+        ChilPurchLine: Record 39;
+        ChildSalesLine: Record 37;
     begin
         Evaluate(SerialNo, input);
         DocFound := false;
@@ -886,6 +922,14 @@ codeunit 50303 "POS Procedure"
             DocFound := true;
             SalesLine.Validate("Qty. to Ship", SalesLine."Qty. to Ship" - 1);
             SalesLine.Modify();
+            //**Child item ****//
+            ChildSalesLine.SetRange("Document No.", SalesLine."Document No.");
+            ChildSalesLine.SetRange("Warranty Parent Line No.", SalesLine."Line No.");
+            IF ChildSalesLine.FindSet() then
+                Repeat
+                    ChildSalesLine.Validate("Qty. to Ship", SalesLine."Qty. to Ship" - 1);
+                    ChildSalesLine.Modify();
+                until ChildSalesLine.Next() = 0;
         end
         else begin
             Evaluate(SerialNo, input);
@@ -924,9 +968,20 @@ codeunit 50303 "POS Procedure"
         IF PurchLine.FindFirst() then begin
             DocFound := true;
             PurchLine.Validate("Qty. to Receive", PurchLine."Qty. to Receive" - 1);
-            //            PurchLine.Validate("Qty. to Invoice", 0);
             PurchLine.Modify();
+            /*
+            //**Child item ***
+            ChilPurchLine.SetRange("Document No.", PurchLine."Document No.");
+            ChilPurchLine.SetRange("Warranty Parent Line No.", PurchLine."Line No.");
+            IF ChilPurchLine.FindSet() then
+                Repeat
+                    //ChilPurchLine.Validate("Bin Code", 'BACKPACK');
+                    ChilPurchLine.Validate("Qty. to Receive", PurchLine."Qty. to Receive" - 1);
+                    ChilPurchLine.Modify();
+                until ChilPurchLine.Next() = 0;
+            */
         end;
+
         IF DocFound = false then
             exit('No document found')
     end;
@@ -1423,7 +1478,7 @@ codeunit 50303 "POS Procedure"
     /// <summary>
     /// Posted Sales Inv Azur Upload Storage
     /// </summary>
-    local procedure UploadonAzurBlobStorageInvoice(FileName: Text; Base64: Text)
+    local procedure UploadonAzurBlobStorageInvoice(FileName: Text; Base64: Text): Text
 
     Var
         client: HttpClient;
@@ -1448,7 +1503,13 @@ codeunit 50303 "POS Procedure"
         cont.GetHeaders(header);
         header.Remove('Content-Type');
         header.Add('Content-Type', 'application/json');
-        client.Post(URL, cont, response);
+        //        client.Post(URL, cont, response);
+        IF client.Post(URL, cont, response) then
+            if response.IsSuccessStatusCode() then begin
+                exit('Sucess')
+            end else
+                exit(Format(response.IsSuccessStatusCode));
+
     end;
 
     /// <summary>
@@ -2025,7 +2086,7 @@ codeunit 50303 "POS Procedure"
                 GenJourLineInit.validate(Amount, PaymentLine.Amount);
                 GenJourLineInit.Validate("Shortcut Dimension 1 Code", Salesheader."Shortcut Dimension 1 Code");
                 GenJourLineInit.Validate("Shortcut Dimension 2 Code", Salesheader."Shortcut Dimension 2 Code");
-                GenJourLineInit."Approval Code" := PaymentLine."Approval Code";
+                GenJourLineInit."Approval Code" := (PaymentLine."Approval Code" + PaymentLine."Cheque No 6 Digit" + PaymentLine."Transaction ID");
                 GenJourLineInit."Card No." := PaymentLine."Credit Card No. Last 4 digit";
                 Evaluate(CheqNo, Format(PaymentLine."Cheque No 6 Digit"));
                 GenJourLineInit.validate("Cheque No.", CheqNo);
@@ -2085,6 +2146,7 @@ codeunit 50303 "POS Procedure"
         RecUser7: Record "User Setup";
         Loc: Record 14;
         GetEnvior: Codeunit "Environment Information";
+        recSH: Record "Sales Header";
     begin
         Clear(Pagelink);
 
@@ -2225,7 +2287,8 @@ codeunit 50303 "POS Procedure"
         SL.SetRange("Document No.", SalesLine."Document No.");
         SL.SetRange("Line No.", SalesLine."Line No.");
         IF SL.FindFirst() then begin
-            SL."Approval Sent By" := UserId;
+            IF recSH.GET(SL."Document Type", SL."Document No.") then
+                SL."Approval Sent By" := recSH."Staff Id";
             SL."Approval Sent On" := Today;
             SL.Modify();
         end;

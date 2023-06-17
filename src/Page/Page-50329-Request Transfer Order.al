@@ -73,21 +73,6 @@ page 50329 "Request Transfer Order"
     {
         area(Processing)
         {
-            action("Open Transfer Orders")
-            {
-                ApplicationArea = All;
-                PromotedCategory = Process;
-                Promoted = true;
-                Caption = 'Open Transfer Orders';
-                Image = Open;
-                trigger OnAction()
-                var
-                    TH: Record "Transfer Header";
-                    TraOrderList: page "Transfer Orders";
-                begin
-                    TraOrderList.Run();
-                end;
-            }
             action("Send for Approval")
             {
                 ApplicationArea = All;
@@ -130,6 +115,7 @@ page 50329 "Request Transfer Order"
                     TransferOrderNo: list of [Text];
                     recLocation: Record 14;
                     RH: Record "Request Transfer Header";
+                    TranRel: Codeunit "Whse.-Transfer Release";
                 begin
                     RrqTransferLineFilter.Reset();
                     RrqTransferLineFilter.SetRange("Document No.", Rec."No.");
@@ -181,8 +167,8 @@ page 50329 "Request Transfer Order"
                                         RrqTransferLine."Line Created" := True;
                                         RrqTransferLine.Modify();
                                     until RrqTransferLine.Next() = 0;
-                                TransferHeader.Status := TransferHeader.Status::Released;
-                                TransferHeader.Modify();
+                                TranRel.Release(TransferHeader);
+                                //TransferHeader.Modify();
                                 //end;
                             end;
                         //end

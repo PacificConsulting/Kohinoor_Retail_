@@ -102,6 +102,14 @@ page 50362 "Sales Line New Subform"
                 {
                     Caption = 'TotalLineAmount';
                 }
+                field(GenProdPostingGroup; Rec."Gen. Prod. Posting Group")
+                {
+                    Caption = 'Gen. Prod. Posting Group';
+                }
+                field("WarrantyParentLineNo"; Rec."Warranty Parent Line No.")
+                {
+                    Caption = 'Warranty Parent Line No.';
+                }
 
             }
         }

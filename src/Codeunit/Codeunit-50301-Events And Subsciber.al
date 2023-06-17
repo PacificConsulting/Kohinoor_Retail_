@@ -62,8 +62,8 @@ codeunit 50301 "Event and Subscribers"
 
 
     //START**********************************Codeunit-80***************************************
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
-    local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnRunOnBeforeFinalizePosting', '', false, false)]
+    local procedure OnRunOnBeforeFinalizePosting(var SalesHeader: Record "Sales Header"; var SalesShipmentHeader: Record "Sales Shipment Header"; var SalesInvoiceHeader: Record "Sales Invoice Header"; var SalesCrMemoHeader: Record "Sales Cr.Memo Header"; var ReturnReceiptHeader: Record "Return Receipt Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; CommitIsSuppressed: Boolean; GenJnlLineExtDocNo: Code[35]; var EverythingInvoiced: Boolean; GenJnlLineDocNo: Code[20]; SrcCode: Code[10])
     var
         CalcStatistics: Codeunit "Calculate Statistics";
         TotalInvoiceAmt: Decimal;
@@ -71,21 +71,21 @@ codeunit 50301 "Event and Subscribers"
         PostedPayemntLine: Record "Posted Payment Lines";
         SIH: Record 112;
         GLSetup: Record "General Ledger Setup";
+        PaymentLine: Record "Payment Lines";
     begin
         //*****************New Code for Check Payment Should not be more then Invoice Amt ******
 
-        SIH.Reset();
-        SIH.SetRange("No.", SalesInvHdrNo);
-        IF SIH.FindFirst() then;
-        //CalcStatistics.GetPostedsalesInvStatisticsAmount(SIH, TotalInvoiceAmt);
+        CalcStatistics.GetPostedsalesInvStatisticsAmount(SalesInvoiceHeader, TotalInvoiceAmt);
         PostedPayemntLine.Reset();
-        PostedPayemntLine.SetRange("Document No.", SIH."No.");
+        PostedPayemntLine.SetRange("Document No.", SalesInvoiceHeader."No.");
         IF PostedPayemntLine.FindSet() then
             repeat
                 TotalPaymentAmt += PostedPayemntLine.Amount;
             until PostedPayemntLine.Next() = 0;
-        IF SIH."Amount To Customer" > TotalPaymentAmt then
-            Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', SIH."Amount To Customer", TotalPaymentAmt);
+        IF TotalInvoiceAmt > TotalPaymentAmt then
+            Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', TotalInvoiceAmt, TotalPaymentAmt);
+        // IF EverythingInvoiced = true then
+        //   DeletePayemntLines(SalesHeader, PaymentLine);
 
     end;
 
@@ -97,6 +97,7 @@ codeunit 50301 "Event and Subscribers"
         CalcStatistics: Codeunit "Calculate Statistics";
         TotalInvoiceAmt: Decimal;
         TotalPaymentAmt: Decimal;
+        SL: Record "Sales Line";
 
     begin
         PostedPayemntLine.Reset();
@@ -109,7 +110,7 @@ codeunit 50301 "Event and Subscribers"
                 repeat
                     PostedPayemntLine.InitFromPaymentLine(PostedPayemntLine, PaymentLine, SalesInvHeader);
                 until PaymentLine.Next() = 0;
-            DeletePayemntLines(SalesHeader, PaymentLine);
+            // DeletePayemntLines(SalesHeader, PaymentLine); //Code commented ask by sourav for issue of partial order.
 
 
         end;
@@ -309,12 +310,17 @@ codeunit 50301 "Event and Subscribers"
     //******************* Local Function Created ***************************************
     local procedure DeletePayemntLines(salesHeaderRec: record "Sales Header"; RecPaymentLine: Record "Payment Lines")
     var
+        SL: Record 37;
     begin
+        // SL.Reset();
+        // SL.SetRange("Document No.", salesHeaderRec."No.");
+        // IF SL."Qty. to Invoice" <> 0 then begin
         RecPaymentLine.Reset();
         RecPaymentLine.SetRange("Document Type", salesHeaderRec."Document Type");
         RecPaymentLine.SetRange("Document No.", salesHeaderRec."No.");
         if RecPaymentLine.FindFirst() then
             RecPaymentLine.DeleteAll();
+        //end;
     end;
 
     procedure UploadonAzurBlobStorageTransferreport(FileName: Text; Base64: Text): Text

@@ -58,11 +58,11 @@ report 50310 "Tax Invoice"
             {
 
             }
-            column(Store_name; Reclocation.Name)
+            column(Store_name; loc.Name)
             {
             }
 
-            column(StoreAddress1; Reclocation.Address + '' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
+            column(StoreAddress1; loc.Address + '' + loc."Address 2" + '' + loc.City + ',' + loc."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + loc."State Code" + ',' + loc."Country/Region Code")
             {
 
             }
@@ -129,10 +129,10 @@ report 50310 "Tax Invoice"
             {
 
             }
-            column(Salesperson_Code; "Salesperson Code")
-            {
+            // column(Salesperson_Code; "Salesperson Code")
+            // {
 
-            }
+            // }
             column(Notext; Notext)
             {
 
@@ -166,8 +166,13 @@ report 50310 "Tax Invoice"
             {
                 DataItemLink = "Document No." = FIELD("No.");
                 DataItemLinkReference = "Sales Invoice Header";
+                DataItemTableView = sorting("Document No.", "Line No.") order(ascending);
 
                 column(SrNo; SrNo)
+                {
+
+                }
+                column(Salesperson_Code; "Salesperson Name")
                 {
 
                 }
@@ -179,6 +184,10 @@ report 50310 "Tax Invoice"
                 {
 
                 }
+                // column(Item_No_; "Sales Invoice Line"."No.")
+                // {
+
+                // }
                 column(Document_No_; "Document No.")
                 {
 
@@ -256,6 +265,7 @@ report 50310 "Tax Invoice"
 
                 trigger OnAfterGetRecord() //SIL
                 begin
+                    // Message('%1 ,%2', "Line No.", Type);
                     SrNo += 1;
                     CGST := 0;
                     IGST := 0;
@@ -295,19 +305,27 @@ report 50310 "Tax Invoice"
 
                                     END
                         until DGLE.Next() = 0;
+
+                        TotalGST += SGST + CGST + IGST;
+                        // Message('%1', TotalGST);
                     end;
-                    //AoumntInWords
-                    TotalAmount += Amount + SGST + CGST + IGST;
-                    AmountInwords.InitTextVariable();
-                    AmountInwords.FormatNoText(AmountInWords1, ROUND("Sales Invoice Header"."Amount To Customer" - TotalPaidAmount), '');
 
 
                     if Type = Type::"G/L Account" then
                         ItemNo := "Exchange Item No."
                     else
                         ItemNo := "No.";
+                    // if Type = Type::Item then
+                    //     ItemNo := "No."
+                    // else
+                    //     ItemNo := "Exchange Item No.";
 
 
+                    //AoumntInWords
+
+                    AmountInwords.InitTextVariable();
+                    //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ROUND("Sales Invoice Header"."Amount To Customer" - TotalPaidAmount), '');
 
                 end;
             }
@@ -321,6 +339,7 @@ report 50310 "Tax Invoice"
 
 
                 Reclocation.get("Location Code");
+                loc.get("Store No.");
                 //     StoreAddress := Reclocation.Address;
                 // StoreAddress2 := Reclocation."Address 2";
                 // StorePostCode := Reclocation."Post Code";
@@ -368,7 +387,18 @@ report 50310 "Tax Invoice"
                     Financecode := PostedPaylines."Approval Code";
 
                 end;
+                //TotalAmount
+                recSalesInvLine.RESET;
+                recSalesInvLine.SETRANGE("Document No.", "Sales Invoice Header"."No.");
+                // recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
+                // recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::"G/L Account");
+                IF recSalesInvLine.FindFirst() THEN begin
+                    REPEAT
+                        TotalAmt += recSalesInvLine.Amount;
 
+                    UNTIL recSalesInvLine.NEXT = 0;
+                    //Message('%1', TotalAmt);
+                end;
                 //PaidAmount
                 RecPaymentlines.Reset();
                 RecPaymentlines.SetRange("Document No.", "No.");
@@ -384,7 +414,11 @@ report 50310 "Tax Invoice"
                 if ReLocation.Get("Location Code") then;
                 Relocation.CalcFields("Payment QR");
 
-                balanceamount := (TotalAmount) - (TotalPaidAmount);
+                TotalAmount := TotalAmt + TotalGST;
+                //Message('%1', TotalAmount);
+                //balanceamount := TotalAmount - TotalPaidAmount;
+                balanceamount := TotalAmount - TotalPaidAmount;
+
 
             end;
 
@@ -442,6 +476,11 @@ report 50310 "Tax Invoice"
 
     var
         myInt: Integer;
+        TotalGST: Decimal;
+        TotalAmt: Decimal;
+        SH: record "Sales Invoice Header";
+        recSalesInvLine: Record "Sales Invoice Line";
+        loc: Record Location;
         Financecode: Code[50];
         RecPaymentlines: Record "Posted Payment Lines";
         TotalPaidAmount: Decimal;

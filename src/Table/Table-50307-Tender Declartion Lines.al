@@ -42,6 +42,16 @@ table 50307 "Tender Declartion Line "
         {
             DataClassification = ToBeClassified;
             Caption = 'Amount';
+            trigger OnValidate()
+            var
+                TD: Record "Tender Declartion Header";
+            begin
+                TD.Reset();
+                TD.SetRange("No.", "Document No.");
+                TD.SetRange(Status, TD.Status::Released);
+                IF TD.FindFirst() then
+                    Error('You cannot change the amount after tender is released');
+            end;
         }
         field(8; "Entry No."; Integer)
         {

@@ -80,6 +80,11 @@ page 50333 "Purchase Order List API"
                     Caption = 'Vehicle No.';
                 }
 
+                field(CompletelyReceived; Rec."Completely Received")
+                {
+                    Caption = 'Completely Received';
+                }
+
             }
         }
     }

@@ -113,6 +113,10 @@ page 50341 "Customer List API"
                 {
                     Caption = 'Customer Reference';
                 }
+                field(applicationMethod; Rec."Application Method")
+                {
+                    Caption = 'Application Method';
+                }
 
             }
         }

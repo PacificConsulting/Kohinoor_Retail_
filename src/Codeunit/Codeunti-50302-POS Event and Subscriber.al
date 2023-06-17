@@ -200,7 +200,7 @@ codeunit 50302 "POS Event and Subscriber"
         Instr: InStream;
         FileManagement_lCdu: Codeunit "File Management";
         NewStr: text;
-        POSProcedure    : Codeunit 50303;
+        POSProcedure: Codeunit 50303;
         IsResult: Text;
     begin
 
@@ -389,6 +389,9 @@ codeunit 50302 "POS Event and Subscriber"
                     IF Found then begin
                         transferLine.Validate("Qty. to Ship");
                         transferLine.Modify();
+                    end else begin
+                        transferLine.Validate("Qty. to Ship", 0);
+                        transferLine.Modify();
                     end;
                 until transferLine.Next() = 0;
         end else
@@ -431,7 +434,9 @@ codeunit 50302 "POS Event and Subscriber"
         RecLocation: Record Location;
         GenJnlPostBatch: Codeunit "Gen. Jnl.-Post Batch";
         PaymentFilter: record "Payment Lines";
-        GenBatch: Record 232;
+        GenBatch: Record 232;//
+        TenderPOSSetup: Record "Tender POS No.Series Setup";
+        CheqNo: Code[10];
     begin
 
         PaymentFilter.Reset();
@@ -439,12 +444,17 @@ codeunit 50302 "POS Event and Subscriber"
         PaymentFilter.SetRange("Document No.", documentno);
         If PaymentFilter.FindFirst() then;
 
-        IF RecLocation.Get(PaymentFilter."Store No.") then begin
-            RecLocation.TestField("Payment Journal Template Name");
-            RecLocation.TestField("Payment Journal Batch Name");
+        IF RecLocation.Get(PaymentFilter."Store No.") then;
+        //     RecLocation.TestField("Payment Journal Template Name");
+        //     RecLocation.TestField("Payment Journal Batch Name");
+        // end;
+        if TenderPOSSetup.Get(PaymentFilter."Store No.") then begin
+            TenderPOSSetup.TestField("Journal Template Name");
+            TenderPOSSetup.TestField("Journal Batch Name");
         end;
 
-        IF GenBatch.Get(RecLocation."Payment Journal Template Name", RecLocation."Payment Journal Batch Name") then;
+
+        IF GenBatch.Get(TenderPOSSetup."Journal Template Name", TenderPOSSetup."Journal Batch Name") then;
 
         PaymentLine.Reset();
         PaymentLine.SetCurrentKey(Posted, "Document No.");
@@ -453,18 +463,21 @@ codeunit 50302 "POS Event and Subscriber"
         if PaymentLine.FindSet() then begin
             repeat
                 GenJourLine.Reset();
-                GenJourLine.SetRange("Journal Template Name", RecLocation."Payment Journal Template Name");
-                GenJourLine.SetRange("Journal Batch Name", RecLocation."Payment Journal Batch Name");
+                GenJourLine.SetRange("Journal Template Name", TenderPOSSetup."Journal Template Name");
+                GenJourLine.SetRange("Journal Batch Name", TenderPOSSetup."Journal Batch Name");
                 GenJourLineInit.Init();
-                GenJourLineInit."Document No." := documentno;//NoSeriesMgt.GetNextNo(GenBatch."No. Series", today, true);
+                if PaymentLine."Payment Method Code" = 'CASH' then
+                    GenJourLineInit."Document No." := NoSeriesMgt.GetNextNo(TenderPOSSetup."Cash Voucher No. Series", Today, true)
+                else
+                    GenJourLineInit."Document No." := NoSeriesMgt.GetNextNo(TenderPOSSetup."Tender Voucher No. Series", Today, true);
                 GenJourLineInit.validate("Posting Date", Today);
                 IF GenJourLine.FindLast() then
                     GenJourLineInit."Line No." := GenJourLine."Line No." + 10000
                 else
                     GenJourLineInit."Line No." := 10000;
 
-                GenJourLineInit.validate("Journal Template Name", RecLocation."Payment Journal Template Name");
-                GenJourLineInit.validate("Journal Batch Name", RecLocation."Payment Journal Batch Name");
+                GenJourLineInit.validate("Journal Template Name", TenderPOSSetup."Journal Template Name");
+                GenJourLineInit.validate("Journal Batch Name", TenderPOSSetup."Journal Batch Name");
                 GenJourLineInit."Document Type" := GenJourLineInit."Document Type"::Payment;
                 // GenJourLineInit.Insert();
 
@@ -486,8 +499,11 @@ codeunit 50302 "POS Event and Subscriber"
                 GenJourLineInit.validate(Amount, PaymentLine.Amount);
                 GenJourLineInit.Validate("Shortcut Dimension 1 Code", RecLocation."Global Dimension 1 Code");
                 GenJourLineInit.Validate("Shortcut Dimension 2 Code", RecLocation."Global Dimension 2 Code");
+                GenJourLineInit."Approval Code" := (PaymentLine."Approval Code" + PaymentLine."Cheque No 6 Digit" + PaymentLine."Transaction ID");
+                GenJourLineInit."Card No." := PaymentLine."Credit Card No. Last 4 digit";
+                Evaluate(CheqNo, Format(PaymentLine."Cheque No 6 Digit"));
+                GenJourLineInit.validate("Cheque No.", CheqNo);
                 GenJourLineInit.Comment := 'Auto Post';
-                GenJourLineInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
                 GenJourLineInit.Insert();
             Until PaymentLine.Next() = 0;
         end else

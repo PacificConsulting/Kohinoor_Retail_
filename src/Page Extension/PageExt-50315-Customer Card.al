@@ -41,12 +41,9 @@ pageextension 50315 Cust_card extends "Customer Card"
 
         rec.TestField(Name);
         rec.TestField(Address);
-        rec.TestField("Address 2");
         rec.TestField(City);
         rec.TestField("Post Code");
         rec.TestField("Country/Region Code");
-        rec.TestField("E-Mail");
-        Rec.TestField("GST Registration No.");
         rec.TestField("Phone No.");
         ShipToAddressInsert(Rec);
 
