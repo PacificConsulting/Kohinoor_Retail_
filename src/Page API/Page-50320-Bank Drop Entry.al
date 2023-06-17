@@ -17,7 +17,7 @@ page 50320 "Bank Drop Entry"
         area(content)
         {
             repeater(General)
-            {
+            {//
 
                 field(staffID; Rec."Staff ID")
                 {
@@ -26,6 +26,7 @@ page 50320 "Bank Drop Entry"
                 field(storeNo; Rec."Store No.")
                 {
                     Caption = 'Store No.';
+
                 }
                 field("date"; Rec."Store Date")
                 {
@@ -59,8 +60,15 @@ page 50320 "Bank Drop Entry"
     var
         NoSeries: Codeunit NoSeriesManagement;
         SR: Record "Sales & Receivables Setup";
+        Loc: Record Location;
     begin
         SR.Get();
         Rec."No." := NoSeries.GetNextNo(SR."Bank Drop No Series", Today, true);
+        IF Loc.Get(Rec."Store No.") then begin
+            Rec."Cash Account" := Loc."Cash Account No.";
+            Rec."Bank Account" := loc."Bank Account No.";
+            //Rec.Modify();
+        end;
+
     end;
 }

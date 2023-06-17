@@ -44,7 +44,7 @@ tableextension 50305 "Location_Ext_retail" extends Location
         field(50309; "Bank Account No."; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Bank Account"."No.";
+            TableRelation = "Bank Account"."No." where(Tender = filter(false));
         }
     }
 

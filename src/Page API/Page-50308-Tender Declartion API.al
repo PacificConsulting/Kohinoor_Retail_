@@ -88,11 +88,17 @@ page 50308 "Tender Declartion API Hdr"
             }
         }
     }
-    // trigger OnInsertRecord(BelowxRec: Boolean): Boolean
-    // var
-    //     NoSeries: Codeunit NoSeriesManagement;
-    //     SR: Record "Sales & Receivables Setup";
-    // begin
-    //     //Rec."No." := NoSeries.GetNextNo(SR."Tender Declartion No Series", Today, true);
-    // end;
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    var
+        NoSeries: Codeunit NoSeriesManagement;
+        SR: Record "Sales & Receivables Setup";
+        TendHdr: Record "Tender Declartion Header";
+    begin
+        TendHdr.Reset();
+        TendHdr.SetRange("Staff ID", rec."Staff ID");
+        TendHdr.SetRange("Store No.", rec."Store No.");
+        TendHdr.SetRange("Store Date", rec."Store Date");
+        IF TendHdr.FindFirst() then
+            Error('Tender is already exist for the staff id %1,Storeb No. %2 and store date %3', TendHdr."Staff ID", TendHdr."Store No.", TendHdr."Store Date");
+    end;
 }

@@ -126,12 +126,12 @@ table 50306 "Tender Declartion Header"
     var
         TendHdr: Record "Tender Declartion Header";
     begin
-        TendHdr.Reset();
-        TendHdr.SetRange("Staff ID", "Staff ID");
-        TendHdr.SetRange("Store No.", "Store No.");
-        TendHdr.SetRange("Store Date", "Store Date");
-        IF TendHdr.FindFirst() then
-            Error('Tender is already exist for the staff id %1,Storeb No. %2 and store date %3', TendHdr."Staff ID", TendHdr."Store No.", TendHdr."Store Date");
+        // TendHdr.Reset();
+        // TendHdr.SetRange("Staff ID", "Staff ID");
+        // TendHdr.SetRange("Store No.", "Store No.");
+        // TendHdr.SetRange("Store Date", "Store Date");
+        // IF TendHdr.FindFirst() then
+        //     Error('Tender is already exist for the staff id %1,Storeb No. %2 and store date %3', TendHdr."Staff ID", TendHdr."Store No.", TendHdr."Store Date");
     end;
 
     trigger OnModify()

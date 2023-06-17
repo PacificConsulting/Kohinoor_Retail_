@@ -322,10 +322,6 @@ report 50310 "Tax Invoice"
 
 
                     //AoumntInWords
-                    TotalAmount += Amount + SGST + CGST + IGST;
-                    AmountInwords.InitTextVariable();
-                    //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
-                    AmountInwords.FormatNoText(AmountInWords1, ROUND("Sales Invoice Header"."Amount To Customer"), '');
 
                 end;
             }
@@ -390,8 +386,8 @@ report 50310 "Tax Invoice"
                 //TotalAmount
                 recSalesInvLine.RESET;
                 recSalesInvLine.SETRANGE("Document No.", "Sales Invoice Header"."No.");
-                // recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
-                // recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::"G/L Account");
+                recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
+                recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::"G/L Account");
                 IF recSalesInvLine.FindFirst() THEN begin
                     REPEAT
                         TotalAmt += recSalesInvLine.Amount;
@@ -414,10 +410,17 @@ report 50310 "Tax Invoice"
                 if ReLocation.Get("Location Code") then;
                 Relocation.CalcFields("Payment QR");
 
-                TotalAmount := TotalAmt + TotalGST;
+                //TotalAmount := TotalAmt + TotalGST;
                 //Message('%1', TotalAmount);
                 //balanceamount := TotalAmount - TotalPaidAmount;
-                balanceamount := TotalAmount - TotalPaidAmount;
+                TotalAmount := TotalAmt + SGST + CGST + IGST;
+                //balanceamount := TotalAmount - TotalPaidAmount;
+                AmountInwords.InitTextVariable();
+                //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
+                //AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
+                AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmt + TotalGST), '');
+
+
 
 
             end;
