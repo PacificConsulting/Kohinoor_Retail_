@@ -110,7 +110,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                             repeat
                                 SalesLineFilter.Reset();
                                 SalesLineFilter.SetRange("Document No.", "Document No.");
-                                //  SalesLineFilter.SetRange("No.", ItemConfig."Item Child No.");
+                                SalesLineFilter.SetRange("No.", ItemConfig."Item Child No.");
                                 SalesLineFilter.SetRange("Warranty Parent Line No.", "Line No.");
                                 if not SalesLineFilter.FindFirst() then begin
                                     //*********New Line Insert*******

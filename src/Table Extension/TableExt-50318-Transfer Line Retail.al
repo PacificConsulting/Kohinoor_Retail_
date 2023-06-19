@@ -30,6 +30,7 @@ tableextension 50318 "Transfer Line Retail" extends "Transfer Line"
                         repeat
                             TranLineFilter.Reset();
                             TranLineFilter.SetRange("Document No.", "Document No.");
+                            TranLineFilter.SetRange("Item No.", ItemConfig."Item Child No.");
                             TranLineFilter.SetRange("Warranty Parent Line No.", "Line No.");
                             if not TranLineFilter.FindFirst() then begin
                                 //*********New Line Insert*******
@@ -43,7 +44,7 @@ tableextension 50318 "Transfer Line Retail" extends "Transfer Line"
 
                                 TLInit.Insert();
                                 TLInit.Validate("Item No.", ItemConfig."Item Child No.");
-                                TLInit.Validate(Quantity, TransferLine.Quantity);
+                                TLInit.Validate(Quantity, Rec.Quantity);
                                 TLInit.Validate("Transfer-to Code", TransferLine."Transfer-to Code");
                                 //TLInit.Validate("Store No.", TransferLine."Store No.");
                                 //TLInit.Validate("Salesperson Code", TransferLine."Salesperson Code");
