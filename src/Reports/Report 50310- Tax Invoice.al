@@ -62,7 +62,7 @@ report 50310 "Tax Invoice"
             {
             }
 
-            column(StoreAddress1; loc.Address + '' + loc."Address 2" + '' + loc.City + ',' + loc."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + loc."State Code" + ',' + loc."Country/Region Code")
+            column(StoreAddress1; loc.Address + ' ' + loc."Address 2" + '' + loc.City + ',' + loc."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + loc."State Code" + ',' + loc."Country/Region Code")
             {
 
             }
@@ -82,7 +82,7 @@ report 50310 "Tax Invoice"
             {
 
             }
-            column(Bill_to_Address; "Bill-to Address" + '' + "Bill-to Address 2" + ',' + "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code")
+            column(Bill_to_Address; "Bill-to Address" + ' ' + "Bill-to Address 2" + ',' + "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code")
             {
 
             }
@@ -137,7 +137,7 @@ report 50310 "Tax Invoice"
             {
 
             }
-            column(Paymentmethod; Paymentmethod)
+            column(Paymentmethod; txt1)
             {
 
             }
@@ -157,10 +157,18 @@ report 50310 "Tax Invoice"
             {
 
             }
-            column(Financecode; Financecode)
+            column(Financecode; txt2)
             {
 
             }
+            column(TotalAmount; TotalAmount)
+            {
+            }
+            column(Salespersoncode; txt3)
+            {
+
+            }
+
 
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
             {
@@ -208,9 +216,7 @@ report 50310 "Tax Invoice"
                 {
 
                 }
-                column(TotalAmount; TotalAmount)
-                {
-                }
+
                 column(AmountInWords1; AmountInWords1[1])
                 {
                 }
@@ -306,9 +312,17 @@ report 50310 "Tax Invoice"
                                     END
                         until DGLE.Next() = 0;
 
-                        TotalGST += SGST + CGST + IGST;
-                        // Message('%1', TotalGST);
+
+
                     end;
+                    TotalGST := SGST + CGST + IGST;
+                    //  Message('%1', TotalGST);
+                    TotalAmt += Amount;
+                    TotalAmount := TotalAmt + TotalGST;
+                    AmountInwords.InitTextVariable();
+                    //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
+                    //AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
 
 
                     if Type = Type::"G/L Account" then
@@ -322,6 +336,14 @@ report 50310 "Tax Invoice"
 
 
                     //AoumntInWords
+                    // recSalesInvoiceLine.RESET;
+                    // recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Invoice Header"."No.");
+                    // recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
+                    // IF recSalesInvoiceLine.FINDFIRST THEN
+                    //     REPEAT
+                    //         TotalAmount += recSalesInvoiceLine.Amount;
+                    //     UNTIL recSalesInvoiceLine.NEXT = 0;
+
 
                 end;
             }
@@ -364,37 +386,60 @@ report 50310 "Tax Invoice"
                 //PCPL-064<< 8june2023
                 PostedPaymentLines.Reset();
                 PostedPaymentLines.setrange("Document No.", "No.");
+
                 //PostedPaymentLines.SetRange("Line No.", "Line No.");
                 if PostedPaymentLines.findfirst() then begin
                     repeat
-                        if Paymentmethod <> '' then
-                            Paymentmethod := PostedPaymentLines."Payment Method Code" + ' ' + '-' + format(PostedPaymentLines.Amount) + ',' + ' ' + Paymentmethod
-                        else
-                            Paymentmethod := PostedPaymentLines."Payment Method Code";
+
+                        Paymentmethod := PostedPaymentLines."Payment Method Code" + ' ' + '-' + format(PostedPaymentLines.Amount) + ',';
+
+                    //else
+                    //Paymentmethod := PostedPaymentLines."Payment Method Code";
                     until PostedPaymentLines.Next = 0;
+                    if Paymentmethod <> '' then
+                        txt1 := DelStr(paymentmethod, StrLen(Paymentmethod), 1);
                 end;
 
+                /* PostedPaylines.Reset();
+                 PostedPaylines.SetRange("Document No.", "No.");
+                 //PostedPaylines.SetRange("Document Type", "Sales Invoice Header".);
+                 if PostedPaylines.FindFirst() then begin
+
+                     PaymentAmount := PostedPaylines.Amount;
+                     Financecode := PostedPaylines."Approval Code";
+
+                 end;*/
+                //finanacecode
                 PostedPaylines.Reset();
                 PostedPaylines.SetRange("Document No.", "No.");
-                //PostedPaylines.SetRange("Document Type", "Sales Invoice Header".);
+                // PostedPaylines.SetRange("Document Type", );
                 if PostedPaylines.FindFirst() then begin
+                    repeat
+                        //if Financecode <> '' then
+                        Financecode += PostedPaylines."Approval Code" + ',';
 
-                    PaymentAmount := PostedPaylines.Amount;
-                    Financecode := PostedPaylines."Approval Code";
-
+                    // else
+                    // Financecode := PostedPaylines."Approval Code";
+                    until PostedPaylines.Next = 0;
+                    if Financecode <> '' then
+                        txt2 := DelStr(Financecode, StrLen(Financecode), 1);
                 end;
-                //TotalAmount
-                recSalesInvLine.RESET;
-                recSalesInvLine.SETRANGE("Document No.", "Sales Invoice Header"."No.");
-                recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
-                recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::"G/L Account");
-                IF recSalesInvLine.FindFirst() THEN begin
-                    REPEAT
-                        TotalAmt += recSalesInvLine.Amount;
 
-                    UNTIL recSalesInvLine.NEXT = 0;
-                    //Message('%1', TotalAmt);
+
+                recSIL.Reset();
+                recSIL.SetRange("Document No.", "No.");
+                // recSIL.SetRange("Document Type", "Document Type"::Order);
+                if recSIL.FindSet() then begin
+                    repeat
+                        //if Salespersoncode <> '' then
+                        Salespersoncode += recSIL."Salesperson Name" + ',';
+
+                    until recSIL.Next = 0;
                 end;
+                if Salespersoncode <> '' then
+                    txt3 := DelStr(Salespersoncode, StrLen(Salespersoncode), 1);
+
+
                 //PaidAmount
                 RecPaymentlines.Reset();
                 RecPaymentlines.SetRange("Document No.", "No.");
@@ -410,15 +455,25 @@ report 50310 "Tax Invoice"
                 if ReLocation.Get("Location Code") then;
                 Relocation.CalcFields("Payment QR");
 
+                //TotalAmount\
+                Clear(TotalAmt);
+                recSalesInvLine.RESET;
+                recSalesInvLine.SETRANGE("Document No.", "Sales Invoice Header"."No.");
+                recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
+
+                IF recSalesInvLine.FindFirst() THEN
+                    REPEAT
+                    // TotalAmt += recSalesInvLine.Amount;
+
+                    UNTIL recSalesInvLine.NEXT = 0;
+                //Message('%1', TotalAmt);
+
                 //TotalAmount := TotalAmt + TotalGST;
                 //Message('%1', TotalAmount);
                 //balanceamount := TotalAmount - TotalPaidAmount;
-                TotalAmount := TotalAmt + SGST + CGST + IGST;
+
                 //balanceamount := TotalAmount - TotalPaidAmount;
-                AmountInwords.InitTextVariable();
-                //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
-                //AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
-                AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmt + TotalGST), '');
+
 
 
 
@@ -479,12 +534,18 @@ report 50310 "Tax Invoice"
 
     var
         myInt: Integer;
+        txt1: Text;
+        txt2: Text;
+        txt3: Text;
+        txt4: Text;
         TotalGST: Decimal;
+        Salespersoncode: Code[50];
+        recSIL: Record "Sales Invoice Line";
         TotalAmt: Decimal;
         SH: record "Sales Invoice Header";
         recSalesInvLine: Record "Sales Invoice Line";
         loc: Record Location;
-        Financecode: Code[50];
+        Financecode: Code[200];
         RecPaymentlines: Record "Posted Payment Lines";
         TotalPaidAmount: Decimal;
         PaymentAmount: Decimal;

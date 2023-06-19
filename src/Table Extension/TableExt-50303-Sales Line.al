@@ -101,7 +101,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 // SH.SetRange("Document Type", "Document Type"::Order);
                 // SH.SetFilter("POS Released Date", '<>%1', 0D);
                 // IF SH.FindFirst() then
-                //     Error('You can not change the quantity when order is Confirmed');
+                //     Error('You can not change the quantity when order is Confirmed');//
                 IF Rec.Type <> rec.Type::" " then begin
                     IF Rec.Quantity > 0 then begin
                         ItemConfig.Reset();

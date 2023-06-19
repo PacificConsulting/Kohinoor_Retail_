@@ -72,9 +72,12 @@ page 50345 "Bank Drop Entry "
                 Promoted = true;
                 trigger OnAction()
                 var
+                    Confirm: Dialog;
                 begin
-                    CurrPage.SetSelectionFilter(Rec);
-                    GenerateContraVoucher();
+                    IF Confirm('Do you want post the voucher', true) then begin
+                        CurrPage.SetSelectionFilter(Rec);
+                        GenerateContraVoucher();
+                    end;
                 end;
             }
         }
@@ -89,6 +92,9 @@ page 50345 "Bank Drop Entry "
         Staff: Record "Staff Master";
         Loc: Record 14;
         GenJournalBatch: Record "Gen. Journal Batch";
+        TenderPOSSetup: Record "Tender POS No.Series Setup";
+        GenBatch: Record 232;
+        GenJnlPostBatch: Codeunit "Gen. Jnl.-Post Batch";
     begin
 
         GLSetup.Get();
@@ -96,6 +102,12 @@ page 50345 "Bank Drop Entry "
             IF Loc.Get(Staff."Store No.") then;
 
         GLSetup.TestField("Bank Drop Batch");
+        if TenderPOSSetup.Get(rec."Store No.") then begin
+            TenderPOSSetup.TestField("Journal Template Name");
+            TenderPOSSetup.TestField("Journal Batch Name");
+        end;
+
+        IF GenBatch.Get(Loc."Payment Journal Template Name", Loc."Payment Journal Batch Name") then;
 
         GenJourLineFilter.Reset();
         GenJourLineFilter.SetRange("Journal Template Name", 'CONTRA VO');
@@ -113,7 +125,7 @@ page 50345 "Bank Drop Entry "
 
 
         GenJourLine.Insert(true);
-        GenJourLine."Document No." := NoSeriesMgt.GetNextNo('CONTRA VO', Today, false);
+        GenJourLine."Document No." := NoSeriesMgt.GetNextNo(TenderPOSSetup."Cash Voucher No. Series", Today, true);
         GenJourLine."Document Type" := GenJourLine."Document Type"::Payment;
         GenJourLine."Account Type" := GenJourLine."Account Type"::"G/L Account";
         GenJourLine.Validate("Account No.", rec."Cash Account");
@@ -127,10 +139,10 @@ page 50345 "Bank Drop Entry "
         //     GenJournalBatch.TestField("Posting No. Series");
         // GenJourLine."Posting No. Series" := GenJournalBatch."Posting No. Series";
         GenJourLine.Comment := 'Auto Post';
-
         GenJourLine.Modify();
         Message('Contra Voucher Created with Docuemt No. %1 and Batch Name %2', GenJourLine."Document No.", GenJourLine."Journal Batch Name");
-        Codeunit.Run(Codeunit::"Gen. Jnl.-Post", GenJourLine);
+        //Codeunit.Run(Codeunit::"Gen. Jnl.-Post", GenJourLine);
+        GenJnlPostBatch.Run(GenJourLine);
     end;
 
 

@@ -65,7 +65,7 @@ report 50311 "Sales Order"
             column(Store_name; loc.Name)
             {
             }
-            column(StoreAddress1; loc.Address + '' + loc."Address 2" + '' + loc.City + ',' + loc."Post Code" + /*',' + 'PANNO.' + Compinfo."P.A.N. No." + */',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
+            column(StoreAddress1; loc.Address + ' ' + loc."Address 2" + ',' + loc.City + ',' + loc."Post Code" + /*',' + 'PANNO.' + Compinfo."P.A.N. No." + */',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {
 
             }
@@ -85,7 +85,7 @@ report 50311 "Sales Order"
             {
 
             }
-            column(Bill_to_Address; "Bill-to Address" + '' + "Bill-to Address 2" + ',' + "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code")
+            column(Bill_to_Address; "Bill-to Address" + ' ' + "Bill-to Address 2" + ',' + "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code")
             {
 
             }
@@ -160,7 +160,7 @@ report 50311 "Sales Order"
             // {
 
             // }
-            column(Paymentmethod; Paymentmethod)
+            column(Paymentmethod; txt1)
             {
 
             }
@@ -192,10 +192,15 @@ report 50311 "Sales Order"
             {
 
             }
-            column(Financecode; Financecode)
+            column(Financecode; txt2)
             {
 
             }
+            column(Salespersoncode; txt3)
+            {
+
+            }
+
 
 
 
@@ -338,7 +343,7 @@ report 50311 "Sales Order"
                 Customer.GET("Sales Header"."Sell-to Customer No.");
                 IF "Ship-to Code" <> '' then begin
                     ShiptoName := "Ship-to Name";
-                    ShiptoAdd := "Ship-to Address" + '' + "Ship-to Address 2";
+                    ShiptoAdd := "Ship-to Address" + ' ' + "Ship-to Address 2";
                     Shiptocity := "Ship-to City" + ',' + "Ship-to Post Code" + ',' + "Ship-to Country/Region Code";
                 end
                 ELSE begin
@@ -359,16 +364,15 @@ report 50311 "Sales Order"
                 //PaymentAmount
                 PaymentLines.Reset();
                 PaymentLines.setrange("Document No.", "No.");
-                PaymentLines.setrange("Document Type", "Sales Line"."Document Type"::Order);
-                if PaymentLines.findfirst() then begin
+                PaymentLines.setrange("Document Type", "Document Type"::Order);
+                //PaymentLines.Ascending(true);
+                if PaymentLines.FindSet() then
                     repeat
-                        if Paymentmethod <> '' then
-                            Paymentmethod := Paymentmethod + ' ' + '-' + format(PaymentLines.Amount) + ',' + ' ' + PaymentLines."Payment Method Code"
-                        else
-                            Paymentmethod := PaymentLines."Payment Method Code";
+                        Paymentmethod += PaymentLines."Payment Method Code" + ' ' + '-' + format(PaymentLines.Amount) + ',';// + ' ' + PaymentLines."Payment Method Code"
+                        txt1 := DelStr(Paymentmethod, StrLen(Paymentmethod), 1);
                     until PaymentLines.Next = 0;
-
-                end;
+                //Message(txt1);
+                //end;
 
                 Paylines.Reset();
                 Paylines.SetRange("Document No.", "No.");
@@ -382,11 +386,25 @@ report 50311 "Sales Order"
                 RPaylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
                 if RPaylines.FindFirst() then begin
                     repeat
-                        if Financecode <> '' then
-                            Financecode := Financecode + ',' + RPaylines."Approval Code"
-                        else
-                            Financecode := RPaylines."Approval Code";
+
+                        Financecode += RPaylines."Approval Code" + ',';
+
+                    // else
+                    //Financecode := RPaylines."Approval Code";
                     until RPaylines.Next = 0;
+                    if Financecode <> '' then
+                        txt2 := DelStr(Financecode, StrLen(Financecode), 1);
+                end;
+
+                recSL.Reset();
+                recSL.SetRange("Document No.", "No.");
+                recSL.SetRange("Document Type", "Document Type"::Order);
+                if recSL.FindSet() then begin
+                    repeat
+                        //if Salespersoncode <> '' then
+                        Salespersoncode += recSL."Salesperson Name" + ',';
+                    until recSL.Next = 0;
+                    txt3 := DelStr(Salespersoncode, StrLen(Salespersoncode), 1);
                 end;
 
                 if ReLocation.Get("Sales Header"."Location Code") then;
@@ -398,16 +416,17 @@ report 50311 "Sales Order"
                 //PCPL-064<< 8june2023
 
                 //TotalAmount
+                TotalAmount1 := 0;
+                Clear(TotalAmount1);
                 recsalesline.RESET;
                 recsalesline.SETRANGE(recsalesline."Document No.", "Sales Header"."No.");
                 recsalesline.SETRANGE(Type, recsalesline.Type::Item);
                 IF recsalesline.FINDSET THEN
                     REPEAT
                         TotalAmount1 += recsalesline.Amount;
-
                     UNTIL recsalesline.NEXT = 0;
                 //TotalAmount1 := ROUND(TotalAmount1, 0.01, '>');
-                //Message('%1', TotalAmount1);
+                // Message('Amount : %1', TotalAmount1);
 
 
                 // //PCPL-064<<9june2023
@@ -429,17 +448,13 @@ report 50311 "Sales Order"
                     // Message('%1', TotalPaidAmount);
                 end;
 
+
                 //TotalAmt += Amount + TotalGSTAmountFinal;
-
-
                 //BalanceAmount := (TotalAmt) - (TotalPaidAmount);
                 // AmountIValue := TotalAmount1 + IGSTAmount + CGSTAmount + SGSTAmount;
                 AmountIValue := TotalAmount1 + TotalGSTAmountFinal;
-                //AmountIValue := Round(AmountIValue);
-                //Message('%1', AmountIValue);
                 BalanceAmount := AmountIValue - TotalPaidAmount;
-                //BalanceAmount := Round(BalanceAmount, 0.01, '>');
-                //Message('%1', BalanceAmount);
+
                 AmountInwords.InitTextVariable();
                 //AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount, 0.01, '>'), '');
                 AmountInwords.FormatNoText(AmountInWords1, Round(AmountIValue), '');
@@ -493,7 +508,13 @@ report 50311 "Sales Order"
     var
         mybalance: Decimal;
         bal: Decimal;
+        txt1: Text;
+        txt2: Text;
+        txt3: Text;
         SL: Record "Sales Line";
+        Salespersoncode: code[50];
+        recSL: record "Sales Line";
+
         loc: Record Location;
         myInt: Integer;
         rate: Decimal;

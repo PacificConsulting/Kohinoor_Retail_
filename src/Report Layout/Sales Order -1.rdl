@@ -370,8 +370,9 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Salesperson_Code.Value</Value>
+                                  <Value>=Fields!Salespersoncode.Value</Value>
                                   <Style>
+                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -1658,7 +1659,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!Paymentmethod.Value  &amp; "-" &amp; Fields!PaymentAmount.Value</Value>
+                                  <Value>=(Fields!Paymentmethod.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1937,7 +1938,9 @@
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!Financecode.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -3153,7 +3156,7 @@
                                   <Value>=Fields!Unit_Price.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
-                                    <Format>f2</Format>
+                                    <Format>n2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3167,26 +3170,6 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>White</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -3208,7 +3191,7 @@
                                   <Value>=Fields!Quantity.Value * Fields!Unit_Price.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
-                                    <Format>f2</Format>
+                                    <Format>n2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3222,26 +3205,6 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>White</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -3263,7 +3226,7 @@
                                   <Value>=Fields!SGSTAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
-                                    <Format>f2</Format>
+                                    <Format>n2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3275,26 +3238,6 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>White</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -3316,7 +3259,7 @@
                                   <Value>=Fields!CGSTAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
-                                    <Format>f2</Format>
+                                    <Format>n2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3328,26 +3271,6 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>White</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -3369,7 +3292,7 @@
                                   <Value>=Fields!IGSTAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
-                                    <Format>f2</Format>
+                                    <Format>n2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3381,26 +3304,6 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>White</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -4203,7 +4106,7 @@
                                 <TextRun>
                                   <Value>=Last(Fields!TotalPaidAmount.Value)</Value>
                                   <Style>
-                                    <Format>0.00;(0.00)</Format>
+                                    <Format>n2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -4215,26 +4118,6 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -4610,7 +4493,7 @@
                                 <TextRun>
                                   <Value>=(SUM (Fields!Amount.Value+Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value)-Last(Fields!TotalPaidAmount.Value))</Value>
                                   <Style>
-                                    <Format>0.00</Format>
+                                    <Format>n2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -5062,7 +4945,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>1. </Value>
+                    <Value>1.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
@@ -5076,7 +4959,21 @@
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>Products once Invoiced cannot be cancelled and amount cannot be refunded. In case of cancellation, 15% of the Invoice value will be deducted as cancellation charges. The refund amount would be given through cheque payment only, in 7 working days.  
+                    <Value>Products once Invoiced cannot be cancelled and amount cannot be refunded. In case of cancellation, 15% of the</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>    Invoice value will be deducted as cancellation charges. The refund amount would be given through cheque payment only, in 7 working days.  
 2.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
@@ -5091,15 +4988,17 @@
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>Products cannot be exchanged or returned at any cost. The concerned brand may only exchange products if the product is to be replaced as per the brand¶s policy within 3 days from Invoice date. Rs. 500/- will be levied as handling cost. Mobiles, Laptop, Computers, 
-Accessories, etc. will not be exchanged or taken back at any cost. </Value>
+                    <Value>Products cannot be exchanged or returned at any cost. The concerned brand may only exchange products if the product is        to be replaced as per the brand¶s policy within 3 days from Invoice date. Rs. 500/- will be levied as handling cost. Mobiles, Laptop, Computers, 
+    Accessories, etc. will not be exchanged or taken back at any cost. </Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style />
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
               </Paragraph>
               <Paragraph>
                 <TextRuns>
@@ -5118,8 +5017,7 @@ Accessories, etc. will not be exchanged or taken back at any cost. </Value>
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value> For the product is the responsibility of the manufacturing brand. Mobiles, laptops, desktops, tabs, digital accessories, once sold would not be exchanged. Warranty is provided by 
-the manufacturing brand through their authorized service center, where the product should be taken by customer. </Value>
+                    <Value> For the product is the responsibility of the manufacturing brand. Mobiles, laptops, desktops, tabs, digital accessories, once sold would not be     exchanged. Warranty is provided by the manufacturing brand through their authorized service center, where the product should be taken by customer. </Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
@@ -5131,7 +5029,7 @@ the manufacturing brand through their authorized service center, where the produ
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>4. </Value>
+                    <Value>4.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
@@ -5171,8 +5069,7 @@ the manufacturing brand through their authorized service center, where the produ
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value> Would be extra and are to be paid 
-directly by the customer to the brand installing it.</Value>
+                    <Value> Would be extra and are to be paid directly by the customer to the brand installing it.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
@@ -5184,7 +5081,7 @@ directly by the customer to the brand installing it.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value> 6.</Value>
+                    <Value>6.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
@@ -5224,8 +5121,7 @@ directly by the customer to the brand installing it.</Value>
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value> Product delivery is subject to realization of cheque / 
-DD.</Value>
+                    <Value> Product delivery is subject to realization of cheque / DD.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
@@ -5545,6 +5441,9 @@ End Function
         </Field>
         <Field Name="Financecode">
           <DataField>Financecode</DataField>
+        </Field>
+        <Field Name="Salespersoncode">
+          <DataField>Salespersoncode</DataField>
         </Field>
         <Field Name="SrNo">
           <DataField>SrNo</DataField>

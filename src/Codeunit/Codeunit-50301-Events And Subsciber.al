@@ -76,20 +76,44 @@ codeunit 50301 "Event and Subscribers"
         //*****************New Code for Check Payment Should not be more then Invoice Amt ******
 
         CalcStatistics.GetPostedsalesInvStatisticsAmount(SalesInvoiceHeader, TotalInvoiceAmt);
-        PostedPayemntLine.Reset();
-        PostedPayemntLine.SetRange("Document No.", SalesInvoiceHeader."No.");
-        IF PostedPayemntLine.FindSet() then
+        PaymentLine.Reset();
+        PaymentLine.SetRange("Document No.", SalesHeader."No.");
+        IF PaymentLine.FindSet() then
             repeat
-                TotalPaymentAmt += PostedPayemntLine.Amount;
-            until PostedPayemntLine.Next() = 0;
+                TotalPaymentAmt += PaymentLine.Amount;
+            until PaymentLine.Next() = 0;
         IF TotalInvoiceAmt > TotalPaymentAmt then
             Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', TotalInvoiceAmt, TotalPaymentAmt);
         // IF EverythingInvoiced = true then
         //   DeletePayemntLines(SalesHeader, PaymentLine);
 
+        PostedPayemntLine.Reset();
+        PostedPayemntLine.SetRange("Document No.", SalesInvoiceHeader."No.");
+        IF not PostedPayemntLine.Find() then begin
+            PaymentLine.Reset();
+            PaymentLine.SetRange("Document No.", SalesHeader."No.");
+            if PaymentLine.FindSet() then
+                repeat
+                    PostedPayemntLine.InitFromPaymentLine(PostedPayemntLine, PaymentLine, SalesInvoiceHeader);
+                until PaymentLine.Next() = 0;
+            // DeletePayemntLines(SalesHeader, PaymentLine); //Code commented ask by sourav for issue of partial order.
+
+        end;
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterSalesInvLineInsert', '', false, false)]
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnDeleteAfterPostingOnAfterSalesLineDeleteAll', '', false, false)]
+    local procedure OnDeleteAfterPostingOnAfterSalesLineDeleteAll(SalesHeader: Record "Sales Header"; SalesInvoiceHeader: Record "Sales Invoice Header"; SalesCrMemoHeader: Record "Sales Cr.Memo Header"; CommitIsSuppressed: Boolean; EverythingInvoiced: Boolean)
+    var
+        PaymentLine: Record "Payment Lines";
+    begin
+        /*
+        PaymentLine.Reset();
+        PaymentLine.SetRange("Document No.", SalesHeader."No.");
+        IF PaymentLine.FindFirst() then
+            PaymentLine.DeleteAll();
+            */
+    end;
+    /*
     local procedure OnAfterSalesInvLineInsert(var SalesInvLine: Record "Sales Invoice Line"; SalesInvHeader: Record "Sales Invoice Header"; SalesLine: Record "Sales Line"; ItemLedgShptEntryNo: Integer; WhseShip: Boolean; WhseReceive: Boolean; CommitIsSuppressed: Boolean; var SalesHeader: Record "Sales Header"; var TempItemChargeAssgntSales: Record "Item Charge Assignment (Sales)" temporary; var TempWhseShptHeader: Record "Warehouse Shipment Header" temporary; var TempWhseRcptHeader: Record "Warehouse Receipt Header" temporary; PreviewMode: Boolean)
     var
         PostedPayemntLine: Record "Posted Payment Lines";
@@ -100,6 +124,7 @@ codeunit 50301 "Event and Subscribers"
         SL: Record "Sales Line";
 
     begin
+        /*
         PostedPayemntLine.Reset();
         PostedPayemntLine.SetRange("Document No.", SalesInvHeader."No.");
         IF not PostedPayemntLine.Find() then begin
@@ -111,13 +136,9 @@ codeunit 50301 "Event and Subscribers"
                     PostedPayemntLine.InitFromPaymentLine(PostedPayemntLine, PaymentLine, SalesInvHeader);
                 until PaymentLine.Next() = 0;
             // DeletePayemntLines(SalesHeader, PaymentLine); //Code commented ask by sourav for issue of partial order.
+            */
 
-
-        end;
-    end;
-
-
-    //[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforeSetPostingFlags', '', false, false)]
+    //end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforeCheckPostingFlags', '', false, false)]
     local procedure OnBeforeCheckPostingFlags(var SalesHeader: Record "Sales Header"; var IsHandled: Boolean)

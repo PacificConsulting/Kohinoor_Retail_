@@ -664,6 +664,7 @@ codeunit 50303 "POS Procedure"
         ChildSalesLine: Record 37;
         RecItem: Record 27;
         ChilPurchLine: Record 39;
+        ChildTranLine: Record "Transfer Line";
     begin
         Evaluate(SerialNo, input);
         Clear(LastEntryNo);
@@ -741,10 +742,23 @@ codeunit 50303 "POS Procedure"
             TranLine.SetRange("Line No.", lineno);
             IF TranLine.FindFirst() then begin
                 DocFound := true;
-
                 TranLine.Validate("Transfer-from Bin Code", 'BACKPACK');
                 TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" + 1);
                 TranLine.Modify();
+
+                //**Child item ****//
+                ChildTranLine.SetRange("Document No.", TranLine."Document No.");
+                ChildTranLine.SetRange("Warranty Parent Line No.", TranLine."Line No.");
+                IF ChildTranLine.FindSet() then
+                    Repeat
+                        IF RecItem.Get(ChildTranLine."Item No.") then;
+                        IF RecItem."Item Tracking Code" = '' then begin
+                            IF RecItem.Type = RecItem.Type::Inventory then
+                                ChildTranLine.Validate("Transfer-from Bin Code", 'BACKPACK');
+                            ChildTranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship");
+                            ChildTranLine.Modify();
+                        end;
+                    until ChildTranLine.Next() = 0;
 
                 ReservEntry.RESET;
                 ReservEntry.LOCKTABLE;
@@ -904,6 +918,7 @@ codeunit 50303 "POS Procedure"
         SNlist: record 6504;
         ChilPurchLine: Record 39;
         ChildSalesLine: Record 37;
+        ChildTransLine: Record "Transfer Line";
     begin
         Evaluate(SerialNo, input);
         DocFound := false;
@@ -940,7 +955,6 @@ codeunit 50303 "POS Procedure"
             if ReservEntry.FindFirst() then begin
                 ReservEntry.Delete();
             end;
-
             TranLine.Reset();
             TranLine.SetCurrentKey("Document No.", "Line No.");
             TranLine.SetRange("Document No.", documentno);
@@ -949,6 +963,14 @@ codeunit 50303 "POS Procedure"
                 DocFound := true;
                 TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
                 TranLine.Modify();
+                //**Child item ****//
+                ChildTransLine.SetRange("Document No.", TranLine."Document No.");
+                ChildTransLine.SetRange("Warranty Parent Line No.", TranLine."Line No.");
+                IF ChildTransLine.FindSet() then
+                    Repeat
+                        ChildTransLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
+                        ChildTransLine.Modify();
+                    until ChildTransLine.Next() = 0;
             end;
         end;
         Evaluate(SerialNo, input);

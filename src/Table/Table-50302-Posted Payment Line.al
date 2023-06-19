@@ -182,12 +182,16 @@ table 50302 "Posted Payment Lines"
 
 
     procedure InitFromPaymentLine(PostedpaymentLine: Record "Posted Payment Lines"; PaymentLine: Record "Payment Lines"; SalesInvHdr: Record "Sales Invoice Header")
+    var
+        PostedpaymentLine11: Record "Posted Payment Lines";
     begin
+
         PostedpaymentLine.Init();
         PostedpaymentLine.TransferFields(PaymentLine);
         PostedpaymentLine."Document No." := SalesInvHdr."No.";
         PostedpaymentLine."Invoice Created" := true;
         PostedpaymentLine.Insert();
+        //end;
     end;
 
     var

@@ -121,6 +121,8 @@ page 50329 "Request Transfer Order"
                     RrqTransferLineFilter.SetRange("Document No.", Rec."No.");
                     IF RrqTransferLineFilter.FindSet() then
                         repeat
+                            IF RrqTransferLineFilter."Transfer-from Code" = Rec."Transfer-to Code" then
+                                Error('Transfer from code and Transfer to code should be different for line no. %1', RrqTransferLineFilter."Line No.");
                             //IF RrqTransferLineFilter."Transfer-from Code" <> TranferFromcode then begin
                             IF RrqTransferLineFilter."Line Created" = false then begin
                                 InvSetup.Get();
