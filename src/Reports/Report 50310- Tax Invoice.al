@@ -174,12 +174,13 @@ report 50310 "Tax Invoice"
             {
                 DataItemLink = "Document No." = FIELD("No.");
                 DataItemLinkReference = "Sales Invoice Header";
-                DataItemTableView = sorting("Document No.", "Line No.") order(ascending);
+                DataItemTableView = sorting("Document No.", "Line No.") order(ascending) where(Quantity = filter(<> 0));
 
                 column(SrNo; SrNo)
                 {
 
                 }
+
                 column(Salesperson_Code; "Salesperson Name")
                 {
 
@@ -261,7 +262,7 @@ report 50310 "Tax Invoice"
                     {
                         //DataItemLink = "Entry No." = FIELD();
                         DataItemLink = "Entry No." = FIELD("Item Ledger Entry No.");
-                        column(Serial_No_; "Serial No.")
+                        column(Serial_No_; 'Serial No.' + '-' + "Serial No.")
                         {
 
                         }
@@ -316,13 +317,26 @@ report 50310 "Tax Invoice"
 
                     end;
                     TotalGST := SGST + CGST + IGST;
-                    //  Message('%1', TotalGST);
-                    TotalAmt += Amount;
+
+                    //TotalAmt := 0;
+                    //TotalAmount := 0;
+                    //Clear(TotalAmt);
+                    //Clear(TotalAmount);
+                    Clear(TotalAmt);
+                    recSIL.Reset();
+                    recSIL.SetRange("Document No.", "Sales Invoice Line"."Document No.");
+                    IF recSIL.FindFirst() then
+                        repeat
+                            TotalAmt += recSIL.Amount;
+                        until recSIL.Next() = 0;
+
                     TotalAmount := TotalAmt + TotalGST;
+
+                    //TotalAmount := Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
                     //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
                     //AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
-                    AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
+                    AmountInwords.FormatNoText(AmountInWords1, ROUND((TotalAmount), 1), '');
 
 
                     if Type = Type::"G/L Account" then
@@ -357,7 +371,7 @@ report 50310 "Tax Invoice"
 
 
                 Reclocation.get("Location Code");
-                loc.get("Store No.");
+                if loc.get("Store No.") then;
                 //     StoreAddress := Reclocation.Address;
                 // StoreAddress2 := Reclocation."Address 2";
                 // StorePostCode := Reclocation."Post Code";
@@ -367,13 +381,13 @@ report 50310 "Tax Invoice"
 
                 IF "Ship-to Code" <> '' then begin
                     ShiptoName := "Ship-to Name";
-                    ShiptoAdd := "Ship-to Address" + '' + "Ship-to Address 2";
+                    ShiptoAdd := "Ship-to Address" + ' ' + "Ship-to Address 2";
                     Shiptocity := "Ship-to City" + ',' + "Ship-to Post Code" + ',' + "Ship-to Country/Region Code";
                     ShiptoGSTIN := "Ship-to GST Reg. No.";
                 end
                 ELSE begin
                     ShiptoName := "Bill-to Name";
-                    ShiptoAdd := "Bill-to Address" + '' + "Bill-to Address 2";
+                    ShiptoAdd := "Bill-to Address" + ' ' + "Bill-to Address 2";
                     Shiptocity := "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code";
                     ShiptoGSTIN := CustGSTIN;
                 end;
@@ -388,17 +402,16 @@ report 50310 "Tax Invoice"
                 PostedPaymentLines.setrange("Document No.", "No.");
 
                 //PostedPaymentLines.SetRange("Line No.", "Line No.");
-                if PostedPaymentLines.findfirst() then begin
+                if PostedPaymentLines.findfirst() then //begin
                     repeat
 
-                        Paymentmethod := PostedPaymentLines."Payment Method Code" + ' ' + '-' + format(PostedPaymentLines.Amount) + ',';
-
+                        Paymentmethod := PostedPaymentLines."Payment Method Code" + '' + '-' + format(PostedPaymentLines.Amount) + ',';
                     //else
                     //Paymentmethod := PostedPaymentLines."Payment Method Code";
                     until PostedPaymentLines.Next = 0;
-                    if Paymentmethod <> '' then
-                        txt1 := DelStr(paymentmethod, StrLen(Paymentmethod), 1);
-                end;
+                if Paymentmethod <> '' then
+                    txt1 := DelStr(paymentmethod, StrLen(Paymentmethod), 1);
+                //end;
 
                 /* PostedPaylines.Reset();
                  PostedPaylines.SetRange("Document No.", "No.");
@@ -435,9 +448,10 @@ report 50310 "Tax Invoice"
                         Salespersoncode += recSIL."Salesperson Name" + ',';
 
                     until recSIL.Next = 0;
+                    if Salespersoncode <> '' then
+                        txt3 := DelStr(Salespersoncode, StrLen(Salespersoncode), 1);
                 end;
-                if Salespersoncode <> '' then
-                    txt3 := DelStr(Salespersoncode, StrLen(Salespersoncode), 1);
+
 
 
                 //PaidAmount
@@ -456,14 +470,14 @@ report 50310 "Tax Invoice"
                 Relocation.CalcFields("Payment QR");
 
                 //TotalAmount\
-                Clear(TotalAmt);
+
                 recSalesInvLine.RESET;
                 recSalesInvLine.SETRANGE("Document No.", "Sales Invoice Header"."No.");
                 recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
 
                 IF recSalesInvLine.FindFirst() THEN
                     REPEAT
-                    // TotalAmt += recSalesInvLine.Amount;
+                    //TotalAmt += recSalesInvLine.Amount;
 
                     UNTIL recSalesInvLine.NEXT = 0;
                 //Message('%1', TotalAmt);

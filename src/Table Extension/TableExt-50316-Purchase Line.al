@@ -82,10 +82,12 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                 IF Rec."Document Type" = Rec."Document Type"::Order then begin
                     IF Rec.Quantity > 0 then begin
                         ItemConfig.Reset();
+                        ItemConfig.SetCurrentKey("Item No.");
                         ItemConfig.SetRange("Item No.", Rec."No.");
                         IF ItemConfig.FindSet() then
                             repeat
                                 PurchLineFilter.Reset();
+                                PurchLineFilter.SetCurrentKey("Document No.", "Warranty Parent Line No.");
                                 PurchLineFilter.SetRange("Document No.", "Document No.");
                                 //PurchLineFilter.SetRange("No.", ItemConfig."Item Child No.");
                                 PurchLineFilter.SetRange("Warranty Parent Line No.", "Line No.");
@@ -104,11 +106,11 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                                     PLInit.Type := PLInit.Type::Item;
                                     PLInit.Validate("No.", ItemConfig."Item Child No.");//
                                     PLInit.Validate(Quantity, Rec.Quantity);
-                                    PLInit.Validate("Location Code", PurchaseLine."Location Code");
-                                    PLInit.Validate("Bin Code", PurchaseLine."Bin Code");
-                                    PLInit.Validate("Shortcut Dimension 1 Code", PurchaseLine."Shortcut Dimension 1 Code");
-                                    PLInit.Validate("Shortcut Dimension 2 Code", PurchaseLine."Shortcut Dimension 2 Code");
-                                    PLInit."Warranty Parent Line No." := PurchaseLine."Line No.";
+                                    PLInit.Validate("Location Code", Rec."Location Code");
+                                    PLInit.Validate("Bin Code", Rec."Bin Code");
+                                    PLInit.Validate("Shortcut Dimension 1 Code", Rec."Shortcut Dimension 1 Code");
+                                    PLInit.Validate("Shortcut Dimension 2 Code", Rec."Shortcut Dimension 2 Code");
+                                    PLInit."Warranty Parent Line No." := Rec."Line No.";
                                     PLInit.Modify();
                                 end else begin
                                     //**********Modify Qty only**********

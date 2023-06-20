@@ -171,12 +171,14 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     end;
                 end;
             }
-            action("Call Function")
+            action("Refresh Sales Order")
             {
+
                 ApplicationArea = all;
-                Image = PostedPayment;
+                PromotedCategory = Process;
                 Promoted = true;
-                PromotedIsBig = true;
+                PromotedOnly = true;
+                Image = Refresh;
                 trigger OnAction()
                 var
                     SH: Record 36;
@@ -191,33 +193,18 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     Tx: Text;
 
                 begin
-                    //result := Cu.OrderConfirmationforDelivery(rec."No.");
-                    Message('hi');
-                    RES.Reset();
-                    RES.SetRange("Entry No.", 456);
-                    if RES.FindFirst() then begin
-                        RES.Validate("Quantity (Base)", 1);
-                        RES.Modify();
-                    end;
+                    result := CU.RefreshSaleOrder(Rec."No.");
+                    IF result = '' then
+                        Message('Success')
+                    else
+                        Message(result);
 
-                    // result := POS.POSAction('KTPLSO23240091', 0, 'INVLINE', '', '', '');
-                    //result := CU.OrderConfirmationforWH(rec."No.");
-                    // SL.Reset();
-                    // sl.SetRange("Approval Status", sl."Approval Status"::"Pending for Approval");
-                    // IF SL.FindFirst() then;
-                    // Hyperlink(GetUrl(ClientType::Current, Rec.CurrentCompany, ObjectType::Page, Page::"Slab Approval List", SL));
-                    // result := GetUrl(ClientType::Current, Rec.CurrentCompany, ObjectType::Page, Page::"Slab Approval List", SL);
-                    //Message(result);
-                    // RES.Reset();
-                    // RES.SetRange("Source ID", 'KTPLPO23240011');
-                    // IF RES.FindSet() then
-                    //     repeat
-                    //         RES.Delete();
-                    //     until res.Next() = 0;
-                    Tx := 'This Is test';
-
-                    result := CU.AddComment(Rec."No.", Tx);
-
+                    SL.Reset();
+                    SL.SetRange("Document No.", Rec."No.");
+                    IF SL.FindSet() then
+                        repeat
+                            SL.Validate("Unit Price");
+                        until SL.Next() = 0;
                 end;
             }
             action("POS Function Test")

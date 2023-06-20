@@ -2,37 +2,9 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
 {
     fields
     {
-        modify("Unit Price Incl. of Tax")
-        {
-            trigger OnAfterValidate()
-            var
-                SH: Record 36;
-            begin
-                //****Below code commened due to Sales Statictic page run same error coming now same code done on Sales line Page
-                /*
-                SH.Reset();
-                SH.SetRange("No.", "Document No.");
-                SH.SetFilter("POS Released Date", '<>%1', 0D);
-                SH.SetRange("Document Type", "Document Type"::Order);
-                IF SH.FindFirst() then
-                    Error('You can not change the unit price incl. of tax when order is Confirmed');
-                    */
-            end;
-        }
-        modify("Unit Price")
-        {
-            trigger OnAfterValidate()
-            var
-                SH: Record 36;
-            begin
-                // SH.Reset();
-                // SH.SetRange("No.", "Document No.");
-                // SH.SetFilter("POS Released Date", '<>%1', 0D);
-                // SH.SetRange("Document Type", "Document Type"::Order);
-                // IF SH.FindFirst() then
-                //     Error('You can not change the unit price when order is Confirmed');
-            end;
-        }
+
+
+
         modify("No.")
         {
             trigger OnAfterValidate()
@@ -40,12 +12,8 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 TradeAggre: record "Trade Aggrement";
                 SalesHeder: record 36;
                 BlockItem: Record "Block Item List";
-
             begin
-                SalesHeder.Reset();
-                SalesHeder.SetRange("No.", rec."Document No.");
-                SalesHeder.SetFilter("Document Type", '%1|%2', "Document Type"::Order, "Document Type"::Invoice);
-                IF SalesHeder.FindFirst() then begin
+                IF SalesHeder.Get(rec."Document Type", rec."Document No.") then begin
                     BlockItem.Reset();
                     BlockItem.SetRange("Store No.", SalesHeder."Store No.");
                     BlockItem.SetRange("Item No.", "No.");
@@ -71,10 +39,6 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                         "Price Inclusive of Tax" := true
                     end;
                 end;
-
-                // Validate("Unit Price Incl. of Tax", 25000);
-                //Validate("Price Inclusive of Tax", true);
-                //"Price Inclusive of Tax" := true;
             end;
 
         }
@@ -95,22 +59,18 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 RecItem: Record 27;
                 ItemConfig: Record "Link Item";
             begin
-                //****Below code commened due to Sales Statictic page run same error coming now same code done on Sales line Page
-                // SH.Reset();
-                // SH.SetRange("No.", "Document No.");
-                // SH.SetRange("Document Type", "Document Type"::Order);
-                // SH.SetFilter("POS Released Date", '<>%1', 0D);
-                // IF SH.FindFirst() then
-                //     Error('You can not change the quantity when order is Confirmed');//
-                IF Rec.Type <> rec.Type::" " then begin
+
+                IF Rec.Type = rec.Type::Item then begin
                     IF Rec.Quantity > 0 then begin
                         ItemConfig.Reset();
+                        ItemConfig.SetCurrentKey("Item No.");
                         ItemConfig.SetRange("Item No.", Rec."No.");
                         IF ItemConfig.FindSet() then
                             repeat
                                 SalesLineFilter.Reset();
+                                SalesLineFilter.SetCurrentKey("Document No.", "Warranty Parent Line No.");
                                 SalesLineFilter.SetRange("Document No.", "Document No.");
-                                SalesLineFilter.SetRange("No.", ItemConfig."Item Child No.");
+                                // SalesLineFilter.SetRange("No.", ItemConfig."Item Child No.");
                                 SalesLineFilter.SetRange("Warranty Parent Line No.", "Line No.");
                                 if not SalesLineFilter.FindFirst() then begin
                                     //*********New Line Insert*******
@@ -123,17 +83,17 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                                     if SalesLine.FindLast() then
                                         SLInit."Line No." := SalesLine."Line No." + 10000;
 
-                                    SLInit.Insert();
+
                                     SLInit.Type := SLInit.Type::Item;
                                     SLInit.Validate("No.", ItemConfig."Item Child No.");
-                                    SLInit.Validate(Quantity, SalesLine.Quantity);
-                                    SLInit.Validate("Location Code", SalesLine."Location Code");
-                                    SLInit.Validate("Store No.", SalesLine."Store No.");
-                                    SLInit.Validate("Salesperson Code", SalesLine."Salesperson Code");
-                                    SLInit.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
-                                    SLInit.Validate("Shortcut Dimension 2 Code", SalesLine."Shortcut Dimension 2 Code");
+                                    SLInit.Validate(Quantity, Rec.Quantity);
+                                    SLInit.Validate("Location Code", Rec."Location Code");
+                                    SLInit.Validate("Store No.", Rec."Store No.");
+                                    SLInit.Validate("Salesperson Code", Rec."Salesperson Code");
+                                    SLInit.Validate("Shortcut Dimension 1 Code", Rec."Shortcut Dimension 1 Code");
+                                    SLInit.Validate("Shortcut Dimension 2 Code", Rec."Shortcut Dimension 2 Code");
                                     SLInit."Warranty Parent Line No." := SalesLine."Line No.";
-                                    SLInit.Modify();
+                                    SLInit.Insert();
                                 end else begin
                                     //**********Modify Qty only**********
                                     SalesLineFilter.Validate(Quantity, Rec.Quantity);
@@ -145,9 +105,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             end;
         }
 
-        field(50301;
-        "Store No.";
-        Code[20])
+        field(50301; "Store No."; Code[20])
         {
             Caption = 'Store No.';
             DataClassification = ToBeClassified;

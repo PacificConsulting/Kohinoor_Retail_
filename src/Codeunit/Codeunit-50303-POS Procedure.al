@@ -745,8 +745,8 @@ codeunit 50303 "POS Procedure"
                 TranLine.Validate("Transfer-from Bin Code", 'BACKPACK');
                 TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" + 1);
                 TranLine.Modify();
-
-                //**Child item ****//
+                /*
+                //**Child item ****
                 ChildTranLine.SetRange("Document No.", TranLine."Document No.");
                 ChildTranLine.SetRange("Warranty Parent Line No.", TranLine."Line No.");
                 IF ChildTranLine.FindSet() then
@@ -759,7 +759,7 @@ codeunit 50303 "POS Procedure"
                             ChildTranLine.Modify();
                         end;
                     until ChildTranLine.Next() = 0;
-
+                */
                 ReservEntry.RESET;
                 ReservEntry.LOCKTABLE;
                 IF ReservEntry.FINDLAST THEN
@@ -963,7 +963,8 @@ codeunit 50303 "POS Procedure"
                 DocFound := true;
                 TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
                 TranLine.Modify();
-                //**Child item ****//
+                /*
+                //**Child item ****
                 ChildTransLine.SetRange("Document No.", TranLine."Document No.");
                 ChildTransLine.SetRange("Warranty Parent Line No.", TranLine."Line No.");
                 IF ChildTransLine.FindSet() then
@@ -971,6 +972,7 @@ codeunit 50303 "POS Procedure"
                         ChildTransLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
                         ChildTransLine.Modify();
                     until ChildTransLine.Next() = 0;
+                    */
             end;
         end;
         Evaluate(SerialNo, input);
@@ -1037,6 +1039,7 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
+                SalesLine.TestField("Unit Price");
             until SalesLine.Next() = 0;
 
         SalesHeader.Reset();
@@ -1156,6 +1159,7 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
+                SalesLine.TestField("Unit Price");
             until SalesLine.Next() = 0;
 
 
@@ -1433,8 +1437,19 @@ codeunit 50303 "POS Procedure"
         VResult: Text;
         B64: Codeunit "Base64 Convert";
         ReturnData: Text;
+        SalesLine: Record 37;
     begin
         //*********Report SaveasPDF code********
+        SalesLine.Reset();
+        SalesLine.SetCurrentKey("Document No.", Type);
+        SalesLine.SetRange("Document No.", DocumentNo);
+        SalesLine.SetRange(Type, SalesLine.Type::Item);
+        IF SalesLine.FindSet() then
+            repeat
+                SalesLine.TestField("Salesperson Code");
+            until SalesLine.Next() = 0;
+
+
         SH.RESET;
         SH.SETRANGE("No.", documentno);
         IF SH.FINDFIRST THEN;
@@ -1542,18 +1557,22 @@ codeunit 50303 "POS Procedure"
         TotalGSTAmount1: Decimal;
         TotalTCSAmt: Decimal;
         TotalAmt: Decimal;
+        CalStat: Codeunit "Calculate Statistics";
+        NetAmt: Decimal;
     begin
+        Clear(NetAmt);
         SH.Reset();
         SH.SetRange("No.", documentno);
         IF SH.FindFirst() then begin
             CalcInvDiscForHeader(SH);
             RefreshOnAfterGetRecord(SH);
-            GetGSTAmountTotal(SH, TotalGSTAmount1);
-            GetTCSAmountTotal(SH, TotalTCSAmt);
-            GetSalesorderStatisticsAmount(SH, TotalAmt);
-            SH."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt);
+            //GetGSTAmountTotal(SH, TotalGSTAmount1);
+            //GetTCSAmountTotal(SH, TotalTCSAmt);
+            //GetSalesorderStatisticsAmount(SH, TotalAmt);
+            CalStat.GetSalesStatisticsAmount(SH, NetAmt);
+            //SH."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt, 1);
+            SH."Amount To Customer" := NetAmt;
             SH.Modify();
-
         end;
     end;
 

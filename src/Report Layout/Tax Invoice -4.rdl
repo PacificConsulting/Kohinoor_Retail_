@@ -50,7 +50,6 @@
                                   <Value>Customer A/c </Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -87,14 +86,12 @@
                                   <Value>:</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=First(Fields!Bill_to_Customer_No_.Value, "DataSet_Result")</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -131,7 +128,6 @@
                                   <Value>Delivery Address</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -200,7 +196,6 @@
                                   <Value>Sales Executive</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -242,7 +237,6 @@
                                   <Value>=Fields!Bill_to_Name.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -281,7 +275,6 @@
                                   <Value>=Fields!ShiptoName.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -320,7 +313,6 @@
                                   <Value>=Fields!Salespersoncode.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -367,7 +359,6 @@
                                   <Value>=Fields!Bill_to_Address.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -406,7 +397,6 @@
                                   <Value>=First(Fields!ShiptoAdd.Value, "DataSet_Result") + First(Fields!Shiptocity.Value, "DataSet_Result")</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -491,7 +481,6 @@
                                   <Value>EMAIL</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -528,14 +517,12 @@
                                   <Value>:</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!Cust_EMail.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -569,7 +556,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>GSTIN:        </Value>
+                                  <Value>GSTIN: </Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve">       </Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -659,7 +653,6 @@
                                   <Value>Contact No</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -696,14 +689,12 @@
                                   <Value>:</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!Cust_PhoneNo.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -808,7 +799,6 @@
                                   <Value>Delivery Date:</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -852,7 +842,6 @@
                                   <Value>GSTIN</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -889,14 +878,12 @@
                                   <Value>:</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!CustGSTIN.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -996,7 +983,6 @@
                                   <Value>=Fields!Shipment_Date.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>d MMM yyyy</Format>
                                   </Style>
                                 </TextRun>
@@ -1347,14 +1333,12 @@
                                   <Value>Store Name :  </Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!Store_name.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1520,7 +1504,6 @@
                                   <Value>Store Address:</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1701,7 +1684,6 @@
                                   <Value>=Fields!StoreAddress1.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1737,17 +1719,24 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Payment Mode:   </Value>
+                                  <Value>Payment Mode</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>:  </Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!Paymentmethod.Value  &amp; "-" &amp; Fields!PaymentAmount.Value</Value>
+                                  <Value>=Fields!Paymentmethod.Value</Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1792,14 +1781,12 @@
                                   <Value>P.A.N No.  :    </Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ComPAN.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1835,7 +1822,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>IRN No.</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1872,7 +1859,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>IRN No.</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1906,7 +1893,7 @@
                                 <TextRun>
                                   <Value>E-Invoice QR Code</Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -1918,7 +1905,7 @@
                                 <TextRun>
                                   <Value xml:space="preserve">                  </Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -1957,15 +1944,13 @@
                                 <TextRun>
                                   <Value>GSTIN No.:  </Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
+                                    <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!StoreGSTIN.Value</Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
+                                    <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2001,7 +1986,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Finance Code:  </Value>
+                                  <Value>Finance Code: </Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2054,8 +2046,7 @@
                                 <TextRun>
                                   <Value>For any query visit to our </Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
+                                    <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2172,8 +2163,7 @@
                                     </Actions>
                                   </ActionInfo>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
+                                    <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2291,7 +2281,6 @@
                                   <Value>CALL CENTER NO.</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2481,7 +2470,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.0762cm</Width>
+                  <Width>2.36724cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>4.96876cm</Width>
@@ -2499,16 +2488,16 @@
                   <Width>1.88082cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.59201cm</Width>
+                  <Width>1.51455cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.35947cm</Width>
+                  <Width>1.51455cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.80559cm</Width>
+                  <Width>1.51455cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.01193cm</Width>
+                  <Width>1.93431cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -3438,7 +3427,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Round(Fields!Amount.Value+Fields!SGST.Value + Fields!CGST.Value +Fields!IGST.Value)</Value>
+                                  <Value>=(Fields!Amount.Value+Fields!SGST.Value + Fields!CGST.Value +Fields!IGST.Value)</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <Format>n2</Format>
@@ -3519,12 +3508,6 @@
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
-                                <TextRun>
-                                  <Value>Serial No.-</Value>
-                                  <Style>
-                                    <FontSize>9pt</FontSize>
-                                  </Style>
-                                </TextRun>
                                 <TextRun>
                                   <Value>=Fields!Serial_No_.Value</Value>
                                   <Style>
@@ -5218,9 +5201,6 @@
                   </Group>
                   <TablixMembers>
                     <TablixMember>
-                      <Visibility>
-                        <Hidden>=IIF(Fields!Quantity.Value=0,true,false)</Hidden>
-                      </Visibility>
                       <KeepWithGroup>After</KeepWithGroup>
                     </TablixMember>
                     <TablixMember>
@@ -5373,7 +5353,7 @@ invoice.</Value>
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>=First(Fields!AmountInWords1.Value, "DataSet_Result")</Value>
+                    <Value>=Fields!AmountInWords1.Value</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -5541,7 +5521,7 @@ invoice.</Value>
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>Products cannot be exchanged or returned at any cost. The concerned brand may only exchange products if the product is to        be replaced as per the brand¶s policy within 3 days from Invoice date. Rs. 500/- will be levied as handling cost. Mobiles, Laptop, Computers, 
+                    <Value>Products cannot be exchanged or returned at any cost. The concerned brand may only exchange products if the product is to               be replaced as per the brand¶s policy within 3 days from Invoice date. Rs. 500/- will be levied as handling cost. Mobiles, Laptop, Computers, 
     Accessories, etc. will not be exchanged or taken back at any cost. </Value>
                     <Style>
                       <FontSize>8pt</FontSize>
@@ -5549,7 +5529,9 @@ invoice.</Value>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style />
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
               </Paragraph>
               <Paragraph>
                 <TextRuns>
@@ -5644,7 +5626,7 @@ invoice.</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value> 6.</Value>
+                    <Value>6.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
