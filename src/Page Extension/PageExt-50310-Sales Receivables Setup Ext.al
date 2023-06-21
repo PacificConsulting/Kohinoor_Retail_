@@ -17,6 +17,11 @@ pageextension 50310 "Sales & Receivables Setup Ext" extends "Sales & Receivables
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Warranty G/L Code field.';
             }
+            field("Installtion Details"; Rec."Installtion Details")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Installtion Details field.';
+            }
 
 
         }

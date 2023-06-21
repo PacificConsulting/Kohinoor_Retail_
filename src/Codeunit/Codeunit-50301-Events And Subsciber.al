@@ -82,8 +82,10 @@ codeunit 50301 "Event and Subscribers"
             repeat
                 TotalPaymentAmt += PaymentLine.Amount;
             until PaymentLine.Next() = 0;
-        IF TotalInvoiceAmt > TotalPaymentAmt then
-            Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', TotalInvoiceAmt, TotalPaymentAmt);
+        IF SalesHeader."Allow for Credit Bill" = false then begin
+            IF TotalInvoiceAmt > TotalPaymentAmt then
+                Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', TotalInvoiceAmt, TotalPaymentAmt);
+        end;
         // IF EverythingInvoiced = true then
         //   DeletePayemntLines(SalesHeader, PaymentLine);
 

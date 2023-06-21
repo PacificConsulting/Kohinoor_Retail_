@@ -47,6 +47,21 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Posted By field.';
                 }
+                field("Allow for Credit Bill"; Rec."Allow for Credit Bill")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Allow for Credit Bill field.';
+                }
+                field("Allow for Credit Bill at"; Rec."Allow for Credit Bill at")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Allow for Credit Bill field.';
+                }
+                field("Allow for Credit Bill By"; Rec."Allow for Credit Bill By")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Allow for Credit Bill field.';
+                }
 
             }
         }
@@ -169,6 +184,56 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                         end;
 
                     end;
+                end;
+            }
+            action(AutofillQuantity)
+            {
+                ApplicationArea = All;
+                Caption = 'AutofillQuantity';
+                Image = RefreshLines;
+                PromotedCategory = Process;
+                Promoted = true;
+                PromotedOnly = true;
+
+                trigger OnAction()
+                var
+                    SL: Record "Sales Line";
+                begin
+                    SL.Reset();
+                    SL.SetRange("Document No.", Rec."No.");
+                    SL.SetRange(type, Sl.Type::Item);
+                    if SL.FindSet() then
+                        repeat
+                            SL.Validate("Qty. to Ship", SL.Quantity - SL."Quantity Shipped");
+                            SL.Modify();
+                        until SL.Next() = 0;
+                    Message('Quantity Auto filled is done');
+                end;
+            }
+            action("Allow for Credit Bill.")
+            {
+                ApplicationArea = All;
+                Caption = 'Allow for Credit Bill';
+                Image = Allocations;
+                PromotedCategory = Process;
+                Promoted = true;
+                PromotedOnly = true;
+
+                trigger OnAction()
+                var
+                    Userset: Record "User Setup";
+                begin
+                    If Userset.Get(UserId) then begin
+                        IF Userset."Allow for Credit Bill" then begin
+                            Rec."Allow for Credit Bill" := true;
+                            Rec."Allow for Credit Bill By" := UserId;
+                            Rec."Allow for Credit Bill at" := CurrentDateTime;
+                            rec.Modify();
+                            Message('Access Granted for Allow Credit Bill');
+                        end else
+                            Error('You do not have permission to allow credit bill activate');
+                    end;
+
                 end;
             }
             action("Refresh Sales Order")

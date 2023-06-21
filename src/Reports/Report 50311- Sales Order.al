@@ -456,9 +456,13 @@ report 50311 "Sales Order"
                 AmountIValue := TotalAmount1 + TotalGSTAmountFinal;
                 //BalanceAmount := AmountIValue - TotalPaidAmount;
 
+                //<<PCPl/NSW/07  21June23
+                CalSta.GetSalesStatisticsAmount("Sales Header", AmtInWordDecimal);
+                //>>PCPl/NSW/07  21June23
+
                 AmountInwords.InitTextVariable();
                 //AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount, 0.01, '>'), '');
-                AmountInwords.FormatNoText(AmountInWords1, Round((AmountIValue)), '');
+                AmountInwords.FormatNoText(AmountInWords1, Round((AmtInWordDecimal)), '');
                 // AmountInwords.FormatNoText(AmountInWords1, (AmountIValue), '');
 
             end;
@@ -508,6 +512,8 @@ report 50311 "Sales Order"
 
     var
         mybalance: Decimal;
+        CalSta: Codeunit "Calculate Statistics";
+        AmtInWordDecimal: Decimal;
         bal: Decimal;
         txt1: Text;
         txt2: Text;

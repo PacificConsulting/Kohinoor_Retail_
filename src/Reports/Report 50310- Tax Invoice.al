@@ -321,8 +321,10 @@ report 50310 "Tax Invoice"
                     //TotalAmt := 0;
                     //TotalAmount := 0;
                     //Clear(TotalAmt);
-                    //Clear(TotalAmount);
-                    Clear(TotalAmt);
+                    Clear(TotalAmount);
+                    //Clear(TotalAmt);
+                    CalcSta.GetPostedSalesInvStatisticsAmount("Sales Invoice Header", TotalAmount);
+                    /*
                     recSIL.Reset();
                     recSIL.SetRange("Document No.", "Sales Invoice Line"."Document No.");
                     IF recSIL.FindFirst() then
@@ -331,6 +333,7 @@ report 50310 "Tax Invoice"
                         until recSIL.Next() = 0;
 
                     TotalAmount := TotalAmt + TotalGST;
+                    */
 
                     //TotalAmount := Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
@@ -405,7 +408,7 @@ report 50310 "Tax Invoice"
                 if PostedPaymentLines.findfirst() then //begin
                     repeat
 
-                        Paymentmethod := PostedPaymentLines."Payment Method Code" + '' + '-' + format(PostedPaymentLines.Amount) + ',';
+                        Paymentmethod := PostedPaymentLines."Payment Method Code" + '' + ':' + format(PostedPaymentLines.Amount) + ',';
                     //else
                     //Paymentmethod := PostedPaymentLines."Payment Method Code";
                     until PostedPaymentLines.Next = 0;
@@ -553,7 +556,7 @@ report 50310 "Tax Invoice"
         txt3: Text;
         txt4: Text;
         TotalGST: Decimal;
-        Salespersoncode: Code[50];
+        Salespersoncode: Text[250];
         recSIL: Record "Sales Invoice Line";
         TotalAmt: Decimal;
         SH: record "Sales Invoice Header";
@@ -599,6 +602,7 @@ report 50310 "Tax Invoice"
         Paymentmethod: Code[50];
         ReLocation: Record Location;
         balanceamount: Decimal;
+        CalcSta: Codeunit "Calculate Statistics";
 
     //GLE:Record 
 }

@@ -33,6 +33,10 @@ tableextension 50308 "Sales & Rec Setup" extends "Sales & Receivables Setup"
             Caption = 'Warranty Item No.';
             TableRelation = Item."No.";
         }
+        field(50307; "Installtion Details"; Text[150])
+        {
+            DataClassification = ToBeClassified;
+        }
 
 
 

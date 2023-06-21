@@ -512,6 +512,7 @@ codeunit 50303 "POS Procedure"
         TradeAggre: record "Trade Aggrement";
         SalesHeder: record 36;
         SL: Record 37;
+        PaymentLine: Record "Payment Lines";
     begin
         Clear(NewUnitPrice);
         Evaluate(NewUnitPrice, LineDocumentpara);
@@ -519,10 +520,13 @@ codeunit 50303 "POS Procedure"
         SaleHeaderUnitPrice.SetCurrentKey("No.");
         SaleHeaderUnitPrice.SetRange("No.", DocumentNo);
         IF SaleHeaderUnitPrice.FindFirst() then begin
-            IF SaleHeaderUnitPrice.Status = SaleHeaderUnitPrice.Status::Released then begin
-                SaleHeaderUnitPrice.Status := SaleHeaderUnitPrice.Status::Open;
-                SaleHeaderUnitPrice.Modify();
-            end;
+            SaleHeaderUnitPrice.TestField(Status, SaleHeaderUnitPrice.Status::Open);
+
+            PaymentLine.Reset();
+            PaymentLine.SetRange("Document No.", SaleHeaderUnitPrice."No.");
+            IF PaymentLine.FindFirst() then
+                Error('You can not change the price when payment line is exist.');
+
             SalesLineunitPrice.Reset();
             SalesLineunitPrice.SetCurrentKey("Document No.", "Line No.");
             SalesLineunitPrice.SetRange("Document No.", SaleHeaderUnitPrice."No.");
@@ -547,8 +551,8 @@ codeunit 50303 "POS Procedure"
                     IF TradeAggre.FindFirst() then begin
                         IF TradeAggre."M.R.P" < SalesLineunitPrice."Unit Price Incl. of Tax" then
                             Error('Amount should not be more than M.R.P INR ' + Format(TradeAggre."M.R.P"));
-                        IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
-                            Error('Amount should not be less than FNNLC INR ' + Format(TradeAggre.FNNLC));
+                        // IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
+                        ///   Error('Amount should not be less than FNNLC INR ' + Format(TradeAggre.FNNLC));
                         IF TradeAggre."Last Selling Price" > SalesLineunitPrice."Unit Price Incl. of Tax" then begin
                             ApprovalMailSent(SalesLineunitPrice, TradeAggre);
                         end;
@@ -557,8 +561,8 @@ codeunit 50303 "POS Procedure"
                         IF TradeAggre.FindFirst() then begin
                             IF TradeAggre."M.R.P" < SalesLineunitPrice."Unit Price Incl. of Tax" then
                                 Error('Amount should not be more than %1 M.R.P INR ' + Format(TradeAggre."M.R.P"));
-                            IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
-                                Error('Amount should not be less than %1 FNNLC INR ' + Format(TradeAggre.FNNLC));
+                            // IF TradeAggre.FNNLC > SalesLineunitPrice."Unit Price Incl. of Tax" then
+                            //   Error('Amount should not be less than %1 FNNLC INR ' + Format(TradeAggre.FNNLC));
                             IF TradeAggre."Last Selling Price" > SalesLineunitPrice."Unit Price Incl. of Tax" then begin
                                 ApprovalMailSent(SalesLineunitPrice, TradeAggre);
                             end;
@@ -1039,8 +1043,10 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
-                SalesLine.TestField("Unit Price");
+                If SalesLine."Warranty Parent Line No." = 0 then
+                    SalesLine.TestField("Unit Price");
             until SalesLine.Next() = 0;
+
 
         SalesHeader.Reset();
         SalesHeader.SetRange("No.", DocumentNo);
@@ -1067,12 +1073,10 @@ codeunit 50303 "POS Procedure"
                 repeat
                     TotalPayemtamt += PaymentLine.Amount;
                 until PaymentLine.Next() = 0;
-            /* Temp Comment
-            IF TotalPayemtamt <> SalesHeader."Amount To Customer" then
-                Error('Sales Order amount is not match with Payment amount %1 with %2', TotalPayemtamt, SalesHeader."Amount To Customer")
-            else
-            */
-            begin
+
+            IF TotalPayemtamt > SalesHeader."Amount To Customer" then
+                Error('You cannot accept the payment amount %1 more then Order amount %2', TotalPayemtamt, SalesHeader."Amount To Customer")
+            else begin
                 BankPayentReceiptAutoPost(SalesHeader);
                 SalesHeader.Reset();
                 SalesHeader.SetRange("No.", SalesHeader."No.");
@@ -1159,8 +1163,11 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
-                SalesLine.TestField("Unit Price");
+                If SalesLine."Warranty Parent Line No." = 0 then
+                    SalesLine.TestField("Unit Price");
             until SalesLine.Next() = 0;
+
+
 
 
         SalesHdr.Reset();
@@ -1193,7 +1200,9 @@ codeunit 50303 "POS Procedure"
                 repeat
                     TotalPayemtamt += PaymentLine.Amount;
                 until PaymentLine.Next() = 0;
-            begin
+            IF TotalPayemtamt > SalesHdr."Amount To Customer" then
+                Error('You cannot accept the payment amount %1 more then Order amount %2', TotalPayemtamt, SalesHdr."Amount To Customer")
+            else begin
                 PaymentLine.Reset();
                 PaymentLine.SetRange("Document No.", documentno);
                 PaymentLine.SetRange(Posted, false);
