@@ -253,6 +253,14 @@ report 50310 "Tax Invoice"
                 {
 
                 }
+                column(Exchange_Comment; "Exchange Comment")
+                {
+
+                }
+                column(GL_Serial_No_; "Serial No.")
+                {
+
+                }
 
                 dataitem("Value Entry"; "Value Entry")
                 {
@@ -360,6 +368,9 @@ report 50310 "Tax Invoice"
                     //     REPEAT
                     //         TotalAmount += recSalesInvoiceLine.Amount;
                     //     UNTIL recSalesInvoiceLine.NEXT = 0;
+
+                    //Comments
+
 
 
                 end;
@@ -483,13 +494,12 @@ report 50310 "Tax Invoice"
                     //TotalAmt += recSalesInvLine.Amount;
 
                     UNTIL recSalesInvLine.NEXT = 0;
-                //Message('%1', TotalAmt);
+
 
                 //TotalAmount := TotalAmt + TotalGST;
-                //Message('%1', TotalAmount);
+                //balanceamount := TotalAmount - TotalPaidAmount;
                 //balanceamount := TotalAmount - TotalPaidAmount;
 
-                //balanceamount := TotalAmount - TotalPaidAmount;
 
 
 
@@ -557,6 +567,7 @@ report 50310 "Tax Invoice"
         txt4: Text;
         TotalGST: Decimal;
         Salespersoncode: Text[250];
+        SIL: Record "Sales Invoice Line";
         recSIL: Record "Sales Invoice Line";
         TotalAmt: Decimal;
         SH: record "Sales Invoice Header";

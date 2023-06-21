@@ -78,6 +78,7 @@ codeunit 50301 "Event and Subscribers"
         CalcStatistics.GetPostedsalesInvStatisticsAmount(SalesInvoiceHeader, TotalInvoiceAmt);
         PaymentLine.Reset();
         PaymentLine.SetRange("Document No.", SalesHeader."No.");
+        PaymentLine.SetRange(Posted, true);
         IF PaymentLine.FindSet() then
             repeat
                 TotalPaymentAmt += PaymentLine.Amount;

@@ -4968,7 +4968,7 @@ invoice.</Value>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>10.03371cm</Top>
             <Left>0cm</Left>
-            <Height>0.69016cm</Height>
+            <Height>0.39912cm</Height>
             <Width>20.27721cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
@@ -5021,9 +5021,9 @@ invoice.</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox91</rd:DefaultName>
-            <Top>10.72387cm</Top>
+            <Top>10.83852cm</Top>
             <Left>0cm</Left>
-            <Height>0.96886cm</Height>
+            <Height>0.85421cm</Height>
             <Width>20.27721cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
@@ -5629,6 +5629,39 @@ invoice.</Value>
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox103">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Comments:</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox103</rd:DefaultName>
+            <Top>10.43283cm</Top>
+            <Left>0.00296cm</Left>
+            <Height>0.40569cm</Height>
+            <Width>20.28014cm</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <Height>25.03894cm</Height>
         <Style />
@@ -5882,6 +5915,12 @@ End Function
         </Field>
         <Field Name="WithSerialNo">
           <DataField>WithSerialNo</DataField>
+        </Field>
+        <Field Name="Exchange_Comment">
+          <DataField>Exchange_Comment</DataField>
+        </Field>
+        <Field Name="GL_Serial_No_">
+          <DataField>GL_Serial_No_</DataField>
         </Field>
         <Field Name="Serial_No_">
           <DataField>Serial_No_</DataField>

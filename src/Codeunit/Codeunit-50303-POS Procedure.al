@@ -335,10 +335,11 @@ codeunit 50303 "POS Procedure"
         IF SalesHdr.FindFirst() then begin
             SalesHdr."Posted By" := staffid;
             SalesHdr.Modify();
-            IF SalesHdr.Status = SalesHdr.Status::Released then begin
-                SalesHdr.Status := SalesHdr.Status::Open;
-                SalesHdr.Modify();
-            end;
+            SalesHdr.TestField(Status, SalesHdr.Status::Released);
+            // IF SalesHdr.Status = SalesHdr.Status::Released then begin
+            //     SalesHdr.Status := SalesHdr.Status::Open;
+            //     SalesHdr.Modify();
+            // end;
             SalesLine.Reset();
             salesline.SetCurrentKey("Document No.");
             SalesLine.SetRange("Document No.", SalesHdr."No.");
@@ -379,29 +380,30 @@ codeunit 50303 "POS Procedure"
         IF SaleHeaderInv.FindFirst() then begin
             SaleHeaderInv."Posted By" := staffid;
             SaleHeaderInv.Modify();
-            IF SaleHeaderInv.Status = SaleHeaderInv.Status::Released then begin
-                SaleHeaderInv.Status := SaleHeaderInv.Status::Open;
-                SaleHeaderInv.Modify(true);
-            end;
-            SaleLinerInv.Reset();
-            SaleLinerInv.SetCurrentKey("Document No.", "Line No.");
-            SaleLinerInv.SetRange("Document No.", SaleHeaderInv."No.");
-            SaleLinerInv.SetRange("Line No.", LineNo);
-            IF SaleLinerInv.FindFirst() then begin
-                SaleLinerInv.validate("Qty. to Ship", SaleLinerInv."Qty. to Ship");
-                SaleLinerInv.Validate("Qty. to Invoice", SaleLinerInv."Qty. to Ship");
-                SaleLinerInv.Modify(true);
-                ReleaseSalesDoc.PerformManualRelease(SaleHeaderInv);
-                SaleHeaderInv.Modify(true);
-                OrderNo := SaleHeaderInv."No.";
-                Salespost.Run(SaleHeaderInv);
-                SIH.Reset();
-                SIH.SetRange("Order No.", OrderNo);
-                IF SIH.FindFirst() then
-                    exit('Success;' + SIH."No.");
-            end
+            SaleHeaderInv.TestField(Status, SaleHeaderInv.Status::Released);
+            //IF SaleHeaderInv.Status = SaleHeaderInv.Status::Released then begin
+            // SaleHeaderInv.Status := SaleHeaderInv.Status::Open;
+            //SaleHeaderInv.Modify(true);
         end;
+        SaleLinerInv.Reset();
+        SaleLinerInv.SetCurrentKey("Document No.", "Line No.");
+        SaleLinerInv.SetRange("Document No.", SaleHeaderInv."No.");
+        SaleLinerInv.SetRange("Line No.", LineNo);
+        IF SaleLinerInv.FindFirst() then begin
+            SaleLinerInv.validate("Qty. to Ship", SaleLinerInv."Qty. to Ship");
+            SaleLinerInv.Validate("Qty. to Invoice", SaleLinerInv."Qty. to Ship");
+            SaleLinerInv.Modify(true);
+            ReleaseSalesDoc.PerformManualRelease(SaleHeaderInv);
+            SaleHeaderInv.Modify(true);
+            OrderNo := SaleHeaderInv."No.";
+            Salespost.Run(SaleHeaderInv);
+            SIH.Reset();
+            SIH.SetRange("Order No.", OrderNo);
+            IF SIH.FindFirst() then
+                exit('Success;' + SIH."No.");
+        end
     end;
+    //end;
 
     /// <summary>
     /// Receive GRN or Transfer Receipt
@@ -669,10 +671,19 @@ codeunit 50303 "POS Procedure"
         RecItem: Record 27;
         ChilPurchLine: Record 39;
         ChildTranLine: Record "Transfer Line";
+        SH: Record 36;
+        PH: Record 38;
+        TH: record "Transfer Header";
     begin
         Evaluate(SerialNo, input);
         Clear(LastEntryNo);
         DocFound := false;
+        //***Validaton ask by sourav to Sales order must be released before Item tracking
+        SH.Reset();
+        SH.SetRange("No.", documentno);
+        IF SH.FindFirst() then
+            SH.TestField(Status, SH.Status::Released);
+       
         SalesLine.Reset();
         SalesLine.SetRange("Document No.", documentno);
         SalesLine.SetRange("Line No.", lineno);
