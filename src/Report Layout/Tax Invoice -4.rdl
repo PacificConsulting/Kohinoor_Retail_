@@ -11,6 +11,244 @@
       <rd:DataSourceID>06713163-2721-4249-8edf-b157eaba6dd6</rd:DataSourceID>
     </DataSource>
   </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="SIH_No_">
+          <DataField>SIH_No_</DataField>
+        </Field>
+        <Field Name="IRNNo">
+          <DataField>IRNNo</DataField>
+        </Field>
+        <Field Name="IRNQRCode">
+          <DataField>IRNQRCode</DataField>
+        </Field>
+        <Field Name="CommentsLine">
+          <DataField>CommentsLine</DataField>
+        </Field>
+        <Field Name="salesReceivablesetupIntallation">
+          <DataField>salesReceivablesetupIntallation</DataField>
+        </Field>
+        <Field Name="CompName">
+          <DataField>CompName</DataField>
+        </Field>
+        <Field Name="CompName2">
+          <DataField>CompName2</DataField>
+        </Field>
+        <Field Name="Compinfo_bankname">
+          <DataField>Compinfo_bankname</DataField>
+        </Field>
+        <Field Name="Compinfo_AccountNo">
+          <DataField>Compinfo_AccountNo</DataField>
+        </Field>
+        <Field Name="Compinfo_IFSC">
+          <DataField>Compinfo_IFSC</DataField>
+        </Field>
+        <Field Name="ComPAN">
+          <DataField>ComPAN</DataField>
+        </Field>
+        <Field Name="ComHomepage">
+          <DataField>ComHomepage</DataField>
+        </Field>
+        <Field Name="Store_name">
+          <DataField>Store_name</DataField>
+        </Field>
+        <Field Name="StoreAddress1">
+          <DataField>StoreAddress1</DataField>
+        </Field>
+        <Field Name="StoreGSTIN">
+          <DataField>StoreGSTIN</DataField>
+        </Field>
+        <Field Name="Order_No_">
+          <DataField>Order_No_</DataField>
+        </Field>
+        <Field Name="Order_Date">
+          <DataField>Order_Date</DataField>
+        </Field>
+        <Field Name="Bill_to_Name">
+          <DataField>Bill_to_Name</DataField>
+        </Field>
+        <Field Name="Bill_to_Address">
+          <DataField>Bill_to_Address</DataField>
+        </Field>
+        <Field Name="Bill_to_Customer_No_">
+          <DataField>Bill_to_Customer_No_</DataField>
+        </Field>
+        <Field Name="Cust_EMail">
+          <DataField>Cust_EMail</DataField>
+        </Field>
+        <Field Name="Cust_PhoneNo">
+          <DataField>Cust_PhoneNo</DataField>
+        </Field>
+        <Field Name="ShiptoName">
+          <DataField>ShiptoName</DataField>
+        </Field>
+        <Field Name="ShiptoAdd">
+          <DataField>ShiptoAdd</DataField>
+        </Field>
+        <Field Name="Shiptocity">
+          <DataField>Shiptocity</DataField>
+        </Field>
+        <Field Name="Shipment_Date">
+          <DataField>Shipment_Date</DataField>
+        </Field>
+        <Field Name="Ship_to_GST_Reg__No_">
+          <DataField>Ship_to_GST_Reg__No_</DataField>
+        </Field>
+        <Field Name="ShiptoGSTIN">
+          <DataField>ShiptoGSTIN</DataField>
+        </Field>
+        <Field Name="CustGSTIN">
+          <DataField>CustGSTIN</DataField>
+        </Field>
+        <Field Name="Notext">
+          <DataField>Notext</DataField>
+        </Field>
+        <Field Name="Paymentmethod">
+          <DataField>Paymentmethod</DataField>
+        </Field>
+        <Field Name="ReLocation">
+          <DataField>ReLocation</DataField>
+        </Field>
+        <Field Name="TotalPaidAmount">
+          <DataField>TotalPaidAmount</DataField>
+        </Field>
+        <Field Name="TotalPaidAmountFormat">
+          <DataField>TotalPaidAmountFormat</DataField>
+        </Field>
+        <Field Name="PaymentAmount">
+          <DataField>PaymentAmount</DataField>
+        </Field>
+        <Field Name="PaymentAmountFormat">
+          <DataField>PaymentAmountFormat</DataField>
+        </Field>
+        <Field Name="balanceamount">
+          <DataField>balanceamount</DataField>
+        </Field>
+        <Field Name="balanceamountFormat">
+          <DataField>balanceamountFormat</DataField>
+        </Field>
+        <Field Name="Financecode">
+          <DataField>Financecode</DataField>
+        </Field>
+        <Field Name="TotalAmount">
+          <DataField>TotalAmount</DataField>
+        </Field>
+        <Field Name="TotalAmountFormat">
+          <DataField>TotalAmountFormat</DataField>
+        </Field>
+        <Field Name="Salespersoncode">
+          <DataField>Salespersoncode</DataField>
+        </Field>
+        <Field Name="ExchangeComments">
+          <DataField>ExchangeComments</DataField>
+        </Field>
+        <Field Name="SrNo">
+          <DataField>SrNo</DataField>
+        </Field>
+        <Field Name="Salesperson_Code">
+          <DataField>Salesperson_Code</DataField>
+        </Field>
+        <Field Name="Line_No_">
+          <DataField>Line_No_</DataField>
+        </Field>
+        <Field Name="Item_No_">
+          <DataField>Item_No_</DataField>
+        </Field>
+        <Field Name="No_">
+          <DataField>No_</DataField>
+        </Field>
+        <Field Name="Document_No_">
+          <DataField>Document_No_</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="Quantity">
+          <DataField>Quantity</DataField>
+        </Field>
+        <Field Name="QuantityFormat">
+          <DataField>QuantityFormat</DataField>
+        </Field>
+        <Field Name="Unit_Price">
+          <DataField>Unit_Price</DataField>
+        </Field>
+        <Field Name="Unit_PriceFormat">
+          <DataField>Unit_PriceFormat</DataField>
+        </Field>
+        <Field Name="Amount">
+          <DataField>Amount</DataField>
+        </Field>
+        <Field Name="AmountFormat">
+          <DataField>AmountFormat</DataField>
+        </Field>
+        <Field Name="AmountInWords1">
+          <DataField>AmountInWords1</DataField>
+        </Field>
+        <Field Name="HSNSACCode_SalesInvoiceLine">
+          <DataField>HSNSACCode_SalesInvoiceLine</DataField>
+        </Field>
+        <Field Name="SGST">
+          <DataField>SGST</DataField>
+        </Field>
+        <Field Name="SGSTFormat">
+          <DataField>SGSTFormat</DataField>
+        </Field>
+        <Field Name="SGSTPer">
+          <DataField>SGSTPer</DataField>
+        </Field>
+        <Field Name="SGSTPerFormat">
+          <DataField>SGSTPerFormat</DataField>
+        </Field>
+        <Field Name="CGST">
+          <DataField>CGST</DataField>
+        </Field>
+        <Field Name="CGSTFormat">
+          <DataField>CGSTFormat</DataField>
+        </Field>
+        <Field Name="CGSTPer">
+          <DataField>CGSTPer</DataField>
+        </Field>
+        <Field Name="CGSTPerFormat">
+          <DataField>CGSTPerFormat</DataField>
+        </Field>
+        <Field Name="IGST">
+          <DataField>IGST</DataField>
+        </Field>
+        <Field Name="IGSTFormat">
+          <DataField>IGSTFormat</DataField>
+        </Field>
+        <Field Name="IGSTPer">
+          <DataField>IGSTPer</DataField>
+        </Field>
+        <Field Name="IGSTPerFormat">
+          <DataField>IGSTPerFormat</DataField>
+        </Field>
+        <Field Name="WithSerialNo">
+          <DataField>WithSerialNo</DataField>
+        </Field>
+        <Field Name="Exchange_Comment">
+          <DataField>Exchange_Comment</DataField>
+        </Field>
+        <Field Name="GL_Serial_No_">
+          <DataField>GL_Serial_No_</DataField>
+        </Field>
+        <Field Name="Itemserialno">
+          <DataField>Itemserialno</DataField>
+        </Field>
+        <Field Name="Serial_No_">
+          <DataField>Serial_No_</DataField>
+        </Field>
+        <Field Name="SerialCaption">
+          <DataField>SerialCaption</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -2267,7 +2505,19 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>="Serial No. :-"+Fields!Serial_No_.Value+""+Fields!Itemserialno.Value</Value>
+                                  <Value>=Fields!SerialCaption.Value</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!Serial_No_.Value+""+Fields!Itemserialno.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -4439,8 +4689,8 @@ invoice.</Value>
                 <Width>1pt</Width>
               </LeftBorder>
               <RightBorder>
-                <Color>White</Color>
-                <Style>None</Style>
+                <Color>Black</Color>
+                <Style>Solid</Style>
                 <Width>1pt</Width>
               </RightBorder>
               <PaddingLeft>2pt</PaddingLeft>
@@ -4747,7 +4997,6 @@ invoice.</Value>
             </Style>
           </Rectangle>
           <Textbox Name="Textbox101">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -4776,7 +5025,7 @@ invoice.</Value>
             <rd:DefaultName>Textbox101</rd:DefaultName>
             <Top>4.29155cm</Top>
             <Left>16.15226cm</Left>
-            <Height>2.83027cm</Height>
+            <Height>3cm</Height>
             <Width>4.49537cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
@@ -4823,7 +5072,7 @@ invoice.</Value>
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>=First(Fields!CommentsLine.Value, "DataSet_Result")</Value>
+                    <Value>=Fields!CommentsLine.Value</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                     </Style>
@@ -4894,56 +5143,6 @@ invoice.</Value>
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
-              <LeftBorder>
-                <Color>Black</Color>
-                <Style>Solid</Style>
-                <Width>1pt</Width>
-              </LeftBorder>
-              <RightBorder>
-                <Color>Black</Color>
-                <Style>Solid</Style>
-                <Width>1pt</Width>
-              </RightBorder>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox28">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Tax Invoice</Value>
-                    <Style>
-                      <FontSize>14pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox28</rd:DefaultName>
-            <Top>0cm</Top>
-            <Left>0.00296cm</Left>
-            <Height>0.59154cm</Height>
-            <Width>20.64467cm</Width>
-            <ZIndex>11</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <TopBorder>
-                <Color>Black</Color>
-                <Style>Solid</Style>
-                <Width>1pt</Width>
-              </TopBorder>
               <LeftBorder>
                 <Color>Black</Color>
                 <Style>Solid</Style>
@@ -5208,20 +5407,6 @@ invoice.</Value>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>Payment Mode</Value>
-                        <Style>
-                          <FontSize>8pt</FontSize>
-                          <FontWeight>Normal</FontWeight>
-                        </Style>
-                      </TextRun>
-                      <TextRun>
-                        <Value>:  </Value>
-                        <Style>
-                          <FontSize>8pt</FontSize>
-                          <FontWeight>Bold</FontWeight>
-                        </Style>
-                      </TextRun>
-                      <TextRun>
                         <Value>=Fields!Paymentmethod.Value</Value>
                         <Style>
                           <FontSize>8pt</FontSize>
@@ -5233,10 +5418,10 @@ invoice.</Value>
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox52</rd:DefaultName>
-                <Top>1.26302cm</Top>
-                <Left>0.04343cm</Left>
-                <Height>0.34364cm</Height>
-                <Width>8.35328cm</Width>
+                <Top>1.29264cm</Top>
+                <Left>2.12305cm</Left>
+                <Height>0.80924cm</Height>
+                <Width>6.24191cm</Width>
                 <ZIndex>6</ZIndex>
                 <Style>
                   <Border>
@@ -5257,15 +5442,15 @@ invoice.</Value>
                       <TextRun>
                         <Value>IRN No.:  </Value>
                         <Style>
-                          <FontSize>8pt</FontSize>
+                          <FontSize>7pt</FontSize>
                           <FontWeight>Bold</FontWeight>
                         </Style>
                       </TextRun>
                       <TextRun>
                         <Value>=First(Fields!IRNNo.Value, "DataSet_Result")</Value>
                         <Style>
-                          <FontSize>8pt</FontSize>
-                          <FontWeight>Normal</FontWeight>
+                          <FontSize>7pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
                         </Style>
                       </TextRun>
                     </TextRuns>
@@ -5273,7 +5458,7 @@ invoice.</Value>
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox52</rd:DefaultName>
-                <Top>1.66091cm</Top>
+                <Top>2.16891cm</Top>
                 <Left>0.04028cm</Left>
                 <Height>0.34364cm</Height>
                 <Width>8.35328cm</Width>
@@ -5295,20 +5480,6 @@ invoice.</Value>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>Finance Code: </Value>
-                        <Style>
-                          <FontSize>8pt</FontSize>
-                          <FontWeight>Normal</FontWeight>
-                        </Style>
-                      </TextRun>
-                      <TextRun>
-                        <Value xml:space="preserve"> </Value>
-                        <Style>
-                          <FontSize>8pt</FontSize>
-                          <FontWeight>Bold</FontWeight>
-                        </Style>
-                      </TextRun>
-                      <TextRun>
                         <Value>=Fields!Financecode.Value</Value>
                         <Style>
                           <FontSize>8pt</FontSize>
@@ -5319,10 +5490,10 @@ invoice.</Value>
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox73</rd:DefaultName>
-                <Top>2.07052cm</Top>
-                <Left>0cm</Left>
-                <Height>1.41429cm</Height>
-                <Width>8.39671cm</Width>
+                <Top>2.58876cm</Top>
+                <Left>2.12305cm</Left>
+                <Height>0.89605cm</Height>
+                <Width>6.24191cm</Width>
                 <ZIndex>8</ZIndex>
                 <Style>
                   <Border>
@@ -5350,13 +5521,79 @@ invoice.</Value>
                   </Border>
                 </Style>
               </Image>
+              <Textbox Name="Textbox5">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Payment Mode: </Value>
+                        <Style>
+                          <FontSize>7pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox5</rd:DefaultName>
+                <Top>1.29264cm</Top>
+                <Left>0cm</Left>
+                <Height>0.80924cm</Height>
+                <Width>2.12305cm</Width>
+                <ZIndex>10</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox13">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Finance Code: </Value>
+                        <Style>
+                          <FontSize>7pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox5</rd:DefaultName>
+                <Top>2.58876cm</Top>
+                <Left>0cm</Left>
+                <Height>0.89605cm</Height>
+                <Width>2.08778cm</Width>
+                <ZIndex>11</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>0.63035cm</Top>
             <Left>8.84446cm</Left>
             <Height>4.48081cm</Height>
             <Width>11.82863cm</Width>
-            <ZIndex>12</ZIndex>
+            <ZIndex>11</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -5373,6 +5610,56 @@ invoice.</Value>
               </RightBorder>
             </Style>
           </Rectangle>
+          <Textbox Name="Textbox28">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Tax Invoice</Value>
+                    <Style>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox28</rd:DefaultName>
+            <Top>0cm</Top>
+            <Left>0.00296cm</Left>
+            <Height>0.59154cm</Height>
+            <Width>20.64467cm</Width>
+            <ZIndex>12</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <TopBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </TopBorder>
+              <LeftBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </LeftBorder>
+              <RightBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </RightBorder>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <Height>23.98061cm</Height>
         <Style />
@@ -5397,6 +5684,12 @@ invoice.</Value>
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -5436,239 +5729,4 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Fields>
-        <Field Name="SIH_No_">
-          <DataField>SIH_No_</DataField>
-        </Field>
-        <Field Name="IRNNo">
-          <DataField>IRNNo</DataField>
-        </Field>
-        <Field Name="IRNQRCode">
-          <DataField>IRNQRCode</DataField>
-        </Field>
-        <Field Name="CommentsLine">
-          <DataField>CommentsLine</DataField>
-        </Field>
-        <Field Name="salesReceivablesetupIntallation">
-          <DataField>salesReceivablesetupIntallation</DataField>
-        </Field>
-        <Field Name="CompName">
-          <DataField>CompName</DataField>
-        </Field>
-        <Field Name="CompName2">
-          <DataField>CompName2</DataField>
-        </Field>
-        <Field Name="Compinfo_bankname">
-          <DataField>Compinfo_bankname</DataField>
-        </Field>
-        <Field Name="Compinfo_AccountNo">
-          <DataField>Compinfo_AccountNo</DataField>
-        </Field>
-        <Field Name="Compinfo_IFSC">
-          <DataField>Compinfo_IFSC</DataField>
-        </Field>
-        <Field Name="ComPAN">
-          <DataField>ComPAN</DataField>
-        </Field>
-        <Field Name="ComHomepage">
-          <DataField>ComHomepage</DataField>
-        </Field>
-        <Field Name="Store_name">
-          <DataField>Store_name</DataField>
-        </Field>
-        <Field Name="StoreAddress1">
-          <DataField>StoreAddress1</DataField>
-        </Field>
-        <Field Name="StoreGSTIN">
-          <DataField>StoreGSTIN</DataField>
-        </Field>
-        <Field Name="Order_No_">
-          <DataField>Order_No_</DataField>
-        </Field>
-        <Field Name="Order_Date">
-          <DataField>Order_Date</DataField>
-        </Field>
-        <Field Name="Bill_to_Name">
-          <DataField>Bill_to_Name</DataField>
-        </Field>
-        <Field Name="Bill_to_Address">
-          <DataField>Bill_to_Address</DataField>
-        </Field>
-        <Field Name="Bill_to_Customer_No_">
-          <DataField>Bill_to_Customer_No_</DataField>
-        </Field>
-        <Field Name="Cust_EMail">
-          <DataField>Cust_EMail</DataField>
-        </Field>
-        <Field Name="Cust_PhoneNo">
-          <DataField>Cust_PhoneNo</DataField>
-        </Field>
-        <Field Name="ShiptoName">
-          <DataField>ShiptoName</DataField>
-        </Field>
-        <Field Name="ShiptoAdd">
-          <DataField>ShiptoAdd</DataField>
-        </Field>
-        <Field Name="Shiptocity">
-          <DataField>Shiptocity</DataField>
-        </Field>
-        <Field Name="Shipment_Date">
-          <DataField>Shipment_Date</DataField>
-        </Field>
-        <Field Name="Ship_to_GST_Reg__No_">
-          <DataField>Ship_to_GST_Reg__No_</DataField>
-        </Field>
-        <Field Name="ShiptoGSTIN">
-          <DataField>ShiptoGSTIN</DataField>
-        </Field>
-        <Field Name="CustGSTIN">
-          <DataField>CustGSTIN</DataField>
-        </Field>
-        <Field Name="Notext">
-          <DataField>Notext</DataField>
-        </Field>
-        <Field Name="Paymentmethod">
-          <DataField>Paymentmethod</DataField>
-        </Field>
-        <Field Name="ReLocation">
-          <DataField>ReLocation</DataField>
-        </Field>
-        <Field Name="TotalPaidAmount">
-          <DataField>TotalPaidAmount</DataField>
-        </Field>
-        <Field Name="TotalPaidAmountFormat">
-          <DataField>TotalPaidAmountFormat</DataField>
-        </Field>
-        <Field Name="PaymentAmount">
-          <DataField>PaymentAmount</DataField>
-        </Field>
-        <Field Name="PaymentAmountFormat">
-          <DataField>PaymentAmountFormat</DataField>
-        </Field>
-        <Field Name="balanceamount">
-          <DataField>balanceamount</DataField>
-        </Field>
-        <Field Name="balanceamountFormat">
-          <DataField>balanceamountFormat</DataField>
-        </Field>
-        <Field Name="Financecode">
-          <DataField>Financecode</DataField>
-        </Field>
-        <Field Name="TotalAmount">
-          <DataField>TotalAmount</DataField>
-        </Field>
-        <Field Name="TotalAmountFormat">
-          <DataField>TotalAmountFormat</DataField>
-        </Field>
-        <Field Name="Salespersoncode">
-          <DataField>Salespersoncode</DataField>
-        </Field>
-        <Field Name="ExchangeComments">
-          <DataField>ExchangeComments</DataField>
-        </Field>
-        <Field Name="SrNo">
-          <DataField>SrNo</DataField>
-        </Field>
-        <Field Name="Salesperson_Code">
-          <DataField>Salesperson_Code</DataField>
-        </Field>
-        <Field Name="Line_No_">
-          <DataField>Line_No_</DataField>
-        </Field>
-        <Field Name="Item_No_">
-          <DataField>Item_No_</DataField>
-        </Field>
-        <Field Name="No_">
-          <DataField>No_</DataField>
-        </Field>
-        <Field Name="Document_No_">
-          <DataField>Document_No_</DataField>
-        </Field>
-        <Field Name="Description">
-          <DataField>Description</DataField>
-        </Field>
-        <Field Name="Quantity">
-          <DataField>Quantity</DataField>
-        </Field>
-        <Field Name="QuantityFormat">
-          <DataField>QuantityFormat</DataField>
-        </Field>
-        <Field Name="Unit_Price">
-          <DataField>Unit_Price</DataField>
-        </Field>
-        <Field Name="Unit_PriceFormat">
-          <DataField>Unit_PriceFormat</DataField>
-        </Field>
-        <Field Name="Amount">
-          <DataField>Amount</DataField>
-        </Field>
-        <Field Name="AmountFormat">
-          <DataField>AmountFormat</DataField>
-        </Field>
-        <Field Name="AmountInWords1">
-          <DataField>AmountInWords1</DataField>
-        </Field>
-        <Field Name="HSNSACCode_SalesInvoiceLine">
-          <DataField>HSNSACCode_SalesInvoiceLine</DataField>
-        </Field>
-        <Field Name="SGST">
-          <DataField>SGST</DataField>
-        </Field>
-        <Field Name="SGSTFormat">
-          <DataField>SGSTFormat</DataField>
-        </Field>
-        <Field Name="SGSTPer">
-          <DataField>SGSTPer</DataField>
-        </Field>
-        <Field Name="SGSTPerFormat">
-          <DataField>SGSTPerFormat</DataField>
-        </Field>
-        <Field Name="CGST">
-          <DataField>CGST</DataField>
-        </Field>
-        <Field Name="CGSTFormat">
-          <DataField>CGSTFormat</DataField>
-        </Field>
-        <Field Name="CGSTPer">
-          <DataField>CGSTPer</DataField>
-        </Field>
-        <Field Name="CGSTPerFormat">
-          <DataField>CGSTPerFormat</DataField>
-        </Field>
-        <Field Name="IGST">
-          <DataField>IGST</DataField>
-        </Field>
-        <Field Name="IGSTFormat">
-          <DataField>IGSTFormat</DataField>
-        </Field>
-        <Field Name="IGSTPer">
-          <DataField>IGSTPer</DataField>
-        </Field>
-        <Field Name="IGSTPerFormat">
-          <DataField>IGSTPerFormat</DataField>
-        </Field>
-        <Field Name="WithSerialNo">
-          <DataField>WithSerialNo</DataField>
-        </Field>
-        <Field Name="Exchange_Comment">
-          <DataField>Exchange_Comment</DataField>
-        </Field>
-        <Field Name="GL_Serial_No_">
-          <DataField>GL_Serial_No_</DataField>
-        </Field>
-        <Field Name="Itemserialno">
-          <DataField>Itemserialno</DataField>
-        </Field>
-        <Field Name="Serial_No_">
-          <DataField>Serial_No_</DataField>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-    </DataSet>
-  </DataSets>
 </Report>

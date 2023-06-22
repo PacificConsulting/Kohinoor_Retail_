@@ -299,6 +299,10 @@ report 50310 "Tax Invoice"
                         {
 
                         }
+                        column(SerialCaption; SerialCaption)
+                        {
+
+                        }
 
                     }
                 }
@@ -306,7 +310,29 @@ report 50310 "Tax Invoice"
 
                 trigger OnAfterGetRecord() //SIL
                 begin
-                    // Message('%1 ,%2', "Line No.", Type);
+                    Clear(SerialCaption);
+                    if "Sales Invoice Line".Type = "Sales Invoice Line".Type::Item then begin
+                        VE.Reset();
+                        VE.SetRange("Document No.", "Sales Invoice Line"."Document No.");
+                        VE.SetRange("Document Line No.", "Sales Invoice Line"."Line No.");
+                        IF VE.FindFirst() then begin
+                            ILE.Reset();
+                            ILE.SetRange("Entry No.", VE."Item Ledger Entry No.");
+                            ILE.SetFilter("Serial No.", '<>%1', '');
+                            if ILE.FindFirst() then
+                                SerialCaption := 'Serial No.:'
+                            else
+                                SerialCaption := '';
+                        end;
+                    end else
+                        if "Sales Invoice Line".Type = "Sales Invoice Line".Type::"G/L Account" then begin
+                            if "Sales Invoice Line"."Serial No." <> '' then
+                                SerialCaption := 'Serial No.:'
+                            else
+                                SerialCaption := '';
+                        end;
+
+
                     SrNo += 1;
                     CGST := 0;
                     IGST := 0;
@@ -376,9 +402,7 @@ report 50310 "Tax Invoice"
                     else
                         ItemNo := "No.";
 
-                    IF Type = Type::" " then begin
-                        CommentsLine += Description + ',';
-                    end;
+
                     Clear(Itemserialno);
                     if type = Type::"G/L Account" then begin
                         IF "Sales Invoice Line"."Serial No." <> '' then
@@ -448,7 +472,6 @@ report 50310 "Tax Invoice"
 
                 recSIL.Reset();
                 recSIL.SetRange("Document No.", "No.");
-                // recSIL.SetRange("Document Type", "Document Type"::Order);
                 if recSIL.FindSet() then begin
                     repeat
                         IF recSIL."Salesperson Code" <> '' then
@@ -497,6 +520,14 @@ report 50310 "Tax Invoice"
                         ExchangeComments += SalesInvLine."Exchange Comment";
                     until SalesInvLine.Next = 0;
 
+
+                SalesInvLine.Reset();
+                SalesInvLine.SetRange("Document No.", "No.");
+                SalesInvLine.SetRange(Type, Type::" ");
+                if SalesInvLine.FindFirst() then
+                    repeat
+                        CommentsLine += SalesInvLine.Description + ',';
+                    until SalesInvLine.Next() = 0;
 
             end;
 
@@ -569,7 +600,7 @@ report 50310 "Tax Invoice"
         SH: record "Sales Invoice Header";
         recSalesInvLine: Record "Sales Invoice Line";
         loc: Record Location;
-        Financecode: Code[200];
+        Financecode: Code[250];
         RecPaymentlines: Record "Posted Payment Lines";
         TotalPaidAmount: Decimal;
         PaymentAmount: Decimal;
@@ -606,7 +637,7 @@ report 50310 "Tax Invoice"
         WithoutSerialNo: Boolean;
         Notext: Text[20];
         PostedPaymentLines: Record "Posted Payment Lines";
-        Paymentmethod: Code[50];
+        Paymentmethod: Code[250];
         ReLocation: Record Location;
         balanceamount: Decimal;
         CalcSta: Codeunit "Calculate Statistics";
@@ -615,6 +646,8 @@ report 50310 "Tax Invoice"
         ExchangeComments: Text[250];
         CommentsLine: Text;
         recEInvoice: Record "E-Invoice Detail";
+        VE: Record "Value Entry";
+        SerialCaption: Text;
 
     //GLE:Record 
 }

@@ -521,7 +521,7 @@ report 50311 "Sales Order"
         txt2: Text;
         txt3: Text;
         SL: Record "Sales Line";
-        Salespersoncode: code[50];
+        Salespersoncode: code[250];
         recSL: record "Sales Line";
 
         loc: Record Location;
@@ -531,7 +531,7 @@ report 50311 "Sales Order"
         AmountIValue: Decimal;
         RPaylines: RECORD "Payment Lines";
 
-        Financecode: Code[200];
+        Financecode: Code[250];
         TotalAmt: Decimal;
         Compinfo: record "Company Information";
         SrNo: Integer;
@@ -572,7 +572,7 @@ report 50311 "Sales Order"
         customer: Record Customer;
         TotalAmount: decimal;
         PaymentLines: Record "Payment Lines";
-        Paymentmethod: Code[200];
+        Paymentmethod: Code[250];
         ReLocation: Record Location;
         recsalesline: record "Sales Line";
         CGSTAmount: Decimal;

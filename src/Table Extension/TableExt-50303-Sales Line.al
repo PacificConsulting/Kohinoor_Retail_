@@ -44,10 +44,10 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
         }
         modify(Quantity)
         {
-            trigger OnBeforeValidate()
-            begin
-                Message('Hi');
-            end;
+            // trigger OnBeforeValidate()
+            // begin
+            //     Message('Hi');
+            // end;
 
             trigger OnAfterValidate()
             var
