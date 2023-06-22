@@ -389,10 +389,7 @@ report 50311 "Sales Order"
                 RPaylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
                 if RPaylines.FindSet() then begin
                     repeat
-
                         Financecode += RPaylines."Approval Code" + ',';
-                    // else
-                    //Financecode := RPaylines."Approval Code";
                     until RPaylines.Next = 0;
                     if Financecode <> '' then
                         txt2 := DelStr(Financecode, StrLen(Financecode), 1);
@@ -403,7 +400,7 @@ report 50311 "Sales Order"
                 recSL.SetRange("Document Type", "Document Type"::Order);
                 if recSL.FindSet() then begin
                     repeat
-                        //if Salespersoncode <> '' then
+                        // If recSL."Salesperson Code" <> '' then
                         Salespersoncode += recSL."Salesperson Name" + ',';
                     until recSL.Next = 0;
                     if Salespersoncode <> '' then  ///pcpl

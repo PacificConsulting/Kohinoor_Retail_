@@ -438,7 +438,7 @@ report 50310 "Tax Invoice"
 
                 PostedPaylines.Reset();
                 PostedPaylines.SetRange("Document No.", "No.");
-                if PostedPaylines.FindFirst() then begin
+                if PostedPaylines.FindSet() then begin
                     repeat
                         Financecode += PostedPaylines."Approval Code" + ',';
                     until PostedPaylines.Next = 0;
