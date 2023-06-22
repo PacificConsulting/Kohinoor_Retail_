@@ -200,9 +200,18 @@ report 50311 "Sales Order"
             {
 
             }
+            column(ExchangeComments; ExchangeComments)
+            {
 
+            }
+            column(installation_details; salesreceivablesetup."Installtion Details")
+            {
 
+            }
+            column(Comments; Comments)
+            {
 
+            }
 
             dataitem("Sales Line"; "Sales Line")
             {
@@ -296,18 +305,9 @@ report 50311 "Sales Order"
                     else
                         ItemNo := "No.";
 
-                    // SL.Reset();
-                    // SL.SetRange("Document No.", "No.");
-                    // SL.SetRange(Type, recsalesline.Type::item);
-                    // if SL.FindSet then
-                    //     ////repeat
-                    //     rate := SL."Unit Price" * SL.Quantity;
-                    // Message('%1', rate);
-                    //until SL.Next = 0;
-
-                    // mybalance := ("Sales Line".Amount + CGSTAmount + SGSTAmount + IGSTAmount);
-                    // Message(format(mybalance));
-
+                    IF Type = Type::" " then begin
+                        Comments += Description + ',';
+                    end;
                 end;
             }
             trigger OnAfterGetRecord()  //SH
@@ -387,7 +387,7 @@ report 50311 "Sales Order"
                 RPaylines.Reset();
                 RPaylines.SetRange("Document No.", "No.");
                 RPaylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
-                if RPaylines.FindFirst() then begin
+                if RPaylines.FindSet() then begin
                     repeat
 
                         Financecode += RPaylines."Approval Code" + ',';
@@ -428,15 +428,7 @@ report 50311 "Sales Order"
                     REPEAT
                         TotalAmount1 += recsalesline.Amount;
                     UNTIL recsalesline.NEXT = 0;
-                //TotalAmount1 := ROUND(TotalAmount1, 0.01, '>');
-                // Message('Amount : %1', TotalAmount1);
 
-
-                // //PCPL-064<<9june2023
-                // IF SalesHedr.get("Sales Line"."Document Type", "Sales Line"."Document No.") then
-                //     TotalGSTAmountFinal := GSTFooterTotal(SalesHedr);
-                // Message(format(TotalGSTAmountFinal));
-                //PCPL-064<<9june2023
 
                 //PaidAmount
                 RecPaymentlines.Reset();
@@ -464,6 +456,18 @@ report 50311 "Sales Order"
                 //AmountInwords.FormatNoText(AmountInWords1, Round(BalanceAmount, 0.01, '>'), '');
                 AmountInwords.FormatNoText(AmountInWords1, Round((AmtInWordDecimal)), '');
                 // AmountInwords.FormatNoText(AmountInWords1, (AmountIValue), '');
+
+                //Exhanges comments
+                SLrec.Reset();
+                SLrec.SetRange("Document No.", "No.");
+                SLrec.SetRange(Type, Type::"G/L Account");
+                if SLrec.FindSet() then
+                    repeat
+                        ExchangeComments += SLrec."Exchange Comment";
+                    until SLrec.Next = 0;
+
+                //Installation
+                salesreceivablesetup.Get();
 
             end;
 
@@ -512,6 +516,7 @@ report 50311 "Sales Order"
 
     var
         mybalance: Decimal;
+        Comments: Text;
         CalSta: Codeunit "Calculate Statistics";
         AmtInWordDecimal: Decimal;
         bal: Decimal;
@@ -588,6 +593,9 @@ report 50311 "Sales Order"
         Paylines: Record "Payment Lines";
         ItemNo: Code[20];
         BalanceAmount: Decimal;
+        SLrec: record "Sales Line";
+        ExchangeComments: text[250];
+        salesreceivablesetup: record "Sales & Receivables Setup";
 
 
     //GST calculate 

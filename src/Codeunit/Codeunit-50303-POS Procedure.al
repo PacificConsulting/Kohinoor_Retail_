@@ -683,7 +683,7 @@ codeunit 50303 "POS Procedure"
         SH.SetRange("No.", documentno);
         IF SH.FindFirst() then
             SH.TestField(Status, SH.Status::Released);
-       
+
         SalesLine.Reset();
         SalesLine.SetRange("Document No.", documentno);
         SalesLine.SetRange("Line No.", lineno);
@@ -745,8 +745,8 @@ codeunit 50303 "POS Procedure"
                 ReservEntryInit.INSERT;
             End
             ELSE
-                EXIT('Insufficient Inventory'); //Until
-                                                //exit('Success');
+                Error('Insufficient Inventory'); //Until
+                                                 //exit('Success');
         end else begin
             Evaluate(SerialNo, input);
             Clear(LastEntryNo);

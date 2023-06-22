@@ -17,6 +17,23 @@ report 50310 "Tax Invoice"
             {
 
             }
+            column(IRNNo; recEInvoice."E-Invoice IRN No.")
+            {
+
+            }
+            column(IRNQRCode; recEInvoice."E-Invoice QR Code")
+            {
+
+            }
+            column(CommentsLine; CommentsLine)
+            {
+
+            }
+            column(salesReceivablesetupIntallation; salesReceivablesetup."Installtion Details")
+            {
+
+            }
+
             column(CompName; Compinfo.Name)
             {
 
@@ -168,6 +185,10 @@ report 50310 "Tax Invoice"
             {
 
             }
+            column(ExchangeComments; ExchangeComments)
+            {
+
+            }
 
 
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
@@ -193,10 +214,10 @@ report 50310 "Tax Invoice"
                 {
 
                 }
-                // column(Item_No_; "Sales Invoice Line"."No.")
-                // {
+                column(No_; "Sales Invoice Line"."No.")
+                {
 
-                // }
+                }
                 column(Document_No_; "Document No.")
                 {
 
@@ -261,19 +282,24 @@ report 50310 "Tax Invoice"
                 {
 
                 }
+                //column(Itemserialno; 'Serial No.' + '-' + Itemserialno)
+                column(Itemserialno; Itemserialno)
+                {
 
+                }
                 dataitem("Value Entry"; "Value Entry")
                 {
                     DataItemLink = "Document No." = FIELD("Document No."),
                     "Document Line No." = FIELD("Line No.");
                     dataitem("Item Ledger Entry"; "Item Ledger Entry")
                     {
-                        //DataItemLink = "Entry No." = FIELD();
                         DataItemLink = "Entry No." = FIELD("Item Ledger Entry No.");
-                        column(Serial_No_; 'Serial No.' + '-' + "Serial No.")
+                        //column(Serial_No_; 'Serial No.' + '-' + "Serial No.")
+                        column(Serial_No_; "Serial No.")
                         {
 
                         }
+
                     }
                 }
 
@@ -326,11 +352,9 @@ report 50310 "Tax Invoice"
                     end;
                     TotalGST := SGST + CGST + IGST;
 
-                    //TotalAmt := 0;
-                    //TotalAmount := 0;
+
                     //Clear(TotalAmt);
                     Clear(TotalAmount);
-                    //Clear(TotalAmt);
                     CalcSta.GetPostedSalesInvStatisticsAmount("Sales Invoice Header", TotalAmount);
                     /*
                     recSIL.Reset();
@@ -345,53 +369,43 @@ report 50310 "Tax Invoice"
 
                     //TotalAmount := Amount + SGST + CGST + IGST;
                     AmountInwords.InitTextVariable();
-                    //AmountInwords.FormatNoText(AmountInWords1, ROUND(balanceamount), '');
-                    //AmountInwords.FormatNoText(AmountInWords1, ROUND(TotalAmount), '');
                     AmountInwords.FormatNoText(AmountInWords1, ROUND((TotalAmount), 1), '');
-
 
                     if Type = Type::"G/L Account" then
                         ItemNo := "Exchange Item No."
                     else
                         ItemNo := "No.";
-                    // if Type = Type::Item then
-                    //     ItemNo := "No."
-                    // else
-                    //     ItemNo := "Exchange Item No.";
 
-
-                    //AoumntInWords
-                    // recSalesInvoiceLine.RESET;
-                    // recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Invoice Header"."No.");
-                    // recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
-                    // IF recSalesInvoiceLine.FINDFIRST THEN
-                    //     REPEAT
-                    //         TotalAmount += recSalesInvoiceLine.Amount;
-                    //     UNTIL recSalesInvoiceLine.NEXT = 0;
-
-                    //Comments
-
-
-
+                    IF Type = Type::" " then begin
+                        CommentsLine += Description + ',';
+                    end;
+                    Clear(Itemserialno);
+                    if type = Type::"G/L Account" then begin
+                        IF "Sales Invoice Line"."Serial No." <> '' then
+                            IF "No." <> '402053' then
+                                Itemserialno := "Sales Invoice Line"."Serial No.";
+                    end;
                 end;
+
             }
             trigger OnAfterGetRecord()  //SIH
             begin
-                if RecCust.get("Sales Invoice Header"."Sell-to Customer No.") then
+                salesReceivablesetup.Get();
+                recEInvoice.RESET;
+                recEInvoice.SETRANGE("Document No.", "Sales Invoice Header"."No.");
+                IF recEInvoice.FINDFIRST THEN
+                    recEInvoice.CALCFIELDS(recEInvoice."E-Invoice QR Code");
+
+                if RecCust.get("Sales Invoice Header"."Sell-to Customer No.") then begin
                     Mail := RecCust."E-Mail";
-                PhoneNo := RecCust."Phone No.";
-                CustGSTIN := RecCust."GST Registration No.";
+                    PhoneNo := RecCust."Phone No.";
+                    CustGSTIN := RecCust."GST Registration No.";
+                end;
 
 
 
                 Reclocation.get("Location Code");
                 if loc.get("Store No.") then;
-                //     StoreAddress := Reclocation.Address;
-                // StoreAddress2 := Reclocation."Address 2";
-                // StorePostCode := Reclocation."Post Code";
-                // SotreCountryRegioncode:=Reclocation."Country/Region Code";
-                // if RecCust.get("Ship-to Code") then
-                //     ShiptoGSTIN := RecCust."GST Registration No.";
 
                 IF "Ship-to Code" <> '' then begin
                     ShiptoName := "Ship-to Name";
@@ -414,53 +428,31 @@ report 50310 "Tax Invoice"
                 //PCPL-064<< 8june2023
                 PostedPaymentLines.Reset();
                 PostedPaymentLines.setrange("Document No.", "No.");
-
-                //PostedPaymentLines.SetRange("Line No.", "Line No.");
-                if PostedPaymentLines.findfirst() then //begin
+                if PostedPaymentLines.FindSet() then //begin
                     repeat
-
-                        Paymentmethod := PostedPaymentLines."Payment Method Code" + '' + ':' + format(PostedPaymentLines.Amount) + ',';
-                    //else
-                    //Paymentmethod := PostedPaymentLines."Payment Method Code";
+                        Paymentmethod += PostedPaymentLines."Payment Method Code" + ':' + format(PostedPaymentLines.Amount) + ',';
                     until PostedPaymentLines.Next = 0;
                 if Paymentmethod <> '' then
                     txt1 := DelStr(paymentmethod, StrLen(Paymentmethod), 1);
                 //end;
 
-                /* PostedPaylines.Reset();
-                 PostedPaylines.SetRange("Document No.", "No.");
-                 //PostedPaylines.SetRange("Document Type", "Sales Invoice Header".);
-                 if PostedPaylines.FindFirst() then begin
-
-                     PaymentAmount := PostedPaylines.Amount;
-                     Financecode := PostedPaylines."Approval Code";
-
-                 end;*/
-                //finanacecode
                 PostedPaylines.Reset();
                 PostedPaylines.SetRange("Document No.", "No.");
-                // PostedPaylines.SetRange("Document Type", );
                 if PostedPaylines.FindFirst() then begin
                     repeat
-                        //if Financecode <> '' then
                         Financecode += PostedPaylines."Approval Code" + ',';
-
-                    // else
-                    // Financecode := PostedPaylines."Approval Code";
                     until PostedPaylines.Next = 0;
                     if Financecode <> '' then
                         txt2 := DelStr(Financecode, StrLen(Financecode), 1);
                 end;
-
 
                 recSIL.Reset();
                 recSIL.SetRange("Document No.", "No.");
                 // recSIL.SetRange("Document Type", "Document Type"::Order);
                 if recSIL.FindSet() then begin
                     repeat
-                        //if Salespersoncode <> '' then
-                        Salespersoncode += recSIL."Salesperson Name" + ',';
-
+                        IF recSIL."Salesperson Code" <> '' then
+                            Salespersoncode += recSIL."Salesperson Name" + ',';
                     until recSIL.Next = 0;
                     if Salespersoncode <> '' then
                         txt3 := DelStr(Salespersoncode, StrLen(Salespersoncode), 1);
@@ -488,7 +480,6 @@ report 50310 "Tax Invoice"
                 recSalesInvLine.RESET;
                 recSalesInvLine.SETRANGE("Document No.", "Sales Invoice Header"."No.");
                 recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
-
                 IF recSalesInvLine.FindFirst() THEN
                     REPEAT
                     //TotalAmt += recSalesInvLine.Amount;
@@ -496,13 +487,15 @@ report 50310 "Tax Invoice"
                     UNTIL recSalesInvLine.NEXT = 0;
 
 
-                //TotalAmount := TotalAmt + TotalGST;
-                //balanceamount := TotalAmount - TotalPaidAmount;
-                //balanceamount := TotalAmount - TotalPaidAmount;
 
-
-
-
+                //Exhanges comments
+                SalesInvLine.Reset();
+                SalesInvLine.SetRange("Document No.", "No.");
+                SalesInvLine.SetRange(Type, Type::"G/L Account");
+                if SalesInvLine.FindFirst() then
+                    repeat
+                        ExchangeComments += SalesInvLine."Exchange Comment";
+                    until SalesInvLine.Next = 0;
 
 
             end;
@@ -529,7 +522,6 @@ report 50310 "Tax Invoice"
                         ApplicationArea = all;
                         trigger OnValidate()
                         begin
-
 
                         end;
                     }
@@ -561,6 +553,10 @@ report 50310 "Tax Invoice"
 
     var
         myInt: Integer;
+        salesReceivablesetup: Record "Sales & Receivables Setup";
+        SalesInvLine: Record "Sales Invoice Line";
+        glserialno: Code[50];
+        Itemserialno: Code[50];
         txt1: Text;
         txt2: Text;
         txt3: Text;
@@ -614,6 +610,11 @@ report 50310 "Tax Invoice"
         ReLocation: Record Location;
         balanceamount: Decimal;
         CalcSta: Codeunit "Calculate Statistics";
+        valueentry: Record "Value Entry";
+        ILE: Record "Item Ledger Entry";
+        ExchangeComments: Text[250];
+        CommentsLine: Text;
+        recEInvoice: Record "E-Invoice Detail";
 
     //GLE:Record 
 }
