@@ -287,6 +287,10 @@ report 50310 "Tax Invoice"
                 {
 
                 }
+                column(SerialCaption; SerialCaption)
+                {
+
+                }
                 dataitem("Value Entry"; "Value Entry")
                 {
                     DataItemLink = "Document No." = FIELD("Document No."),
@@ -299,10 +303,10 @@ report 50310 "Tax Invoice"
                         {
 
                         }
-                        column(SerialCaption; SerialCaption)
-                        {
+                        // column(SerialCaption; SerialCaption)
+                        // {
 
-                        }
+                        // }
 
                     }
                 }
@@ -327,7 +331,7 @@ report 50310 "Tax Invoice"
                     end else
                         if "Sales Invoice Line".Type = "Sales Invoice Line".Type::"G/L Account" then begin
                             if "Sales Invoice Line"."Serial No." <> '' then
-                                SerialCaption := 'Serial No.:'
+                                SerialCaption := 'Serial No.:' + '' + "Sales Invoice Line"."Serial No."
                             else
                                 SerialCaption := '';
                         end;
@@ -403,12 +407,12 @@ report 50310 "Tax Invoice"
                         ItemNo := "No.";
 
 
-                    Clear(Itemserialno);
-                    if type = Type::"G/L Account" then begin
-                        IF "Sales Invoice Line"."Serial No." <> '' then
-                            IF "No." <> '402053' then
-                                Itemserialno := "Sales Invoice Line"."Serial No.";
-                    end;
+                    // Clear(Itemserialno);
+                    // if type = Type::"G/L Account" then begin
+                    //     IF "Sales Invoice Line"."Serial No." <> '' then
+                    //         IF "No." <> '402053' then
+                    //             Itemserialno := "Sales Invoice Line"."Serial No.";
+                    // end;
                 end;
 
             }

@@ -240,11 +240,11 @@
         <Field Name="Itemserialno">
           <DataField>Itemserialno</DataField>
         </Field>
-        <Field Name="Serial_No_">
-          <DataField>Serial_No_</DataField>
-        </Field>
         <Field Name="SerialCaption">
           <DataField>SerialCaption</DataField>
+        </Field>
+        <Field Name="Serial_No_">
+          <DataField>Serial_No_</DataField>
         </Field>
       </Fields>
     </DataSet>
@@ -2517,7 +2517,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!Serial_No_.Value+""+Fields!Itemserialno.Value</Value>
+                                  <Value>=Fields!Serial_No_.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -4421,7 +4421,7 @@ invoice.</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox91</rd:DefaultName>
-            <Top>10.83852cm</Top>
+            <Top>10.80677cm</Top>
             <Left>0cm</Left>
             <Height>0.39912cm</Height>
             <Width>20.67309cm</Width>
@@ -5025,7 +5025,7 @@ invoice.</Value>
             <rd:DefaultName>Textbox101</rd:DefaultName>
             <Top>4.29155cm</Top>
             <Left>16.15226cm</Left>
-            <Height>3cm</Height>
+            <Height>3.10069cm</Height>
             <Width>4.49537cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
@@ -5129,7 +5129,7 @@ invoice.</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>11.21648cm</Top>
+            <Top>11.18473cm</Top>
             <Left>0.00296cm</Left>
             <Height>0.39912cm</Height>
             <Width>20.67013cm</Width>
@@ -5459,7 +5459,7 @@ invoice.</Value>
                 </Paragraphs>
                 <rd:DefaultName>Textbox52</rd:DefaultName>
                 <Top>2.16891cm</Top>
-                <Left>0.04028cm</Left>
+                <Left>0.00853cm</Left>
                 <Height>0.34364cm</Height>
                 <Width>8.35328cm</Width>
                 <ZIndex>7</ZIndex>

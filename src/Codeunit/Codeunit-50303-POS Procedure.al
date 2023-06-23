@@ -1075,7 +1075,14 @@ codeunit 50303 "POS Procedure"
             GetSalesorderStatisticsAmount(SalesHeader, TotalAmt);
             SalesHeader."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt, 1);
             SalesHeader.Modify();
-
+            //**Comments are made mandatory****//
+            SalesLine.Reset();
+            SalesLine.SetCurrentKey("Document No.");
+            SalesLine.SetRange("Document No.", DocumentNo);
+            SalesLine.SetRange(Type, SalesLine.Type::" ");
+            IF NOT SalesLine.FindFirst() then
+                Error('Comment must be added');
+            //**Comments are made mandatory****//
             Clear(TotalPayemtamt);
             PaymentLine.Reset();
             PaymentLine.SetCurrentKey("Document No.");
@@ -1166,7 +1173,14 @@ codeunit 50303 "POS Procedure"
         Clear(TotalAmt);
         SalesRec.Get();
 
-
+        //**Comments are made mandatory****//
+        SalesLine.Reset();
+        SalesLine.SetCurrentKey("Document No.");
+        SalesLine.SetRange("Document No.", DocumentNo);
+        SalesLine.SetRange(Type, SalesLine.Type::" ");
+        IF NOT SalesLine.FindFirst() then
+            Error('Comment must be added');
+        //**Comments are made mandatory****//
         SalesLine.Reset();
         SalesLine.SetCurrentKey("Document No.", Type);
         SalesLine.SetRange("Document No.", DocumentNo);
