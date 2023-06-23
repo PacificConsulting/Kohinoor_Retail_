@@ -42,6 +42,10 @@ table 50324 "Azure Storage Container Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(9; "Azure Payment Receipt URL"; Text[1024])
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys

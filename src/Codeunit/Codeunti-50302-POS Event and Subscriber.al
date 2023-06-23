@@ -159,7 +159,7 @@ codeunit 50302 "POS Event and Subscriber"
                     //   exit(IsResult);
 
                 end;
-            'CANNEW':  //<<<<** Add Comment on Live level new Line Insert **>>>>
+            'CANNEW':  //<<<<** cancel SO and create New SO **>>>>
                 begin
                     IsResult := POSProcedure.CancelNewSO(documentno);
                     IF IsResult = '' then
@@ -168,14 +168,20 @@ codeunit 50302 "POS Event and Subscriber"
                         exit(IsResult);
 
                 end;
-            'SOPRINT':  //<<<<** Add Comment on Live level new Line Insert **>>>>
+            'SOPRINT':  //<<<<** Sale Order Report Print Function save as PDF **>>>>
                 begin
                     IsResult := POSProcedure.SOPrint(documentno);
                     exit(IsResult);
                 end;
-            'SIPRINT':  //<<<<** Add Comment on Live level new Line Insert **>>>>
+            'SIPRINT':  //<<<<** Tax Invoice ReportPrint Function save as PDF **>>>>
                 begin
                     IsResult := POSProcedure.SIPrint(documentno);
+                    exit(IsResult);
+
+                end;
+            'PAYRPRINT':  //<<<<** Payment Receipt Report Print Function save as PDF **>>>>
+                begin
+                    IsResult := POSProcedure.PaymentReceipt(documentno);
                     exit(IsResult);
 
                 end;

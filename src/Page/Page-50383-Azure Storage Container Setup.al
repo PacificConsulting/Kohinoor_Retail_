@@ -40,6 +40,11 @@ page 50383 "Azure Storage Container Setup"
                 {
                     ToolTip = 'Specifies the value of the Azure Order URL field.';
                 }
+                field("Azure Payment Receipt URL"; Rec."Azure Payment Receipt URL")
+                {
+                    ToolTip = 'Specifies the value of the Azure Payment Receipt URL field.';
+                }
+
             }
         }
     }

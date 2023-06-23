@@ -445,6 +445,7 @@ report 50310 "Tax Invoice"
                     ShiptoName := "Bill-to Name";
                     ShiptoAdd := "Bill-to Address" + ' ' + "Bill-to Address 2";
                     Shiptocity := "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code";
+
                     ShiptoGSTIN := CustGSTIN;
                 end;
 

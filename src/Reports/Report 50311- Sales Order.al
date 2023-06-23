@@ -120,7 +120,7 @@ report 50311 "Sales Order"
             {
 
             }
-            column(Ship_to_GST_Reg__No_; "Ship-to GST Reg. No.")
+            column(Ship_to_GST_Reg__No_; shiptogstin)
             {
 
             }
@@ -305,9 +305,7 @@ report 50311 "Sales Order"
                     else
                         ItemNo := "No.";
 
-                    IF Type = Type::" " then begin
-                        Comments += Description + ',';
-                    end;
+
                 end;
             }
             trigger OnAfterGetRecord()  //SH
@@ -323,10 +321,6 @@ report 50311 "Sales Order"
                         TotalGSTAmountFinal += GetGSTAmount(SL.RecordId)
                     until SL.next() = 0;
                 //TotalGSTAmountFinal := Round(TotalGSTAmountFinal, 0.01, '>');
-                //Message('%1', TotalGSTAmountFinal);
-                //;
-                //pcpl-064 10june2023
-                //Message('%1', TotalGSTAmountFinal);
 
 
                 if RecCust.get("Sales Header"."Sell-to Customer No.") then
@@ -340,16 +334,22 @@ report 50311 "Sales Order"
                 // StoreAddress2 := Reclocation."Address 2";
                 // StorePostCode := Reclocation."Post Code";
                 // SotreCountryRegioncode:=Reclocation."Country/Region Code";
-                Customer.GET("Sales Header"."Sell-to Customer No.");
+
                 IF "Ship-to Code" <> '' then begin
                     ShiptoName := "Ship-to Name";
                     ShiptoAdd := "Ship-to Address" + ' ' + "Ship-to Address 2";
                     Shiptocity := "Ship-to City" + ',' + "Ship-to Post Code" + ',' + "Ship-to Country/Region Code";
+                    shiptogstin := "Ship-to GST Reg. No.";
                 end
                 ELSE begin
+
                     ShiptoName := "Bill-to Name";
                     ShiptoAdd := "Bill-to Address" + ' ' + "Bill-to Address 2";
                     Shiptocity := "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code";
+
+                    shiptogstin := CustGSTIN;
+
+
                 end;
 
                 if "Pro-forma Invoice" = true then
@@ -389,10 +389,11 @@ report 50311 "Sales Order"
                 RPaylines.SetRange("Document Type", "Sales Header"."Document Type"::Order);
                 if RPaylines.FindSet() then begin
                     repeat
-                        Financecode += RPaylines."Approval Code" + ',';
+                        if RPaylines."Approval Code" <> '' then
+                            Financecode += RPaylines."Approval Code" + ',';
                     until RPaylines.Next = 0;
-                    if Financecode <> '' then
-                        txt2 := DelStr(Financecode, StrLen(Financecode), 1);
+                    if Financecode <> '' then;
+                    txt2 := DelStr(Financecode, StrLen(Financecode), 1);
                 end;
 
                 recSL.Reset();
@@ -400,7 +401,6 @@ report 50311 "Sales Order"
                 recSL.SetRange("Document Type", "Document Type"::Order);
                 if recSL.FindSet() then begin
                     repeat
-                        // If recSL."Salesperson Code" <> '' then
                         Salespersoncode += recSL."Salesperson Name" + ',';
                     until recSL.Next = 0;
                     if Salespersoncode <> '' then  ///pcpl
@@ -417,7 +417,7 @@ report 50311 "Sales Order"
 
                 //TotalAmount
                 //TotalAmount1 := 0;
-                Clear(TotalAmount1);
+                //Clear(TotalAmount1);
                 recsalesline.RESET;
                 recsalesline.SETRANGE(recsalesline."Document No.", "Sales Header"."No.");
                 recsalesline.SETRANGE(Type, recsalesline.Type::Item);
@@ -458,13 +458,23 @@ report 50311 "Sales Order"
                 SLrec.Reset();
                 SLrec.SetRange("Document No.", "No.");
                 SLrec.SetRange(Type, Type::"G/L Account");
-                if SLrec.FindSet() then
+                if SLrec.FindFirst() then
                     repeat
                         ExchangeComments += SLrec."Exchange Comment";
                     until SLrec.Next = 0;
 
                 //Installation
                 salesreceivablesetup.Get();
+
+                //comments:
+                salesline.Reset();
+                salesline.SetRange("Document No.", "No.");
+                salesline.SetRange(Type, Type::" ");
+                if salesline.FindFirst() then
+                    repeat
+                        Comments += salesline.Description + ',';
+                    until salesline.Next() = 0;
+
 
             end;
 
@@ -513,6 +523,8 @@ report 50311 "Sales Order"
 
     var
         mybalance: Decimal;
+        salesline: Record "Sales Line";
+        shiptogstin: Code[20];
         Comments: Text;
         CalSta: Codeunit "Calculate Statistics";
         AmtInWordDecimal: Decimal;

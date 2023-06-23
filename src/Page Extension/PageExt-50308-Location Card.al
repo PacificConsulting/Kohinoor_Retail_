@@ -57,6 +57,12 @@ pageextension 50308 Location_Card extends "Location Card"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Startup Menu  field.';
             }
+            field("Payment QR "; Rec."Payment QR")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Upload Payment QR';
+            }
+
 
 
         }

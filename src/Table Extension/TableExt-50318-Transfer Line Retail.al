@@ -22,7 +22,7 @@ tableextension 50318 "Transfer Line Retail" extends "Transfer Line"
                 TranLineFilter: Record "Transfer Line";
                 TransferLine: Record "Transfer Line";
             begin
-                /*
+
                 // IF Rec.Type <> rec.Type::" " then begin
                 IF Rec.Quantity > 0 then begin
                     ItemConfig.Reset();
@@ -31,7 +31,7 @@ tableextension 50318 "Transfer Line Retail" extends "Transfer Line"
                         repeat
                             TranLineFilter.Reset();
                             TranLineFilter.SetRange("Document No.", "Document No.");
-                            TranLineFilter.SetRange("Item No.", ItemConfig."Item Child No.");
+                            // TranLineFilter.SetRange("Item No.", ItemConfig."Item Child No.");
                             TranLineFilter.SetRange("Warranty Parent Line No.", "Line No.");
                             if not TranLineFilter.FindFirst() then begin
                                 //*********New Line Insert*******
@@ -61,7 +61,7 @@ tableextension 50318 "Transfer Line Retail" extends "Transfer Line"
                         until ItemConfig.Next() = 0;
                 end;
                 //end;
-                */
+
             end;
         }
     }

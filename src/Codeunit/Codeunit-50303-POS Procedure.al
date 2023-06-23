@@ -760,7 +760,7 @@ codeunit 50303 "POS Procedure"
                 TranLine.Validate("Transfer-from Bin Code", 'BACKPACK');
                 TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" + 1);
                 TranLine.Modify();
-                /*
+
                 //**Child item ****
                 ChildTranLine.SetRange("Document No.", TranLine."Document No.");
                 ChildTranLine.SetRange("Warranty Parent Line No.", TranLine."Line No.");
@@ -774,7 +774,7 @@ codeunit 50303 "POS Procedure"
                             ChildTranLine.Modify();
                         end;
                     until ChildTranLine.Next() = 0;
-                */
+
                 ReservEntry.RESET;
                 ReservEntry.LOCKTABLE;
                 IF ReservEntry.FINDLAST THEN
@@ -978,7 +978,7 @@ codeunit 50303 "POS Procedure"
                 DocFound := true;
                 TranLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
                 TranLine.Modify();
-                /*
+
                 //**Child item ****
                 ChildTransLine.SetRange("Document No.", TranLine."Document No.");
                 ChildTransLine.SetRange("Warranty Parent Line No.", TranLine."Line No.");
@@ -987,7 +987,7 @@ codeunit 50303 "POS Procedure"
                         ChildTransLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
                         ChildTransLine.Modify();
                     until ChildTransLine.Next() = 0;
-                    */
+
             end;
         end;
         Evaluate(SerialNo, input);
@@ -1041,11 +1041,28 @@ codeunit 50303 "POS Procedure"
         ReleaseSalesDoc: Codeunit "Release Sales Document";
         SR: Record "Sales & Receivables Setup";
         RecItem: Record 27;
+        SH: Record 36;
     begin
         clear(TotalGSTAmount1);
         Clear(TotalTCSAmt);
         Clear(TotalAmt);
         SalesRec11.get();
+
+        SH.Reset();
+        SH.SetRange("No.", documentno);
+        if SH.FindFirst() then;
+
+        SalesLine.Reset();
+        SalesLine.SetCurrentKey("Document No.", "Location Code");
+        SalesLine.SetRange("Document No.", SH."No.");
+        SalesLine.SetRange("Location Code", '');
+        IF SalesLine.FindSet() then
+            repeat
+                SalesLine.Validate("Location Code", SH."Location Code");
+                SalesLine."Store No." := SH."Store No.";
+                SalesLine.Modify();
+            until SalesLine.Next() = 0;
+
 
         SalesLine.Reset();
         SalesLine.SetCurrentKey("Document No.", Type);
@@ -1543,6 +1560,77 @@ codeunit 50303 "POS Procedure"
         UploadonAzurBlobStorageInvoice(SIH."No." + '.PDF', VResult);
 
     end;
+
+
+    /// <summary>
+    /// Payment Receipt Report Save As Function
+    /// </summary>
+    procedure PaymentReceipt(documentno: Code[20]): Text
+    var
+        ABSBlobClient: Codeunit "ABS Blob Client";
+        Authorization: Interface "Storage Service Authorization";
+        ABSCSetup: Record "Azure Storage Container Setup";
+        StorageServiceAuth: Codeunit "Storage Service Authorization";
+        Instrm: InStream;
+        OutStrm: OutStream;
+        TempBlob: Codeunit "Temp Blob";
+        FileName: Text;
+        SIH: record 112;
+        Recref: RecordRef;
+        VResult: Text;
+        B64: Codeunit "Base64 Convert";
+        CLE: Record 21;
+    begin
+        //*********Report SaveasPDF code********
+        CLE.RESET;
+        CLE.SETRANGE("Document No.", documentno);
+        IF CLE.FINDFIRST THEN;
+        Recref.GetTable(CLE);
+        TempBlob.CreateOutStream(OutStrm);
+        Report.SaveAs(Report::"Customer - Payment Receipt", '', ReportFormat::Pdf, OutStrm, Recref);
+        TempBlob.CreateInStream(Instrm);
+        VResult := B64.ToBase64(Instrm);
+        UploadonAzurBlobStoragepaymentReceipt(CLE."Document No." + '.PDF', VResult);
+
+    end;
+
+    /// <summary>
+    /// Payment Receipt Report Azur Upload Storage
+    /// </summary>
+
+    local procedure UploadonAzurBlobStoragepaymentReceipt(FileName: Text; Base64: Text): Text
+
+    Var
+        client: HttpClient;
+        cont: HttpContent;
+        header: HttpHeaders;
+        response: HttpResponseMessage;
+        Jobject: JsonObject;
+        tmpString: Text;
+        token: Text;
+        URL: text;
+        AzurBlobSetup: Record "Azure Storage Container Setup";
+    Begin
+        AzurBlobSetup.Get();
+        AzurBlobSetup.TestField("Azure Payment Receipt URL");
+        URL := AzurBlobSetup."Azure Payment Receipt URL";
+        //Jobject.Add('ApiToken', 'testapi');
+        Jobject.Add('Document', Base64);
+        Jobject.Add('FileName', FileName);
+        Jobject.WriteTo(tmpString);
+        cont.WriteFrom(tmpString);
+        cont.ReadAs(tmpString);
+        cont.GetHeaders(header);
+        header.Remove('Content-Type');
+        header.Add('Content-Type', 'application/json');
+        IF client.Post(URL, cont, response) then
+            if response.IsSuccessStatusCode() then begin
+                exit('Sucess')
+            end else
+                exit(Format(response.IsSuccessStatusCode));
+
+    end;
+
 
     /// <summary>
     /// Posted Sales Inv Azur Upload Storage

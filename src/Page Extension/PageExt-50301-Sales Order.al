@@ -258,18 +258,34 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     Tx: Text;
 
                 begin
-                    result := CU.RefreshSaleOrder(Rec."No.");
+                    // result := CU.RefreshSaleOrder(Rec."No.");
+                    /*
                     IF result = '' then
                         Message('Success')
                     else
                         Message(result);
-
+                    */
                     SL.Reset();
+                    SL.SetCurrentKey("Document No.", "Location Code");
                     SL.SetRange("Document No.", Rec."No.");
+                    SL.SetRange("Location Code", '');
                     IF SL.FindSet() then
                         repeat
-                            SL.Validate("Unit Price");
+                            SL.Validate("Location Code", rec."Location Code");
+                            SL."Store No." := rec."Store No.";
+                            SL.Modify();
                         until SL.Next() = 0;
+
+                    SL.Reset();
+                    SL.SetCurrentKey("Document No.", "Unit Price");
+                    SL.SetRange("Document No.", Rec."No.");
+                    SL.SetRange("Unit Price", 0);
+                    IF SL.FindSet() then
+                        repeat
+                            SL.Validate("Unit Price Incl. of Tax");
+                            SL.Modify();
+                        until SL.Next() = 0;
+                    Message('Sales order has been refresh');
                 end;
             }
             action("POS Function Test")

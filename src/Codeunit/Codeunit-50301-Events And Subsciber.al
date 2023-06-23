@@ -79,6 +79,7 @@ codeunit 50301 "Event and Subscribers"
         PaymentLine.Reset();
         PaymentLine.SetRange("Document No.", SalesHeader."No.");
         PaymentLine.SetRange(Posted, true);
+        PaymentLine.SetFilter("Payment Method Code", '<>%1', 'CHEQUE');
         IF PaymentLine.FindSet() then
             repeat
                 TotalPaymentAmt += PaymentLine.Amount;
