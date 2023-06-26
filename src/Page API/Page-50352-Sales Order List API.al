@@ -114,6 +114,10 @@ page 50352 "Sales Order List API"
                 {
                     Caption = 'Vehicle No.';
                 }
+                field(workDescription; Rec."Work Description")
+                {
+                    Caption = 'Work Description';
+                }
             }
         }
     }

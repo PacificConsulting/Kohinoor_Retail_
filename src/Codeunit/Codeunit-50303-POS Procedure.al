@@ -984,7 +984,7 @@ codeunit 50303 "POS Procedure"
                 ChildTransLine.SetRange("Warranty Parent Line No.", TranLine."Line No.");
                 IF ChildTransLine.FindSet() then
                     Repeat
-                        ChildTransLine.Validate("Qty. to Ship", TranLine."Qty. to Ship" - 1);
+                        ChildTransLine.Validate("Qty. to Ship", TranLine."Qty. to Ship");
                         ChildTransLine.Modify();
                     until ChildTransLine.Next() = 0;
 
@@ -1558,7 +1558,6 @@ codeunit 50303 "POS Procedure"
         TempBlob.CreateInStream(Instrm);
         VResult := B64.ToBase64(Instrm);
         UploadonAzurBlobStorageInvoice(SIH."No." + '.PDF', VResult);
-
     end;
 
 
@@ -1580,6 +1579,7 @@ codeunit 50303 "POS Procedure"
         VResult: Text;
         B64: Codeunit "Base64 Convert";
         CLE: Record 21;
+        Resultret: text;
     begin
         //*********Report SaveasPDF code********
         CLE.RESET;
@@ -1591,7 +1591,7 @@ codeunit 50303 "POS Procedure"
         TempBlob.CreateInStream(Instrm);
         VResult := B64.ToBase64(Instrm);
         UploadonAzurBlobStoragepaymentReceipt(CLE."Document No." + '.PDF', VResult);
-
+        //exit(Resultret);
     end;
 
     /// <summary>

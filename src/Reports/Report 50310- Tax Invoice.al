@@ -469,7 +469,8 @@ report 50310 "Tax Invoice"
                 PostedPaylines.SetRange("Document No.", "No.");
                 if PostedPaylines.FindSet() then begin
                     repeat
-                        Financecode += PostedPaylines."Approval Code" + ',';
+                        if PostedPaylines."Approval Code" <> '' then
+                            Financecode += PostedPaylines."Approval Code" + ',';
                     until PostedPaylines.Next = 0;
                     if Financecode <> '' then
                         txt2 := DelStr(Financecode, StrLen(Financecode), 1);
@@ -479,7 +480,7 @@ report 50310 "Tax Invoice"
                 recSIL.SetRange("Document No.", "No.");
                 if recSIL.FindSet() then begin
                     repeat
-                        IF recSIL."Salesperson Code" <> '' then
+                        IF recSIL."Salesperson Name" <> '' then
                             Salespersoncode += recSIL."Salesperson Name" + ',';
                     until recSIL.Next = 0;
                     if Salespersoncode <> '' then

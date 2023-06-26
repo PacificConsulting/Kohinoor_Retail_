@@ -401,7 +401,8 @@ report 50311 "Sales Order"
                 recSL.SetRange("Document Type", "Document Type"::Order);
                 if recSL.FindSet() then begin
                     repeat
-                        Salespersoncode += recSL."Salesperson Name" + ',';
+                        if recSL."Salesperson Name" <> '' then
+                            Salespersoncode += recSL."Salesperson Name" + ',';
                     until recSL.Next = 0;
                     if Salespersoncode <> '' then  ///pcpl
                         txt3 := DelStr(Salespersoncode, StrLen(Salespersoncode), 1);
