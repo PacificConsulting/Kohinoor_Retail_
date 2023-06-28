@@ -1580,18 +1580,24 @@ codeunit 50303 "POS Procedure"
         B64: Codeunit "Base64 Convert";
         CLE: Record 21;
         Resultret: text;
+        CLE11: Record 21;
     begin
         //*********Report SaveasPDF code********
-        CLE.RESET;
-        CLE.SETRANGE("Document No.", documentno);
-        IF CLE.FINDFIRST THEN;
+        CLE11.RESET;
+        CLE11.SETRANGE("Customer No.", documentno);
+        CLE11.SetRange("Document Type", CLE11."Document Type"::Payment);
+        IF CLE11.FindLast() THEN begin
+            CLE.Reset();
+            cle.SetRange("Document No.", CLE11."Document No.");
+            IF CLE.FindFirst() then;
+        end;
         Recref.GetTable(CLE);
         TempBlob.CreateOutStream(OutStrm);
         Report.SaveAs(Report::"Customer - Payment Receipt", '', ReportFormat::Pdf, OutStrm, Recref);
         TempBlob.CreateInStream(Instrm);
         VResult := B64.ToBase64(Instrm);
-        UploadonAzurBlobStoragepaymentReceipt(CLE."Document No." + '.PDF', VResult);
-        //exit(Resultret);
+        Resultret := UploadonAzurBlobStoragepaymentReceipt(CLE."Customer No." + '.PDF', VResult);
+        exit(Resultret);
     end;
 
     /// <summary>
@@ -1625,7 +1631,7 @@ codeunit 50303 "POS Procedure"
         header.Add('Content-Type', 'application/json');
         IF client.Post(URL, cont, response) then
             if response.IsSuccessStatusCode() then begin
-                exit('Sucess')
+                exit('Success')
             end else
                 exit(Format(response.IsSuccessStatusCode));
 

@@ -40,7 +40,19 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                     if PDL.FindFirst() then
                         Report.RunModal(50190, true, false, PDL);
                         */
-                    Demo.Run();
+                    //Demo.Run();
+                    Clear(SDate);
+                    Clear(EDate);
+                    Clear(PageDatefilter);
+                    PageDatefilter.LookupMode(true);
+                    if PageDatefilter.RunModal() = Action::LookupOK then begin
+                        SDate := PageDatefilter.Returnstartdate();
+                        EDate := PageDatefilter.ReturnEnddate();
+                    End;
+                    IF SDate = 0D then
+                        IF EDate <> 0D then
+                            Error('Please enter start date also.');
+
                     IH.Reset();
                     IH.SetRange("Option Type", IH."Option Type"::"Category 1");
                     If IH.FindSet() then
@@ -48,6 +60,10 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                             //***********Report Save as Excel****************
                             PDL.RESET;
                             PDL.SETRANGE("Item Category code 1", IH.Code);
+                            PDl.SetRange(Delivered, true);
+                            PDL.SetRange(Demo, false);
+                            IF (SDate <> 0D) and (EDate <> 0D) then
+                                PDL.SetRange("Delivered Date", SDate, EDate);
                             IF PDL.FINDFIRST THEN;
                             Recref.GetTable(PDL);
                             TempBlob.CreateOutStream(OutStrm);
@@ -55,16 +71,16 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                             TempBlob.CreateInStream(Instrm);
 
                             //*************Azure upload Code**************
+                            //IF PDL."Item Category code 1" <> '' then begin
                             ABSCSetup.Get();
                             Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
                             ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
                             FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
                             response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-                            IF response.IsSuccessful() then
-                                Message('File Create and upload successfully.');
+                            //IF response.IsSuccessful() then
+                            //  Message('File Create and upload successfully.');
 
                             //************Update Demo Field***************
-                            PDL.Reset();
                             PDL.SetRange("Item Category code 1", IH.Code);
                             PDL.SetRange(Delivered, true);
                             IF PDL.FindSet() then
@@ -72,10 +88,37 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                                     PDL.Demo := true;
                                     PDL.Modify();
                                 until PDL.Next() = 0;
-                        until PDl.Next() = 0;
+                        //  end;
+                        until IH.Next() = 0;
+                end;
+            }
+            action(DemoFasle)
+            {
+                ApplicationArea = all;
+                Image = Print;
+                Promoted = true;
+                PromotedCategory = Report;
+                PromotedIsBig = true;
+                Caption = 'Demo Fasle';
+                trigger OnAction()
+                var
+                    PDL: Record "Posted Delivery Line";
+                begin
+                    PDL.Reset();
+                    PDL.SetRange(Delivered, true);
+                    if PDL.FindSet() then
+                        repeat
+                            PDl.Demo := false;
+                            PDL.Modify();
+                        until PDL.Next() = 0;
+                    Message('Done');
                 end;
             }
 
         }
     }
+    var
+        PageDatefilter: Page 50394;
+        SDate: Date;
+        EDate: Date;
 }

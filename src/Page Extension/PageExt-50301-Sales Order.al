@@ -319,7 +319,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //result := CU.InvoiceLine(Rec."No.", 10000, '', '', '');
                     //cu.RefreshSaleOrder(Rec."No.");
                     // POS.TransferShipQtyUpdate('KTVTO232400000024');
-                    result := cu.PaymentReceipt('KTVCSR232400000015');
+                    result := cu.PaymentReceipt(rec."Sell-to Customer No.");
                     Message(result);
                 end;
             }

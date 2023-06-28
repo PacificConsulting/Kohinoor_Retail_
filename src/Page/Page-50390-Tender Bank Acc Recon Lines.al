@@ -71,6 +71,12 @@ page 50390 "Tender Bank Acc Recon Lines"
                         CurrPage.Update();
                     end;
                 }
+                field("Approval Code"; Rec."Approval Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Approval Code field.';
+                }
+
                 field("Applied Amount"; Rec."Applied Amount")
                 {
                     ApplicationArea = Basic, Suite;

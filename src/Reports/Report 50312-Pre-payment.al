@@ -12,6 +12,7 @@ report 50312 "Pre-Payment Sheet Report"
         {
             RequestFilterFields = "Document No.", "Posting Date";
             DataItemTableView = sorting("Document No.", "Line No.") order(ascending) where(Quantity = filter(<> 0));
+
             //DataItemLinkReference= 
             column(PIH_Orderno; Orderno)
             {
@@ -174,6 +175,18 @@ report 50312 "Pre-Payment Sheet Report"
             {
 
             }
+            column(Fromdate; Fromdate)
+            {
+
+            }
+            column(Todate; Todate)
+            {
+
+            }
+            column(TotalNLC; TotalNLC)
+            {
+
+            }
 
 
             trigger OnAfterGetRecord()
@@ -264,6 +277,9 @@ report 50312 "Pre-Payment Sheet Report"
                     Dealerprice := TradeAggrement.DP;
                     NNLC := TradeAggrement.NNLC;
                     FNNLC := TradeAggrement.NNLC;
+                    if TradeAggrement.DP <> 0 then;
+                    Margin_percent_on_Purchase_unit_price := "Unit Cost" * 100 / Dealerprice + 100;
+
 
                 end;
                 //TotalDealerPrice
@@ -271,16 +287,28 @@ report 50312 "Pre-Payment Sheet Report"
 
                 //Margin percent on Purchase unit price
 
-                if TradeAggrement.DP <> 0 then;
-                Margin_percent_on_Purchase_unit_price := "Unit Cost" * 100 / Dealerprice + 100;
 
                 //Margin percent on NLC
-                //Margin_percent_on_NLC += NLC * 100 / Dealerprice + 100;
+
+                // Margin_percent_on_NLC := "Unit Cost" * 100 / Dealerprice + 100;
+
+
+                TotalNLC := "Purch. Inv. Line"."Unit Cost" * Quantity;
 
                 //
             end;
+
+            trigger OnPreDataItem() //PIL
+
+            begin
+
+
+            end;
+
         }
+
     }
+
 
     requestpage
     {
@@ -288,14 +316,18 @@ report 50312 "Pre-Payment Sheet Report"
         {
             area(Content)
             {
-                /* group(GroupName)
+                group(GroupName)
                 {
-                    field(Name; SourceExpression)
-                    {
-                        ApplicationArea = All;
-                        
-                    }
-                } */
+                    // field(Fromdate; Fromdate)
+                    // {
+                    //     ApplicationArea = All;
+
+                    // }
+                    // field(Todate; Todate)
+                    // {
+                    //     ApplicationArea = all;
+                    // }
+                }
             }
         }
 
@@ -312,6 +344,14 @@ report 50312 "Pre-Payment Sheet Report"
         }
     }
 
+    trigger OnPreReport()
+
+    begin
+        // if "Purch. Inv. Line".GetFilter("Posting Date") <> '' then;
+        Fromdate := "Purch. Inv. Line".GetRangeMin("Posting Date");
+        Todate := "Purch. Inv. Line".GetRangeMax("Posting Date");
+    end;
+
     /*  rendering
      {
          layout(LayoutName)
@@ -324,6 +364,7 @@ report 50312 "Pre-Payment Sheet Report"
     var
         myInt: Integer;
         RecItem: Record Item;
+        PILRec: Record "Purch. Inv. Line";
         RecPIL: record "Purch. Inv. Line";
         PIH: Record "Purch. Inv. Header";
         RecPIH: Record "Purch. Inv. Header";
@@ -355,8 +396,11 @@ report 50312 "Pre-Payment Sheet Report"
         FNNLC: Decimal;
         Margin_percent_on_Purchase_unit_price: Decimal;
         Margin_percent_on_NLC: Decimal;
+        Fromdate: Date;
+        Todate: Date;
+        String: Text;
+        TotalNLC: Decimal;
 
-    //TDS Amount
 
 
 }

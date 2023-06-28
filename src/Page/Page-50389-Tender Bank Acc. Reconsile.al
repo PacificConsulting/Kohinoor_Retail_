@@ -20,6 +20,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     Caption = 'Tender Account No.';
                     ToolTip = 'Specifies the number of the bank account that you want to reconcile with the bank''s statement.';
                     Editable = BankAccountNoIsEditable;
+                    //Visible=false;
 
                     trigger OnValidate()
                     var
@@ -36,6 +37,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                         CurrPage.Update(false);
                     end;
                 }
+
                 field(StatementNo; Rec."Statement No.")
                 {
                     ApplicationArea = Basic, Suite;
@@ -64,6 +66,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     Caption = 'Statement Ending Balance';
                     ToolTip = 'Specifies the ending balance shown on the bank''s statement that you want to reconcile with the bank account.';
                 }
+
             }
             group(Control8)
             {

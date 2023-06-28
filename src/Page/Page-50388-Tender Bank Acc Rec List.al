@@ -1,7 +1,7 @@
 page 50388 "Tender Bank Acc. Rec List"
 {
     ApplicationArea = All;
-    Caption = 'Tender Bank Acc. Rec List';
+    Caption = 'Tender Reconciliation';
     CardPageID = "Tender Bank Acc. Reconciliate";
     Editable = false;
     PageType = List;

@@ -56,6 +56,11 @@ page 50391 "Tender Apply Bank Acc Leder"
                     ToolTip = 'Specifies the amount of the entry denominated in the applicable foreign currency.';
                     Visible = AmountVisible;
                 }
+                field("Approval Code"; Rec."Approval Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Approval Code field.';
+                }
                 field("Debit Amount"; Rec."Debit Amount")
                 {
                     ApplicationArea = Basic, Suite;
