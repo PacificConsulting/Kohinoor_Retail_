@@ -41,6 +41,22 @@ tableextension 50307 "Payment Method" extends "Payment Method"
                 end;
             end;
         }
+        field(50303; "Reco. Account Type"; enum "Payment Balance Account Type")
+        {
+            Caption = 'Reco. Account Type';
+
+            trigger OnValidate()
+            begin
+                "Reco. Account No." := '';
+            end;
+        }
+        field(50304; "Reco. Account No."; Code[20])
+        {
+            Caption = 'Reco. Account No.';
+            TableRelation = IF ("Reco. Account Type" = CONST("G/L Account")) "G/L Account"
+            ELSE
+            IF ("Reco. Account Type" = CONST("Bank Account")) "Bank Account";
+        }
     }
 
     var

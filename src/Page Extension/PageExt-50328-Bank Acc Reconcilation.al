@@ -2,7 +2,17 @@ pageextension 50328 "Bank Acc reconcilation" extends "Bank Acc. Reconciliation"
 {
     layout
     {
-
+        modify(BankAccountNo)
+        {
+            trigger OnAfterValidate()
+            var
+                BA: Record "Bank Account";
+            begin
+                IF BA.get(Rec."Bank Account No.") then
+                    IF BA.Tender then
+                        Error('This Bank Account is define as Tender Account');
+            end;
+        }
     }
     trigger OnOpenPage()
     begin

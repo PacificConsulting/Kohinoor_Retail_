@@ -5,6 +5,11 @@ codeunit 50301 "Event and Subscribers"
 
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Bank Acc. Reconciliation Line", 'OnAfterFilterBankRecLines', '', false, false)]
+    local procedure OnAfterFilterBankRecLines(var Rec: Record "Bank Acc. Reconciliation Line"; BankAccRecon: Record "Bank Acc. Reconciliation")
+    begin
+        //Rec.SetRange("Approval Code",BankAccRec
+    end;
     //<<<<<<<START********************************CU-12*****************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitBankAccLedgEntry', '', false, false)]
     local procedure OnAfterInitBankAccLedgEntry(var BankAccountLedgerEntry: Record "Bank Account Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")

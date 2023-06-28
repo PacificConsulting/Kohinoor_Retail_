@@ -25,7 +25,12 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     trigger OnValidate()
                     var
                         BankAccReconciliationLine: record "Bank Acc. Reconciliation Line";
+                        BA: Record "Bank Account";
                     begin
+                        IF BA.get(Rec."Bank Account No.") then
+                            IF BA.Tender = false then
+                                Error('This Bank Account is not as Tender Account');
+
                         if BankAccReconciliationLine.BankStatementLinesListIsEmpty(Rec."Statement No.", Rec."Statement Type", Rec."Bank Account No.") then
                             CreateEmptyListNotification();
 
