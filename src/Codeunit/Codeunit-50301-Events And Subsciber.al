@@ -5,10 +5,78 @@ codeunit 50301 "Event and Subscribers"
 
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Bank Acc. Reconciliation Line", 'OnAfterFilterBankRecLines', '', false, false)]
-    local procedure OnAfterFilterBankRecLines(var Rec: Record "Bank Acc. Reconciliation Line"; BankAccRecon: Record "Bank Acc. Reconciliation")
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Bank Acc. Reconciliation Post", 'OnBeforeFinalizePost', '', false, false)]
+    local procedure OnBeforeFinalizePost(var BankAccReconciliation: Record "Bank Acc. Reconciliation")
+    var
+        BankAccLedEntry: Record "Bank Account Ledger Entry";
+        GenJnlInit: Record 81;
+        GenJnl: Record 81;
+        GL: Record 98;
+        Amount: Decimal;
+        BanKposting: Record "Bank Account Posting Group";
     begin
-        //Rec.SetRange("Approval Code",BankAccRec
+        GL.Get();
+        GL.TestField("Tender Reco. Batch Name");
+        GL.TestField("Tender Reco. Template Name");
+        BankAccLedEntry.Reset();
+        BankAccLedEntry.SetRange("Bank Account No.", BankAccReconciliation."Bank Account No.");
+        BankAccLedEntry.SetRange("Statement No.", BankAccReconciliation."Statement No.");
+        IF BankAccLedEntry.FindSet() then
+            repeat
+                Amount += BankAccLedEntry.Amount;
+            until BankAccLedEntry.Next() = 0;
+        //******** Postive Amount with bank Account Debit*********
+        GenJnl.Reset();
+        GenJnl.SetRange("Journal Template Name", Gl."Tender Reco. Template Name");
+        GenJnl.SetRange("Journal Batch Name", GL."Tender Reco. Batch Name");
+        GenJnlInit.Init();
+        GenJnlInit."Journal Template Name" := Gl."Tender Reco. Template Name";
+        GenJnlInit.validate("Journal Batch Name", Gl."Tender Reco. Batch Name");
+        GenJnlInit.Validate("Posting Date", Today);
+
+        IF GenJnl.FindLast() then
+            GenJnlInit."Line No." := GenJnl."Line No." + 10000
+        else
+            GenJnlInit."Line No." := 10000;
+
+        GenJnlInit."Document No." := 'RECO' + format(GenJnlInit."Line No.");
+        GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
+        IF BankAccReconciliation."Reco. Account Type" = BankAccReconciliation."Reco. Account Type"::"Bank Account" then begin
+            GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"Bank Account");
+            GenJnlInit.Validate("Account No.", BankAccReconciliation."Reco. Account No.");
+        end else begin
+            IF BankAccReconciliation."Reco. Account Type" = BankAccReconciliation."Reco. Account Type"::"G/L Account" then begin
+                GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"G/L Account");
+                GenJnlInit.Validate("Account No.", BankAccReconciliation."Reco. Account No.");
+            end;
+        end;
+        GenJnlInit.Validate(Amount, Amount);
+        GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
+        GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
+        GenJnlInit.Insert(true);
+        //******** Negative Amount with G/L Account Credit*********
+        IF BanKposting.Get(BankAccReconciliation."Bank Account No.") then;
+        GenJnl.Reset();
+        GenJnl.SetRange("Journal Template Name", Gl."Tender Reco. Template Name");
+        GenJnl.SetRange("Journal Batch Name", GL."Tender Reco. Batch Name");
+        GenJnlInit.Init();
+        GenJnlInit."Journal Template Name" := Gl."Tender Reco. Template Name";
+        GenJnlInit.validate("Journal Batch Name", Gl."Tender Reco. Batch Name");
+        GenJnlInit.Validate("Posting Date", Today);
+
+        IF GenJnl.FindLast() then
+            GenJnlInit."Line No." := GenJnl."Line No." + 10000
+        else
+            GenJnlInit."Line No." := 10000;
+
+        GenJnlInit."Document No." := 'RECO' + format(GenJnlInit."Line No.");
+        GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
+        GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"G/L Account");
+        GenJnlInit.Validate("Account No.", BanKposting."G/L Account No.");
+        GenJnlInit.Validate(Amount, -Amount);
+        GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
+        GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
+        GenJnlInit.Insert(true);
     end;
     //<<<<<<<START********************************CU-12*****************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitBankAccLedgEntry', '', false, false)]
