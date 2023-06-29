@@ -6,7 +6,7 @@ tableextension 50321 "Bank Account Led. Entry" extends "Bank Account Ledger Entr
         {
             Caption = 'Approval Code';
             DataClassification = ToBeClassified;
-            Editable = false;
+            //Editable = false;
         }
         field(50302; "Card No."; Integer)
         {

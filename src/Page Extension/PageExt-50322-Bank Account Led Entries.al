@@ -7,6 +7,7 @@ pageextension 50322 "Bank Account Led Entries" extends "Bank Account Ledger Entr
             field("Approval Code"; Rec."Approval Code")
             {
                 ApplicationArea = all;
+                Editable = false;
             }
             field("Card No."; Rec."Card No.")
             {

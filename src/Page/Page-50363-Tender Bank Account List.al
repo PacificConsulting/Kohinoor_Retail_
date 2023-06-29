@@ -1,7 +1,7 @@
 page 50363 "Tender Bank Account List"
 {
     ApplicationArea = All;
-    Caption = 'Tender Bank Account List';
+    Caption = 'Tender Accounts';
     PageType = List;
     SourceTable = "Bank Account";
     UsageCategory = Lists;

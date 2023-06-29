@@ -187,6 +187,10 @@ report 50312 "Pre-Payment Sheet Report"
             {
 
             }
+            column(PurchUnitPrice; PurchUnitPrice)
+            {
+
+            }
 
 
             trigger OnAfterGetRecord()
@@ -271,17 +275,19 @@ report 50312 "Pre-Payment Sheet Report"
                 //Trade Aggrement   
                 //  if TradeAggrement.Get("Vendor Item No.") then;
                 TradeAggrement.Reset();
-                TradeAggrement.SetRange("Item No.", "Vendor Item No.");
+                TradeAggrement.SetRange("Item No.", "No.");
                 TradeAggrement.SetRange("Customer Group", TradeAggrement."Customer Group"::Regular);
-                if TradeAggrement.FindFirst() then begin
-                    Dealerprice := TradeAggrement.DP;
-                    NNLC := TradeAggrement.NNLC;
-                    FNNLC := TradeAggrement.NNLC;
-                    if TradeAggrement.DP <> 0 then;
-                    Margin_percent_on_Purchase_unit_price := "Unit Cost" * 100 / Dealerprice + 100;
+                if TradeAggrement.FindSet() then
+                    repeat
+                        Dealerprice += TradeAggrement.DP;
+                        NNLC := TradeAggrement.NNLC;
+                        FNNLC := TradeAggrement.NNLC;
+                    until TradeAggrement.Next = 0;
+                if TradeAggrement.DP <> 0 then;
+                Margin_percent_on_Purchase_unit_price := "Unit Cost" * 100 / Dealerprice + 100;
 
 
-                end;
+
                 //TotalDealerPrice
                 TotalDealerPrice := "Purch. Inv. Line".Quantity * Dealerprice;
 
@@ -294,7 +300,12 @@ report 50312 "Pre-Payment Sheet Report"
 
 
                 TotalNLC := "Purch. Inv. Line"."Unit Cost" * Quantity;
-
+                PILRec.Reset();
+                PILRec.SetRange("Document No.", "Document No.");
+                if PILRec.FindFirst() then
+                    if PILRec.Quantity <> 0 then
+                        PUP := TotalGST / Quantity;
+                PurchUnitPrice := PUP + "Unit Cost";
                 //
             end;
 
@@ -400,6 +411,8 @@ report 50312 "Pre-Payment Sheet Report"
         Todate: Date;
         String: Text;
         TotalNLC: Decimal;
+        PUP: Decimal;
+        PurchUnitPrice: Decimal;
 
 
 

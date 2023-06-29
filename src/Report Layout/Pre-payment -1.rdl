@@ -5047,7 +5047,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Top>0.25in</Top>
+            <Top>0.625in</Top>
             <Height>0.5in</Height>
             <Width>63.9375in</Width>
             <Style>
@@ -5093,8 +5093,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox8</rd:DefaultName>
-            <Top>0.06738cm</Top>
-            <Left>16.66466cm</Left>
+            <Top>1.01988cm</Top>
+            <Left>16.34716cm</Left>
             <Height>0.42651cm</Height>
             <Width>2.88806cm</Width>
             <ZIndex>1</ZIndex>
@@ -5125,8 +5125,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox12</rd:DefaultName>
-            <Top>0.06738cm</Top>
-            <Left>19.60245cm</Left>
+            <Top>1.01988cm</Top>
+            <Left>19.28495cm</Left>
             <Height>0.42651cm</Height>
             <Width>3.12527cm</Width>
             <ZIndex>2</ZIndex>
@@ -5155,8 +5155,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox16</rd:DefaultName>
-            <Top>0.06738cm</Top>
-            <Left>15.47495cm</Left>
+            <Top>1.01988cm</Top>
+            <Left>15.15745cm</Left>
             <Height>0.42651cm</Height>
             <Width>1.18971cm</Width>
             <ZIndex>3</ZIndex>
@@ -5170,8 +5170,42 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox18">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Pre-Payment Sheet Report</Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox18</rd:DefaultName>
+            <Top>0cm</Top>
+            <Left>15.6337cm</Left>
+            <Height>0.6cm</Height>
+            <Width>7.09402cm</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>1.905cm</Height>
+        <Height>3.28083cm</Height>
         <Style />
       </Body>
       <Width>162.40125cm</Width>
@@ -5420,6 +5454,12 @@ End Function
         </Field>
         <Field Name="TotalNLCFormat">
           <DataField>TotalNLCFormat</DataField>
+        </Field>
+        <Field Name="PurchUnitPrice">
+          <DataField>PurchUnitPrice</DataField>
+        </Field>
+        <Field Name="PurchUnitPriceFormat">
+          <DataField>PurchUnitPriceFormat</DataField>
         </Field>
       </Fields>
       <Query>
