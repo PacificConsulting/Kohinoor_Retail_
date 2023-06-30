@@ -13,6 +13,28 @@ pageextension 50328 "Bank Acc reconcilation" extends "Bank Acc. Reconciliation"
                         Error('This Bank Account is define as Tender Account');
             end;
         }
+
+    }
+    actions
+    {
+        addafter("Ba&nk")
+        {
+            action(Tender)
+            {
+                ApplicationArea = all;
+                PromotedCategory = New;
+                Promoted = true;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    rec.Tender := true;
+                    rec.Modify();
+
+                end;
+
+
+            }
+        }
     }
     trigger OnOpenPage()
     begin

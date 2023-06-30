@@ -46,6 +46,11 @@ table 50324 "Azure Storage Container Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(10; "Container Name Demo"; Text[250])
+        {
+            Caption = 'Container Name Demo';
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys

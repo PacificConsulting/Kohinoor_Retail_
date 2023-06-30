@@ -371,8 +371,8 @@ report 50311 "Sales Order"
                         Paymentmethod += PaymentLines."Payment Method Code" + '' + '-' + format(PaymentLines.Amount) + ',';// + ' ' + PaymentLines."Payment Method Code"
 
                     until PaymentLines.Next = 0;
-                    if Paymentmethod <> '' then;
-                    txt1 := DelStr(Paymentmethod, StrLen(Paymentmethod), 1);
+                    if Paymentmethod <> '' then
+                        txt1 := DelStr(Paymentmethod, StrLen(Paymentmethod), 1);
                 end;
                 //Message(txt1);
                 //end;
@@ -392,8 +392,8 @@ report 50311 "Sales Order"
                         if RPaylines."Approval Code" <> '' then
                             Financecode += RPaylines."Approval Code" + ',';
                     until RPaylines.Next = 0;
-                    if Financecode <> '' then;
-                    txt2 := DelStr(Financecode, StrLen(Financecode), 1);
+                    if Financecode <> '' then
+                        txt2 := DelStr(Financecode, StrLen(Financecode), 1);
                 end;
 
                 recSL.Reset();

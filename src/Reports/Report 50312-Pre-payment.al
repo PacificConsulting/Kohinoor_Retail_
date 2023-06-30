@@ -11,10 +11,14 @@ report 50312 "Pre-Payment Sheet Report"
         dataitem("Purch. Inv. Line"; "Purch. Inv. Line")
         {
             RequestFilterFields = "Document No.", "Posting Date";
-            DataItemTableView = sorting("Document No.", "Line No.") order(ascending) where(Quantity = filter(<> 0));
+            DataItemTableView = sorting("Document No.", "Line No.") order(ascending) where(Quantity = filter(<> 0), Type = filter('Item'));
 
             //DataItemLinkReference= 
             column(PIH_Orderno; Orderno)
+            {
+
+            }
+            column(PIL_HSN_SAC_Code; "HSN/SAC Code")
             {
 
             }
@@ -114,7 +118,7 @@ report 50312 "Pre-Payment Sheet Report"
             {
 
             }
-            column(Unit_Cost; "Unit Cost")
+            column(Unit_Cost; PUP)
             {
 
             }
@@ -187,7 +191,11 @@ report 50312 "Pre-Payment Sheet Report"
             {
 
             }
-            column(PurchUnitPrice; PurchUnitPrice)
+            // column(PurchUnitPrice; PurchUnitPrice)
+            // {
+
+            // }
+            column(PUP; PUP)
             {
 
             }
@@ -212,6 +220,7 @@ report 50312 "Pre-Payment Sheet Report"
 
                 if RecItem.Get("No.") then;
 
+
                 //Calculate GST
 
                 CGST := 0;
@@ -223,7 +232,7 @@ report 50312 "Pre-Payment Sheet Report"
                 Clear(CGST);
                 Clear(IGST);
                 Clear(SGST);
-
+                Clear(TotalGST);
                 DGLE.Reset();
                 DGLE.SetRange("Document No.", "Document No.");
                 DGLE.SetRange("Document Line No.", "Line No.");
@@ -253,13 +262,14 @@ report 50312 "Pre-Payment Sheet Report"
                     until DGLE.Next() = 0;
 
                 end;
+                //Total Tax Amount
                 TotalGST := SGST + CGST + IGST;
 
                 //TotalBasic
                 Totalbasic := "Purch. Inv. Line".Quantity * "Purch. Inv. Line"."Unit Cost";
 
                 //Totalpurchaseprice 
-                Totalpurchaseprice := "Unit Cost" + TotalGST - "Line Discount Amount";
+                Totalpurchaseprice := (Totalbasic + TotalGST) - "Line Discount Amount";
 
                 //TDS Amount
                 TDSAmT := 0;
@@ -272,41 +282,46 @@ report 50312 "Pre-Payment Sheet Report"
                     repeat
                         TDSAmt += TDSEntry."TDS Amount";
                     until TDSEntry.Next = 0;
+
                 //Trade Aggrement   
-                //  if TradeAggrement.Get("Vendor Item No.") then;
+                Clear(Dealerprice);
+                Clear(FNNLC);
+                Clear(NNLC);
                 TradeAggrement.Reset();
-                TradeAggrement.SetRange("Item No.", "No.");
+                TradeAggrement.SetRange("Item No.", "Purch. Inv. Line"."No.");
                 TradeAggrement.SetRange("Customer Group", TradeAggrement."Customer Group"::Regular);
-                if TradeAggrement.FindSet() then
-                    repeat
-                        Dealerprice += TradeAggrement.DP;
-                        NNLC := TradeAggrement.NNLC;
-                        FNNLC := TradeAggrement.NNLC;
-                    until TradeAggrement.Next = 0;
-                if TradeAggrement.DP <> 0 then;
-                Margin_percent_on_Purchase_unit_price := "Unit Cost" * 100 / Dealerprice + 100;
-
-
+                //TradeAggrement.SetRange("From Date", Fromdate);
+                //TradeAggrement.SetRange("To Date", Todate);
+                TradeAggrement.SetFilter("From Date", '<=%1', "Posting Date");
+                TradeAggrement.SetFilter("To Date", '>=%1', "Posting Date");
+                if TradeAggrement.FindFirst() then begin
+                    Dealerprice += TradeAggrement.DP;
+                    NNLC += TradeAggrement.NNLC;
+                    FNNLC += TradeAggrement.FNNLC;
+                end;
+                //Margin percent on Purchase unit price
+                if (TradeAggrement.DP <> 0) AND (Dealerprice <> 0) then
+                    Margin_percent_on_Purchase_unit_price := ("Unit Cost" * 100 / Dealerprice) + 100;
 
                 //TotalDealerPrice
+                Clear(TotalDealerPrice);
                 TotalDealerPrice := "Purch. Inv. Line".Quantity * Dealerprice;
 
-                //Margin percent on Purchase unit price
 
+                //PurchUnitPrice
+                Clear(PUP);
+                if "Purch. Inv. Line".Quantity <> 0 then
+                    PUP := (TotalGST / Quantity) + "Unit Cost";
+
+                // TotalNLC
+                Clear(TotalNLC);
+                TotalNLC := PUP * "Purch. Inv. Line".Quantity;
 
                 //Margin percent on NLC
+                if (Dealerprice <> 0) then
+                    Margin_percent_on_NLC := (PUP * 100 / Dealerprice) + 100;
 
-                // Margin_percent_on_NLC := "Unit Cost" * 100 / Dealerprice + 100;
 
-
-                TotalNLC := "Purch. Inv. Line"."Unit Cost" * Quantity;
-                PILRec.Reset();
-                PILRec.SetRange("Document No.", "Document No.");
-                if PILRec.FindFirst() then
-                    if PILRec.Quantity <> 0 then
-                        PUP := TotalGST / Quantity;
-                PurchUnitPrice := PUP + "Unit Cost";
-                //
             end;
 
             trigger OnPreDataItem() //PIL

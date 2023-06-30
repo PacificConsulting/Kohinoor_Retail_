@@ -26,10 +26,15 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     var
                         BankAccReconciliationLine: record "Bank Acc. Reconciliation Line";
                         BA: Record "Bank Account";
+                        PM: Record "Payment Method";
                     begin
                         IF BA.get(Rec."Bank Account No.") then
                             IF BA.Tender = false then
                                 Error('This Bank Account is not as Tender Account');
+                        IF PM.Get(rec."Bank Account No.") then begin
+                            rec."Reco. Account Type" := PM."Reco. Account Type";
+                            rec."Reco. Account No." := PM."Reco. Account No.";
+                        end;
 
                         if BankAccReconciliationLine.BankStatementLinesListIsEmpty(Rec."Statement No.", Rec."Statement Type", Rec."Bank Account No.") then
                             CreateEmptyListNotification();
@@ -70,6 +75,14 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     ApplicationArea = Basic, Suite;
                     Caption = 'Statement Ending Balance';
                     ToolTip = 'Specifies the ending balance shown on the bank''s statement that you want to reconcile with the bank account.';
+                }
+                field("Reco. Account Type"; Rec."Reco. Account Type")
+                {
+                    ApplicationArea = all;
+                }
+                field("Reco. Account No."; Rec."Reco. Account No.")
+                {
+                    ApplicationArea = all;
                 }
 
             }
@@ -245,22 +258,88 @@ page 50389 "Tender Bank Acc. Reconciliate"
             }
             group("M&atching")
             {
-                Caption = 'M&atching';
+                Caption = 'M&atching';//
                 action(MatchAutomatically)
                 {
+                    ApplicationArea = All;
+                    Caption = 'Match Auto With Approval Code';
+                    Image = MapAccounts;
+                    ToolTip = 'Automatically search for and match bank statement lines.';
+                    trigger OnAction()
+                    var
+                        BRL: Record "Bank Acc. Reconciliation Line";
+                        MBEL: codeunit "Match Bank Rec. Lines";
+                        BLE: Record "Bank Account Ledger Entry";
+                        MatchBankRecLines: Codeunit "Match Bank Rec. Lines";
+                        TempBankAccReconciliationLine: Record "Bank Acc. Reconciliation Line" temporary;
+                        TempBankAccountLedgerEntry: Record "Bank Account Ledger Entry" temporary;
+                    begin
+                        BRl.Reset();
+                        BRL.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                        BRL.SetRange("Bank Account No.", rec."Bank Account No.");
+                        BRL.SetRange("Statement No.", rec."Statement No.");
+                        IF BRL.FindSet() then
+                            repeat
+                                BLE.Reset();
+                                BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
+                                BLE.SetRange("Approval Code", BRL."Approval Code");
+                                IF BLE.FindFirst() then
+                                    repeat
+                                        TempBankAccReconciliationLine.DeleteAll();
+                                        TempBankAccountLedgerEntry.DeleteAll();
+                                        TempBankAccReconciliationLine := BRL;
+                                        TempBankAccReconciliationLine.Insert();
+                                        TempBankAccountLedgerEntry := BLE;
+                                        TempBankAccountLedgerEntry.Insert();
+                                        MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
+                                    until BLE.Next() = 0;
+                            until BRL.Next() = 0;
+                    end;
+
+                }
+                /*
+                action(MatchAutomaticallyNew)
+                {
                     ApplicationArea = Basic, Suite;
-                    Caption = 'Match Automatically';
+                    Caption = 'Match Automatically New';
                     Image = MapAccounts;
                     ToolTip = 'Automatically search for and match bank statement lines.';
 
                     trigger OnAction()
+                    var
+                        BRL: Record "Bank Acc. Reconciliation Line";
+                        MBEL: codeunit "Match Bank Rec. Lines";
+                        BLE: Record "Bank Account Ledger Entry";
+                        MatchBankRecLines: Codeunit "Match Bank Rec. Lines";
+                        TempBankAccReconciliationLine: Record "Bank Acc. Reconciliation Line" temporary;
+                        TempBankAccountLedgerEntry: Record "Bank Account Ledger Entry" temporary;
                     begin
-                        Rec.SetRange("Statement Type", rec."Statement Type");
-                        Rec.SetRange("Bank Account No.", Rec."Bank Account No.");
-                        Rec.SetRange("Statement No.", Rec."Statement No.");
-                        REPORT.Run(REPORT::"Match Bank Entries", true, true, Rec);
+                        BRl.Reset();
+                        BRL.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                        BRL.SetRange("Bank Account No.", rec."Bank Account No.");
+                        BRL.SetRange("Statement No.", rec."Statement No.");
+                        IF BRL.FindSet() then
+                            repeat
+                                BLE.Reset();
+                                BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
+                                BLE.SetRange("Approval Code", BRL."Approval Code");
+                                IF BLE.FindFirst() then
+                                    repeat
+                                        TempBankAccReconciliationLine.DeleteAll();
+                                        TempBankAccountLedgerEntry.DeleteAll();
+                                        TempBankAccReconciliationLine := BRL;
+                                        TempBankAccReconciliationLine.Insert();
+                                        TempBankAccountLedgerEntry := BLE;
+                                        TempBankAccountLedgerEntry.Insert();
+                                        MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
+                                    until BLE.Next() = 0;
+                            until BRL.Next() = 0;
                     end;
+
                 }
+                */
                 action(MatchManually)
                 {
                     ApplicationArea = Basic, Suite;

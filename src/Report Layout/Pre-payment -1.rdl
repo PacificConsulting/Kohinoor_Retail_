@@ -148,9 +148,6 @@
                   <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.22917in</Width>
-                </TablixColumn>
-                <TablixColumn>
                   <Width>1.11458in</Width>
                 </TablixColumn>
                 <TablixColumn>
@@ -2468,59 +2465,6 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox52">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Total other price</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox52</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Textbox48">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -3913,14 +3857,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Unit_Cost">
+                        <Textbox Name="PUP">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Unit_Cost.Value</Value>
+                                  <Value>=Fields!PUP.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -3929,7 +3873,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Unit_Cost</rd:DefaultName>
+                          <rd:DefaultName>PUP</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -4379,7 +4323,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Margin_percent_on_Purchase_unit_price.Value</Value>
+                                  <Value>=Round(Fields!Margin_percent_on_Purchase_unit_price.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -4430,7 +4374,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Margin_percent_on_Purchase_unit_price.Value</Value>
+                                  <Value>=Round(Fields!Margin_percent_on_NLC.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -4576,14 +4520,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Unit_Cost1">
+                        <Textbox Name="PUP1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Unit_Cost.Value</Value>
+                                  <Value>=Fields!PUP.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -4592,7 +4536,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Unit_Cost1</rd:DefaultName>
+                          <rd:DefaultName>PUP1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -4699,26 +4643,6 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -4780,14 +4704,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox58">
+                        <Textbox Name="PIL_HSN_SAC_Code">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!PIL_HSN_SAC_Code.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -4796,58 +4720,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox58</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox54">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox54</rd:DefaultName>
+                          <rd:DefaultName>PIL_HSN_SAC_Code</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -5033,7 +4906,6 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -5049,7 +4921,7 @@
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.625in</Top>
             <Height>0.5in</Height>
-            <Width>63.9375in</Width>
+            <Width>62.70833in</Width>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -5208,7 +5080,7 @@
         <Height>3.28083cm</Height>
         <Style />
       </Body>
-      <Width>162.40125cm</Width>
+      <Width>159.27916cm</Width>
       <Page>
         <PageHeight>21cm</PageHeight>
         <PageWidth>165cm</PageWidth>
@@ -5265,6 +5137,9 @@ End Function
       <Fields>
         <Field Name="PIH_Orderno">
           <DataField>PIH_Orderno</DataField>
+        </Field>
+        <Field Name="PIL_HSN_SAC_Code">
+          <DataField>PIL_HSN_SAC_Code</DataField>
         </Field>
         <Field Name="PIL_Document_No_">
           <DataField>PIL_Document_No_</DataField>
@@ -5455,11 +5330,11 @@ End Function
         <Field Name="TotalNLCFormat">
           <DataField>TotalNLCFormat</DataField>
         </Field>
-        <Field Name="PurchUnitPrice">
-          <DataField>PurchUnitPrice</DataField>
+        <Field Name="PUP">
+          <DataField>PUP</DataField>
         </Field>
-        <Field Name="PurchUnitPriceFormat">
-          <DataField>PurchUnitPriceFormat</DataField>
+        <Field Name="PUPFormat">
+          <DataField>PUPFormat</DataField>
         </Field>
       </Fields>
       <Query>

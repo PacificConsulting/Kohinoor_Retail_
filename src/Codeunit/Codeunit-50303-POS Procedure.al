@@ -1151,6 +1151,7 @@ codeunit 50303 "POS Procedure"
                     SalesLine.SetCurrentKey(Type, "No.");
                     SalesLine.SetRange(Type, SalesLine.Type::"G/L Account");
                     SalesLine.SetRange("No.", SalesRec11."Exchange Item G/L");
+                    SalesLine.SetRange("Document No.", documentno);//PCPL/NSW/29June23
                     IF SalesLine.FindSet() then begin
                         repeat
                             SalesLine.Validate("Qty. to Ship", SalesLine.Quantity);
@@ -1158,7 +1159,6 @@ codeunit 50303 "POS Procedure"
                         until SalesLine.Next() = 0;
                     end;
                     ReleaseSalesDoc.PerformManualRelease(SalesHeader);
-
                 end;
             end;
         end; //else
@@ -1305,9 +1305,10 @@ codeunit 50303 "POS Procedure"
                     until SalesLine.Next() = 0;
 
                 SalesLine.Reset();
-                SalesLine.SetCurrentKey(Type, "No.");
+                SalesLine.SetCurrentKey(Type, "No.", "Document No.");
                 SalesLine.SetRange(Type, SalesLine.Type::"G/L Account");
                 SalesLine.SetRange("No.", SalesRec."Exchange Item G/L");
+                SalesLine.SetRange("Document No.", documentno);
                 IF SalesLine.FindSet() then begin
                     repeat
                         SalesLine.Validate("Qty. to Ship", SalesLine.Quantity);

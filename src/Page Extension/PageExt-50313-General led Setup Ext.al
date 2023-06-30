@@ -10,6 +10,16 @@ pageextension 50313 "General led Setup Ext" extends "General Ledger Setup"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Exchange Batch field.';
             }
+            field("Tender Reco. Template Name"; Rec."Tender Reco. Template Name")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Tender Reco. Template Name field.';
+            }
+            field("Tender Reco. Batch Name"; Rec."Tender Reco. Batch Name")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Tender Reco. Batch Name field.';
+            }
         }
         addafter("Tax Information")
         {

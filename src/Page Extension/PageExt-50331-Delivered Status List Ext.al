@@ -16,7 +16,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                 Promoted = true;
                 PromotedCategory = Report;
                 PromotedIsBig = true;
-                Caption = 'Demo File';
+                Caption = 'Create Demo File';
                 trigger OnAction()
                 var
                     PDL: Record "Posted Delivery Line";
@@ -59,6 +59,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                         repeat
                             //***********Report Save as Excel****************
                             PDL.RESET;
+                            PDL.SetCurrentKey("Item Category code 1", Delivered, Demo, "Delivered Date");
                             PDL.SETRANGE("Item Category code 1", IH.Code);
                             PDl.SetRange(Delivered, true);
                             PDL.SetRange(Demo, false);
@@ -73,8 +74,9 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                             //*************Azure upload Code**************
                             //IF PDL."Item Category code 1" <> '' then begin
                             ABSCSetup.Get();
+                            ABSCSetup.TestField("Container Name Demo");
                             Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-                            ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name", Authorization);
+                            ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Demo", Authorization);
                             FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
                             response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
                             //IF response.IsSuccessful() then

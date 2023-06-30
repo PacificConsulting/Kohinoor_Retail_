@@ -304,7 +304,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 begin
                     //result := POS.POSAction('KTPLSO23240091', 10000, 'INVLINE', '1', '', '');
                     // result := cu.OrderConfirmationforWH(rec."No.");
-                    //result := Cu.OrderConfirmationforDelivery(rec."No.");
+                    result := Cu.OrderConfirmationforDelivery(rec."No.");
                     //result := CU.ItemReceipt('KTPLPO23240011', 20000, '');
                     //result := POS.AddWarranty('KTPLSO23240121', 10000, 'ZOPPER', '12');
                     //result := POS.ShipTransferLine('KTRO029', 10000, '1');
@@ -319,7 +319,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //result := CU.InvoiceLine(Rec."No.", 10000, '', '', '');
                     //cu.RefreshSaleOrder(Rec."No.");
                     // POS.TransferShipQtyUpdate('KTVTO232400000024');
-                    result := cu.PaymentReceipt(rec."Sell-to Customer No.");
+                    //result := cu.PaymentReceipt(rec."Sell-to Customer No.");
                     Message(result);
                 end;
             }

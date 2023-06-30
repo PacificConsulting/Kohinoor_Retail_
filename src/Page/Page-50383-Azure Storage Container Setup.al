@@ -44,6 +44,10 @@ page 50383 "Azure Storage Container Setup"
                 {
                     ToolTip = 'Specifies the value of the Azure Payment Receipt URL field.';
                 }
+                field("Container Name Demo"; Rec."Container Name Demo")
+                {
+                    ToolTip = 'Specifies the value of the Container Name Demo field.';
+                }
 
             }
         }

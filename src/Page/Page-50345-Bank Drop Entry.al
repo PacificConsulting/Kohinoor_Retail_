@@ -110,11 +110,11 @@ page 50345 "Bank Drop Entry "
         IF GenBatch.Get(Loc."Payment Journal Template Name", Loc."Payment Journal Batch Name") then;
 
         GenJourLineFilter.Reset();
-        GenJourLineFilter.SetRange("Journal Template Name", 'CONTRA VO');
+        GenJourLineFilter.SetRange("Journal Template Name", 'CONTRAV');
         GenJourLineFilter.SetRange("Journal Batch Name", GLSetup."Bank Drop Batch");
 
         GenJourLine.Init();
-        GenJourLine."Journal Template Name" := 'CONTRA VO';
+        GenJourLine."Journal Template Name" := 'CONTRAV';
         GenJourLine."Journal Batch Name" := GLSetup."Bank Drop Batch";
         GenJourLine.Validate("Posting Date", Today);
 

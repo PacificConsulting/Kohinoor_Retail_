@@ -18,6 +18,7 @@ page 50350 "Items API"
         {
             repeater(General)
             {
+
                 field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
                 {
                     Caption = 'Allow Invoice Disc.';

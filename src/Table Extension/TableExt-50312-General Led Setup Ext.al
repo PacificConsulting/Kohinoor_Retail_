@@ -115,5 +115,14 @@ tableextension 50312 "General Led.Setup Ext" extends "General Ledger Setup"
             Caption = 'Exchange Batch';
             DataClassification = ToBeClassified;
         }
+        field(50311; "Tender Reco. Template Name"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Gen. Journal Template";
+        }
+        field(50312; "Tender Reco. Batch Name"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

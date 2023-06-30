@@ -168,6 +168,10 @@ page 50357 "Trade Aggrement List"
                 {
                     ToolTip = 'Specifies the value of the UOM field.';
                 }
+                field("FNNLC Without SELLOUT"; Rec."FNNLC Without SELLOUT")
+                {
+                    ToolTip = 'Specifies the value of the FNNLC Without SELLOUT field.';
+                }
             }
 
         }

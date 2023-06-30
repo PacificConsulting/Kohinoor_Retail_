@@ -203,6 +203,10 @@ table 50317 "Trade Aggrement"
             DataClassification = ToBeClassified;
             Caption = 'PROMO';
         }
+        field(40; "FNNLC Without SELLOUT"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys
