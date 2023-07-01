@@ -102,6 +102,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                 PromotedCategory = Report;
                 PromotedIsBig = true;
                 Caption = 'Demo Fasle';
+                Visible = false;
                 trigger OnAction()
                 var
                     PDL: Record "Posted Delivery Line";

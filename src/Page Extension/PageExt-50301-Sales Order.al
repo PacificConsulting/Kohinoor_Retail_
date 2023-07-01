@@ -120,6 +120,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 Promoted = true;
                 PromotedIsBig = true;
                 PromotedCategory = Process;
+                Visible = false;
 
                 trigger OnAction()
                 var
@@ -296,6 +297,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 Promoted = true;
                 PromotedOnly = true;
                 Image = Email;
+                Visible = false;
                 trigger OnAction()
                 var
                     CU: Codeunit 50303;
@@ -331,6 +333,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 Promoted = true;
                 PromotedOnly = true;
                 Image = Email;
+                Visible = false;
                 trigger OnAction()
                 var
                     txtFile: Text[100];
@@ -349,6 +352,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     CU: Codeunit 50303;
                     POS: Codeunit 50302;
                     result: Text;
+
                 begin
                     Message('hi');
                     result := POS.POSAction('KTPLSO23240091', 0, 'INVLINE', '', '', '');

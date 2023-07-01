@@ -525,7 +525,7 @@ report 50311 "Sales Order"
     var
         mybalance: Decimal;
         salesline: Record "Sales Line";
-        shiptogstin: Code[20];
+        shiptogstin: Code[100];
         Comments: Text;
         CalSta: Codeunit "Calculate Statistics";
         AmtInWordDecimal: Decimal;
@@ -552,7 +552,7 @@ report 50311 "Sales Order"
         RecCust: Record Customer;
         Mail: Text[80];
         PhoneNo: Code[30];
-        CustGSTIN: code[20];
+        CustGSTIN: code[50];
         CGST: Decimal;
         IGST: Decimal;
         SGST: Decimal;
@@ -577,11 +577,11 @@ report 50311 "Sales Order"
         TotalAmount1: decimal;
         ShiptoAdd: Text[200];
         ShiptoName: Text[50];
-        Shiptocity: Text[20];
-        Notext: text[20];
+        Shiptocity: Text[50];
+        Notext: text[50];
         TotalGSTAmount: decimal;
         TotalGSTPercent: Decimal;
-        ShipGSTIN: code[20];
+        ShipGSTIN: code[50];
         customer: Record Customer;
         TotalAmount: decimal;
         PaymentLines: Record "Payment Lines";

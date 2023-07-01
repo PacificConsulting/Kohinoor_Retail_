@@ -20,6 +20,23 @@
             
         },
         {
+            "name": "Debugg Production",
+            "type": "al",
+            "request": "attach",
+            "environmentType": "Production",
+            "environmentName": "Production",
+            "tenant": "abc87ed0-4014-486f-afd8-1577c92442a6",
+            "breakOnError": "All",
+            "breakOnRecordWrite": "None",
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10,
+            "breakOnNext": "WebClient",
+            "sessionId": 15262
+            
+        },
+        {
             "name": "Microsoft cloud sandbox",
             "request": "launch",
             "type": "al",

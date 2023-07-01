@@ -1862,6 +1862,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -3422,7 +3423,7 @@
                 <TablixMember>
                   <Group Name="Item_No_">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!Item_No_.Value</GroupExpression>
+                      <GroupExpression>=Fields!Line_No_.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
                   <TablixMembers>

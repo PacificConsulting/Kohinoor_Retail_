@@ -60,7 +60,9 @@ xmlport 50302 "Sales Document Upload"
                 textelement(GlobalDimension2)
                 {
                 }
-
+                textelement(staffID)
+                {
+                }
                 trigger OnBeforeInsertRecord()
                 var
                     RecLoc: Record 14;
@@ -99,6 +101,7 @@ xmlport 50302 "Sales Document Upload"
                         SaleseHeader.INSERT(TRUE);
                         SaleseHeader.VALIDATE("Sell-to Customer No.", CustNo);
                         EVALUATE(PostDate, Postingdate);
+                        SaleseHeader.Validate("Staff Id", staffID);
                         SaleseHeader.VALIDATE(SaleseHeader."Posting Date", PostDate);
                         SaleseHeader.Validate("Payment Terms Code", PayemntCode);
                         SaleseHeader.validate("External Document No.", ExterDocNo);
@@ -106,6 +109,7 @@ xmlport 50302 "Sales Document Upload"
                         SaleseHeader.VALIDATE(SaleseHeader."Location Code", LocationCode);
                         SaleseHeader.VALIDATE("Shortcut Dimension 1 Code", GlobalDimension1);
                         SaleseHeader.VALIDATE("Shortcut Dimension 2 Code", GlobalDimension2);
+                        SaleseHeader."Store No." := GlobalDimension2;
                         SaleseHeader.Validate("Ship-to Code", ShiptoAdd);
                         SaleseHeader.MODIFY(true);
                         COMMIT;
@@ -135,6 +139,7 @@ xmlport 50302 "Sales Document Upload"
                         SalesLine."Price Inclusive of Tax" := true;
                         SalesLine.VALIDATE("Shortcut Dimension 1 Code", SaleseHeader."Shortcut Dimension 1 Code");
                         SalesLine.VALIDATE("Shortcut Dimension 2 Code", SaleseHeader."Shortcut Dimension 2 Code");
+                        SalesLine."Store No." := SaleseHeader."Shortcut Dimension 2 Code";
                         SalesLine.MODIFY(TRUE);
 
                     END ELSE BEGIN
@@ -157,6 +162,7 @@ xmlport 50302 "Sales Document Upload"
                         EVALUATE(UnitCostValue, Unitprice);
                         SalesLine.VALIDATE("Unit Price Incl. of Tax", UnitCostValue);
                         SalesLine."Price Inclusive of Tax" := true;
+                        SalesLine."Store No." := SaleseHeader."Shortcut Dimension 2 Code";
                         SalesLine.MODIFY(TRUE);
                     END;
 
