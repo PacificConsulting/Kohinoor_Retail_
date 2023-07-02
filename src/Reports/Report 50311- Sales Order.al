@@ -116,7 +116,7 @@ report 50311 "Sales Order"
             {
 
             }
-            column(Shipment_Date; "Shipment Date")
+            column(Shipment_Date; "Requested Delivery Date")
             {
 
             }
@@ -323,10 +323,14 @@ report 50311 "Sales Order"
                 //TotalGSTAmountFinal := Round(TotalGSTAmountFinal, 0.01, '>');
 
 
-                if RecCust.get("Sales Header"."Sell-to Customer No.") then
+                if RecCust.get("Sales Header"."Sell-to Customer No.") then begin
                     Mail := RecCust."E-Mail";
-                PhoneNo := RecCust."Phone No.";
-                CustGSTIN := RecCust."GST Registration No.";
+                    IF RecCust."Mobile Phone No." <> '' then
+                        PhoneNo := RecCust."Phone No." + '/' + RecCust."Mobile Phone No."
+                    else
+                        PhoneNo := RecCust."Phone No.";
+                    CustGSTIN := RecCust."GST Registration No.";
+                end;
 
                 Reclocation.get("Location Code");
                 if loc.get("Store No.") then;
@@ -458,7 +462,7 @@ report 50311 "Sales Order"
                 //Exhanges comments
                 SLrec.Reset();
                 SLrec.SetRange("Document No.", "No.");
-                SLrec.SetRange(Type, Type::"G/L Account");
+                // SLrec.SetRange(Type, Type::"G/L Account");
                 if SLrec.FindFirst() then
                     repeat
                         ExchangeComments += SLrec."Exchange Comment";

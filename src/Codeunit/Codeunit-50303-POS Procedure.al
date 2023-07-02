@@ -1071,7 +1071,7 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
-                If SalesLine."Warranty Parent Line No." = 0 then
+                If (SalesLine."Warranty Parent Line No." = 0) and (SalesLine."Unit Price Incl. of Tax" <> 0) then
                     SalesLine.TestField("Unit Price");
             until SalesLine.Next() = 0;
 
@@ -1205,7 +1205,7 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
-                If SalesLine."Warranty Parent Line No." = 0 then
+                If (SalesLine."Warranty Parent Line No." = 0) and (SalesLine."Unit Price Incl. of Tax" <> 0) then
                     SalesLine.TestField("Unit Price");
             until SalesLine.Next() = 0;
 
@@ -1548,6 +1548,7 @@ codeunit 50303 "POS Procedure"
         Recref: RecordRef;
         VResult: Text;
         B64: Codeunit "Base64 Convert";
+        Result: Text;
     begin
         //*********Report SaveasPDF code********
         SIH.RESET;
@@ -1558,7 +1559,8 @@ codeunit 50303 "POS Procedure"
         Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStrm, Recref);
         TempBlob.CreateInStream(Instrm);
         VResult := B64.ToBase64(Instrm);
-        UploadonAzurBlobStorageInvoice(SIH."No." + '.PDF', VResult);
+        Result := UploadonAzurBlobStorageInvoice(SIH."No." + '.PDF', VResult);
+        exit(Result);
     end;
 
 
@@ -1670,7 +1672,7 @@ codeunit 50303 "POS Procedure"
         //        client.Post(URL, cont, response);
         IF client.Post(URL, cont, response) then
             if response.IsSuccessStatusCode() then begin
-                exit('Sucess')
+                exit('Success')
             end else
                 exit(Format(response.IsSuccessStatusCode));
 
@@ -1688,20 +1690,35 @@ codeunit 50303 "POS Procedure"
         TotalAmt: Decimal;
         CalStat: Codeunit "Calculate Statistics";
         NetAmt: Decimal;
+        SalesLine: Record 37;
     begin
-        Clear(NetAmt);
+        //Clear(NetAmt);
         SH.Reset();
         SH.SetRange("No.", documentno);
         IF SH.FindFirst() then begin
-            CalcInvDiscForHeader(SH);
-            RefreshOnAfterGetRecord(SH);
+            /*
+            SalesLine.Reset();
+            SalesLine.SetCurrentKey("Document No.", "Approval Status", "Rejected By");
+            SalesLine.SetRange("Document No.", SH."No.");
+            SalesLine.SetRange("Approval Status", SalesLine."Approval Status"::"Pending for Approval");
+            SalesLine.SetFilter("Rejected By", '<>%1', '');
+            IF SalesLine.FindSet() then
+                repeat
+                    SalesLine.Validate("Unit Price Incl. of Tax", SalesLine."Old Unit Price");
+                    SalesLine."GST Tax Amount" := (SalesLine."Unit Price Incl. of Tax" - SalesLine."Unit Price") * SalesLine.Quantity;
+                    SalesLine.Modify();
+                until SalesLine.Next() = 0;
+                */
+
+            //CalcInvDiscForHeader(SH);
+            //RefreshOnAfterGetRecord(SH);
             //GetGSTAmountTotal(SH, TotalGSTAmount1);
             //GetTCSAmountTotal(SH, TotalTCSAmt);
             //GetSalesorderStatisticsAmount(SH, TotalAmt);
-            CalStat.GetSalesStatisticsAmount(SH, NetAmt);
+            //CalStat.GetSalesStatisticsAmount(SH, NetAmt);
             //SH."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt, 1);
-            SH."Amount To Customer" := NetAmt;
-            SH.Modify();
+            //SH."Amount To Customer" := NetAmt;
+            //SH.Modify();
         end;
     end;
 

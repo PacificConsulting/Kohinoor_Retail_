@@ -8,6 +8,7 @@ page 50311 "Tender Declartion Lists"
     CardPageId = "Tender Declartion Card";
     InsertAllowed = false;
     ModifyAllowed = false;
+    Editable = false;
 
 
 

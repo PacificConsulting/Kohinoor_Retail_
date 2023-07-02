@@ -8,6 +8,7 @@ page 50373 "Expense Bookings"
     CardPageId = "Expense Booking";
     InsertAllowed = false;
     ModifyAllowed = false;
+    Editable = false;
 
     layout
     {

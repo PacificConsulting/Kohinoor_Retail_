@@ -185,6 +185,20 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             DataClassification = ToBeClassified;
 
         }
+        field(50315; "Rejected By"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+
+        }
+        field(50316; "Rejected On"; DateTime)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+
+
+
 
 
     }

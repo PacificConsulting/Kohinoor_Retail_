@@ -234,9 +234,10 @@ codeunit 50302 "POS Event and Subscriber"
     begin
         IF Comment <> '' then begin
             SL.Reset();
+            SL.SetRange(Type, SL.Type::"G/L Account");
             SL.SetRange("Document No.", documentno);
-            SL.SetRange("Line No.", lineno);
-            IF SL.FindFirst() then begin
+            //SL.SetRange("Line No.", lineno);
+            IF SL.FindLast() then begin
                 SL."Exchange Comment" := Comment;
                 SL.Modify();
             end else

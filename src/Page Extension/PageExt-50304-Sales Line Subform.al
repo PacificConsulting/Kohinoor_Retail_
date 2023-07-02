@@ -2,6 +2,10 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
 {
     layout
     {
+        modify("Bin Code")
+        {
+            Visible = true;
+        }
         modify(Quantity)
         {
             trigger OnAfterValidate()
@@ -82,6 +86,16 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Approved On field.';
+            }
+            field("Rejected By"; Rec."Rejected By")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Rejected By field.';
+            }
+            field("Rejected On"; Rec."Rejected On")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Rejected On field.';
             }
             field("Old Unit Price"; Rec."Old Unit Price")
             {
