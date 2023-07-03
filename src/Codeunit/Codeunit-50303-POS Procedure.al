@@ -10,6 +10,7 @@ codeunit 50303 "POS Procedure"
     /// </summary>
     /// 
 
+
     procedure AdjustAdvance(documentno: Code[20]): Text
     var
         SH: Record 36;

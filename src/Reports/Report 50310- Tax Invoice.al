@@ -599,14 +599,14 @@ report 50310 "Tax Invoice"
         txt3: Text;
         txt4: Text;
         TotalGST: Decimal;
-        Salespersoncode: Text[250];
+        Salespersoncode: Text[550];
         SIL: Record "Sales Invoice Line";
         recSIL: Record "Sales Invoice Line";
         TotalAmt: Decimal;
         SH: record "Sales Invoice Header";
         recSalesInvLine: Record "Sales Invoice Line";
         loc: Record Location;
-        Financecode: Code[250];
+        Financecode: Code[550];
         RecPaymentlines: Record "Posted Payment Lines";
         TotalPaidAmount: Decimal;
         PaymentAmount: Decimal;
@@ -617,7 +617,7 @@ report 50310 "Tax Invoice"
         recSalesInvoiceLine: Record 113;
         RecCust: Record Customer;
         Mail: Text[80];
-        PhoneNo: Code[30];
+        PhoneNo: Code[100];
         CustGSTIN: code[20];
         CGST: Decimal;
         IGST: Decimal;
@@ -641,7 +641,7 @@ report 50310 "Tax Invoice"
         ShiptoGSTIN: Code[20];
         WithSerialNo: Boolean;
         WithoutSerialNo: Boolean;
-        Notext: Text[100];
+        Notext: Text[500];
         PostedPaymentLines: Record "Posted Payment Lines";
         Paymentmethod: Code[550];
         ReLocation: Record Location;

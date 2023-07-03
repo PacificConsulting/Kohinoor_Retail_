@@ -20,6 +20,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                 trigger OnAction()
                 var
                     PDL: Record "Posted Delivery Line";
+                    PDLUpdate: Record "Posted Delivery Line";
                     Demo: Report 50190;
                     ABSBlobClient: Codeunit "ABS Blob Client";
                     Authorization: Interface "Storage Service Authorization";
@@ -54,6 +55,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                             Error('Please enter start date also.');
 
                     IH.Reset();
+                    IH.SetCurrentKey("Option Type");
                     IH.SetRange("Option Type", IH."Option Type"::"Category 1");
                     If IH.FindSet() then
                         repeat
@@ -65,32 +67,33 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                             PDL.SetRange(Demo, false);
                             IF (SDate <> 0D) and (EDate <> 0D) then
                                 PDL.SetRange("Delivered Date", SDate, EDate);
-                            IF PDL.FINDFIRST THEN;
-                            Recref.GetTable(PDL);
-                            TempBlob.CreateOutStream(OutStrm);
-                            Report.SaveAs(Report::"Sales Delivery Report", '', ReportFormat::Excel, OutStrm, Recref);
-                            TempBlob.CreateInStream(Instrm);
+                            IF PDL.FindSet() THEN begin
+                                Recref.GetTable(PDL);
+                                TempBlob.CreateOutStream(OutStrm);
+                                Report.SaveAs(Report::"Sales Delivery Report", '', ReportFormat::Excel, OutStrm, Recref);
+                                TempBlob.CreateInStream(Instrm);
 
-                            //*************Azure upload Code**************
-                            //IF PDL."Item Category code 1" <> '' then begin
-                            ABSCSetup.Get();
-                            ABSCSetup.TestField("Container Name Demo");
-                            Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-                            ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Demo", Authorization);
-                            FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
-                            response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
-                            //IF response.IsSuccessful() then
-                            //  Message('File Create and upload successfully.');
+                                //*************Azure upload Code**************
+                                //IF PDL."Item Category code 1" <> '' then begin
+                                ABSCSetup.Get();
+                                ABSCSetup.TestField("Container Name Demo");
+                                Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
+                                ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Demo", Authorization);
+                                FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
+                                response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+                                //IF response.IsSuccessful() then
+                                //  Message('File Create and upload successfully.');
 
-                            //************Update Demo Field***************
-                            PDL.SetRange("Item Category code 1", IH.Code);
-                            PDL.SetRange(Delivered, true);
-                            IF PDL.FindSet() then
-                                repeat
-                                    PDL.Demo := true;
-                                    PDL.Modify();
-                                until PDL.Next() = 0;
-                        //  end;
+                                //************Update Demo Field***************
+                                PDLUpdate.Reset();
+                                PDLUpdate.SetRange("Item Category code 1", IH.Code);
+                                PDLUpdate.SetRange(Delivered, true);
+                                IF PDLUpdate.FindSet() then
+                                    repeat
+                                        PDLUpdate.Demo := true;
+                                        PDLUpdate.Modify();
+                                    until PDLUpdate.Next() = 0;
+                            end;
                         until IH.Next() = 0;
                 end;
             }
@@ -102,7 +105,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                 PromotedCategory = Report;
                 PromotedIsBig = true;
                 Caption = 'Demo Fasle';
-                Visible = false;
+                //Visible = false;
                 trigger OnAction()
                 var
                     PDL: Record "Posted Delivery Line";

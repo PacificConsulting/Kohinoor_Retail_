@@ -267,6 +267,7 @@ codeunit 50302 "POS Event and Subscriber"
         SH.Reset();
         SH.SetRange("No.", documentno);
         IF SH.FindFirst() then;
+        //**Warranty against an item**************//
 
         SalesLine.Reset();
         SalesLine.SetCurrentKey("Document No.", "Line No.");
@@ -307,45 +308,64 @@ codeunit 50302 "POS Event and Subscriber"
                 Error('Warranty not found');
             Saleslineinit.Modify();
         End else begin
-            SalesLine.Reset();
-            SalesLine.SetCurrentKey("Document No.", "Line No.");
-            SalesLine.SetRange("Document No.", documentno);
-            SalesLine.SetRange("Line No.", 0);
-            IF SalesLine.FindFirst() then begin
-                Saleslineinit.Init();
-                Saleslineinit."Document Type" := SalesLine."Document Type";
-                Saleslineinit."Document No." := SalesLine."Document No.";
+            Saleslineinit.Init();
+            Saleslineinit."Document Type" := Saleslineinit."Document Type"::Order;
+            Saleslineinit."Document No." := documentno;
 
-                SL.Reset();
-                SL.SetRange("Document No.", documentno);
-                IF SL.FindLast() then
-                    Saleslineinit."Line No." := SL."Line No." + 10000;
+            SL.Reset();
+            SL.SetRange("Document No.", documentno);
+            IF SL.FindLast() then
+                Saleslineinit."Line No." := SL."Line No." + 10000;
 
-                Saleslineinit.Insert();
-                Saleslineinit.Type := Saleslineinit.Type::Item;
-                Saleslineinit.Validate("No.", SR."Warranty G/L Code");
-                Saleslineinit.Validate("Location Code", SalesLine."Location Code");
-                Saleslineinit.Validate("Unit of Measure Code", 'PCS');
-                //Saleslineinit."Warranty Parent Line No." := SalesLine."Line No.";
-                Saleslineinit."Store No." := SalesLine."Store No.";
-                Saleslineinit.Validate("Salesperson Code", SalesLine."Salesperson Code");
-                WarrMaster.Reset();
-                WarrMaster.SetCurrentKey(Brand, Months, "From Date", "TO Date", "From Value", "To Value");
-                WarrMaster.SetRange(Brand, brand);
-                WarrMaster.SetRange(Months, MonthInt);
-                // WarrMaster.SetFilter("From Date", '<=%1', SH."Posting Date");
-                // WarrMaster.SetFilter("To Date", '>=%1', SH."Posting Date");
-                // WarrMaster.SetFilter("From Value", '<=%1', SalesLine."Unit Price Incl. of Tax");
-                // WarrMaster.SetFilter("TO Value", '>=%1', SalesLine."Unit Price Incl. of Tax");
-                IF WarrMaster.FindFirst() then begin
-                    Saleslineinit.Validate("Unit Price Incl. of Tax", 1);
-                    Saleslineinit."Price Inclusive of Tax" := true;
-                    Saleslineinit.Validate(Quantity, 1);
-                    Saleslineinit.Description := WarrMaster.Description;
-                    Saleslineinit.modify();
-                end;
+            Saleslineinit.Insert();
+            Saleslineinit.Type := Saleslineinit.Type::Item;
+            Saleslineinit.Validate("No.", SR."Warranty G/L Code");
+            Saleslineinit.Validate("Location Code", SH."Location Code");
+            Saleslineinit.Validate("Unit of Measure Code", 'PCS');
+            //Saleslineinit."Warranty Parent Line No." := SalesLine."Line No.";
+            Saleslineinit."Store No." := SH."Store No.";
+            // Saleslineinit.Validate("Salesperson Code", SalesLine."Salesperson Code");
+            WarrMaster.Reset();
+            WarrMaster.SetCurrentKey(Brand, Months, "From Date", "TO Date", "From Value", "To Value");
+            WarrMaster.SetRange(Brand, brand);
+            WarrMaster.SetRange(Months, MonthInt);
+            // WarrMaster.SetFilter("From Date", '<=%1', SH."Posting Date");
+            // WarrMaster.SetFilter("To Date", '>=%1', SH."Posting Date");
+            // WarrMaster.SetFilter("From Value", '<=%1', SalesLine."Unit Price Incl. of Tax");
+            // WarrMaster.SetFilter("TO Value", '>=%1', SalesLine."Unit Price Incl. of Tax");
+            IF WarrMaster.FindFirst() then begin
+                Saleslineinit.Validate("Unit Price Incl. of Tax", 1);
+                Saleslineinit."Price Inclusive of Tax" := true;
+                Saleslineinit.Validate(Quantity, 1);
+                Saleslineinit.Description := WarrMaster.Description;
+                Saleslineinit.modify();
             end;
+
         end;
+        Exit('Success');
+    end;
+
+    /// <summary>
+    /// Warranty Line Qty to Ship Upadte
+    /// </summary>
+    procedure QtyShipUpdateWarranty(documentno: Code[20]): Text
+    var
+        SalesLine: Record 37;
+        SR: Record 311;
+    begin
+        SR.Get();
+        SalesLine.Reset();
+        SalesLine.SetRange("Document No.", documentno);
+        SalesLine.SetRange(Type, SalesLine.Type::Item);
+        SalesLine.SetRange("No.", SR."Warranty G/L Code");
+        SalesLine.SetRange("Warranty Parent Line No.", 0);
+        IF SalesLine.FindFirst() then begin
+            SalesLine.Validate("Qty. to Ship", SalesLine.Quantity);
+            SalesLine.Modify();
+        end else
+            exit('Document Not found');
+        exit('Success');
+
     end;
 
     /// <summary>
@@ -781,7 +801,16 @@ codeunit 50302 "POS Event and Subscriber"
 
 
 
+    procedure UpdateLocation(documentno: Code[20]): Text
+    var
+        SalesHeader: Record "Sales Header";
 
+    begin
+        SalesHeader.GET(SalesHeader."Document Type"::Order, DocumentNo);
+        SalesHeader.Validate("Location Code", SalesHeader."Store No.");
+        SalesHeader.Modify();
+        exit('Success');
+    end;
 
 
     procedure GetSalesorderStatisticsAmount(

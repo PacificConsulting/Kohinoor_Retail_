@@ -1,7 +1,7 @@
 page 50394 "Date Filter"
 {
     ApplicationArea = All;
-    Caption = 'Password Detail';
+    Caption = 'Date Filter';
     PageType = StandardDialog;
 
     layout

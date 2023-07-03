@@ -554,8 +554,8 @@ report 50311 "Sales Order"
         SrNo: Integer;
         recSalesInvoiceLine: Record "Sales Line";
         RecCust: Record Customer;
-        Mail: Text[80];
-        PhoneNo: Code[30];
+        Mail: Text[500];
+        PhoneNo: Code[100];
         CustGSTIN: code[50];
         CGST: Decimal;
         IGST: Decimal;
@@ -579,10 +579,10 @@ report 50311 "Sales Order"
         AmountInwords: codeunit "Amount In Words";
         AmountInWords1: array[2] of Text[200];
         TotalAmount1: decimal;
-        ShiptoAdd: Text[200];
-        ShiptoName: Text[50];
-        Shiptocity: Text[50];
-        Notext: text[50];
+        ShiptoAdd: Text[500];
+        ShiptoName: Text[500];
+        Shiptocity: Text[500];
+        Notext: text[500];
         TotalGSTAmount: decimal;
         TotalGSTPercent: Decimal;
         ShipGSTIN: code[50];
@@ -608,7 +608,7 @@ report 50311 "Sales Order"
         ItemNo: Code[20];
         BalanceAmount: Decimal;
         SLrec: record "Sales Line";
-        ExchangeComments: text[250];
+        ExchangeComments: text[550];
         salesreceivablesetup: record "Sales & Receivables Setup";
 
 

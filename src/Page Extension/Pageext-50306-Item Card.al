@@ -2,13 +2,22 @@ pageextension 50306 "ItemCArdExtension" extends "Item Card"
 {
     layout
     {
-        // addafter(Description)
-        // {
-        //     field("Search Description"; Rec."Search Description")
-        //     {
-        //         ApplicationArea = all;
-        //     }
-        // }
+        addafter("No.")
+        {
+            field("No. 2"; Rec."No. 2")
+            {
+                ApplicationArea = all;
+            }
+        }
+        addafter(Description)
+        {
+
+            field("Description 2"; Rec."Description 2")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Description 2 field.';
+            }
+        }
     }
     actions
     {
@@ -43,6 +52,7 @@ pageextension 50306 "ItemCArdExtension" extends "Item Card"
                     PromotedOnly = true;
                     Image = Picture;
                     ApplicationArea = All;
+                    Visible = false;
 
                     trigger OnAction();
                     var

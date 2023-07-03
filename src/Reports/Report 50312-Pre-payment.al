@@ -299,9 +299,7 @@ report 50312 "Pre-Payment Sheet Report"
                     NNLC += TradeAggrement.NNLC;
                     FNNLC += TradeAggrement.FNNLC;
                 end;
-                //Margin percent on Purchase unit price
-                if (TradeAggrement.DP <> 0) AND (Dealerprice <> 0) then
-                    Margin_percent_on_Purchase_unit_price := ("Unit Cost" * 100 / Dealerprice) + 100;
+
 
                 //TotalDealerPrice
                 Clear(TotalDealerPrice);
@@ -320,6 +318,9 @@ report 50312 "Pre-Payment Sheet Report"
                 //Margin percent on NLC
                 if (Dealerprice <> 0) then
                     Margin_percent_on_NLC := (PUP * 100 / Dealerprice) + 100;
+                //Margin percent on Purchase unit price
+                if (TradeAggrement.DP <> 0) AND (Dealerprice <> 0) then
+                    Margin_percent_on_Purchase_unit_price := (PUP * 100 / Dealerprice) + 100;
 
 
             end;
