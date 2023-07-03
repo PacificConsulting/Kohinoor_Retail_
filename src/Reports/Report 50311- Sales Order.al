@@ -81,11 +81,11 @@ report 50311 "Sales Order"
             {
 
             }
-            column(Bill_to_Name; "Bill-to Name")
+            column(Bill_to_Name; "Sell-to Customer Name")
             {
 
             }
-            column(Bill_to_Address; "Bill-to Address" + ' ' + "Bill-to Address 2" + ',' + "Bill-to City" + ',' + "Bill-to Post Code" + ',' + "Bill-to Country/Region Code")
+            column(Bill_to_Address; "Sell-to Address" + ' ' + "Sell-to Address 2" + ',' + "Sell-to City" + ',' + "Sell-to Post Code" + ',' + "Sell-to Country/Region Code")
             {
 
             }
@@ -273,6 +273,19 @@ report 50311 "Sales Order"
                 column(IGSTAmount; IGSTAmount)
                 {
                 }
+                column(SGSTPer; SGSTPer)
+                {
+
+                }
+                column(CGSTPer; CGSTPer)
+                {
+
+                }
+                column(IGSTPer; IGSTPer)
+                {
+
+                }
+
 
 
                 dataitem("Value Entry"; "Value Entry")
