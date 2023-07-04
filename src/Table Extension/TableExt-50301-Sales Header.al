@@ -2,7 +2,6 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
 {
     fields
     {
-
         modify("Location Code")
         {
             trigger OnAfterValidate()
