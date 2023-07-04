@@ -295,6 +295,11 @@ report 50310 "Tax Invoice"
                 {
 
                 }
+                column(SrNo1; SrNo1)
+                {
+
+                }
+                /*
                 dataitem("Value Entry"; "Value Entry")
                 {
                     DataItemLink = "Document No." = FIELD("Document No."),
@@ -318,6 +323,7 @@ report 50310 "Tax Invoice"
 
                     }
                 }
+                */
 
 
                 trigger OnAfterGetRecord() //SIL
@@ -343,6 +349,21 @@ report 50310 "Tax Invoice"
                             else
                                 SerialCaption := '';
                         end;
+                    Clear(SrNo1);
+                    if "Sales Invoice Line".Type = "Sales Invoice Line".Type::Item then begin
+                        VE.Reset();
+                        VE.SetRange("Document No.", "Sales Invoice Line"."Document No.");
+                        VE.SetRange("Document Line No.", "Sales Invoice Line"."Line No.");
+                        IF VE.FindSet() then
+                            repeat
+                                ILE.Reset();
+                                ILE.SetRange("Entry No.", VE."Item Ledger Entry No.");
+                                ILE.SetFilter("Serial No.", '<>%1', '');
+                                if ILE.FindFirst() then
+                                    SrNo1 += ILE."Serial No." + ','
+                            until VE.Next() = 0;
+                        SrNo1 := DelStr(SrNo1, StrLen(SrNo1), 1);
+                    end;
 
 
                     SrNo += 1;
@@ -665,6 +686,7 @@ report 50310 "Tax Invoice"
         recEInvoice: Record "E-Invoice Detail";
         VE: Record "Value Entry";
         SerialCaption: Text;
+        SrNo1: Text;
 
     //GLE:Record 
 }
