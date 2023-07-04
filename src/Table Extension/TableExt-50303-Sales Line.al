@@ -222,7 +222,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 RecLoc.SetRange(Store, true);
                 RecLoc.SetRange(Code, SalesHeader."Store No.");
                 IF RecLoc.FindFirst() then begin
-                    Validate("Location Code", RecLoc.Code);
+                    //Validate("Location Code", RecLoc.Code);
                     "Store No." := RecLoc.Code;
                 end;
             end;

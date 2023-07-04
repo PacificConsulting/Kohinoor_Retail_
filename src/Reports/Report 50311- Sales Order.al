@@ -260,7 +260,7 @@ report 50311 "Sales Order"
                 column(AmountInWords1; AmountInWords1[1])
                 {
                 }
-                column(HSNSACCode_SalesLine; "Sales Line"."HSN/SAC Code")
+                column(HSNSACCode_SalesLine; HSNCode/*"Sales Line"."HSN/SAC Code"*/)
                 {
 
                 }
@@ -273,15 +273,15 @@ report 50311 "Sales Order"
                 column(IGSTAmount; IGSTAmount)
                 {
                 }
-                column(SGSTPer; SGSTPer)
+                column(SGSTPer; SGSTAMTPER)
                 {
 
                 }
-                column(CGSTPer; CGSTPer)
+                column(CGSTPer; CGSTAMTPER)
                 {
 
                 }
-                column(IGSTPer; IGSTPer)
+                column(IGSTPer; IGSTAMTPER)
                 {
 
                 }
@@ -310,6 +310,7 @@ report 50311 "Sales Order"
 
                     //AoumntInWords
                     //TotalAmount1 += Amount + SGST + CGST + IGST;
+                    Clear(HSNCode);
 
                     GetGSTAmountLinewise("Sales Line", TotalGSTAmountlinewise, TotalGSTPercent);
 
@@ -318,7 +319,8 @@ report 50311 "Sales Order"
                     else
                         ItemNo := "No.";
 
-
+                    IF RecItem.Get(ItemNo) then
+                        HSNCode := RecItem."HSN/SAC Code";
                 end;
             }
             trigger OnAfterGetRecord()  //SH
@@ -541,6 +543,8 @@ report 50311 "Sales Order"
 
     var
         mybalance: Decimal;
+        HSNCode: code[10];
+        RecItem: Record 27;
         salesline: Record "Sales Line";
         shiptogstin: Code[100];
         Comments: Text;
@@ -623,6 +627,9 @@ report 50311 "Sales Order"
         SLrec: record "Sales Line";
         ExchangeComments: text[550];
         salesreceivablesetup: record "Sales & Receivables Setup";
+        IGSTAMTPER: Text;
+        SGSTAMTPER: Text;
+        CGSTAMTPER: Text;
 
 
     //GST calculate 
@@ -737,16 +744,28 @@ report 50311 "Sales Order"
                             begin
                                 SGSTAmount := Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
                                 SGSTPer := TaxTransactionValue.Percent;
+                                if SGSTAmount <> 0 then
+                                    SGSTAMTPER := '[' + FORMAT(SGSTPer) + '%]'
+                                else
+                                    Clear(SGSTAMTPER);
                             end;
                         2:
                             begin
                                 CGSTAmount := Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
                                 CGSTPer := TaxTransactionValue.Percent;
+                                if cGSTAmount <> 0 then
+                                    CGSTAMTPER := '[' + FORMAT(CGSTPer) + '%]'
+                                else
+                                    Clear(CGSTAMTPER);
                             end;
                         3:
                             begin
                                 IGSTAmount := Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
                                 IGSTPer := TaxTransactionValue.Percent;
+                                if IGSTAmount <> 0 then
+                                    IGSTAMTPER := '[' + FORMAT(IGSTPer) + '%]'
+                                else
+                                    Clear(IGSTAMTPER);
                             end;
                     end;
                 until TaxTransactionValue.Next() = 0;
@@ -777,6 +796,7 @@ report 50311 "Sales Order"
                             begin
                                 SGSTAmount += Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
                                 SGSTPer := TaxTransactionValue.Percent;
+                                //SGSTAMTPER:= '[' + FORMAT(SGSTPer) + '%]'
                             end;
                         2:
                             begin
@@ -787,6 +807,9 @@ report 50311 "Sales Order"
                             begin
                                 IGSTAmount += Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
                                 IGSTPer := TaxTransactionValue.Percent;
+                                IGSTAMTPER := '[' + FORMAT(IGSTPer) + '%]'
+
+
                             end;
                     end;
                 until TaxTransactionValue.Next() = 0;

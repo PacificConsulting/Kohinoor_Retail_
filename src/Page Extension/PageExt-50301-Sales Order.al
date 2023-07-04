@@ -227,7 +227,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     If Userset.Get(UserId) then begin
                         IF Userset."Allow for Credit Bill" then begin
                             Rec."Allow for Credit Bill" := true;
-                            Rec."Allow for Credit Bill By" := UserId;
+                            //Rec."Allow for Credit Bill By" := UserId;
                             Rec."Allow for Credit Bill at" := CurrentDateTime;
                             rec.Modify();
                             Message('Access Granted for Allow Credit Bill');

@@ -1264,7 +1264,7 @@
                   <Width>4.96876cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.76421cm</Width>
+                  <Width>1.73875cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.96659cm</Width>
@@ -1883,7 +1883,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2287,7 +2286,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -3077,7 +3075,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=SUM(Fields!Amount.Value+Fields!SGST.Value + Fields!CGST.Value +Fields!IGST.Value)</Value>
+                                  <Value>=Fields!TotalAmount.Value</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>n2</Format>
@@ -3100,6 +3098,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -4008,8 +4007,7 @@
                     <TablixMember>
                       <Group Name="Details">
                         <GroupExpressions>
-                          <GroupExpression>=Fields!Item_No_.Value</GroupExpression>
-                          <GroupExpression>=Fields!Itemserialno.Value</GroupExpression>
+                          <GroupExpression>=Fields!Serial_No_.Value</GroupExpression>
                         </GroupExpressions>
                       </Group>
                       <TablixMembers>
@@ -4039,7 +4037,7 @@
             <Top>6.85152cm</Top>
             <Left>0.00001cm</Left>
             <Height>3.18219cm</Height>
-            <Width>20.67308cm</Width>
+            <Width>20.64762cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -4819,7 +4817,7 @@ invoice.</Value>
             <rd:DefaultName>Textbox101</rd:DefaultName>
             <Top>4.29155cm</Top>
             <Left>16.15226cm</Left>
-            <Height>3.20069cm</Height>
+            <Height>3.51819cm</Height>
             <Width>4.49537cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
@@ -5677,6 +5675,12 @@ End Function
         </Field>
         <Field Name="AmountFormat">
           <DataField>AmountFormat</DataField>
+        </Field>
+        <Field Name="AmountDecimal">
+          <DataField>AmountDecimal</DataField>
+        </Field>
+        <Field Name="AmountDecimalFormat">
+          <DataField>AmountDecimalFormat</DataField>
         </Field>
         <Field Name="AmountInWords1">
           <DataField>AmountInWords1</DataField>

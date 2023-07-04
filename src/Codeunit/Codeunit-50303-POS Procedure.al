@@ -2218,7 +2218,7 @@ codeunit 50303 "POS Procedure"
         //     RecLocation.TestField("Payment Journal Template Name");
         //     RecLocation.TestField("Payment Journal Batch Name");
         // end;
-        if TenderPOSSetup.Get(Salesheader."Location Code") then begin
+        if TenderPOSSetup.Get(Salesheader."Store No.") then begin
             TenderPOSSetup.TestField("Journal Template Name");
             TenderPOSSetup.TestField("Journal Batch Name");
         end;
@@ -2286,9 +2286,10 @@ codeunit 50303 "POS Procedure"
         PaymentLine.SetRange("Document No.", Salesheader."No.");
         PaymentLine.SetFilter("Payment Method Code", '<>%1', 'ADVANCE');
         PaymentLine.SetRange(Posted, false); //NSW 240523 New filter
-        if Not PaymentLine.IsEmpty then
+        if Not PaymentLine.IsEmpty then begin
             GenJnlPostBatch.Run(GenJourLineInit);
-
+            PaymentLine.ModifyAll(Posted, true);
+        end;
         PaymentLine.Reset();
         PaymentLine.SetCurrentKey("Document Type", "Document No.");
         PaymentLine.SetRange("Document Type", Salesheader."Document Type");

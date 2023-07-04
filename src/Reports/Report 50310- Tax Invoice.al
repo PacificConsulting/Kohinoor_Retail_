@@ -238,6 +238,10 @@ report 50310 "Tax Invoice"
                 {
 
                 }
+                column(AmountDecimal; AmountDecimal)
+                {
+
+                }
 
                 column(AmountInWords1; AmountInWords1[1])
                 {
@@ -307,6 +311,10 @@ report 50310 "Tax Invoice"
                         // {
 
                         // }
+                        trigger OnAfterGetRecord()
+                        begin
+                            //  Message("Serial No.");
+                        end;
 
                     }
                 }
@@ -398,6 +406,8 @@ report 50310 "Tax Invoice"
                     */
 
                     //TotalAmount := Amount + SGST + CGST + IGST;
+                    AmountDecimal += "Sales Invoice Line".Amount;
+                    //Message(Format(AmountDecimal));
                     AmountInwords.InitTextVariable();
                     AmountInwords.FormatNoText(AmountInWords1, ROUND((TotalAmount), 1), '');
 
@@ -432,7 +442,7 @@ report 50310 "Tax Invoice"
 
 
 
-                Reclocation.get("Location Code");
+                IF Reclocation.get("Location Code") then;
                 if loc.get("Store No.") then;
 
                 IF "Ship-to Code" <> '' then begin
@@ -501,7 +511,7 @@ report 50310 "Tax Invoice"
                 end;
 
 
-                if ReLocation.Get("Location Code") then;
+                if ReLocation.Get("Store No.") then;
                 Relocation.CalcFields("Payment QR");
 
                 //TotalAmount\
@@ -635,6 +645,7 @@ report 50310 "Tax Invoice"
         AmountInwords: codeunit "Amount In Words";
         AmountInWords1: array[2] of Text[200];
         TotalAmount: decimal;
+        AmountDecimal: Decimal;
         ShiptoAdd: Text[500];
         ShiptoName: Text[500];
         Shiptocity: Text[500];

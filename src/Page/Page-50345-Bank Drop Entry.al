@@ -116,7 +116,7 @@ page 50345 "Bank Drop Entry "
         GenJourLine.Init();
         GenJourLine."Journal Template Name" := 'CONTRAV';
         GenJourLine."Journal Batch Name" := GLSetup."Bank Drop Batch";
-        GenJourLine.Validate("Posting Date", Today);
+        GenJourLine.Validate("Posting Date", rec."Store Date");
 
         IF GenJourLineFilter.FindLast() then
             GenJourLine."Line No." := GenJourLineFilter."Line No." + 10000
