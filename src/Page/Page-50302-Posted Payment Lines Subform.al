@@ -111,6 +111,10 @@ page 50302 "Posted Payment Lines Subform"
                 {
                     ToolTip = 'Specifies the value of the Attachment field.';
                 }
+                field("Invoice Posting Date"; Rec."Invoice Posting Date")
+                {
+                    ToolTip = 'Specifies the value of the Invoice Posting Date field.';
+                }
             }
         }
     }

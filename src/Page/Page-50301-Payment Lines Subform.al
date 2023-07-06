@@ -160,6 +160,10 @@ page 50301 "Payment Lines Subform"
     var
         SH: Record 36;
     begin
+        IF US.Get(UserId) then begin
+            IF not Us."Admin Access" then
+                Error('You do not have access to modify the data.');
+        end;
         SH.Reset();
         SH.SetRange("No.", Rec."Document No.");
         SH.SetRange(Status, SH.Status::Released);
@@ -171,6 +175,10 @@ page 50301 "Payment Lines Subform"
     var
         SH: Record 36;
     begin
+        IF US.Get(UserId) then begin
+            IF not Us."Admin Access" then
+                Error('You do not have access to modify the data.');
+        end;
         SH.Reset();
         SH.SetRange("No.", Rec."Document No.");
         SH.SetRange(Status, SH.Status::Released);
@@ -178,7 +186,15 @@ page 50301 "Payment Lines Subform"
             Error('you can not modify when Sales order released');
     end;
 
+    trigger OnDeleteRecord(): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Admin Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
 
     var
-        myInt: Integer;
+        US: Record 91;
 }

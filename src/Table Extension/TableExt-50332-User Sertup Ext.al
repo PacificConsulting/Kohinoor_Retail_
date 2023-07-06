@@ -7,5 +7,10 @@ tableextension 50332 "User Sertup Ext" extends "User Setup"
             Caption = 'Allow for Credit Bill';
             DataClassification = ToBeClassified;
         }
+        field(50302; "Admin Access"; Boolean)
+        {
+            Caption = 'Admin Access';
+            DataClassification = ToBeClassified;
+        }
     }
 }

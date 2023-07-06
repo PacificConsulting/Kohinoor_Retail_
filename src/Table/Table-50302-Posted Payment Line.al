@@ -170,6 +170,12 @@ table 50302 "Posted Payment Lines"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(29; "Invoice Posting Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Invoice Header"."Posting Date" where("No." = field("Document No.")));
+            Editable = false;
+        }
     }
 
     keys

@@ -8,10 +8,24 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
             var
                 RecLoc: Record Location;
             begin
+                /*
                 IF RecLoc.Get("Location Code") then begin
                     IF RecLoc.Store then
                         "Store No." := "Location Code";
                 end;
+                */
+                IF rec."Store No." <> '' then begin
+                    If RecLoc.get(Rec."Store No.") then begin
+                        Validate("Shortcut Dimension 1 Code", RecLoc."Global Dimension 1 Code");
+                        Validate("Shortcut Dimension 2 Code", RecLoc."Global Dimension 2 Code");
+                    end;
+                end else begin
+                    If RecLoc.get(Rec."Location Code") then begin
+                        Validate("Shortcut Dimension 1 Code", RecLoc."Global Dimension 1 Code");
+                        Validate("Shortcut Dimension 2 Code", RecLoc."Global Dimension 2 Code");
+                    end;
+                end;
+
             end;
         }
         modify("Sell-to Customer No.")
@@ -112,6 +126,7 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
     var
         PayLine: Record "Payment Lines";
         SalesLine: Record "Sales Line";
+        ReservEntry: Record 337;
     begin
         SalesLine.Reset();
         SalesLine.SetRange("Document No.", "No.");
@@ -130,6 +145,20 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
             repeat
                 PayLine.Delete();
             until PayLine.Next() = 0;
+
+        SalesLine.Reset();
+        SalesLine.SetRange("Document No.", "No.");
+        SalesLine.SetRange("Document Type", "Document Type");
+        IF SalesLine.FindSet() then
+            repeat
+                ReservEntry.RESET;
+                ReservEntry.SetRange("Source ID", SalesLine."Document No.");
+                ReservEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
+                if ReservEntry.Findset() then
+                    repeat
+                        ReservEntry.Delete();
+                    until ReservEntry.Next() = 0;
+            until SalesLine.Next() = 0;
     end;
 
     trigger OnModify()

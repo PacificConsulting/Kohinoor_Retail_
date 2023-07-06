@@ -27,6 +27,7 @@ pageextension 50309 "Payment Methods" extends "Payment Methods"
                 ToolTip = 'Specifies the value of the Bal. Account No. field.';
             }
         }
+
     }
 
 
@@ -35,6 +36,31 @@ pageextension 50309 "Payment Methods" extends "Payment Methods"
         // Add changes to page actions here
     }
 
+    trigger OnModifyRecord(): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Admin Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    trigger OnDeleteRecord(): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Admin Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Admin Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
     var
-        myInt: Integer;
+        US: Record "User Setup";
+
 }

@@ -254,7 +254,7 @@ report 50310 "Tax Invoice"
                 {
 
                 }
-                column(SGSTPer; SGSTPer)
+                column(SGSTPer; SGSTAMTPER)
                 {
 
                 }
@@ -262,7 +262,7 @@ report 50310 "Tax Invoice"
                 {
 
                 }
-                column(CGSTPer; CGSTPer)
+                column(CGSTPer; CGSTAMTPER)
                 {
 
                 }
@@ -270,7 +270,7 @@ report 50310 "Tax Invoice"
                 {
 
                 }
-                column(IGSTPer; IGSTPer)
+                column(IGSTPer; IGSTAMTPER)
                 {
 
                 }
@@ -362,7 +362,8 @@ report 50310 "Tax Invoice"
                                 if ILE.FindFirst() then
                                     SrNo1 += ILE."Serial No." + ','
                             until VE.Next() = 0;
-                        SrNo1 := DelStr(SrNo1, StrLen(SrNo1), 1);
+                        IF SrNo1 <> '' then
+                            SrNo1 := DelStr(SrNo1, StrLen(SrNo1), 1);
                     end;
 
 
@@ -382,7 +383,6 @@ report 50310 "Tax Invoice"
                     DGLE.SetRange("Document No.", "Document No.");
                     DGLE.SetRange("Document Line No.", "Line No.");
                     DGLE.SetRange(DGLE."HSN/SAC Code", "Sales Invoice Line"."HSN/SAC Code");
-                    //DGLE.SetRange("No.", "No.");
                     DGLE.SetRange("Transaction Type", DGLE."Transaction Type"::sales);
                     DGLE.SetRange("Document Type", DGLE."Document Type"::Invoice);
                     if DGLE.findset then begin
@@ -390,18 +390,30 @@ report 50310 "Tax Invoice"
                             IF DGLE."GST Component Code" = 'SGST' THEN BEGIN
                                 SGST := ABS(DGLE."GST Amount");
                                 SGSTPer := DGLE."GST %";
+                                if SGST <> 0 then
+                                    SGSTAMTPER := '[' + FORMAT(SGSTPer) + '%]'
+                                else
+                                    Clear(SGSTAMTPER);
                             END
 
                             ELSE
                                 IF DGLE."GST Component Code" = 'CGST' THEN BEGIN
                                     CGST := ABS(DGLE."GST Amount");
                                     CGSTPer := DGLE."GST %";
+                                    if CGST <> 0 then
+                                        CGSTAMTPER := '[' + FORMAT(CGSTPer) + '%]'
+                                    else
+                                        Clear(CGSTAMTPER);
                                 END
 
                                 ELSE
                                     IF DGLE."GST Component Code" = 'IGST' THEN BEGIN
                                         IGST := ABS(DGLE."GST Amount");
                                         IGSTPer := DGLE."GST %";
+                                        if IGST <> 0 then
+                                            IGSTAMTPER := '[' + FORMAT(IGSTPer) + '%]'
+                                        else
+                                            Clear(IGSTAMTPER);
 
                                     END
                         until DGLE.Next() = 0;
@@ -409,6 +421,14 @@ report 50310 "Tax Invoice"
 
 
                     end;
+                    IF (CGST = 0) then begin
+                        Clear(CGSTAMTPER);
+                        clear(SGSTAMTPER);
+                    end
+                    else
+                        if IGST = 0 then
+                            Clear(IGSTAMTPER);
+
                     TotalGST := SGST + CGST + IGST;
 
 
@@ -427,7 +447,7 @@ report 50310 "Tax Invoice"
                     */
 
                     //TotalAmount := Amount + SGST + CGST + IGST;
-                    AmountDecimal += "Sales Invoice Line".Amount;
+                    // AmountDecimal += "Sales Invoice Line".Amount;
                     //Message(Format(AmountDecimal));
                     AmountInwords.InitTextVariable();
                     AmountInwords.FormatNoText(AmountInWords1, ROUND((TotalAmount), 1), '');
@@ -621,6 +641,9 @@ report 50310 "Tax Invoice"
 
     var
         myInt: Integer;
+        SGSTAMTPER: Text;
+        CGSTAMTPER: Text;
+        IGSTAMTPER: Text;
         salesReceivablesetup: Record "Sales & Receivables Setup";
         SalesInvLine: Record "Sales Invoice Line";
         glserialno: Code[50];

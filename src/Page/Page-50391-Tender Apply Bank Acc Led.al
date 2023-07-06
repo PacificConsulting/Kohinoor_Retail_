@@ -48,6 +48,11 @@ page 50391 "Tender Apply Bank Acc Leder"
                     StyleExpr = StyleTxt;
                     ToolTip = 'Specifies the description of the bank account entry.';
                 }
+                field("Customer Name"; Rec."Customer Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Customer Name field.';
+                }
                 field(Amount; Rec.Amount)
                 {
                     ApplicationArea = Basic, Suite;

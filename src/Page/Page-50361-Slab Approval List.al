@@ -99,14 +99,13 @@ page 50361 "Slab Approval List"
                     CurrPage.SetSelectionFilter(SalesLine);
                     SalesLine.SetRange("Approval Status", SalesLine."Approval Status"::"Pending for Approval");
                     IF SalesLine.FindFirst() then begin
-                        /*
+
                         SalesLine."Rejected By" := UserId;
                         SalesLine."Rejected On" := CurrentDateTime;
                         // SalesLine."Approval Status" := SalesLine."Approval Status"::" ";
                         // SalesLine.Validate("Unit Price Incl. of Tax", rec."Old Unit Price");
                         // SalesLine."GST Tax Amount" := (SalesLine."Unit Price Incl. of Tax" - SalesLine."Unit Price") * SalesLine.Quantity;
                         SalesLine.Modify();
-                        */
                         Message('Price is Rejected Successfully.');
 
                     end;

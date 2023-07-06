@@ -2,6 +2,39 @@ pageextension 50315 Cust_card extends "Customer Card"
 {
     layout
     {
+        modify("GST Customer Type")
+        {
+            trigger OnAfterValidate()
+            var
+                ShipAdd: Record "Ship-to Address";
+            begin
+
+                ShipAdd.Reset();
+                ShipAdd.SetRange("Customer No.", Rec."No.");
+                ShipAdd.SetRange("Address Type", ShipAdd."Address Type"::Primary);
+                IF ShipAdd.FindFirst() then begin
+                    ShipAdd."Ship-to GST Customer Type" := rec."GST Customer Type";
+                    ShipAdd.Modify();
+                end;
+
+            end;
+        }
+        modify("GST Registration No.")
+        {
+            trigger OnAfterValidate()
+            var
+                ShipAdd: Record "Ship-to Address";
+            begin
+                ShipAdd.Reset();
+                ShipAdd.SetRange("Customer No.", Rec."No.");
+                ShipAdd.SetRange("Address Type", ShipAdd."Address Type"::Primary);
+                IF ShipAdd.FindFirst() then begin
+                    ShipAdd."GST Registration No." := rec."GST Registration No.";
+                    ShipAdd.Modify();
+                end;
+
+            end;
+        }
         modify("Search Name")
         {
             Visible = true;

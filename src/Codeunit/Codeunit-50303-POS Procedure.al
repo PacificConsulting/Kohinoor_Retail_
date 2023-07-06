@@ -51,7 +51,8 @@ codeunit 50303 "POS Procedure"
                 repeat
                     TotalPayemtamt += PaymentLine.Amount;
                 until PaymentLine.Next() = 0;
-
+            IF TotalPayemtamt > 0 THEN
+                Error('Adjustment against advance should be taken prior to othher tender');//Sourav Code added
             DueAmt := SalesHeader."Amount To Customer" - TotalPayemtamt;
 
             IF cust.get(SalesHeader."Sell-to Customer No.") then begin
@@ -1694,10 +1695,11 @@ codeunit 50303 "POS Procedure"
         SalesLine: Record 37;
     begin
         //Clear(NetAmt);
+        /*
         SH.Reset();
         SH.SetRange("No.", documentno);
         IF SH.FindFirst() then begin
-            /*
+
             SalesLine.Reset();
             SalesLine.SetCurrentKey("Document No.", "Approval Status", "Rejected By");
             SalesLine.SetRange("Document No.", SH."No.");
@@ -1709,18 +1711,20 @@ codeunit 50303 "POS Procedure"
                     SalesLine."GST Tax Amount" := (SalesLine."Unit Price Incl. of Tax" - SalesLine."Unit Price") * SalesLine.Quantity;
                     SalesLine.Modify();
                 until SalesLine.Next() = 0;
-                */
-
-            //CalcInvDiscForHeader(SH);
-            //RefreshOnAfterGetRecord(SH);
-            //GetGSTAmountTotal(SH, TotalGSTAmount1);
-            //GetTCSAmountTotal(SH, TotalTCSAmt);
-            //GetSalesorderStatisticsAmount(SH, TotalAmt);
-            //CalStat.GetSalesStatisticsAmount(SH, NetAmt);
-            //SH."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt, 1);
-            //SH."Amount To Customer" := NetAmt;
-            //SH.Modify();
         end;
+        */
+
+
+        //CalcInvDiscForHeader(SH);
+        //RefreshOnAfterGetRecord(SH);
+        //GetGSTAmountTotal(SH, TotalGSTAmount1);
+        //GetTCSAmountTotal(SH, TotalTCSAmt);
+        //GetSalesorderStatisticsAmount(SH, TotalAmt);
+        //CalStat.GetSalesStatisticsAmount(SH, NetAmt);
+        //SH."Amount To Customer" := ROUND(TotalAmt + TotalGSTAmount1 + TotalTCSAmt, 1);
+        //SH."Amount To Customer" := NetAmt;
+        //SH.Modify();
+
     end;
 
     procedure CalcInvDiscForHeader(SH: Record 36)
