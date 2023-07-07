@@ -12,5 +12,17 @@ tableextension 50332 "User Sertup Ext" extends "User Setup"
             Caption = 'Admin Access';
             DataClassification = ToBeClassified;
         }
+        field(50303; "Trade Agreement Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50304; "Warranty Access"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50305; "Allow Cheque Clearance"; Blob)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

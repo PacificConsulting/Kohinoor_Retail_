@@ -33,6 +33,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                     Recref: RecordRef;
                     response: Codeunit "ABS Operation Response";
                     IH: record "Item Heirarchy Master";
+                    SEDate: Text;
 
                 begin
                     /*
@@ -45,6 +46,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                     Clear(SDate);
                     Clear(EDate);
                     Clear(PageDatefilter);
+                    Clear(SEDate);
                     PageDatefilter.LookupMode(true);
                     if PageDatefilter.RunModal() = Action::LookupOK then begin
                         SDate := PageDatefilter.Returnstartdate();
@@ -53,7 +55,8 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                     IF SDate = 0D then
                         IF EDate <> 0D then
                             Error('Please enter start date also.');
-
+                    //SEDATE := Format(SDate);
+                    //SEDate += Format(EDate);
                     IH.Reset();
                     IH.SetCurrentKey("Option Type");
                     IH.SetRange("Option Type", IH."Option Type"::"Category 1");
@@ -79,7 +82,11 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                                 ABSCSetup.TestField("Container Name Demo");
                                 Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
                                 ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Demo", Authorization);
-                                FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
+                                IF (SDate = 0D) AND (EDate = 0D) then
+                                    FileName := PDL."Item Category code 1" + '_' + Format(SDate) + Format(EDate) + '.' + 'xlsx'
+                                else
+                                    FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
+
                                 response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
                                 //IF response.IsSuccessful() then
                                 //  Message('File Create and upload successfully.');

@@ -23,4 +23,31 @@ page 50359 "Warranty Brand Master"
             }
         }
     }
+    trigger OnModifyRecord(): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Warranty Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    trigger OnDeleteRecord(): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Warranty Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Warranty Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    var
+        US: Record 91;
+
 }

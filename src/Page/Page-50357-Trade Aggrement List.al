@@ -193,9 +193,39 @@ page 50357 "Trade Aggrement List"
                 var
                     TD: XmlPort "Trade Aggrement Data Upload";
                 begin
+                    IF US.Get(UserId) then begin
+                        IF not Us."Trade Agreement Access" then
+                            Error('You do not have access to modify the data.');
+                    end;
                     TD.Run();
                 end;
             }
         }
     }
+    trigger OnModifyRecord(): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Trade Agreement Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    trigger OnDeleteRecord(): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Trade Agreement Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        IF US.Get(UserId) then begin
+            IF not Us."Trade Agreement Access" then
+                Error('You do not have access to modify the data.');
+        end;
+    end;
+
+    var
+        US: Record 91;
 }
