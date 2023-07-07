@@ -207,6 +207,57 @@ table 50317 "Trade Aggrement"
         {
             DataClassification = ToBeClassified;
         }
+        field(41; "Item No. 2"; Code[20])
+        {
+            Caption = 'Item No.';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."No. 2" where("No." = field("Item No.")));
+            Editable = false;
+        }
+        field(42; "PMG NLC W/O SELL OUT"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(43; "Category 1"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 1" where("No." = field("Item No.")));
+        }
+        field(44; "Category 2"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 2" where("No." = field("Item No.")));
+        }
+        field(45; "Category 3"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 3" where("No." = field("Item No.")));
+        }
+        field(46; "Category 4"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 4" where("No." = field("Item No.")));
+        }
+        field(47; "Category 5"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 5" where("No." = field("Item No.")));
+        }
+        field(48; "Category 6"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 6" where("No." = field("Item No.")));
+        }
+        field(49; "Category 7"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 7" where("No." = field("Item No.")));
+        }
+        field(50; "Category 8"; Code[30])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Category 8" where("No." = field("Item No.")));
+        }
 
     }
     keys

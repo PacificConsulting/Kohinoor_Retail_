@@ -20,7 +20,7 @@ tableextension 50332 "User Sertup Ext" extends "User Setup"
         {
             DataClassification = ToBeClassified;
         }
-        field(50305; "Allow Cheque Clearance"; Blob)
+        field(50305; "Allow Cheque Clearance"; Boolean)
         {
             DataClassification = ToBeClassified;
         }

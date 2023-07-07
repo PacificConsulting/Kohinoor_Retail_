@@ -15,6 +15,11 @@ pageextension 50332 "Sales Lines List Ext" extends "Sales Lines"
                 ApplicationArea = All;
                 ToolTip = 'Specifies unit prices are inclusive of tax on the line.';
             }
+            field("Store No."; Rec."Store No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Store No. field.';
+            }
         }
     }
 }

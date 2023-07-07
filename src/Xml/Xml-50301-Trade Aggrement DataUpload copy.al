@@ -53,10 +53,12 @@ xmlport 50301 "Trade Aggrement Data Upload"
                     PurcpriceDecimal: Decimal;
                     Custgroup: Enum "Trade Customer Group";
                 begin
+                    if FromDate <> '' then
+                        Evaluate(FromdateD, FromDate);
                     TG.Reset();
                     TG.SetRange("Item No.", ItemNo);
                     IF TG.FindLast() then begin
-                        TG.Rename(TG."Item No.", TG."From Date", Today, TG."Location Code");
+                        TG.Rename(TG."Item No.", TG."From Date", FromdateD, TG."Location Code", TG."Customer Group");
 
                         if AmountInINR <> '' then
                             Evaluate(AMTINR, AmountInINR);

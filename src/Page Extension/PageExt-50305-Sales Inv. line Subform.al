@@ -41,7 +41,16 @@ pageextension 50305 "Sales Inv Line Subform" extends "Posted Sales Invoice Subfo
             {
                 ApplicationArea = all;
                 ToolTip = 'Specifies the value of the GST Tax Amount.';
-
+            }
+            field("Order No."; Rec."Order No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Order No. field.';
+            }
+            field("POS Release Date"; Rec."POS Release Date")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the POS Release Date field.';
             }
 
         }

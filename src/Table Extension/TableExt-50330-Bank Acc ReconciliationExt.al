@@ -29,7 +29,7 @@ tableextension 50330 "Bank Acc. Reconciliation Ext" extends "Bank Acc. Reconcili
             Caption = 'Reco. Account No.';
             TableRelation = IF ("Reco. Account Type" = CONST("G/L Account")) "G/L Account"
             ELSE
-            IF ("Reco. Account Type" = CONST("Bank Account")) "Bank Account" where(Tender = filter(true));
+            IF ("Reco. Account Type" = CONST("Bank Account")) "Bank Account" where(Tender = filter(false));
         }
 
 

@@ -16,6 +16,10 @@ page 50357 "Trade Aggrement List"
                 {
                     ToolTip = 'Specifies the value of the Item field.';
                 }
+                field("Item No. 2"; Rec."Item No. 2")
+                {
+                    ToolTip = 'Specifies the value of the Item No. field.';
+                }
                 field("From Date"; Rec."From Date")
                 {
                     ToolTip = 'Specifies the value of the From Date field.';
@@ -171,6 +175,42 @@ page 50357 "Trade Aggrement List"
                 field("FNNLC Without SELLOUT"; Rec."FNNLC Without SELLOUT")
                 {
                     ToolTip = 'Specifies the value of the FNNLC Without SELLOUT field.';
+                }
+                field("PMG NLC W/O SELL OUT"; Rec."PMG NLC W/O SELL OUT")
+                {
+                    ToolTip = 'Specifies the value of the PMG NLC W/O SELL OUT field.';
+                }
+                field("Category 1"; Rec."Category 1")
+                {
+                    ToolTip = 'Specifies the value of the Category 1 field.';
+                }
+                field("Category 2"; Rec."Category 2")
+                {
+                    ToolTip = 'Specifies the value of the Category 2 field.';
+                }
+                field("Category 3"; Rec."Category 3")
+                {
+                    ToolTip = 'Specifies the value of the Category 3 field.';
+                }
+                field("Category 4"; Rec."Category 4")
+                {
+                    ToolTip = 'Specifies the value of the Category 4 field.';
+                }
+                field("Category 5"; Rec."Category 5")
+                {
+                    ToolTip = 'Specifies the value of the Category 5 field.';
+                }
+                field("Category 6"; Rec."Category 6")
+                {
+                    ToolTip = 'Specifies the value of the Category 6 field.';
+                }
+                field("Category 7"; Rec."Category 7")
+                {
+                    ToolTip = 'Specifies the value of the Category 7 field.';
+                }
+                field("Category 8"; Rec."Category 8")
+                {
+                    ToolTip = 'Specifies the value of the Category 8 field.';
                 }
             }
 

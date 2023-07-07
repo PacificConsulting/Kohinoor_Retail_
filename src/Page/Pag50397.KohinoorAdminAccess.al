@@ -12,6 +12,11 @@ page 50397 "Kohinoor Admin Access"
         {
             repeater(General)
             {
+                field("User ID"; Rec."User ID")
+                {
+                    ToolTip = 'Specifies the ID of the user who posted the entry, to be used, for example, in the change log.';
+                }
+
                 field("Admin Access"; Rec."Admin Access")
                 {
                     ToolTip = 'Specifies the value of the Admin Access field.';

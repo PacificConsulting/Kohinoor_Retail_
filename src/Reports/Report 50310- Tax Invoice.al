@@ -51,6 +51,10 @@ report 50310 "Tax Invoice"
             {
 
             }
+            column(CompinfoPhno; Compinfo."Phone No.")
+            {
+
+            }
             column(Compinfo_IFSC; Compinfo.IBAN)
             {
 

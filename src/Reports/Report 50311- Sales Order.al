@@ -26,7 +26,10 @@ report 50311 "Sales Order"
             {
 
             }
+            column(CompinfoPhno; Compinfo."Phone No.")
+            {
 
+            }
             column(CompName2; Compinfo.Name + '' + Compinfo."Name 2")
             {
 

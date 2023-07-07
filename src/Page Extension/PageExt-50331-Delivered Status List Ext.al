@@ -82,12 +82,12 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                                 ABSCSetup.TestField("Container Name Demo");
                                 Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
                                 ABSBlobClient.Initialize(ABSCSetup."Account Name", ABSCSetup."Container Name Demo", Authorization);
-                                IF (SDate = 0D) AND (EDate = 0D) then
-                                    FileName := PDL."Item Category code 1" + '_' + Format(SDate) + Format(EDate) + '.' + 'xlsx'
-                                else
-                                    FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
-
+                                FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'xlsx';
                                 response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+                                // IF (SDate = 0D) AND (EDate = 0D) then
+                                //     FileName := PDL."Item Category code 1" + '_' + Format(SDate) + Format(EDate) + '.' + 'xlsx'
+                                // else
+
                                 //IF response.IsSuccessful() then
                                 //  Message('File Create and upload successfully.');
 
@@ -102,6 +102,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                                     until PDLUpdate.Next() = 0;
                             end;
                         until IH.Next() = 0;
+                    Message('Demo files are generated on azure portal');
                 end;
             }
             action(DemoFasle)

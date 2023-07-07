@@ -14,6 +14,21 @@ pageextension 50333 "Posted Sales Invoice Lines ext" extends "Posted Sales Invoi
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the VAT Base Amount field.';
             }
+            field("Store No."; Rec."Store No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Store No. field.';
+            }
+            field("Order No."; Rec."Order No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Order No. field.';
+            }
+            field("POS Release Date"; Rec."POS Release Date")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the POS Release Date field.';
+            }
 
         }
 

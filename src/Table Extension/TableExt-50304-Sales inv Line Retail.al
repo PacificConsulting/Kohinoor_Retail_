@@ -67,8 +67,10 @@ tableextension 50304 "Sales inv. Line Retail" extends "Sales Invoice Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
-
-
-
+        field(50315; "POS Release Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Invoice Header"."POS Released Date" where("No." = field("Document No.")));
+        }
     }
 }
