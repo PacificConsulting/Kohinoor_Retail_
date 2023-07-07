@@ -2216,6 +2216,7 @@ codeunit 50303 "POS Procedure"
         GenBatch: Record 232;
         TenderPOSSetup: Record "Tender POS No.Series Setup";
         CheqNo: Code[10];
+        GenJ: Codeunit 12;
 
     begin
         // IF RecLocation.Get(Salesheader."Location Code") then begin
@@ -2291,6 +2292,7 @@ codeunit 50303 "POS Procedure"
         PaymentLine.SetFilter("Payment Method Code", '<>%1', 'ADVANCE');
         PaymentLine.SetRange(Posted, false); //NSW 240523 New filter
         if Not PaymentLine.IsEmpty then begin
+            GenJnlPostBatch.SetSuppressCommit(true);//Sourav New line added
             GenJnlPostBatch.Run(GenJourLineInit);
             PaymentLine.ModifyAll(Posted, true);
         end;
