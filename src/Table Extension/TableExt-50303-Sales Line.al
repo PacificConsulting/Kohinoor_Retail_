@@ -196,6 +196,12 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50317; "No. 2"; Text[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."No. 2" where("No." = field("No.")));
+            Editable = false;
+        }
 
 
 

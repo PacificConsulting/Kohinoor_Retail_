@@ -2,6 +2,15 @@ pageextension 50333 "Posted Sales Invoice Lines ext" extends "Posted Sales Invoi
 {
     layout
     {
+        addafter("No.")
+        {
+
+            field("No. 2"; Rec."No. 2")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the No. 2 field.';
+            }
+        }
         addafter(Amount)
         {
             field("Unit Price Incl. of Tax"; Rec."Unit Price Incl. of Tax")

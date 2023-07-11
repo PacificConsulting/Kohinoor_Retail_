@@ -52,11 +52,10 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                         SDate := PageDatefilter.Returnstartdate();
                         EDate := PageDatefilter.ReturnEnddate();
                     End;
-                    IF SDate = 0D then
-                        IF EDate <> 0D then
-                            Error('Please enter start date also.');
-                    //SEDATE := Format(SDate);
-                    //SEDate += Format(EDate);
+
+                    IF (SDate = 0D) OR (EDate = 0D) then
+                        Error('Please enter start date and end date.');
+
                     IH.Reset();
                     IH.SetCurrentKey("Option Type");
                     IH.SetRange("Option Type", IH."Option Type"::"Category 1");
@@ -68,8 +67,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                             PDL.SETRANGE("Item Category code 1", IH.Code);
                             PDl.SetRange(Delivered, true);
                             PDL.SetRange(Demo, false);
-                            IF (SDate <> 0D) and (EDate <> 0D) then
-                                PDL.SetRange("Delivered Date", SDate, EDate);
+                            PDL.SetRange("Delivered Date", SDate, EDate);
                             IF PDL.FindSet() THEN begin
                                 Recref.GetTable(PDL);
                                 TempBlob.CreateOutStream(OutStrm);
@@ -95,6 +93,7 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                                 PDLUpdate.Reset();
                                 PDLUpdate.SetRange("Item Category code 1", IH.Code);
                                 PDLUpdate.SetRange(Delivered, true);
+                                PDLUpdate.SetRange(Demo, false);
                                 IF PDLUpdate.FindSet() then
                                     repeat
                                         PDLUpdate.Demo := true;

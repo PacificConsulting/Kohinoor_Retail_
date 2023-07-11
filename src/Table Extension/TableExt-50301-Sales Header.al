@@ -114,6 +114,24 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50310; "Allow for Cheque Clearance"; Boolean)
+        {
+            Caption = 'Allow for Cheque Clearance';
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(50311; "Allow for Cheque Clearance By"; Code[50])
+        {
+            Caption = 'Allow for Cheque Clearance By';
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(50312; "Allow for Cheque Clearance at"; DateTime)
+        {
+            Caption = 'Allow for Cheque Clearance At';
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
 
     }
 

@@ -1,7 +1,7 @@
 page 50357 "Trade Aggrement List"
 {
     ApplicationArea = All;
-    Caption = 'Trade Aggrement List';
+    Caption = 'Trade Agreement List';
     PageType = List;
     SourceTable = "Trade Aggrement";
     UsageCategory = Lists;
@@ -19,7 +19,13 @@ page 50357 "Trade Aggrement List"
                 field("Item No. 2"; Rec."Item No. 2")
                 {
                     ToolTip = 'Specifies the value of the Item No. field.';
+                    Caption = 'Item No. 2';
                 }
+                field(Description; Rec.Description)
+                {
+                    ToolTip = 'Specifies the value of the Description field.';
+                }
+
                 field("From Date"; Rec."From Date")
                 {
                     ToolTip = 'Specifies the value of the From Date field.';
@@ -231,7 +237,7 @@ page 50357 "Trade Aggrement List"
                 PromotedCategory = Process;
                 trigger OnAction()
                 var
-                    TD: XmlPort "Trade Aggrement Data Upload";
+                    TD: XmlPort "Trade Agreement Data Upload";
                 begin
                     IF US.Get(UserId) then begin
                         IF not Us."Trade Agreement Access" then

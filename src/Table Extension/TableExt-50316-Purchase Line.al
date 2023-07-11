@@ -7,6 +7,12 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50302; "No. 2"; Text[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."No. 2" where("No." = field("No.")));
+            Editable = false;
+        }
 
         modify("No.")
         {
@@ -32,9 +38,13 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
                         // "Price Inclusive of Tax" := true
                     end;
                 end;
-                IF RecLoc.Get(PurchHeder."Location Code") then begin
-                    IF RecLoc."Default Receipt Bin" <> '' then
-                        "Bin Code" := RecLoc."Default Receipt Bin";
+                IF RecItem.Get(rec."No.") then begin
+                    IF RecItem.Type <> RecItem.Type::Service then begin
+                        IF RecLoc.Get(PurchHeder."Location Code") then begin
+                            IF RecLoc."Default Receipt Bin" <> '' then
+                                "Bin Code" := RecLoc."Default Receipt Bin";
+                        end;
+                    end;
                 end;
             end;
 
@@ -127,5 +137,5 @@ tableextension 50316 "Purchase Line Ext" extends "Purchase Line"
 
 
     var
-        myInt: Integer;
+        RecItem: Record 27;
 }

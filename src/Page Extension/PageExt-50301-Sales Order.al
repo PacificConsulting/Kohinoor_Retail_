@@ -2,6 +2,10 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
 {
     layout
     {
+        modify("VAT Bus. Posting Group")
+        {
+            Visible = true;
+        }
 
         addafter(SalesLines)
         {
@@ -61,6 +65,21 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Allow for Credit Bill field.';
+                }
+                field("Allow for Cheque Clearance"; Rec."Allow for Cheque Clearance")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Allow for Cheque Clearance field.';
+                }
+                field("Allow for Cheque Clearance at"; Rec."Allow for Cheque Clearance at")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Allow for Cheque Clearance At field.';
+                }
+                field("Allow for Cheque Clearance By"; Rec."Allow for Cheque Clearance By")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Allow for Cheque Clearance By field.';
                 }
 
             }
@@ -231,6 +250,32 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                             Rec."Allow for Credit Bill at" := CurrentDateTime;
                             rec.Modify();
                             Message('Access Granted for Allow Credit Bill');
+                        end else
+                            Error('You do not have permission to allow credit bill activate');
+                    end;
+
+                end;
+            }
+            action("Allow for Cheque Clearance.")
+            {
+                ApplicationArea = All;
+                Caption = 'Allow for Cheque Clearance';
+                Image = Allocations;
+                PromotedCategory = Process;
+                Promoted = true;
+                PromotedOnly = true;
+
+                trigger OnAction()
+                var
+                    Userset: Record "User Setup";
+                begin
+                    If Userset.Get(UserId) then begin
+                        IF Userset."Allow Cheque Clearance" then begin
+                            Rec."Allow for Cheque Clearance" := true;
+                            rec."Allow for Cheque Clearance By" := UserId;
+                            Rec."Allow for Cheque Clearance at" := CurrentDateTime;
+                            rec.Modify();
+                            Message('Access Granted for Allow for Cheque Clearance');
                         end else
                             Error('You do not have permission to allow credit bill activate');
                     end;

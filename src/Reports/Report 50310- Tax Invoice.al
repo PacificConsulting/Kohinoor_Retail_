@@ -481,7 +481,11 @@ report 50310 "Tax Invoice"
 
                 if RecCust.get("Sales Invoice Header"."Sell-to Customer No.") then begin
                     Mail := RecCust."E-Mail";
-                    PhoneNo := RecCust."Phone No.";
+                    IF RecCust."Mobile Phone No." <> '' then
+                        PhoneNo := RecCust."Phone No." + '/' + RecCust."Mobile Phone No."
+                    else
+                        PhoneNo := RecCust."Phone No.";
+                    // PhoneNo := RecCust."Phone No.";
                     CustGSTIN := RecCust."GST Registration No.";
                 end;
 

@@ -257,7 +257,13 @@ codeunit 50302 "POS Event and Subscriber"
         SH: Record "Sales Header";
         SL: Record "Sales Line";
         MonthInt: Integer;
+        WarrMasterFilter: Record "Warranty Master new";
+        Regular: Boolean;
+        MIT: Boolean;
     begin
+        Clear(Regular);
+        Clear(MIT);
+
         IF month <> '' then
             Evaluate(MonthInt, month);
 
@@ -268,7 +274,22 @@ codeunit 50302 "POS Event and Subscriber"
         SH.SetRange("No.", documentno);
         IF SH.FindFirst() then;
         //**Warranty against an item**************//
-
+        /*
+        WarrMasterFilter.Reset();
+        WarrMasterFilter.SetCurrentKey(Brand, Months, "From Date", "TO Date", "From Value", "To Value");
+        WarrMasterFilter.SetRange(Brand, brand);
+        WarrMasterFilter.SetRange(Months, MonthInt);
+        WarrMasterFilter.SetFilter("From Date", '<=%1', SH."Posting Date");
+        WarrMasterFilter.SetFilter("To Date", '>=%1', SH."Posting Date");
+        IF WarrMasterFilter.FindFirst() then begin
+            IF (WarrMasterFilter."From Value" <> 0) and (WarrMasterFilter."To Value" <> 0) then
+                Regular := true
+            else
+                MIT := true;
+        end;
+        */
+        //It Will works as Default Process as work before
+        //IF Regular then begin
         SalesLine.Reset();
         SalesLine.SetCurrentKey("Document No.", "Line No.");
         SalesLine.SetRange("Document No.", documentno);
@@ -301,7 +322,7 @@ codeunit 50302 "POS Event and Subscriber"
             WarrMaster.SetFilter("TO Value", '>=%1', SalesLine."Unit Price Incl. of Tax");
             IF WarrMaster.FindFirst() then begin
                 Saleslineinit.Validate("Unit Price Incl. of Tax", WarrMaster."EW Prices");
-                Saleslineinit."Price Inclusive of Tax" := true;
+                Saleslineinit.Validate("Price Inclusive of Tax", true);
                 Saleslineinit.Validate(Quantity, 1);
                 Saleslineinit.Description := WarrMaster.Description;
             end else
@@ -340,8 +361,79 @@ codeunit 50302 "POS Event and Subscriber"
                 Saleslineinit.Description := WarrMaster.Description;
                 Saleslineinit.modify();
             end;
-
         end;
+        //end;
+        /*
+        //******It Will works With new Process with calculte on Percentage
+        IF MIT then begin
+            SalesLine.Reset();
+            SalesLine.SetCurrentKey("Document No.", "Line No.");
+            SalesLine.SetRange("Document No.", documentno);
+            SalesLine.SetRange("Line No.", lineno);
+            IF SalesLine.FindFirst() then begin
+                Saleslineinit.Init();
+                Saleslineinit."Document Type" := SalesLine."Document Type";
+                Saleslineinit."Document No." := SalesLine."Document No.";
+
+                SL.Reset();
+                SL.SetRange("Document No.", documentno);
+                IF SL.FindLast() then
+                    Saleslineinit."Line No." := SL."Line No." + 10000;
+
+                Saleslineinit.Insert();
+                Saleslineinit.Type := Saleslineinit.Type::Item;
+                Saleslineinit.Validate("No.", SR."Warranty G/L Code");
+                Saleslineinit.Validate("Location Code", SalesLine."Location Code");
+                Saleslineinit.Validate("Unit of Measure Code", 'PCS');
+                Saleslineinit."Warranty Parent Line No." := SalesLine."Line No.";
+                Saleslineinit."Store No." := SalesLine."Store No.";
+                Saleslineinit.Validate("Salesperson Code", SalesLine."Salesperson Code");
+                WarrMaster.Reset();
+                WarrMaster.SetCurrentKey(Brand, Months, "From Date", "TO Date", "From Value", "To Value");
+                WarrMaster.SetRange(Brand, brand);
+                WarrMaster.SetRange(Months, MonthInt);
+                WarrMaster.SetFilter("From Date", '<=%1', SH."Posting Date");
+                WarrMaster.SetFilter("To Date", '>=%1', SH."Posting Date");
+                //WarrMaster.SetFilter("From Value", '<=%1', SalesLine."Unit Price Incl. of Tax");
+                //WarrMaster.SetFilter("TO Value", '>=%1', SalesLine."Unit Price Incl. of Tax");
+                IF WarrMaster.FindFirst() then begin
+                    Saleslineinit.Validate("Unit Price Incl. of Tax", ((Saleslineinit."Unit Price Incl. of Tax" * WarrMaster."EW Prices") / 100));
+                    Saleslineinit.Validate("Price Inclusive of Tax", true);
+                    Saleslineinit.Validate(Quantity, 1);
+                    Saleslineinit.Description := WarrMaster.Description;
+                end else
+                    Error('Warranty not found');
+                Saleslineinit.Modify();
+            End else begin
+                Saleslineinit.Init();
+                Saleslineinit."Document Type" := Saleslineinit."Document Type"::Order;
+                Saleslineinit."Document No." := documentno;
+
+                SL.Reset();
+                SL.SetRange("Document No.", documentno);
+                IF SL.FindLast() then
+                    Saleslineinit."Line No." := SL."Line No." + 10000;
+
+                Saleslineinit.Insert();
+                Saleslineinit.Type := Saleslineinit.Type::Item;
+                Saleslineinit.Validate("No.", SR."Warranty G/L Code");
+                Saleslineinit.Validate("Location Code", SH."Location Code");
+                Saleslineinit.Validate("Unit of Measure Code", 'PCS');
+                Saleslineinit."Store No." := SH."Store No.";
+                WarrMaster.Reset();
+                WarrMaster.SetCurrentKey(Brand, Months, "From Date", "TO Date", "From Value", "To Value");
+                WarrMaster.SetRange(Brand, brand);
+                WarrMaster.SetRange(Months, MonthInt);
+                IF WarrMaster.FindFirst() then begin
+                    Saleslineinit.Validate("Unit Price Incl. of Tax", 1);
+                    Saleslineinit."Price Inclusive of Tax" := true;
+                    Saleslineinit.Validate(Quantity, 1);
+                    Saleslineinit.Description := WarrMaster.Description;
+                    Saleslineinit.modify();
+                end;
+            end;
+        end;
+        */
         Exit('Success');
     end;
 

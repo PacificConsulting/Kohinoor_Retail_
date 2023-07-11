@@ -67,6 +67,7 @@ report 50311 "Sales Order"
             }
             column(Store_name; loc.Name)
             {
+
             }
             column(StoreAddress1; loc.Address + ' ' + loc."Address 2" + ',' + loc.City + ',' + loc."Post Code" + /*',' + 'PANNO.' + Compinfo."P.A.N. No." + */',' + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {

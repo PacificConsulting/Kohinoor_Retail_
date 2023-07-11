@@ -2,6 +2,10 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
 {
     layout
     {
+        modify("VAT Bus. Posting Group")
+        {
+            Visible = true;
+        }
         modify("Bin Code")
         {
             Visible = true;
@@ -57,8 +61,18 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
                 end;
             end;
         }
+        addafter("No.")
+        {
+
+            field("No. 2"; Rec."No. 2")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the No. 2 field.';
+            }
+        }
         addafter(Quantity)
         {
+
             field("Store No."; Rec."Store No.")
             {
                 ApplicationArea = all;

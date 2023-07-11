@@ -178,12 +178,13 @@ codeunit 50301 "Event and Subscribers"
         PaymentLine.Reset();
         PaymentLine.SetRange("Document No.", SalesHeader."No.");
         PaymentLine.SetRange(Posted, true);
-        PaymentLine.SetFilter("Payment Method Code", '<>%1', 'CHEQUE');
+        //PaymentLine.SetFilter("Payment Method Code", '<>%1', 'CHEQUE');
         IF PaymentLine.FindSet() then
             repeat
-                TotalPaymentAmt += PaymentLine.Amount;
+                IF PaymentLine."Payment Method Code" <> 'CHEQUE' then
+                    TotalPaymentAmt += PaymentLine.Amount;
             until PaymentLine.Next() = 0;
-        IF SalesHeader."Allow for Credit Bill" = false then begin
+        IF (SalesHeader."Allow for Credit Bill" = false) AND (SalesHeader."Allow for Cheque Clearance" = false) then begin
             IF TotalInvoiceAmt > TotalPaymentAmt then
                 Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', TotalInvoiceAmt, TotalPaymentAmt);
         end;

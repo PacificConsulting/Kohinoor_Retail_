@@ -280,12 +280,30 @@ codeunit 50303 "POS Procedure"
         I: Integer;
         J: Integer;
         CopyStr: Text;
+        SR: Record "Sales & Receivables Setup";
+        WarrantyBool: Boolean;
 
     begin
+        SR.Get();
         SalesLineInit.Reset();
         SalesLineInit.SetRange("Document No.", DocumentNo);
         IF not SalesLineInit.FindFirst() then
             exit('Document No. does not exist');
+
+        SalesLineInit.Reset();
+        SalesLineInit.SetRange("Document No.", DocumentNo);
+        SalesLineInit.SetRange("No.", SR."Warranty G/L Code");
+        IF SalesLineInit.FindFirst() then begin
+            SL.Reset();
+            SL.SetRange("Document No.", DocumentNo);
+            SL.SetRange(Type, SL.Type::Item);
+            SL.SetFilter("No.", '<>%1', SR."Warranty G/L Code");
+            IF SL.FindFirst() then
+                WarrantyBool := true;
+
+            IF WarrantyBool then
+                Error('You can not add another item when it is Warranty Sell');
+        end;
 
         Clear(LenCnt);
         Clear(CopyStr);
@@ -1073,8 +1091,9 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
-                If (SalesLine."Warranty Parent Line No." = 0) and (SalesLine."Unit Price Incl. of Tax" <> 0) then
+                If (SalesLine."Unit Price Incl. of Tax" <> 0) then
                     SalesLine.TestField("Unit Price");
+
             until SalesLine.Next() = 0;
 
 
@@ -1207,7 +1226,7 @@ codeunit 50303 "POS Procedure"
         IF SalesLine.FindSet() then
             repeat
                 SalesLine.TestField("Salesperson Code");
-                If (SalesLine."Warranty Parent Line No." = 0) and (SalesLine."Unit Price Incl. of Tax" <> 0) then
+                If (SalesLine."Unit Price Incl. of Tax" <> 0) then
                     SalesLine.TestField("Unit Price");
             until SalesLine.Next() = 0;
 

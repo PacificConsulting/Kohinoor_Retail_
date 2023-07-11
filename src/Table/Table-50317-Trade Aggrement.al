@@ -1,6 +1,6 @@
 table 50317 "Trade Aggrement"
 {
-    Caption = 'Trade Aggrement';
+    Caption = 'Trade Agreement';
     DataClassification = ToBeClassified;
 
 
@@ -257,6 +257,21 @@ table 50317 "Trade Aggrement"
         {
             FieldClass = FlowField;
             CalcFormula = lookup(Item."Category 8" where("No." = field("Item No.")));
+        }
+        field(51; "Sell out Text From Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(52; "Sell out Text To Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(53; Description; Text[100])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item.Description where("No." = field("Item No.")));
+            Editable = false;
+
         }
 
     }

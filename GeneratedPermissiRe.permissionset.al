@@ -59,7 +59,7 @@ permissionset 50302 GeneratedPermissiRe
         codeunit GenericApiCalls = X,
         codeunit "POS Event and Subscriber" = X,
         codeunit "POS Procedure" = X,
-        xmlport "Trade Aggrement Data Upload" = X,
+        xmlport "Trade Agreement Data Upload" = X,
         page "Advanced cust payment" = X,
         page "Azure Storage Container Setup" = X,
         page "Bank Drop Entry" = X,
