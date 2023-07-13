@@ -293,6 +293,7 @@ codeunit 50303 "POS Procedure"
         SalesLineInit.Reset();
         SalesLineInit.SetRange("Document No.", DocumentNo);
         SalesLineInit.SetRange("No.", SR."Warranty G/L Code");
+        SalesLineInit.SetRange("Warranty Parent Line No.", 0);//PCPL-Sourav
         IF SalesLineInit.FindFirst() then begin
             SL.Reset();
             SL.SetRange("Document No.", DocumentNo);
@@ -1179,11 +1180,15 @@ codeunit 50303 "POS Procedure"
                             SalesLine.Modify()
                         until SalesLine.Next() = 0;
                     end;
+                    ArchiveManagement.ArchiveSalesDocument(SalesHeader);
                     ReleaseSalesDoc.PerformManualRelease(SalesHeader);
+
                 end;
             end;
         end; //else
              //exit('Failed');
+
+
     end;
 
 
@@ -1338,6 +1343,7 @@ codeunit 50303 "POS Procedure"
                 end;
 
                 ReleaseSalesDoc.PerformManualRelease(SalesHdr);
+                ArchiveManagement.ArchiveSalesDocument(SalesHdr);//PCPL-Sourav
                 //SalesHdr.Status := SalesHdr.Status::Released;
                 //SalesHdr.Modify();
             end;
@@ -2543,6 +2549,8 @@ codeunit 50303 "POS Procedure"
         PrevTab: Option General,Invoicing,Shipping,Prepayment;
         AllowInvDisc: Boolean;
         AllowVATDifference: Boolean;
+
+        ArchiveManagement: Codeunit ArchiveManagement;
 
 
 

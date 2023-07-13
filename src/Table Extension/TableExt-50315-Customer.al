@@ -2,6 +2,7 @@ tableextension 50315 Customer_ext extends Customer
 {
     fields
     {
+
         modify("P.A.N. No.")
         {
             trigger OnAfterValidate()
@@ -78,6 +79,7 @@ tableextension 50315 Customer_ext extends Customer
             ShipToAddInit.Code := NoSeries.GetNextNo(SR."Ship To address No Series", Today, true);
             ShipToAddInit.Name := rec.Name;
             ShipToAddInit.Address := Rec.Address;
+
             ShipToAddInit."Address 2" := rec."Address 2";
             ShipToAddInit.Validate(City, rec.City);
             // ShipToAddInit.State := rec."State Code";

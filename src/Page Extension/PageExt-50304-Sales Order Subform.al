@@ -2,6 +2,8 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
 {
     layout
     {
+
+
         modify("VAT Bus. Posting Group")
         {
             Visible = true;
@@ -9,6 +11,13 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
         modify("Bin Code")
         {
             Visible = true;
+        }
+        addafter("Bin Code")
+        {
+            field("Store No."; Rec."Store No.")
+            {
+                ApplicationArea = all;
+            }
         }
         modify(Quantity)
         {
@@ -73,10 +82,7 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
         addafter(Quantity)
         {
 
-            field("Store No."; Rec."Store No.")
-            {
-                ApplicationArea = all;
-            }
+
             field("Approval Status"; Rec."Approval Status")
             {
                 ApplicationArea = all;
@@ -148,7 +154,7 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
 
 
         }
-        addafter("Unit Price Incl. of Tax")
+        addafter("HSN/SAC Code")
         {
             field("GST Tax Amount"; Rec."GST Tax Amount")
             {
@@ -156,13 +162,21 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
                 ToolTip = 'Specifies the value of the GST Tax Amount.';
 
             }
-            // field("Change Unit Price Incl. of Tax"; Rec."Change Unit Price Incl. of Tax")
-            // {
-            //     ApplicationArea = All;
-            //     ToolTip = 'Specifies the value of the Change Unit Price Incl. of Tax field.';
-            // }
 
         }
+        moveafter("No. 2"; Description)
+        moveafter("Gen. Prod. Posting Group"; "Location Code")
+        moveafter("Location Code"; "Bin Code")
+        moveafter("Shipment Date"; "VAT Bus. Posting Group")
+        moveafter("Store No."; "Unit Price Incl. of Tax")
+        moveafter("Unit Price Incl. of Tax"; "Price Exclusive of Tax")
+        moveafter("Price Exclusive of Tax"; "Unit Price")
+        moveafter("Return Reason Code"; "Line Amount")
+        moveafter("Line Amount"; "GST Group Code")
+        moveafter("Approval Status"; "TCS Nature of Collection")
+        moveafter("GST Group Code"; "HSN/SAC Code")
+        moveafter("Approval Status"; "Qty. to Ship")
+        moveafter("Location Code"; Quantity)
     }
 
 

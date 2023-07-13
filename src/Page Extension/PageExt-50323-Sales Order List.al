@@ -2,7 +2,10 @@ pageextension 50323 "Sales Order List" extends "Sales Order List"
 {
     layout
     {
-
+        modify("Assigned User ID")
+        {
+            Visible = false;
+        }
     }
     actions
     {

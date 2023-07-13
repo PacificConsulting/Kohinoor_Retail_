@@ -2,6 +2,24 @@ pageextension 50318 "Purchase Order Subform Ext" extends "Purchase Order Subform
 {
     layout
     {
+        modify("Tax Group Code")
+        {
+            Visible = false;
+        }
+        modify("Tax Area Code")
+        {
+            Visible = false;
+        }
+        moveafter("Over-Receipt Code"; "Reserved Quantity")
+        moveafter("Line Amount"; "Qty. to Receive")
+        moveafter("TDS Section Code"; "Quantity Received")
+        moveafter("HSN/SAC Code"; "GST Credit")
+        moveafter("GST Assessable Value"; "Vendor Model No.")
+        moveafter("GST Credit"; "GST Group Type")
+        modify("Item Charge Qty. to Handle")
+        {
+            Visible = false;
+        }
         addafter("No.")
         {
 

@@ -2,6 +2,28 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
 {
     layout
     {
+        modify("Prices Including VAT")
+        {
+            Visible = false;
+        }
+        modify("Payment Discount %")
+        {
+            Visible = false;
+        }
+        modify("Pmt. Discount Date")
+        {
+            Visible = false;
+        }
+        modify("EU 3-Party Trade")
+        {
+            Visible = false;
+        }
+        modify("Payment Terms Code")
+        {
+            Visible = false;
+        }
+        moveafter("Exclude GST in TCS Base"; "Location Code")
+
         modify("VAT Bus. Posting Group")
         {
             Visible = true;

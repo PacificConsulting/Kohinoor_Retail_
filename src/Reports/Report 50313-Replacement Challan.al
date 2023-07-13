@@ -98,6 +98,10 @@ report 50313 "Replacement Challan"
             {
 
             }
+            column(Narration; Narration)
+            {
+
+            }
 
 
 
@@ -109,6 +113,7 @@ report 50313 "Replacement Challan"
                 compinfo.get();
                 compinfo.CalcFields(Picture);
 
+                //Bill to and Ship to Address
                 if Loc.Get("Location Code") then;
                 //if SIH.get("Document No.") then;
                 SIH.Reset();
@@ -120,7 +125,6 @@ report 50313 "Replacement Challan"
                     BilltoAdd := SIH."Sell-to Address" + ' ' + SIH."Sell-to Address 2" + ',' + SIH."Sell-to City" + ',' + SIH."Sell-to Post Code" + ',' + SIH."Sell-to Country/Region Code";
                     ShiptoAdd := SIH."Ship-to Address" + '' + SIH."Ship-to Address 2" + '' + SIH."Ship-to City" + ',' + SIH."Ship-to Post Code" + ',' + SIH."Ship-to Country/Region Code";
                     Storeno := SIH."Store No.";
-
 
                 end;
 
@@ -137,6 +141,7 @@ report 50313 "Replacement Challan"
                         txt3 := DelStr(Salespersoncode, StrLen(Salespersoncode), 1);
                 end;
 
+                //HSN Code
                 RescSIL.Reset();
                 RescSIL.SetRange("Document No.", "Document No.");
                 RescSIL.SetRange("No.", "Item No.");
@@ -168,6 +173,7 @@ report 50313 "Replacement Challan"
                     end;
                 end;
 
+                //Contact No.
                 if SIH.get("Document No.") then;
                 if cust.get(SIH."Sell-to Customer No.") then;
                 if cust."Mobile Phone No." <> '' then
@@ -175,13 +181,17 @@ report 50313 "Replacement Challan"
                 else
                     custphoneno := cust."Phone No.";
 
-                /* begin
-                    custphoneno := cust."Phone No." + '/' + cust."Mobile Phone No.";
-                end;
-                if custphoneno <> '' then
-                    custphoneno := DelStr(custphoneno, StrLen(custphoneno), 1);
- */
-
+                //Narration
+                RecSIH.Reset();
+                RecSIH.SetRange("No.", "Document No.");
+                if RecSIH.FindFirst() then
+                    SalesCommLine.Reset();
+                SalesCommLine.SetRange("No.", RecSIH."No.");
+                SalesCommLine.SetRange("Document Line No.", 0);
+                if SalesCommLine.FindFirst() then
+                    repeat
+                        Narration += SalesCommLine.Comment;
+                    until SalesCommLine.Next = 0;
             end;
 
         }
@@ -228,6 +238,9 @@ report 50313 "Replacement Challan"
 
     var
         myInt: Integer;
+        Narration: Text[250];
+        RecSIH: Record "Sales Invoice Header";
+        SalesCommLine: Record "Sales Comment Line";
         serialno: Code[50];
         custphoneno: Text[30];
         VL: record "Value Entry";

@@ -12,11 +12,11 @@ pageextension 50306 "ItemCArdExtension" extends "Item Card"
         addafter(Description)
         {
 
-            field("Description 2"; Rec."Description 2")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Description 2 field.';
-            }
+            // field("Description 2"; Rec."Description 2")
+            // {
+            //     ApplicationArea = All;
+            //     ToolTip = 'Specifies the value of the Description 2 field.';
+            // }
         }
     }
     actions

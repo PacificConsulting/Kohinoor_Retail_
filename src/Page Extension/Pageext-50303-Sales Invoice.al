@@ -2,6 +2,56 @@ pageextension 50303 "Sales Invoice Retail" extends "Sales Invoice"
 {
     layout
     {
+        modify("Responsibility Center")
+        {
+            Visible = false;
+        }
+        modify("Bill Of Export No.")
+        {
+            Visible = false;
+        }
+        modify("Bill Of Export Date")
+        {
+            Visible = false;
+        }
+        modify("Payment Date")
+        {
+            Visible = false;
+        }
+        modify("E-Commerce Customer")
+        {
+            Visible = false;
+        }
+
+        modify("E-Comm. Merchant Id")
+        {
+            Visible = false;
+        }
+        modify("GST Without Payment of Duty")
+        {
+            Visible = false;
+        }
+        modify("Transaction Specification")
+        {
+            Visible = false;
+        }
+        modify("Transaction Type")
+        {
+            Visible = false;
+        }
+        modify("Transport Method")
+        {
+            Visible = false;
+        }
+        modify("Exit Point")
+        {
+            Visible = false;
+        }
+        modify("Area")
+        {
+            Visible = false;
+        }
+
         addafter(SalesLines)
         {
             part(PaymentLine; "Payment Lines Subform")
