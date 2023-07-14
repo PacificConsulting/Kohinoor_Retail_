@@ -157,5 +157,15 @@ permissionset 50302 GeneratedPermissiRe
         page "Tender Apply Bank Acc Leder" = X,
         page "Tender Bank Acc Recon Lines" = X,
         page "Tender Bank Acc. Rec List" = X,
-        page "Tender Bank Acc. Reconciliate" = X;
+        page "Tender Bank Acc. Reconciliate" = X,
+        tabledata "Email to Finance" = RIMD,
+        table "Email to Finance" = X,
+        report "Pre-Payment Sheet Report" = X,
+        report "Replacement Challan" = X,
+        page "Bank Acc.Ledger Approval Code" = X,
+        page "Date Filter" = X,
+        page "Delivery Order for Warehoue" = X,
+        page "Email to Finance" = X,
+        page "Kohinoor Admin Access" = X,
+        page "Reservation Entry Modify" = X;
 }

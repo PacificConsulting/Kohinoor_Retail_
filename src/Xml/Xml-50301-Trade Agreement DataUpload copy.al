@@ -6,6 +6,7 @@ xmlport 50301 "Trade Agreement Data Upload"
     Format = VariableText;
     FormatEvaluate = Legacy; ////
 
+
     schema
     {
         textelement(RootNodeName)
@@ -173,7 +174,7 @@ xmlport 50301 "Trade Agreement Data Upload"
                         if PurchPrice <> '' then
                             Evaluate(PurcpriceDecimal, PurchPrice);
                         if CustomerGroup <> '' then
-                            Evaluate(Custgroup, CustomerGroup);
+                            Evaluate(CustomerGroupEnum, CustomerGroup);
 
 
                         IF FNNLCWithSellout <> '' then
@@ -227,7 +228,7 @@ xmlport 50301 "Trade Agreement Data Upload"
                         TDInit."Last Selling Price" := LastSellDecimal;
                         TDInit.NNLC := NNLCdeci;
                         TDInit."Purchase Price" := PurcpriceDecimal;
-                        TDInit."Customer Group" := Custgroup;
+                        TDInit."Customer Group" := CustomerGroupEnum;
                         //********New Line Modified if Value is there
                         IF FNNLCWithSellout <> '' then
                             TDInit."Fnnlc with sell out" := FNNLCWithSelloutDec;
@@ -269,6 +270,63 @@ xmlport 50301 "Trade Agreement Data Upload"
 
                         TDInit.Insert();
                     end else begin
+                        if AmountInINR <> '' then
+                            Evaluate(AMTINR, AmountInINR);
+                        if FromDate <> '' then
+                            Evaluate(FromdateD, FromDate);
+                        if FNNLC <> '' then
+                            Evaluate(FNNLCDecim, FNNLC);
+                        if DP <> '' then
+                            Evaluate(DPDeci, DP);
+                        if NNLC <> '' then
+                            Evaluate(NNLCdeci, NNLC);
+                        if LastSellPrice <> '' then
+                            Evaluate(LastSellDecimal, LastSellPrice);
+                        if PurchPrice <> '' then
+                            Evaluate(PurcpriceDecimal, PurchPrice);
+                        if CustomerGroup <> '' then
+                            Evaluate(CustomerGroupEnum, CustomerGroup);
+
+
+                        IF FNNLCWithSellout <> '' then
+                            Evaluate(FNNLCWithoutSelloutdec, FNNLCWithoutSellout);
+                        IF FNNLCWithoutSellout <> '' then
+                            Evaluate(FNNLCWithoutSelloutDec, FNNLCWithoutSellout);
+                        IF MRP <> '' then
+                            Evaluate(MRPDec, MRP);
+                        IF MOP <> '' then
+                            Evaluate(MOPDec, MOP);
+                        IF Sellout <> '' then
+                            Evaluate(SelloutDec, Sellout);
+                        IF SelloutFromDate <> '' then
+                            Evaluate(SelloutFromDateD, SelloutFromDate);
+                        IF SellouttoDate <> '' then
+                            Evaluate(SellouttoDateD, SellouttoDate);
+                        IF SelloutTextFromDate <> '' then
+                            Evaluate(SelloutTextFromDateD, SelloutTextFromDate);
+                        IF SelloutTextToDate <> '' then
+                            Evaluate(SelloutTextToDateD, SelloutTextToDate);
+                        IF SLAB1PRICE <> '' then
+                            Evaluate(SLAB1PRICEDec, SLAB1PRICE);
+                        if SLAB1ExcPRICE <> '' then
+                            Evaluate(SLAB1ExcPRICEDec, SLAB1ExcPRICE);
+                        IF SLAB1INC <> '' then
+                            Evaluate(SLAB1INCDec, SLAB1INC);
+                        IF SLAB2PRICE <> '' then
+                            Evaluate(SLAB2PRICEDec, SLAB2PRICE);
+                        if SLAB2ExcPRICE <> '' then
+                            Evaluate(SLAB2ExcPRICEDec, SLAB2ExcPRICE);
+                        IF SLAB2INC <> '' then
+                            Evaluate(SLAB2INCDec, SLAB2INC);
+                        IF MANAGERDISCRITION <> '' then
+                            Evaluate(MANAGERDISCRITIONDec, MANAGERDISCRITION);
+                        IF MANAGERDISCRITIONINC <> '' then
+                            Evaluate(MANAGERDISCRITIONINCDec, MANAGERDISCRITIONINC);
+                        IF PMGNLCWOSELLOUT <> '' then
+                            Evaluate(PMGNLCWOSELLOUTDec, PMGNLCWOSELLOUT);
+
+
+
                         TDInit.Init();
                         TDInit."Item No." := ItemNo;
                         TDInit."From Date" := FromdateD;
@@ -280,7 +338,7 @@ xmlport 50301 "Trade Agreement Data Upload"
                         TDInit."Last Selling Price" := LastSellDecimal;
                         TDInit.NNLC := NNLCdeci;
                         TDInit."Purchase Price" := PurcpriceDecimal;
-                        TDInit."Customer Group" := Custgroup;
+                        TDInit."Customer Group" := CustomerGroupEnum;
                         //********New Line Modified if Value is there
                         IF FNNLCWithSellout <> '' then
                             TDInit."Fnnlc with sell out" := FNNLCWithSelloutDec;

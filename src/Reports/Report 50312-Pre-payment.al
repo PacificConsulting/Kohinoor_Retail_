@@ -213,7 +213,6 @@ report 50312 "Pre-Payment Sheet Report"
                     documentdate := PIH."Document Date";
                     buyfromvenno := PIH."Buy-from Vendor No.";
                     buyfromvenname := PIH."Buy-from Vendor Name";
-
                 end;
                 //if RecPIH.Get("Location Code") then;
                 if loc.get("Location Code") then;
@@ -332,6 +331,35 @@ report 50312 "Pre-Payment Sheet Report"
 
             end;
 
+        }
+        dataitem("Purch. Cr. Memo Line"; "Purch. Cr. Memo Line")
+        {
+            RequestFilterFields = "Document No.", "Posting Date";
+            DataItemTableView = sorting("Document No.", "Line No.") order(ascending) where(Quantity = filter(<> 0), Type = filter('Item'));
+            column(PCL_Quantity; Quantity)
+            {
+
+            }
+            column(PCL_Shortcut_Dimension_1_Code; "Shortcut Dimension 1 Code")
+            {
+
+            }
+            column(PCL_Bin_Code; "Bin Code")
+            {
+
+            }
+            column(PCL_Unit_of_Measure_Code; "Unit of Measure Code")
+            {
+
+            }
+            column(PCL_Direct_Unit_Cost; "Direct Unit Cost")
+            {
+
+            }
+            column(PCL_Item_id; "No.")
+            {
+
+            }
         }
 
     }

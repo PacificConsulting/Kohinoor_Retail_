@@ -1197,14 +1197,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox52">
+                        <Textbox Name="NewSerialNo">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!NewSerialNo.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -1215,7 +1215,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox52</rd:DefaultName>
+                          <rd:DefaultName>NewSerialNo</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -1859,6 +1859,9 @@ End Function
         </Field>
         <Field Name="Narration">
           <DataField>Narration</DataField>
+        </Field>
+        <Field Name="NewSerialNo">
+          <DataField>NewSerialNo</DataField>
         </Field>
       </Fields>
       <Query>

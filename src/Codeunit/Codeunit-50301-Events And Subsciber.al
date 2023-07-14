@@ -17,7 +17,9 @@ codeunit 50301 "Event and Subscribers"
         BanKposting: Record "Bank Account Posting Group";
         Location: Record Location;
         PayMethod: Record "Payment Method";
+        GenBatch: Record 232;
     begin
+        IF GenBatch.Get(GL."Tender Reco. Template Name", GL."Tender Reco. Batch Name") then;
         IF PayMethod.Get(BankAccReconciliation."Bank Account No.") then begin
             if (PayMethod."Payment Type" in [PayMethod."Payment Type"::Card, PayMethod."Payment Type"::UPI, PayMethod."Payment Type"::Wallet]) then begin
                 Location.Reset();
@@ -54,7 +56,7 @@ codeunit 50301 "Event and Subscribers"
                             else
                                 GenJnlInit."Line No." := 10000;
 
-                            GenJnlInit."Document No." := 'RECO' + format(GenJnlInit."Line No.");
+                            GenJnlInit."Document No." := 'TENDERRECO' + format(BankAccLedEntry."Statement No.");
                             GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
                             IF BankAccReconciliation."Reco. Account Type" = BankAccReconciliation."Reco. Account Type"::"Bank Account" then begin
                                 GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"Bank Account");
@@ -68,6 +70,7 @@ codeunit 50301 "Event and Subscribers"
                             GenJnlInit.Validate(Amount, Amount);
                             GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
                             GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
+                            GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
                             GenJnlInit.Insert(true);
                             //******** Negative Amount with G/L Account Credit*********
                             IF BanKposting.Get(BankAccReconciliation."Bank Account No.") then;
@@ -84,13 +87,14 @@ codeunit 50301 "Event and Subscribers"
                             else
                                 GenJnlInit."Line No." := 10000;
 
-                            GenJnlInit."Document No." := 'RECO' + format(GenJnlInit."Line No.");
+                            GenJnlInit."Document No." := 'TENDERRECO' + format(BankAccLedEntry."Statement No.");
                             GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
                             GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"G/L Account");
                             GenJnlInit.Validate("Account No.", BanKposting."G/L Account No.");
                             GenJnlInit.Validate(Amount, -Amount);
                             GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
                             GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
+                            GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
                             GenJnlInit.Insert(true);
                         end;
                     until Location.Next() = 0;
@@ -98,6 +102,9 @@ codeunit 50301 "Event and Subscribers"
         end;
         //*********For Finance********************
         IF PayMethod.Get(BankAccReconciliation."Bank Account No.") then begin
+            GL.Get();
+            GL.TestField("Tender Reco. Batch Name");
+            GL.TestField("Tender Reco. Template Name");
             if (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
                 BankAccLedEntry.Reset();
                 BankAccLedEntry.SetCurrentKey("Bank Account No.", "Statement No.", "Global Dimension 2 Code");
@@ -117,8 +124,8 @@ codeunit 50301 "Event and Subscribers"
                             GenJnlInit."Line No." := GenJnl."Line No." + 10000
                         else
                             GenJnlInit."Line No." := 10000;
-                        GenJnlInit.Insert();
-                        GenJnlInit."Document No." := 'TENDERECO' + format(GenJnlInit."Line No.");
+
+                        GenJnlInit."Document No." := 'TENDERRECO' + format(BankAccLedEntry."Statement No.");
                         GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
                         GenJnlInit.Validate("Posting Date", Today);
                         IF BankAccReconciliation."Reco. Account Type" = BankAccReconciliation."Reco. Account Type"::"Bank Account" then begin
@@ -133,7 +140,8 @@ codeunit 50301 "Event and Subscribers"
                         GenJnlInit.Validate(Amount, BankAccLedEntry.Amount);
                         GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
                         GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
-                        GenJnlInit.Modify();
+                        GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
+                        GenJnlInit.Insert(true);
 
                         //******** Negative Amount with G/L Account Credit*********
                         IF BanKposting.Get(BankAccReconciliation."Bank Account No.") then;
@@ -147,16 +155,17 @@ codeunit 50301 "Event and Subscribers"
                             GenJnlInit."Line No." := GenJnl."Line No." + 10000
                         else
                             GenJnlInit."Line No." := 10000;
-                        GenJnlInit.Insert();
+
                         GenJnlInit.Validate("Posting Date", Today);
-                        GenJnlInit."Document No." := 'TENDERRECO' + format(GenJnlInit."Line No.");
+                        GenJnlInit."Document No." := 'TENDERRECO' + format(BankAccLedEntry."Statement No.");
                         GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
                         GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"G/L Account");
                         GenJnlInit.Validate("Account No.", BanKposting."G/L Account No.");
                         GenJnlInit.Validate(Amount, (BankAccLedEntry.Amount * -1));
                         GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
                         GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
-                        GenJnlInit.Modify();
+                        GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
+                        GenJnlInit.Insert(true);
                     until BankAccLedEntry.Next() = 0;
             end;
         end;
@@ -350,57 +359,58 @@ codeunit 50301 "Event and Subscribers"
         SalesLine.SetRange("No.", SR."Exchange Item G/L");
         SalesLine.SetFilter("Exchange Item No.", '<>%1', '');
         IF SalesLine.findset() then
-            repeat
-                // IF SalesLine."Exchange Item No." <> '' then begin
-                ItemJInit.Init();
-                ItemJInit."Journal Template Name" := 'ITEM';
-                ItemJInit."Journal Batch Name" := GL."Exchange Batch";
-                ItemJ.Reset();
-                ItemJ.SetRange("Journal Template Name", 'ITEM');
-                ItemJ.SetRange("Journal Batch Name", GL."Exchange Batch");
-                IF ItemJ.FindLast() then
-                    ItemJInit."Line No." := ItemJ."Line No." + 10000
-                else
-                    ItemJInit."Line No." := 10000;
+            IF SalesLine.Quantity <> SalesLine."Quantity Invoiced" then begin
+                repeat
+                    // IF SalesLine."Exchange Item No." <> '' then begin
+                    ItemJInit.Init();
+                    ItemJInit."Journal Template Name" := 'ITEM';
+                    ItemJInit."Journal Batch Name" := GL."Exchange Batch";
+                    ItemJ.Reset();
+                    ItemJ.SetRange("Journal Template Name", 'ITEM');
+                    ItemJ.SetRange("Journal Batch Name", GL."Exchange Batch");
+                    IF ItemJ.FindLast() then
+                        ItemJInit."Line No." := ItemJ."Line No." + 10000
+                    else
+                        ItemJInit."Line No." := 10000;
 
-                ItemJInit."Document No." := SalesHeader."No."; //SalesInvHdrNo;
-                ItemJInit.Validate("Posting Date", Today);
-                ItemJInit."Entry Type" := ItemJInit."Entry Type"::"Positive Adjmt.";
-                ItemJInit.Validate("Item No.", SalesLine."Exchange Item No.");
-                ItemJInit.Validate("Location Code", SalesLine."Location Code");
-                ItemJInit.Validate("Bin Code", 'BACKPACK');
-                ItemJInit.validate(Quantity, SalesLine.Quantity);
-                ItemJInit.Validate("Unit of Measure Code", SalesLine."Unit of Measure Code");
-                ItemJInit.Validate("Unit Amount", ABS(SalesLine."Unit Price"));
-                ItemJInit.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
-                ItemJInit.Validate("Shortcut Dimension 2 Code", SalesLine."Shortcut Dimension 2 Code");
-                ItemJInit.Insert();
+                    ItemJInit."Document No." := SalesHeader."No."; //SalesInvHdrNo;
+                    ItemJInit.Validate("Posting Date", Today);
+                    ItemJInit."Entry Type" := ItemJInit."Entry Type"::"Positive Adjmt.";
+                    ItemJInit.Validate("Item No.", SalesLine."Exchange Item No.");
+                    ItemJInit.Validate("Location Code", SalesLine."Location Code");
+                    ItemJInit.Validate("Bin Code", 'BACKPACK');
+                    ItemJInit.validate(Quantity, SalesLine.Quantity);
+                    ItemJInit.Validate("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                    ItemJInit.Validate("Unit Amount", ABS(SalesLine."Unit Price"));
+                    ItemJInit.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
+                    ItemJInit.Validate("Shortcut Dimension 2 Code", SalesLine."Shortcut Dimension 2 Code");
+                    ItemJInit.Insert();
 
-                //<<******Reservation Creat for item Journal Line************
-                ReservEntry.Reset();
-                ReservEntry.LockTable();
-                if ReservEntry.FindLast() then;
-                ReservEntryInit.Init();
-                ReservEntryInit."Entry No." := ReservEntry."Entry No." + 1;
-                ReservEntryInit."Item No." := ItemJInit."Item No.";
-                ReservEntryInit."Location Code" := ItemJInit."Location Code";
-                ReservEntryInit.validate("Quantity (Base)", ItemJInit.Quantity);
-                ReservEntryInit."Reservation Status" := ReservEntryInit."Reservation Status"::Prospect;
-                ReservEntryInit."Source Type" := DATABASE::"Item Journal Line";
-                ReservEntryInit."Source Subtype" := 2;
-                ReservEntryInit."Source ID" := ItemJInit."Journal Template Name";
-                ReservEntryInit."Source Batch Name" := ItemJInit."Journal Batch Name";
-                ReservEntryInit."Source Ref. No." := ItemJInit."Line No.";
-                ReservEntryInit."Creation Date" := Today;
-                ReservEntryInit."Created By" := UserId;
-                ReservEntryInit."Serial No." := SalesLine."Serial No.";
-                ReservEntryInit."Expected Receipt Date" := Today;
-                ReservEntryInit.Positive := true;
-                ReservEntryInit."Item Tracking" := ReservEntryInit."Item Tracking"::"Serial No.";
-                ReservEntryInit.Insert();
-                ItemJnlPostBatch.Run(ItemJInit);
-            //end;
-            until SalesLine.next() = 0;
+                    //<<******Reservation Creat for item Journal Line************
+                    ReservEntry.Reset();
+                    ReservEntry.LockTable();
+                    if ReservEntry.FindLast() then;
+                    ReservEntryInit.Init();
+                    ReservEntryInit."Entry No." := ReservEntry."Entry No." + 1;
+                    ReservEntryInit."Item No." := ItemJInit."Item No.";
+                    ReservEntryInit."Location Code" := ItemJInit."Location Code";
+                    ReservEntryInit.validate("Quantity (Base)", ItemJInit.Quantity);
+                    ReservEntryInit."Reservation Status" := ReservEntryInit."Reservation Status"::Prospect;
+                    ReservEntryInit."Source Type" := DATABASE::"Item Journal Line";
+                    ReservEntryInit."Source Subtype" := 2;
+                    ReservEntryInit."Source ID" := ItemJInit."Journal Template Name";
+                    ReservEntryInit."Source Batch Name" := ItemJInit."Journal Batch Name";
+                    ReservEntryInit."Source Ref. No." := ItemJInit."Line No.";
+                    ReservEntryInit."Creation Date" := Today;
+                    ReservEntryInit."Created By" := UserId;
+                    ReservEntryInit."Serial No." := SalesLine."Serial No.";
+                    ReservEntryInit."Expected Receipt Date" := Today;
+                    ReservEntryInit.Positive := true;
+                    ReservEntryInit."Item Tracking" := ReservEntryInit."Item Tracking"::"Serial No.";
+                    ReservEntryInit.Insert();
+                    ItemJnlPostBatch.Run(ItemJInit);
+                until SalesLine.next() = 0;
+            end;
 
     end;
     //END**********************************Codeunit-80***************************************

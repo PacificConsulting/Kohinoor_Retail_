@@ -11,7 +11,8 @@ report 50313 "Replacement Challan"
         dataitem("Item Journal Replace Data"; "Item Journal Replace Data")
         {
             RequestFilterFields = "Document No.", "Posting Date";
-            DataItemTableView = where("Item No." = filter(<> ''));
+            DataItemTableView = where("Item No." = filter(<> ''), "Entry Type" = filter('Negative Adjmt.'));
+
             column(Srno; Srno)
             {
 
@@ -102,6 +103,10 @@ report 50313 "Replacement Challan"
             {
 
             }
+            column(NewSerialNo; NewSerialNo)
+            {
+
+            }
 
 
 
@@ -173,6 +178,25 @@ report 50313 "Replacement Challan"
                     end;
                 end;
 
+                //NEW Serial No.
+                Clear(NewSerialNo);
+                ValEntry.Reset();
+                ValEntry.SetRange("Document No.", "Document No.");
+                ValEntry.SetRange("Item No.", "Item No.");
+                ValEntry.SetRange("Item Ledger Entry Type", ValEntry."Item Ledger Entry Type"::"Negative Adjmt.");
+                if ValEntry.FindFirst() then begin
+                    itemLedEntry.Reset();
+                    itemLedEntry.SetRange("Entry No.", ValEntry."Item Ledger Entry No.");
+                    itemLedEntry.SetFilter("Serial No.", '<>%1', '');
+                    if itemLedEntry.FindFirst() then
+                        repeat
+                            NewSerialNo := itemLedEntry."Serial No." + ',';
+                        until ValEntry.Next() = 0;
+                    if NewSerialNo <> '' then
+                        NewSerialNo := DelStr(NewSerialNo, StrLen(NewSerialNo), 1);
+
+                end;
+
                 //Contact No.
                 if SIH.get("Document No.") then;
                 if cust.get(SIH."Sell-to Customer No.") then;
@@ -192,9 +216,21 @@ report 50313 "Replacement Challan"
                     repeat
                         Narration += SalesCommLine.Comment;
                     until SalesCommLine.Next = 0;
+
+
+
+            end;
+
+            trigger OnPreDataItem()
+            var
+                myInt: Integer;
+            begin
+                // "Item Journal Replace Data".Reset();
+                // "Item Journal Replace Data".SetRange("Entry Type", "Item Journal Replace Data"."Entry Type"::"Negative Adjmt.");
             end;
 
         }
+
     }
 
     requestpage
@@ -238,7 +274,10 @@ report 50313 "Replacement Challan"
 
     var
         myInt: Integer;
+        NewSerialNo: Code[50];
         Narration: Text[250];
+        ValEntry: Record "Value Entry";
+        itemLedEntry: record "Item Ledger Entry";
         RecSIH: Record "Sales Invoice Header";
         SalesCommLine: Record "Sales Comment Line";
         serialno: Code[50];
