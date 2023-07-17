@@ -37,6 +37,11 @@ page 50361 "Slab Approval List"
                     ToolTip = 'Specifies a description of the item or service on the line.';
                     Editable = false;
                 }
+                field("Posting Date"; Rec."Posting Date")
+                {
+                    ToolTip = 'Specifies the value of the Posting Date field.';
+                    Editable = false;
+                }
                 field("Unit Price Incl. of Tax"; Rec."Unit Price Incl. of Tax")
                 {
                     ToolTip = 'Specifies unit prices are inclusive of tax on the line.';
@@ -102,7 +107,7 @@ page 50361 "Slab Approval List"
 
                         SalesLine."Rejected By" := UserId;
                         SalesLine."Rejected On" := CurrentDateTime;
-                        // SalesLine."Approval Status" := SalesLine."Approval Status"::" ";
+                        SalesLine."Approval Status" := SalesLine."Approval Status"::" ";
                         // SalesLine.Validate("Unit Price Incl. of Tax", rec."Old Unit Price");
                         // SalesLine."GST Tax Amount" := (SalesLine."Unit Price Incl. of Tax" - SalesLine."Unit Price") * SalesLine.Quantity;
                         SalesLine.Modify();

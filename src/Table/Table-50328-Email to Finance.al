@@ -10,7 +10,7 @@ table 50328 "Email to Finance"
             Caption = 'Payment Method';
             TableRelation = "Payment Method" where("Payment Type" = filter('Finance'));
         }
-        field(2; "E-Mail"; Text[30])
+        field(2; "E-Mail"; Text[50])
         {
             Caption = 'E-Mail';
         }

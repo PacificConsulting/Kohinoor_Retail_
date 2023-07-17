@@ -178,7 +178,7 @@ xmlport 50301 "Trade Agreement Data Upload"
 
 
                         IF FNNLCWithSellout <> '' then
-                            Evaluate(FNNLCWithoutSelloutdec, FNNLCWithoutSellout);
+                            Evaluate(FNNLCWithSelloutdec, FNNLCWithSellout);
                         IF FNNLCWithoutSellout <> '' then
                             Evaluate(FNNLCWithoutSelloutDec, FNNLCWithoutSellout);
                         IF MRP <> '' then
@@ -267,6 +267,8 @@ xmlport 50301 "Trade Agreement Data Upload"
                             TDInit."Sell out Text From Date" := SelloutTextFromDateD;
                         If SelloutTextToDate <> '' then
                             TDInit."Sell out Text To Date" := SelloutTextToDateD;
+                        IF SelloutText <> '' then
+                            TDInit."Sellout Text" := SelloutText;
 
                         TDInit.Insert();
                     end else begin
@@ -377,6 +379,7 @@ xmlport 50301 "Trade Agreement Data Upload"
                             TDInit."Sell out Text From Date" := SelloutTextFromDateD;
                         If SelloutTextToDate <> '' then
                             TDInit."Sell out Text To Date" := SelloutTextToDateD;
+
                         TDInit.Insert();
                     end;
                 end;

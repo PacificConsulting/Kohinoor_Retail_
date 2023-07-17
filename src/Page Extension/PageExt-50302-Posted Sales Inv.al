@@ -33,7 +33,22 @@ pageextension 50302 "Posted Sales invoice Retail" extends "Posted Sales Invoice"
 
     actions
     {
-        // Add changes to page actions here
+        addafter("Tax Invoice")
+        {
+            action("Test mail")
+            {
+                ApplicationArea = all;
+                PromotedCategory = Report;
+                PromotedIsBig = true;
+                Promoted = true;
+                trigger OnAction()
+                var
+                    CU: Codeunit 50304;
+                begin
+                    CU.Run();
+                end;
+            }
+        }
     }
 
     var

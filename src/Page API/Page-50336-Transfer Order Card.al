@@ -259,4 +259,13 @@ page 50336 "Transfer Order Card"
             }
         }
     }
+    // trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    // var
+    //     InvtSetup: Record "Inventory Setup";
+    //     NoSeries: Codeunit NoSeriesManagement;
+    // begin
+    //     InvtSetup.Get();
+    //     InvtSetup.TestField("Transfer Order Nos.");
+    //     Rec."No." := NoSeries.GetNextNo(InvtSetup."Transfer Order Nos.", rec."Posting Date", true);
+    // end;
 }

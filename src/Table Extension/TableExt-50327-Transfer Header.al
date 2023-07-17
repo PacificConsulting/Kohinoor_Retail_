@@ -32,5 +32,10 @@ tableextension 50327 "Transfer Header" extends "Transfer Header"
             TableRelation = "Staff Master".ID;
             Editable = false;
         }
+        field(50302; "Staff Id"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Staff Master".ID;
+        }
     }
 }

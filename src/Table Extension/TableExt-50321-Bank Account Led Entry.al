@@ -24,5 +24,11 @@ tableextension 50321 "Bank Account Led. Entry" extends "Bank Account Ledger Entr
             FieldClass = FlowField;
             CalcFormula = lookup("Vendor Ledger Entry"."Vendor Name" where("Document No." = field("Document No.")));
         }
+        field(50305; "Value Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Bank Acc. Reconciliation Line"."Value Date" where("Bank Account No." = field("Bank Account No."), "Statement No." = field("Statement No."), "Statement Line No." = field("Statement Line No.")));
+            Enabled = false;
+        }
     }
 }

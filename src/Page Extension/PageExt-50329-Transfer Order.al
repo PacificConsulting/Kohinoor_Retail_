@@ -2,7 +2,16 @@ pageextension 50329 "Transfer Order" extends "Transfer Order"
 {
     layout
     {
+        addafter("In-Transit Code")
+        {
 
+            field("Staff Id"; Rec."Staff Id")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Staff Id field.';
+                Editable = false;
+            }
+        }
     }
     actions
     {
@@ -12,6 +21,7 @@ pageextension 50329 "Transfer Order" extends "Transfer Order"
             {
                 ApplicationArea = all;
                 Image = AddAction;
+                Visible = false;
                 trigger OnAction()
                 var
                     CU: Codeunit 50302;
@@ -19,7 +29,20 @@ pageextension 50329 "Transfer Order" extends "Transfer Order"
                     CU.TransferShipQtyUpdate(Rec."No.");
                 end;
             }
+            action(TO)
+            {
+                ApplicationArea = all;
+                Image = AddAction;
+                Visible = false;
+                trigger OnAction()
+                var
+                    CU: Codeunit 50302;
+                begin
+                    CU.CreateTransferHeader(rec."Transfer-from Code", rec."Transfer-to Code", Today, 'E003412');
+                end;
+            }
         }
+
         modify("Re&lease")
         {
             Trigger OnAfterAction()

@@ -54,7 +54,6 @@ permissionset 50302 GeneratedPermissiRe
         table "Warranty Master new" = X,
         table "Warranty Month Master" = X,
         codeunit "Access Token API" = X,
-        codeunit APICalls = X,
         codeunit "Event and Subscribers" = X,
         codeunit GenericApiCalls = X,
         codeunit "POS Event and Subscriber" = X,

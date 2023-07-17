@@ -514,6 +514,7 @@ report 50310 "Tax Invoice"
                     Notext := 'Tax Invoice';
 
                 //PCPL-064<< 8june2023
+                Clear(Paymentmethod); //17July23
                 PostedPaymentLines.Reset();
                 PostedPaymentLines.setrange("Document No.", "No.");
                 if PostedPaymentLines.FindSet() then //begin
@@ -524,6 +525,8 @@ report 50310 "Tax Invoice"
                     txt1 := DelStr(paymentmethod, StrLen(Paymentmethod), 1);
                 //end;
 
+
+                Clear(Financecode); //17July23
                 PostedPaylines.Reset();
                 PostedPaylines.SetRange("Document No.", "No.");
                 if PostedPaylines.FindSet() then begin
@@ -534,7 +537,7 @@ report 50310 "Tax Invoice"
                     if Financecode <> '' then
                         txt2 := DelStr(Financecode, StrLen(Financecode), 1);
                 end;
-
+                Clear(Salespersoncode); //17July23
                 recSIL.Reset();
                 recSIL.SetRange("Document No.", "No.");
                 if recSIL.FindSet() then begin
@@ -564,7 +567,7 @@ report 50310 "Tax Invoice"
                 Relocation.CalcFields("Payment QR");
 
                 //TotalAmount\
-
+                /*
                 recSalesInvLine.RESET;
                 recSalesInvLine.SETRANGE("Document No.", "Sales Invoice Header"."No.");
                 recSalesInvLine.SETRANGE(Type, recSalesInvLine.Type::Item);
@@ -573,10 +576,11 @@ report 50310 "Tax Invoice"
                     //TotalAmt += recSalesInvLine.Amount;
 
                     UNTIL recSalesInvLine.NEXT = 0;
-
+                */
 
 
                 //Exhanges comments
+                Clear(ExchangeComments);//17July23
                 SalesInvLine.Reset();
                 SalesInvLine.SetRange("Document No.", "No.");
                 SalesInvLine.SetRange(Type, Type::"G/L Account");
@@ -585,7 +589,7 @@ report 50310 "Tax Invoice"
                         ExchangeComments += SalesInvLine."Exchange Comment";
                     until SalesInvLine.Next = 0;
 
-
+                Clear(CommentsLine);//17July23
                 SalesInvLine.Reset();
                 SalesInvLine.SetRange("Document No.", "No.");
                 SalesInvLine.SetRange(Type, Type::" ");
@@ -661,14 +665,14 @@ report 50310 "Tax Invoice"
         txt3: Text;
         txt4: Text;
         TotalGST: Decimal;
-        Salespersoncode: Text[550];
+        Salespersoncode: Text[1024];
         SIL: Record "Sales Invoice Line";
         recSIL: Record "Sales Invoice Line";
         TotalAmt: Decimal;
         SH: record "Sales Invoice Header";
         recSalesInvLine: Record "Sales Invoice Line";
         loc: Record Location;
-        Financecode: Code[550];
+        Financecode: Code[1024];
         RecPaymentlines: Record "Posted Payment Lines";
         TotalPaidAmount: Decimal;
         PaymentAmount: Decimal;
@@ -706,13 +710,13 @@ report 50310 "Tax Invoice"
         WithoutSerialNo: Boolean;
         Notext: Text[500];
         PostedPaymentLines: Record "Posted Payment Lines";
-        Paymentmethod: Code[550];
+        Paymentmethod: Code[1024];
         ReLocation: Record Location;
         balanceamount: Decimal;
         CalcSta: Codeunit "Calculate Statistics";
         valueentry: Record "Value Entry";
         ILE: Record "Item Ledger Entry";
-        ExchangeComments: Text[550];
+        ExchangeComments: Text[1024];
         CommentsLine: Text;
         recEInvoice: Record "E-Invoice Detail";
         VE: Record "Value Entry";

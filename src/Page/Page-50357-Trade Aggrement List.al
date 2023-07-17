@@ -186,6 +186,14 @@ page 50357 "Trade Aggrement List"
                 {
                     ToolTip = 'Specifies the value of the PMG NLC W/O SELL OUT field.';
                 }
+                field("Sell out Text From Date"; Rec."Sell out Text From Date")
+                {
+                    ToolTip = 'Specifies the value of the Sell out Text From Date field.';
+                }
+                field("Sell out Text To Date"; Rec."Sell out Text To Date")
+                {
+                    ToolTip = 'Specifies the value of the Sell out Text To Date field.';
+                }
                 field("Category 1"; Rec."Category 1")
                 {
                     ToolTip = 'Specifies the value of the Category 1 field.';

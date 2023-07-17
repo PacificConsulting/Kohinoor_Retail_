@@ -76,6 +76,11 @@ page 50390 "Tender Bank Acc Recon Lines"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Approval Code field.';
                 }
+                field("External Document No."; Rec."External Document No.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the External Document No. field.';
+                }
 
                 field("Applied Amount"; Rec."Applied Amount")
                 {

@@ -7,5 +7,9 @@ tableextension 50333 "Bank Acc Reconsilation line" extends "Bank Acc. Reconcilia
             Caption = 'Approval Code';
             DataClassification = ToBeClassified;
         }
+        field(50302; "External Document No."; Code[35])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

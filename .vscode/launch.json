@@ -41,6 +41,7 @@
             "type": "al",
             "environmentType": "Sandbox",
             "environmentName": "KohinoorSandbox",
+            //"environmentName": "KohinoorUAT",
             "tenant": "abc87ed0-4014-486f-afd8-1577c92442a6",
             "startupObjectId": 9305,
             "startupObjectType": "Page",

@@ -22,6 +22,10 @@ page 50335 "Transfer Order List"
                 {
                     Caption = 'Area';
                 }
+                field(staffId; Rec."Staff Id")
+                {
+                    Caption = 'Staff Id';
+                }
                 field(assignedUserID; Rec."Assigned User ID")
                 {
                     Caption = 'Assigned User ID';
@@ -223,6 +227,27 @@ page 50335 "Transfer Order List"
                 field(transferFromCode; Rec."Transfer-from Code")
                 {
                     Caption = 'Transfer-from Code';
+                    trigger OnValidate()
+                    var
+                        InvtSetup: Record "Inventory Setup";
+                        NoSeries: Codeunit NoSeriesManagement;
+                    begin
+                        InvtSetup.Get();
+                        InvtSetup.TestField("Transfer Order Nos.");
+                        Rec."No." := NoSeries.GetNextNo(InvtSetup."Transfer Order Nos.", rec."Posting Date", true);
+                        Rec.Modify();
+                    end;
+
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        InvtSetup: Record "Inventory Setup";
+                        NoSeries: Codeunit NoSeriesManagement;
+                    begin
+                        InvtSetup.Get();
+                        InvtSetup.TestField("Transfer Order Nos.");
+                        Rec."No." := NoSeries.GetNextNo(InvtSetup."Transfer Order Nos.", rec."Posting Date", true);
+                        Rec.Modify();
+                    end;
                 }
                 field(transferFromContact; Rec."Transfer-from Contact")
                 {
@@ -311,4 +336,15 @@ page 50335 "Transfer Order List"
             }
         }
     }
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    var
+        InvtSetup: Record "Inventory Setup";
+        NoSeries: Codeunit NoSeriesManagement;
+    begin
+        InvtSetup.Get();
+        InvtSetup.TestField("Transfer Order Nos.");
+        Rec."No." := NoSeries.GetNextNo(InvtSetup."Transfer Order Nos.", rec."Posting Date", true);
+    end;
+
 }

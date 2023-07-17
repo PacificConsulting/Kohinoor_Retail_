@@ -1373,7 +1373,7 @@ codeunit 50303 "POS Procedure"
         SalesHeaderDelete.SetRange("No.", documentno);
         if SalesHeaderDelete.FindFirst() then begin
             //********New SO Create with only header same as Deleted SO*******
-            IF Location.Get(SalesHeaderDelete."Location Code") then;
+            IF Location.Get(SalesHeaderDelete."Store No.") then;
             SalesHdrInit.Init();
             SalesHdrInit.TransferFields(SalesHeaderDelete);
             SalesHdrInit."No." := Noseriesmgt.GetNextNo(Location."Sales Order Nos", Today, true);

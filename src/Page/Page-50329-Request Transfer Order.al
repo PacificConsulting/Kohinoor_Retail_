@@ -116,6 +116,7 @@ page 50329 "Request Transfer Order"
                     recLocation: Record 14;
                     RH: Record "Request Transfer Header";
                     TranRel: Codeunit "Whse.-Transfer Release";
+                    RTH: Record "Request Transfer Header";
                 begin
                     RrqTransferLineFilter.Reset();
                     RrqTransferLineFilter.SetRange("Document No.", Rec."No.");
@@ -136,6 +137,8 @@ page 50329 "Request Transfer Order"
                                     TransferHeader.Validate("Shortcut Dimension 1 Code", recLocation."Global Dimension 1 Code");
                                     TransferHeader.Validate("Shortcut Dimension 2 Code", recLocation."Global Dimension 2 Code");
                                 end;
+                                IF RTH.Get(RrqTransferLineFilter."Document No.") then;
+                                TransferHeader."Staff Id" := RTH."Staff ID";
                                 TransferHeader."Posting Date" := Rec."Posting Date";
                                 RLocation.Reset();
                                 RLocation.SetRange("Use As In-Transit", true);

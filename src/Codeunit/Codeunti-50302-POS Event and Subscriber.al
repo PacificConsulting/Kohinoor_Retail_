@@ -282,14 +282,15 @@ codeunit 50302 "POS Event and Subscriber"
         WarrMasterFilter.SetFilter("From Date", '<=%1', SH."Posting Date");
         WarrMasterFilter.SetFilter("To Date", '>=%1', SH."Posting Date");
         IF WarrMasterFilter.FindFirst() then begin
-            IF (WarrMasterFilter."From Value" <> 0) and (WarrMasterFilter."To Value" <> 0) then
-                Regular := true
-            else
+            IF (WarrMasterFilter."From Value" <> 0) or (WarrMasterFilter."To Value" <> 0) then 
                 MIT := true;
+            else
+                Regular := true
         end;
-        */
+
         //It Will works as Default Process as work before
-        //IF Regular then begin
+        IF Regular then begin
+            */
         SalesLine.Reset();
         SalesLine.SetCurrentKey("Document No.", "Line No.");
         SalesLine.SetRange("Document No.", documentno);
@@ -361,10 +362,11 @@ codeunit 50302 "POS Event and Subscriber"
                 Saleslineinit.Description := WarrMaster.Description;
                 Saleslineinit.modify();
             end;
+            // end;
         end;
-        //end;
-        /*
+
         //******It Will works With new Process with calculte on Percentage
+        /*
         IF MIT then begin
             SalesLine.Reset();
             SalesLine.SetCurrentKey("Document No.", "Line No.");
@@ -433,8 +435,31 @@ codeunit 50302 "POS Event and Subscriber"
                 end;
             end;
         end;
-        */
+            */
         Exit('Success');
+    end;
+
+    /// <summary>
+    /// Create Transfer Order Header Function
+    /// </summary>
+    procedure CreateTransferHeader(fromcode: Code[10]; tocode: Code[10]; tdate: date; staffid: code[10]): text
+    var
+        TH: Record "Transfer Header";
+        InvtSetup: Record "Inventory Setup";
+        NoSeries: Codeunit NoSeriesManagement;
+    begin
+        TH.Init();
+        InvtSetup.Get();
+        InvtSetup.TestField("Transfer Order Nos.");
+        TH."No." := NoSeries.GetNextNo(InvtSetup."Transfer Order Nos.", Today, true);
+        TH.Insert(true);
+        TH.Validate("Transfer-from Code", fromcode);
+        TH.Validate("Transfer-to Code", tocode);
+        TH.Validate("In-Transit Code", 'IN TRANSIT');
+        TH.Validate("Posting Date", tdate);
+        TH."Staff Id" := staffid;
+        TH.Modify();
+        exit('Success' + format(TH."No."));
     end;
 
     /// <summary>

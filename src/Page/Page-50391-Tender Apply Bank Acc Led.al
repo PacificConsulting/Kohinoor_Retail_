@@ -66,6 +66,11 @@ page 50391 "Tender Apply Bank Acc Leder"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Approval Code field.';
                 }
+                field("Value Date"; Rec."Value Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Value Date field.';
+                }
                 field("Debit Amount"; Rec."Debit Amount")
                 {
                     ApplicationArea = Basic, Suite;
