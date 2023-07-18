@@ -2365,6 +2365,8 @@ codeunit 50303 "POS Procedure"
         Loc: Record 14;
         GetEnvior: Codeunit "Environment Information";
         recSH: Record "Sales Header";
+        LineComment: Text[500];
+        SalesLineCom: record 37;
     begin
         Clear(Pagelink);
 
@@ -2376,6 +2378,16 @@ codeunit 50303 "POS Procedure"
             SL."Approval Status" := SL."Approval Status"::"Pending for Approval";
             SL.Modify();
         end;
+
+        Clear(LineComment);
+        SalesLineCom.Reset();
+        SalesLineCom.SetCurrentKey("Document No.", "Exchange Comment");
+        SalesLineCom.SetRange("Document No.", SalesLine."Document No.");
+        SalesLineCom.SetFilter("Exchange Comment", '<>%1', '');
+        IF SalesLineCom.FindSet() then
+            repeat
+                LineComment += SalesLineCom."Exchange Comment" + '';
+            until SalesLineCom.Next() = 0;
 
         GLSetup.Get();
         GLSetup.TestField("Slab Approval User 1");
@@ -2416,13 +2428,14 @@ codeunit 50303 "POS Procedure"
         end;
         IF Loc.Get(SL."Store No.") then;
 
+
         Emailmessage.Create(ToRecipients/*'niwagh16@gmail.com'*/, 'Approval Slab', '', true);
         Emailmessage.AppendToBody('<p><font face="Calibri">Dear <B>Sir,</B></font></p>');
         Char := 13;
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody('<p><font face="Calibri"> <B>!!!Greetings!!!</B></font></p>');
         Emailmessage.AppendToBody('<p><font face="Calibri"><BR>Sales Order ' + FORMAT(SL."Document No.") + ' Price Approval is requested for slab between last selling price to NNLC from store ' + FORMAT(LOC.Name) +
-       ' for ' + FORMAT(SL.Description) + ' (With Second hand item which mention by user)' + '</BR></font></p>');
+       ' for ' + FORMAT(SL.Description) + ' (With Second hand item )' + Format(LineComment) + '(which mention by user)' + '</BR></font></p>');
 
         Emailmessage.AppendToBody(FORMAT(Char));
         Emailmessage.AppendToBody(FORMAT(Char));

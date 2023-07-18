@@ -31,7 +31,40 @@ tableextension 50330 "Bank Acc. Reconciliation Ext" extends "Bank Acc. Reconcili
             ELSE
             IF ("Reco. Account Type" = CONST("Bank Account")) "Bank Account" where(Tender = filter(false));
         }
+        field(50305; "Journal Template Name"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Gen. Journal Template";
+        }
+        field(50306; "Journal Batch Name"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            trigger OnLookup()
+            var
+                GenJnlTemplate: Record "Gen. Journal Template";
+                GenJnlBatch: Record "Gen. Journal Batch";
+            begin
+                //GenJnlLine.TestField("Journal Template Name");
+                GenJnlTemplate.Get("Journal Template Name");
+                GenJnlBatch.FilterGroup(2);
+                GenJnlBatch.SetRange("Journal Template Name", "Journal Template Name");
+                GenJnlBatch.FilterGroup(0);
+                GenJnlBatch.Name := "Journal Batch Name";
+                if GenJnlBatch.Find('=><') then;
+                if PAGE.RunModal(0, GenJnlBatch) = ACTION::LookupOK then begin
+                    "Journal Batch Name" := GenJnlBatch.Name;
 
+                end;
+            end;
+
+            trigger OnValidate()
+            var
+                GenJnlBatch: Record "Gen. Journal Batch";
+            begin
+                TestField("Journal Template Name");
+                GenJnlBatch.Get("Journal Template Name", "Journal Batch Name");
+            end;
+        }
 
 
     }

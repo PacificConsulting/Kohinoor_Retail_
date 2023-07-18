@@ -30,8 +30,8 @@ codeunit 50301 "Event and Subscribers"
                     repeat
                         Clear(Amount);
                         GL.Get();
-                        GL.TestField("Tender Reco. Batch Name");
-                        GL.TestField("Tender Reco. Template Name");
+                        BankAccReconciliation.TestField("Journal Template Name");
+                        BankAccReconciliation.TestField("Journal Batch Name");
                         BankAccLedEntry.Reset();
                         BankAccLedEntry.SetCurrentKey("Bank Account No.", "Statement No.", "Global Dimension 2 Code");
                         BankAccLedEntry.SetRange("Bank Account No.", BankAccReconciliation."Bank Account No.");
@@ -45,11 +45,11 @@ codeunit 50301 "Event and Subscribers"
                         //******** Postive Amount with bank Account Debit*********
                         IF Amount <> 0 then begin
                             GenJnl.Reset();
-                            GenJnl.SetRange("Journal Template Name", Gl."Tender Reco. Template Name");
-                            GenJnl.SetRange("Journal Batch Name", GL."Tender Reco. Batch Name");
+                            GenJnl.SetRange("Journal Template Name", BankAccReconciliation."Journal Template Name");
+                            GenJnl.SetRange("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
                             GenJnlInit.Init();
-                            GenJnlInit."Journal Template Name" := Gl."Tender Reco. Template Name";
-                            GenJnlInit.validate("Journal Batch Name", Gl."Tender Reco. Batch Name");
+                            GenJnlInit."Journal Template Name" := BankAccReconciliation."Journal Template Name";
+                            GenJnlInit.validate("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
                             GenJnlInit.Validate("Posting Date", Today);
 
                             IF GenJnl.FindLast() then
@@ -76,11 +76,11 @@ codeunit 50301 "Event and Subscribers"
                             //******** Negative Amount with G/L Account Credit*********
                             IF BanKposting.Get(BankAccReconciliation."Bank Account No.") then;
                             GenJnl.Reset();
-                            GenJnl.SetRange("Journal Template Name", Gl."Tender Reco. Template Name");
-                            GenJnl.SetRange("Journal Batch Name", GL."Tender Reco. Batch Name");
+                            GenJnl.SetRange("Journal Template Name", BankAccReconciliation."Journal Template Name");
+                            GenJnl.SetRange("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
                             GenJnlInit.Init();
-                            GenJnlInit."Journal Template Name" := Gl."Tender Reco. Template Name";
-                            GenJnlInit.validate("Journal Batch Name", Gl."Tender Reco. Batch Name");
+                            GenJnlInit."Journal Template Name" := BankAccReconciliation."Journal Template Name";
+                            GenJnlInit.validate("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
                             GenJnlInit.Validate("Posting Date", Today);
 
                             IF GenJnl.FindLast() then
@@ -104,8 +104,8 @@ codeunit 50301 "Event and Subscribers"
         //*********For Finance********************
         IF PayMethod.Get(BankAccReconciliation."Bank Account No.") then begin
             GL.Get();
-            GL.TestField("Tender Reco. Batch Name");
-            GL.TestField("Tender Reco. Template Name");
+            BankAccReconciliation.TestField("Journal Template Name");
+            BankAccReconciliation.TestField("Journal Batch Name");
             if (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
                 BankAccLedEntry.Reset();
                 BankAccLedEntry.SetCurrentKey("Bank Account No.", "Statement No.", "Global Dimension 2 Code");
@@ -119,11 +119,11 @@ codeunit 50301 "Event and Subscribers"
                         BankAccRecLine.SetRange("Statement Line No.", BankAccLedEntry."Statement Line No.");
                         IF BankAccRecLine.FindFirst() then begin
                             GenJnl.Reset();
-                            GenJnl.SetRange("Journal Template Name", Gl."Tender Reco. Template Name");
-                            GenJnl.SetRange("Journal Batch Name", GL."Tender Reco. Batch Name");
+                            GenJnl.SetRange("Journal Template Name", BankAccReconciliation."Journal Template Name");
+                            GenJnl.SetRange("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
                             GenJnlInit.Init();
-                            GenJnlInit."Journal Template Name" := Gl."Tender Reco. Template Name";
-                            GenJnlInit.validate("Journal Batch Name", Gl."Tender Reco. Batch Name");
+                            GenJnlInit."Journal Template Name" := BankAccReconciliation."Journal Template Name";
+                            GenJnlInit.validate("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
 
                             IF GenJnl.FindLast() then
                                 GenJnlInit."Line No." := GenJnl."Line No." + 10000
@@ -152,11 +152,11 @@ codeunit 50301 "Event and Subscribers"
                             //******** Negative Amount with G/L Account Credit*********
                             IF BanKposting.Get(BankAccReconciliation."Bank Account No.") then;
                             GenJnl.Reset();
-                            GenJnl.SetRange("Journal Template Name", Gl."Tender Reco. Template Name");
-                            GenJnl.SetRange("Journal Batch Name", GL."Tender Reco. Batch Name");
+                            GenJnl.SetRange("Journal Template Name", BankAccReconciliation."Journal Template Name");
+                            GenJnl.SetRange("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
                             GenJnlInit.Init();
-                            GenJnlInit."Journal Template Name" := Gl."Tender Reco. Template Name";
-                            GenJnlInit.validate("Journal Batch Name", Gl."Tender Reco. Batch Name");
+                            GenJnlInit."Journal Template Name" := BankAccReconciliation."Journal Template Name";
+                            GenJnlInit.validate("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
                             IF GenJnl.FindLast() then
                                 GenJnlInit."Line No." := GenJnl."Line No." + 10000
                             else

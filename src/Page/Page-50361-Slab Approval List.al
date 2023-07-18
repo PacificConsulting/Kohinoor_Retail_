@@ -7,9 +7,7 @@ page 50361 "Slab Approval List"
     UsageCategory = Lists;
     InsertAllowed = false;
     DeleteAllowed = false;
-
     SourceTableView = where("Approval Status" = filter("Pending for Approval"));
-
     layout
     {
         area(content)
@@ -51,6 +49,11 @@ page 50361 "Slab Approval List"
                 field("Location Code"; Rec."Location Code")
                 {
                     ToolTip = 'Specifies the inventory location from which the items sold should be picked and where the inventory decrease is registered.';
+                    Editable = false;
+                }
+                field("Exchange Comment"; Rec."Exchange Comment")
+                {
+                    ToolTip = 'Specifies the value of the Exchange Comment field.';
                     Editable = false;
                 }
                 field("Approval Status"; Rec."Approval Status")

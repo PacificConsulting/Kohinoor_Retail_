@@ -326,6 +326,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     Tx: Text;
 
                 begin
+
                     // result := CU.RefreshSaleOrder(Rec."No.");
                     /*
                     IF result = '' then
@@ -373,7 +374,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 begin
                     //result := POS.POSAction('KTPLSO23240091', 10000, 'INVLINE', '1', '', '');
                     // result := cu.OrderConfirmationforWH(rec."No.");
-                    result := Cu.OrderConfirmationforDelivery(rec."No.");
+                    result := POS.AddWarranty('BORSO23241200218', 10000, 'Zopper LAPDESK', '12');
                     //result := CU.ItemReceipt('KTPLPO23240011', 20000, '');
                     //result := POS.AddWarranty('KTPLSO23240121', 10000, 'ZOPPER', '12');
                     //result := POS.ShipTransferLine('KTRO029', 10000, '1');

@@ -54,6 +54,11 @@ tableextension 50315 Customer_ext extends Customer
             DataClassification = ToBeClassified;
             TableRelation = "Customer Reference".Code;
         }
+        field(50302; "Customer Group"; Enum "Trade Customer Group")
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Customer Group';
+        }
 
     }
     trigger OnInsert()

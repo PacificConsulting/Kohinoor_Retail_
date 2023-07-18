@@ -157,7 +157,7 @@ xmlport 50301 "Trade Agreement Data Upload"
                     TG.SetRange("Item No.", ItemNo);
                     TG.SetRange("Customer Group", CustomerGroupEnum);
                     IF TG.FindLast() then begin
-                        TG.Rename(TG."Item No.", TG."From Date", FromdateD, TG."Location Code", TG."Customer Group");
+                        TG.Rename(TG."Item No.", TG."From Date", FromdateD, TG."Location Code", TG."Customer Group", TG."Amount In INR");
 
                         if AmountInINR <> '' then
                             Evaluate(AMTINR, AmountInINR);

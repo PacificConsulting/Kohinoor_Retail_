@@ -84,6 +84,14 @@ page 50389 "Tender Bank Acc. Reconciliate"
                 {
                     ApplicationArea = all;
                 }
+                field("Journal Template Name"; Rec."Journal Template Name")
+                {
+                    ApplicationArea = all;
+                }
+                field("Journal Batch Name"; Rec."Journal Batch Name")
+                {
+                    ApplicationArea = all;
+                }
 
             }
             group(Control8)
@@ -439,6 +447,8 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     begin
                         // To configure the report and log troubleshooting telemetry we bind subscribers.
                         // the report is not directly configurable since it uses ReportSelections
+                        Rec.TestField("Journal Template Name");
+                        Rec.TestField("Journal Batch Name");
                         BindSubscription(BankAccRecTestRepVisible);
                         TestReportPrint.PrintBankAccRecon(Rec);
                     end;

@@ -62,6 +62,11 @@ pageextension 50315 Cust_card extends "Customer Card"
                 ApplicationArea = all;
                 Caption = 'Customer Reference';
             }
+            field("Customer Group"; Rec."Customer Group")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Customer Group field.';
+            }
         }
     }
 
