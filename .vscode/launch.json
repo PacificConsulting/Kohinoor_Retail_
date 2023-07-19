@@ -39,7 +39,7 @@
             "name": "Microsoft cloud sandbox",
             "request": "launch",
             "type": "al",
-            //"environmentType": "Sandbox",
+            "environmentType": "Sandbox",
             "environmentName": "KohinoorSandbox",
             //"environmentName": "KohinoorUAT",
             "tenant": "abc87ed0-4014-486f-afd8-1577c92442a6",

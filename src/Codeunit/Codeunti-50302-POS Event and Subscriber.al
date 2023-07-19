@@ -441,23 +441,38 @@ codeunit 50302 "POS Event and Subscriber"
     /// <summary>
     /// Create Transfer Order Header Function
     /// </summary>
-    procedure CreateTransferHeader(fromcode: Code[10]; tocode: Code[10]; tdate: date; staffid: code[10]): text
+    procedure CreateTransferHeader(fromcode: Code[10]; tocode: Code[10]; tdate: date; staffid: code[10]; documentno: Code[20]; status: Text[15]): text
     var
         TH: Record "Transfer Header";
         InvtSetup: Record "Inventory Setup";
         NoSeries: Codeunit NoSeriesManagement;
+        StatusVar: Option Open,Released;
+        TranHeader: Record "Transfer Header";
     begin
-        TH.Init();
-        InvtSetup.Get();
-        InvtSetup.TestField("Transfer Order Nos.");
-        TH."No." := NoSeries.GetNextNo(InvtSetup."Transfer Order Nos.", Today, true);
-        TH.Insert(true);
-        TH.Validate("Transfer-from Code", fromcode);
-        TH.Validate("Transfer-to Code", tocode);
-        TH.Validate("In-Transit Code", 'IN TRANSIT');
-        TH.Validate("Posting Date", tdate);
-        TH."Staff Id" := staffid;
-        TH.Modify();
+        IF Status <> '' then
+            Evaluate(StatusVar, Status);
+
+        IF documentno = '' then begin
+            TH.Init();
+            InvtSetup.Get();
+            InvtSetup.TestField("Transfer Order Nos.");
+            TH."No." := NoSeries.GetNextNo(InvtSetup."Transfer Order Nos.", Today, true);
+            TH.Insert(true);
+            TH.Validate("Transfer-from Code", fromcode);
+            TH.Validate("Transfer-to Code", tocode);
+            TH.Validate("In-Transit Code", 'IN TRANSIT');
+            TH.Validate("Posting Date", tdate);
+            TH."Staff Id" := staffid;
+            TH.Modify();
+        end else begin
+            TranHeader.Reset();
+            TranHeader.SetRange("No.", documentno);
+            IF TranHeader.FindFirst() then begin
+                TranHeader.Validate(Status, StatusVar);
+                TranHeader.Modify();
+                exit('Success: ' + Format(TranHeader.Status));
+            end;
+        end;
         exit('Success: ' + format(TH."No."));
     end;
 

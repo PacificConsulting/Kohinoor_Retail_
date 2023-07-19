@@ -38,7 +38,7 @@ pageextension 50329 "Transfer Order" extends "Transfer Order"
                 var
                     CU: Codeunit 50302;
                 begin
-                    CU.CreateTransferHeader(rec."Transfer-from Code", rec."Transfer-to Code", Today, 'E003412');
+                    //  CU.CreateTransferHeader(rec."Transfer-from Code", rec."Transfer-to Code", Today, 'E003412');
                 end;
             }
         }
