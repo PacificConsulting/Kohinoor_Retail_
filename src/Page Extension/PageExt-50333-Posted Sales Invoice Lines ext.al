@@ -96,6 +96,11 @@ pageextension 50333 "Posted Sales Invoice Lines ext" extends "Posted Sales Invoi
                 ApplicationArea = All;
                 ToolTip = 'Specifies the location from where inventory items to the customer on the sales document are to be shipped by default.';
             }
+            field("Exchange Comment"; Rec."Exchange Comment")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Exchange Comment field.';
+            }
 
         }
 

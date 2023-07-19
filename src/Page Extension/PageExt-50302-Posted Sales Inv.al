@@ -42,6 +42,7 @@ pageextension 50302 "Posted Sales invoice Retail" extends "Posted Sales Invoice"
                 PromotedIsBig = true;
                 Promoted = true;
                 Image = SendMail;
+                Visible = false;
                 trigger OnAction()
                 var
                     CU: Codeunit 50304;
@@ -98,7 +99,7 @@ pageextension 50302 "Posted Sales invoice Retail" extends "Posted Sales Invoice"
         //**** Email Create **** 
         VCount := VarRecipient.Count();
         IF VCount <> 0 then begin
-            Emailmessage.Create(VarRecipient, 'Tax Invoice' + SIH."No." + ' Dated ' + FORMAT(SIH."Order Date"), '', true);
+            Emailmessage.Create(VarRecipient, 'Tax Invoice: ' + SIH."No." + ' Dated ' + FORMAT(SIH."Order Date"), '', true);
             //**** Report SaveAsPDF and Attached in Mail
             SIHNEW.Reset();
             SIHNEW.SetRange("No.", SIH."No.");

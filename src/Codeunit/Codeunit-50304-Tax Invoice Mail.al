@@ -9,7 +9,6 @@ codeunit 50304 "Tax Invoice Mail"
         PPL.Reset();
         PPL.SetCurrentKey("Invoice Posting Date", "Payment type");
         PPL.SetRange("Invoice Posting Date", CalcDate('-1D', Today));
-        //PPL.SetRange("Document No.", 'THATI23240900023');
         PPL.SetRange("Payment type", PPL."Payment type"::Finance);
         IF PPL.FindSet() then
             repeat
@@ -49,7 +48,7 @@ codeunit 50304 "Tax Invoice Mail"
         //**** Email Create ****     
         VCount := VarRecipient.Count();
         IF VCount <> 0 then begin
-            Emailmessage.Create(VarRecipient, 'Tax Invoice' + SIH."No." + ' Dated ' + FORMAT(SIH."Order Date"), '', true);
+            Emailmessage.Create(VarRecipient, 'Tax Invoice: ' + SIH."No." + ' Dated ' + FORMAT(SIH."Order Date"), '', true);
             //**** Report SaveAsPDF and Attached in Mail
             SIHNEW.Reset();
             SIHNEW.SetRange("No.", SIH."No.");

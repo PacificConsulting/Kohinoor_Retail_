@@ -19,8 +19,19 @@ codeunit 50301 "Event and Subscribers"
         PayMethod: Record "Payment Method";
         GenBatch: Record 232;
         BankAccRecLine: Record "Bank Acc. Reconciliation Line";
+        BankAccRecLineTmp: Record "Bank Acc. Reconciliation Line" temporary;
     begin
-        IF GenBatch.Get(GL."Tender Reco. Template Name", GL."Tender Reco. Batch Name") then;
+        BankAccRecLineTmp.DeleteAll();
+        BankAccRecLine.Reset();
+        BankAccRecLine.SetRange("Bank Account No.", BankAccReconciliation."Bank Account No.");
+        BankAccRecLine.SetRange("Statement No.", BankAccReconciliation."Statement No.");
+        IF BankAccRecLine.FindSet() then
+            repeat
+                BankAccRecLineTmp.Init();
+                BankAccRecLineTmp.TransferFields(BankAccRecLine);
+                BankAccRecLineTmp.Insert();
+            until BankAccRecLine.Next() = 0;
+        IF GenBatch.Get(BankAccReconciliation."Journal Template Name", BankAccReconciliation."Journal Batch Name") then;
         IF PayMethod.Get(BankAccReconciliation."Bank Account No.") then begin
             if (PayMethod."Payment Type" in [PayMethod."Payment Type"::Card, PayMethod."Payment Type"::UPI, PayMethod."Payment Type"::Wallet]) then begin
                 Location.Reset();
@@ -32,6 +43,8 @@ codeunit 50301 "Event and Subscribers"
                         GL.Get();
                         BankAccReconciliation.TestField("Journal Template Name");
                         BankAccReconciliation.TestField("Journal Batch Name");
+                        BankAccReconciliation.TestField("Reco. Account No.");
+                        BankAccReconciliation.TestField("Reco. Account Type");
                         BankAccLedEntry.Reset();
                         BankAccLedEntry.SetCurrentKey("Bank Account No.", "Statement No.", "Global Dimension 2 Code");
                         BankAccLedEntry.SetRange("Bank Account No.", BankAccReconciliation."Bank Account No.");
@@ -101,11 +114,13 @@ codeunit 50301 "Event and Subscribers"
                     until Location.Next() = 0;
             end;
         end;
-        //*********For Finance********************
+        //******************For Finance********************
         IF PayMethod.Get(BankAccReconciliation."Bank Account No.") then begin
             GL.Get();
             BankAccReconciliation.TestField("Journal Template Name");
             BankAccReconciliation.TestField("Journal Batch Name");
+            BankAccReconciliation.TestField("Reco. Account No.");
+            BankAccReconciliation.TestField("Reco. Account Type");
             if (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
                 BankAccLedEntry.Reset();
                 BankAccLedEntry.SetCurrentKey("Bank Account No.", "Statement No.", "Global Dimension 2 Code");
@@ -113,11 +128,13 @@ codeunit 50301 "Event and Subscribers"
                 BankAccLedEntry.SetRange("Statement No.", BankAccReconciliation."Statement No.");
                 IF BankAccLedEntry.FindSet() then
                     repeat
-                        BankAccRecLine.Reset();
-                        BankAccRecLine.SetRange("Bank Account No.", BankAccLedEntry."Bal. Account No.");
-                        BankAccRecLine.SetRange("Statement No.", BankAccLedEntry."Statement No.");
-                        BankAccRecLine.SetRange("Statement Line No.", BankAccLedEntry."Statement Line No.");
-                        IF BankAccRecLine.FindFirst() then begin
+                        BankAccRecLineTmp.Reset();
+                        BankAccRecLineTmp.SetCurrentKey("Bank Account No.", "Statement No.", "Statement Line No.", "Approval Code");
+                        BankAccRecLineTmp.SetRange("Bank Account No.", BankAccLedEntry."Bank Account No.");
+                        BankAccRecLineTmp.SetRange("Statement No.", BankAccLedEntry."Statement No.");
+                        BankAccRecLineTmp.SetRange("Statement Line No.", BankAccLedEntry."Statement Line No.");
+                        BankAccRecLineTmp.SetRange("Approval Code", BankAccLedEntry."Approval Code");
+                        IF BankAccRecLineTmp.FindFirst() then begin
                             GenJnl.Reset();
                             GenJnl.SetRange("Journal Template Name", BankAccReconciliation."Journal Template Name");
                             GenJnl.SetRange("Journal Batch Name", BankAccReconciliation."Journal Batch Name");
@@ -130,9 +147,9 @@ codeunit 50301 "Event and Subscribers"
                             else
                                 GenJnlInit."Line No." := 10000;
 
-                            GenJnlInit."Document No." := 'TENDERREC' + format(BankAccRecLine."Statement No.") + Format(BankAccRecLine."Value Date");
+                            GenJnlInit."Document No." := 'TENDERREC' + format(BankAccRecLineTmp."Statement No.") + Format(BankAccRecLineTmp."Value Date");
                             GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
-                            GenJnlInit.Validate("Posting Date", BankAccRecLine."Value Date");
+                            GenJnlInit.Validate("Posting Date", BankAccRecLineTmp."Value Date");
                             IF BankAccReconciliation."Reco. Account Type" = BankAccReconciliation."Reco. Account Type"::"Bank Account" then begin
                                 GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"Bank Account");
                                 GenJnlInit.Validate("Account No.", BankAccReconciliation."Reco. Account No.");
@@ -142,11 +159,11 @@ codeunit 50301 "Event and Subscribers"
                                     GenJnlInit.Validate("Account No.", BankAccReconciliation."Reco. Account No.");
                                 end;
                             end;
-                            GenJnlInit.Validate(Amount, BankAccRecLine."Statement Amount");
-                            GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccRecLine."Shortcut Dimension 1 Code");
-                            GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccRecLine."Shortcut Dimension 2 Code");
+                            GenJnlInit.Validate(Amount, BankAccRecLineTmp."Statement Amount");
+                            GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
+                            GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
                             GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
-                            GenJnlInit."External Document No." := BankAccRecLine."External Document No.";
+                            GenJnlInit."External Document No." := BankAccRecLineTmp."External Document No.";
                             GenJnlInit.Insert(true);
 
                             //******** Negative Amount with G/L Account Credit*********
@@ -162,16 +179,16 @@ codeunit 50301 "Event and Subscribers"
                             else
                                 GenJnlInit."Line No." := 10000;
 
-                            GenJnlInit.Validate("Posting Date", BankAccRecLine."Value Date");
-                            GenJnlInit."Document No." := 'TENDERREC' + format(BankAccRecLine."Statement No.") + Format(BankAccRecLine."Value Date");
+                            GenJnlInit.Validate("Posting Date", BankAccRecLineTmp."Value Date");
+                            GenJnlInit."Document No." := 'TENDERREC' + format(BankAccRecLineTmp."Statement No.") + Format(BankAccRecLineTmp."Value Date");
                             GenJnlInit."Document Type" := GenJnlInit."Document Type"::Payment;
                             GenJnlInit.validate("Account Type", GenJnlInit."Account Type"::"G/L Account");
                             GenJnlInit.Validate("Account No.", BanKposting."G/L Account No.");
-                            GenJnlInit.Validate(Amount, (BankAccRecLine."Statement Amount" * -1));
-                            GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccRecLine."Shortcut Dimension 1 Code");
-                            GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccRecLine."Shortcut Dimension 2 Code");
+                            GenJnlInit.Validate(Amount, (BankAccRecLineTmp."Statement Amount" * -1));
+                            GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
+                            GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
                             GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
-                            GenJnlInit."External Document No." := BankAccRecLine."External Document No.";
+                            GenJnlInit."External Document No." := BankAccRecLineTmp."External Document No.";
                             GenJnlInit.Insert(true);
                         end;
                     until BankAccLedEntry.Next() = 0;

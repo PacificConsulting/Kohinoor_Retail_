@@ -55,6 +55,16 @@ pageextension 50355 "Posted Sales Invoices Ext" extends "Posted Sales Invoices"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the POS Released Date field.';
             }
+            field("Ship-to GST Reg. No."; Rec."Ship-to GST Reg. No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Ship-to GST Reg. No. field.';
+            }
+            field("Customer GST Reg. No."; Rec."Customer GST Reg. No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Customer GST Reg. No. field.';
+            }
         }
     }
 }

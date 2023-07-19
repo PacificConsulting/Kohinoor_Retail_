@@ -283,6 +283,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                         TempBankAccReconciliationLine: Record "Bank Acc. Reconciliation Line" temporary;
                         TempBankAccountLedgerEntry: Record "Bank Account Ledger Entry" temporary;
                     begin
+                        /*
                         BRl.Reset();
                         BRL.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
                         BRL.SetRange("Bank Account No.", rec."Bank Account No.");
@@ -305,7 +306,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
                                     until BLE.Next() = 0;
                             until BRL.Next() = 0;
-                        /*
+                        */
                         BRl.Reset();
                         BRL.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
                         BRL.SetRange("Bank Account No.", rec."Bank Account No.");
@@ -334,7 +335,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
                                     until BLE.Next() = 0;
                             until BRL.Next() = 0;
-                            */
+
                     end;
 
                 }
