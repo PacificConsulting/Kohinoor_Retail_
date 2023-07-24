@@ -34,6 +34,8 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                     response: Codeunit "ABS Operation Response";
                     IH: record "Item Heirarchy Master";
                     SEDate: Text;
+                    InstrmCSV: InStream;
+                    OutStrmCSv: OutStream;
 
                 begin
                     /*
@@ -85,12 +87,15 @@ pageextension 50331 "Delivered Status List Ext" extends "Delivered Status List"
                                 response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
 
                                 //*****CSV File Save
+                                TempBlob.CreateOutStream(OutStrmCSV);
+                                Report.SaveAs(Report::"Sales Delivery Report", '', ReportFormat::Excel, OutStrm, Recref);
+                                TempBlob.CreateInStream(InstrmCSV);
                                 ABSCSetup.Get();
                                 ABSCSetup.TestField("Container Name Demo");
                                 Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
-                                ABSBlobClient.Initialize(ABSCSetup."Account Name", 'qrcodes', Authorization);
+                                ABSBlobClient.Initialize(ABSCSetup."Account Name", 'demofilescsv', Authorization);
                                 FileName := PDL."Item Category code 1" + '_' + Format(Today) + '.' + 'csv';
-                                response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+                                response := ABSBlobClient.PutBlobBlockBlobStream(FileName, InstrmCSV);
                                 // IF (SDate = 0D) AND (EDate = 0D) then
                                 //     FileName := PDL."Item Category code 1" + '_' + Format(SDate) + Format(EDate) + '.' + 'xlsx'
                                 // else

@@ -282,7 +282,7 @@ codeunit 50302 "POS Event and Subscriber"
         WarrMasterFilter.SetFilter("From Date", '<=%1', SH."Posting Date");
         WarrMasterFilter.SetFilter("To Date", '>=%1', SH."Posting Date");
         IF WarrMasterFilter.FindFirst() then begin
-            IF (WarrMasterFilter."From Value" = 0) or (WarrMasterFilter."To Value" = 0) then
+            IF (WarrMasterFilter."From Value" = 0) and (WarrMasterFilter."To Value" = 0) then
                 MIT := true
             else
                 Regular := true;

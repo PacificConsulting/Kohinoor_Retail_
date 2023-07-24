@@ -120,6 +120,10 @@ page 50352 "Sales Order List API"
                 {
                     Caption = 'Work Description';
                 }
+                field(whConfirmationRemark; Rec."WH Confirmation Remark")
+                {
+                    Caption = 'WH Confirmation Remark';
+                }
             }
         }
     }

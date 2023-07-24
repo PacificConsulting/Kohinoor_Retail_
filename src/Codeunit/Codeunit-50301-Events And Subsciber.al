@@ -109,6 +109,7 @@ codeunit 50301 "Event and Subscribers"
                             GenJnlInit.Validate("Shortcut Dimension 1 Code", BankAccLedEntry."Global Dimension 1 Code");
                             GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
                             GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
+                            //GenJnlInit."Approval Code":=BankAccRecLineTmp."External Document No.";
                             GenJnlInit.Insert(true);
                         end;
                     until Location.Next() = 0;
@@ -164,6 +165,7 @@ codeunit 50301 "Event and Subscribers"
                             GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
                             GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
                             GenJnlInit."External Document No." := BankAccRecLineTmp."External Document No.";
+                            GenJnlInit."Approval Code" := BankAccRecLineTmp."External Document No.";
                             GenJnlInit.Insert(true);
 
                             //******** Negative Amount with G/L Account Credit*********
@@ -189,6 +191,7 @@ codeunit 50301 "Event and Subscribers"
                             GenJnlInit.Validate("Shortcut Dimension 2 Code", BankAccLedEntry."Global Dimension 2 Code");
                             GenJnlInit.Validate("Posting No. Series", GenBatch."Posting No. Series");
                             GenJnlInit."External Document No." := BankAccRecLineTmp."External Document No.";
+                            GenJnlInit."Approval Code" := BankAccRecLineTmp."External Document No.";
                             GenJnlInit.Insert(true);
                         end;
                     until BankAccLedEntry.Next() = 0;

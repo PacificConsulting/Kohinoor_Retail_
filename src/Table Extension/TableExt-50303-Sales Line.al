@@ -146,7 +146,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
         {
             DataClassification = ToBeClassified;
             TableRelation = Item."No.";
-            Editable = false;
+            //Editable = false;
         }
         field(50309; "Serial No."; Code[50])
         {

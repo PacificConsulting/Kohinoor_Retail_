@@ -2,6 +2,15 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
 {
     layout
     {
+        addafter("Work Description")
+        {
+
+            field("WH Confirmation Remark"; Rec."WH Confirmation Remark")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the WH Confirmation Remark field.';
+            }
+        }
         modify("Prices Including VAT")
         {
             Visible = false;
@@ -365,7 +374,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 Promoted = true;
                 PromotedOnly = true;
                 Image = Email;
-                Visible = false;
+                //Visible = false;
                 trigger OnAction()
                 var
                     CU: Codeunit 50303;
@@ -374,7 +383,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 begin
                     //result := POS.POSAction('KTPLSO23240091', 10000, 'INVLINE', '1', '', '');
                     // result := cu.OrderConfirmationforWH(rec."No.");
-                    result := POS.AddWarranty('BORSO23241200218', 10000, 'Zopper LAPDESK', '12');
+                    result := POS.AddWarranty(rec."No.", 10000, 'Zopper Regular', '24');
                     //result := CU.ItemReceipt('KTPLPO23240011', 20000, '');
                     //result := POS.AddWarranty('KTPLSO23240121', 10000, 'ZOPPER', '12');
                     //result := POS.ShipTransferLine('KTRO029', 10000, '1');

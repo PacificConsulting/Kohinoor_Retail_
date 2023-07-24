@@ -132,6 +132,10 @@ tableextension 50301 Sales_Header_AmttoCust extends "Sales Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50313; "WH Confirmation Remark"; Text[200])
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
 

@@ -2,6 +2,24 @@ pageextension 50351 "Sales Cr. Memo Subform Ext" extends "Sales Cr. Memo Subform
 {
     layout
     {
+        addafter(Quantity)
+        {
+            field("Exchange Item No."; Rec."Exchange Item No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Exchange Item No. field.';
+            }
+            field("Serial No."; Rec."Serial No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Serial No. field.';
+            }
+            field("Exchange Comment"; Rec."Exchange Comment")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Exchange Comment field.';
+            }
+        }
         moveafter("Location Code"; Quantity)
         moveafter(Quantity; "Unit Price Incl. of Tax")
         moveafter("Qty. Assigned"; "TCS Nature of Collection")
