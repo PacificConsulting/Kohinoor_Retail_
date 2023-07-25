@@ -44,7 +44,7 @@ codeunit 50301 "Event and Subscribers"
                         BankAccReconciliation.TestField("Journal Template Name");
                         BankAccReconciliation.TestField("Journal Batch Name");
                         BankAccReconciliation.TestField("Reco. Account No.");
-                        BankAccReconciliation.TestField("Reco. Account Type");
+                        // BankAccReconciliation.TestField("Reco. Account Type");
                         BankAccLedEntry.Reset();
                         BankAccLedEntry.SetCurrentKey("Bank Account No.", "Statement No.", "Global Dimension 2 Code");
                         BankAccLedEntry.SetRange("Bank Account No.", BankAccReconciliation."Bank Account No.");
@@ -121,7 +121,7 @@ codeunit 50301 "Event and Subscribers"
             BankAccReconciliation.TestField("Journal Template Name");
             BankAccReconciliation.TestField("Journal Batch Name");
             BankAccReconciliation.TestField("Reco. Account No.");
-            BankAccReconciliation.TestField("Reco. Account Type");
+            //BankAccReconciliation.TestField("Reco. Account Type");
             if (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
                 BankAccLedEntry.Reset();
                 BankAccLedEntry.SetCurrentKey("Bank Account No.", "Statement No.", "Global Dimension 2 Code");

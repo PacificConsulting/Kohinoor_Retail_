@@ -66,7 +66,11 @@ pageextension 50302 "Posted Sales invoice Retail" extends "Posted Sales Invoice"
                     OutStrm: OutStream;
                     TempBlob: Codeunit "Temp Blob";
                     Recref: RecordRef;
+                    CU1: Codeunit 50308;
                 begin
+                    //CU1.TaxInvoiceUploadAzure();
+                    cu.SendMail();
+                    /*
                     SIHNEW.Reset();
                     SIHNEW.SetRange("No.", Rec."No.");
                     IF SIHNEW.FindFirst() then;
@@ -82,6 +86,7 @@ pageextension 50302 "Posted Sales invoice Retail" extends "Posted Sales Invoice"
                     ABSBlobClient.Initialize(ABSCSetup."Account Name", 'demofilescsv', Authorization);
                     FileName := Rec."No." + '_' + Format(Today) + '.' + 'xlsx';
                     response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Instrm);
+                    */
                     /*
                     PPL.Reset();
                     PPL.SetCurrentKey("Document No.");

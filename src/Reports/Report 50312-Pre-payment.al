@@ -90,6 +90,10 @@ report 50312 "Pre-Payment Sheet Report"
             {
 
             }
+            column(PIL_Item_id2; RecItem."No. 2")
+            {
+
+            }
             column(PIL_ItmeName; Description)
             {
 
@@ -207,16 +211,26 @@ report 50312 "Pre-Payment Sheet Report"
                 PIH.Reset();
                 PIH.SetRange("No.", "Document No.");
                 if PIH.FindFirst() then begin
-                    Orderno := PIH."Order No.";
+                    //Orderno := PIH."Order No.";
                     VendInvNo := PIH."Vendor Invoice No.";
                     Orderdate := PIH."Order Date";
                     documentdate := PIH."Document Date";
                     buyfromvenno := PIH."Buy-from Vendor No.";
                     buyfromvenname := PIH."Buy-from Vendor Name";
                 end;
+                //Order No.
+                RPIH.Reset();
+                RPIH.SetRange("No.", "Document No.");
+                if RPIH.FindFirst() then
+                    RPPR.Reset();
+                RPPR.SetRange("No.", "Receipt No.");
+                if RPPR.FindFirst() then
+                    if PIH."Order No." <> '' then
+                        Orderno := RPIH."Order No."
+                    else
+                        Orderno := RPPR."Order No.";
                 //if RecPIH.Get("Location Code") then;
                 if loc.get("Location Code") then;
-
                 if RecItem.Get("No.") then;
 
 
@@ -276,6 +290,7 @@ report 50312 "Pre-Payment Sheet Report"
                 TDSEntry.Reset();
                 TDSEntry.SetRange("Document No.", "Document No.");
                 TDSEntry.SetRange("Posting Date", "Posting Date");
+
                 TDSEntry.SetRange("Document Type", TDSEntry."Document Type"::Invoice);
                 if TDSEntry.FindSet() then
                     repeat
@@ -538,6 +553,8 @@ report 50312 "Pre-Payment Sheet Report"
                     buyfromvenno_1 := PCH."Buy-from Vendor No.";
                     buyfromvenname_1 := PCH."Buy-from Vendor Name";
                 end;
+
+
                 //if RecPIH.Get("Location Code") then;
                 if loc_1.get("Location Code") then;
 
@@ -706,7 +723,10 @@ report 50312 "Pre-Payment Sheet Report"
         myInt: Integer;
 
         RecItem: Record Item;
-
+        ITEMNO2: Code[20];
+        RPIH: Record "Purch. Inv. Header";
+        RPIL: Record "Purch. Inv. Line";
+        RPPR: Record "Purch. Rcpt. Header";
 
         PILRec: Record "Purch. Inv. Line";
         RecPIL: record "Purch. Inv. Line";

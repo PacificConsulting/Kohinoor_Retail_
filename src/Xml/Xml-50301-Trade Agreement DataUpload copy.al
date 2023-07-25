@@ -148,6 +148,7 @@ xmlport 50301 "Trade Agreement Data Upload"
                     MANAGERDISCRITIONINCDec: Decimal;
                     PMGNLCWOSELLOUTDec: Decimal;
                     CustomerGroupEnum: enum "Trade Customer Group";
+                    RecItem: Record 27;
                 begin
                     if FromDate <> '' then
                         Evaluate(FromdateD, FromDate);
@@ -214,7 +215,8 @@ xmlport 50301 "Trade Agreement Data Upload"
                         IF PMGNLCWOSELLOUT <> '' then
                             Evaluate(PMGNLCWOSELLOUTDec, PMGNLCWOSELLOUT);
 
-
+                        IF not RecItem.Get(ItemNo) then
+                            Error('%1 Item No, does not exist in master', ItemNo);
 
                         TDInit.Init();
                         TDInit.TransferFields(TG);
@@ -328,7 +330,8 @@ xmlport 50301 "Trade Agreement Data Upload"
                         IF PMGNLCWOSELLOUT <> '' then
                             Evaluate(PMGNLCWOSELLOUTDec, PMGNLCWOSELLOUT);
 
-
+                        IF not RecItem.Get(ItemNo) then
+                            Error('%1 Item No, does not exist in master', ItemNo);
 
                         TDInit.Init();
                         TDInit."Item No." := ItemNo;

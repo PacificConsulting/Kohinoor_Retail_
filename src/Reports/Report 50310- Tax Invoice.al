@@ -562,6 +562,13 @@ report 50310 "Tax Invoice"
                     until RecPaymentlines.Next = 0;
                 end;
 
+                //PCPL/NSW/07 250723
+                "Sales Invoice Header".CalcFields("Remaining Amount");
+                IF "Sales Invoice Header"."Remaining Amount" = 0 then begin
+                    IF TotalPaidAmount <> "Sales Invoice Header"."Amount To Customer" then
+                        TotalPaidAmount := "Sales Invoice Header"."Amount To Customer";
+                end;
+
 
                 if ReLocation.Get("Store No.") then;
                 Relocation.CalcFields("Payment QR");

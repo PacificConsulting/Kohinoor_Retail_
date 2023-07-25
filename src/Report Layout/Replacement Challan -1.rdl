@@ -403,7 +403,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>Sales Order No:
+                        <Value>Voucher No.:
 </Value>
                         <Style>
                           <FontSize>8pt</FontSize>

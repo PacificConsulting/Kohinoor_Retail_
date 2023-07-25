@@ -118,6 +118,11 @@ report 50313 "Replacement Challan"
                 compinfo.get();
                 compinfo.CalcFields(Picture);
 
+                RECILE.Reset(); //25july2023
+                RECILE.SetRange("External Document No.", "External Document No.");
+                if RECILE.FindLast() then begin
+                    SalesOrderNo := RECILE."Document No.";
+                end;
                 //Bill to and Ship to Address
                 if Loc.Get("Location Code") then;
                 //if SIH.get("Document No.") then;
@@ -125,7 +130,7 @@ report 50313 "Replacement Challan"
                 SIH.SetRange("No.", "Document No.");
                 if SIH.FindFirst() then begin
                     Bill_to_Customer_No_ := SIH."Bill-to Customer No.";
-                    SalesOrderNo := SIH."Order No.";
+                    //SalesOrderNo := SIH."Order No.";
                     BilltoName := SIH."Sell-to Customer Name";
                     BilltoAdd := SIH."Sell-to Address" + ' ' + SIH."Sell-to Address 2" + ',' + SIH."Sell-to City" + ',' + SIH."Sell-to Post Code" + ',' + SIH."Sell-to Country/Region Code";
                     ShiptoAdd := SIH."Ship-to Address" + '' + SIH."Ship-to Address 2" + '' + SIH."Ship-to City" + ',' + SIH."Ship-to Post Code" + ',' + SIH."Ship-to Country/Region Code";
@@ -164,6 +169,7 @@ report 50313 "Replacement Challan"
                     VL.Reset();
                     VL.SetRange("Document No.", "Document No.");
                     VL.SetRange("Item No.", "Item No.");
+                    VL.SetRange("Item Ledger Entry Type", VL."Item Ledger Entry Type"::"Negative Adjmt.");
                     if VL.FindSet() then begin
                         repeat
                             ILE.Reset();
@@ -180,21 +186,25 @@ report 50313 "Replacement Challan"
 
                 //NEW Serial No.
                 Clear(NewSerialNo);
-                ValEntry.Reset();
-                ValEntry.SetRange("Document No.", "Document No.");
-                ValEntry.SetRange("Item No.", "Item No.");
-                ValEntry.SetRange("Item Ledger Entry Type", ValEntry."Item Ledger Entry Type"::"Negative Adjmt.");
-                if ValEntry.FindFirst() then begin
-                    itemLedEntry.Reset();
-                    itemLedEntry.SetRange("Entry No.", ValEntry."Item Ledger Entry No.");
-                    itemLedEntry.SetFilter("Serial No.", '<>%1', '');
-                    if itemLedEntry.FindFirst() then
-                        repeat
-                            NewSerialNo := itemLedEntry."Serial No." + ',';
-                        until ValEntry.Next() = 0;
-                    if NewSerialNo <> '' then
-                        NewSerialNo := DelStr(NewSerialNo, StrLen(NewSerialNo), 1);
-
+                RSIL.Reset();
+                RSIL.SetRange("Document No.", "Document No.");
+                RSIL.SetRange("No.", "Item No.");
+                if RSIL.FindFirst() then begin
+                    ValEntry.Reset();
+                    ValEntry.SetRange("Document No.", "Document No.");
+                    ValEntry.SetRange("Item No.", "Item No.");
+                    ValEntry.SetRange("Item Ledger Entry Type", ValEntry."Item Ledger Entry Type"::"Positive Adjmt.");
+                    if ValEntry.FindFirst() then begin
+                        itemLedEntry.Reset();
+                        itemLedEntry.SetRange("Entry No.", ValEntry."Item Ledger Entry No.");
+                        itemLedEntry.SetFilter("Serial No.", '<>%1', '');
+                        if itemLedEntry.FindFirst() then
+                            repeat
+                                NewSerialNo := itemLedEntry."Serial No." + ',';
+                            until ValEntry.Next() = 0;
+                        if NewSerialNo <> '' then
+                            NewSerialNo := DelStr(NewSerialNo, StrLen(NewSerialNo), 1);
+                    end;
                 end;
 
                 //Contact No.
@@ -275,6 +285,8 @@ report 50313 "Replacement Challan"
     var
         myInt: Integer;
         NewSerialNo: Code[50];
+        RECILE: Record "Item Ledger Entry";
+        RSIL: Record "Sales Invoice Line";
         Narration: Text[250];
         ValEntry: Record "Value Entry";
         itemLedEntry: record "Item Ledger Entry";

@@ -101,6 +101,11 @@ pageextension 50333 "Posted Sales Invoice Lines ext" extends "Posted Sales Invoi
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Exchange Comment field.';
             }
+            field("Serial No."; Rec."Serial No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Serial No. field.';
+            }
 
         }
 
