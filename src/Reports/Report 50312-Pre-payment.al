@@ -287,16 +287,17 @@ report 50312 "Pre-Payment Sheet Report"
                 //TDS Amount
                 TDSAmT := 0;
                 Clear(TDSAmt);
-                TDSEntry.Reset();
-                TDSEntry.SetRange("Document No.", "Document No.");
-                TDSEntry.SetRange("Posting Date", "Posting Date");
-
-                TDSEntry.SetRange("Document Type", TDSEntry."Document Type"::Invoice);
-                if TDSEntry.FindSet() then
-                    repeat
-                        TDSAmt += TDSEntry."TDS Amount";
-                    until TDSEntry.Next = 0;
-
+                if documentno <> "Document No." then begin
+                    TDSEntry.Reset();
+                    TDSEntry.SetRange("Document No.", "Document No.");
+                    TDSEntry.SetRange("Posting Date", "Posting Date");
+                    TDSEntry.SetRange("Document Type", TDSEntry."Document Type"::Invoice);
+                    if TDSEntry.FindSet() then
+                        repeat
+                            TDSAmt += TDSEntry."TDS Amount";
+                        until TDSEntry.Next = 0;
+                end;
+                documentno := "Document No."; //PCPL-064 
                 //Trade Aggrement   
                 Clear(Dealerprice);
                 Clear(FNNLC);
@@ -614,15 +615,17 @@ report 50312 "Pre-Payment Sheet Report"
                 //TDS Amount
                 TDSAmt_1 := 0;
                 Clear(TDSAmt_1);
-                TDSEntry_1.Reset();
-                TDSEntry_1.SetRange("Document No.", "Document No.");
-                TDSEntry_1.SetRange("Posting Date", "Posting Date");
-                TDSEntry_1.SetRange("Document Type", TDSEntry_1."Document Type"::"Credit Memo");
-                if TDSEntry_1.FindSet() then
-                    repeat
-                        TDSAmt_1 += TDSEntry_1."TDS Amount";
-                    until TDSEntry_1.Next = 0;
-
+                if documentno_1 <> "Document No." then begin
+                    TDSEntry_1.Reset();
+                    TDSEntry_1.SetRange("Document No.", "Document No.");
+                    TDSEntry_1.SetRange("Posting Date", "Posting Date");
+                    TDSEntry_1.SetRange("Document Type", TDSEntry_1."Document Type"::"Credit Memo");
+                    if TDSEntry_1.FindSet() then
+                        repeat
+                            TDSAmt_1 += TDSEntry_1."TDS Amount";
+                        until TDSEntry_1.Next = 0;
+                end;
+                documentno_1 := "Document No.";
                 //Trade Aggrement   
                 Clear(Dealerprice_1);
                 Clear(FNNLC_1);
@@ -721,7 +724,7 @@ report 50312 "Pre-Payment Sheet Report"
 
     var
         myInt: Integer;
-
+        documentno: code[20];
         RecItem: Record Item;
         ITEMNO2: Code[20];
         RPIH: Record "Purch. Inv. Header";
@@ -770,6 +773,7 @@ report 50312 "Pre-Payment Sheet Report"
 
         //PCL Variable
         RecItem_1: Record Item;
+        documentno_1: code[20];
         PCLRec: Record "Purch. Cr. Memo Line";
         RecPCL: record "Purch. Cr. Memo Line";
         PCH: Record "Purch. Cr. Memo Hdr.";

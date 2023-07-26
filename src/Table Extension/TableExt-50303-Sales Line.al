@@ -24,32 +24,26 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                 end;
 
 
-                if rec.Type = rec.Type::Item then begin
-                    if recitem.Get(Rec."No.") then begin
-                        if recitem.Type = recitem.Type::Inventory then begin
-                            IF SalesHeder.Get(rec."Document Type", rec."Document No.") then
-                                IF cust.get("Sell-to Customer No.") then;
-                            TradeAggre.Reset();
-                            TradeAggre.SetCurrentKey("Item No.", "From Date", "To Date", "Location Code");
-                            //TradeAggre.SetRange("Customer Group", TradeAggre."Customer Group"::Regular);
-                            TradeAggre.SetRange("Customer Group", Cust."Customer Group"); //New Condition Add
-                            TradeAggre.SetRange("Item No.", Rec."No.");
-                            TradeAggre.SetRange("Location Code", SalesHeder."Location Code");
-                            TradeAggre.SetFilter("From Date", '<=%1', SalesHeder."Posting Date");
-                            TradeAggre.SetFilter("To Date", '>=%1', SalesHeder."Posting Date");
-                            IF TradeAggre.FindFirst() then begin
-                                Validate("Unit Price Incl. of Tax", TradeAggre."Amount In INR");
-                                "Price Inclusive of Tax" := true;
-                            end else begin
-                                TradeAggre.SetRange("Location Code");
-                                IF TradeAggre.FindFirst() then begin
-                                    Validate("Unit Price Incl. of Tax", TradeAggre."Amount In INR");
-                                    "Price Inclusive of Tax" := true;
-                                end else
-                                    Error('Trade Agreement does not exist for %1 Posting date', SalesHeder."Posting Date");
-                            end;
-                        end;
-                    end;
+
+                IF SalesHeder.Get(rec."Document Type", rec."Document No.") then;
+                IF cust.get("Sell-to Customer No.") then;
+                TradeAggre.Reset();
+                TradeAggre.SetCurrentKey("Item No.", "From Date", "To Date", "Location Code");
+                //TradeAggre.SetRange("Customer Group", TradeAggre."Customer Group"::Regular);
+                TradeAggre.SetRange("Customer Group", Cust."Customer Group"); //New Condition Add
+                TradeAggre.SetRange("Item No.", Rec."No.");
+                TradeAggre.SetRange("Location Code", SalesHeder."Location Code");
+                TradeAggre.SetFilter("From Date", '<=%1', SalesHeder."Posting Date");
+                TradeAggre.SetFilter("To Date", '>=%1', SalesHeder."Posting Date");
+                IF TradeAggre.FindFirst() then begin
+                    Validate("Unit Price Incl. of Tax", TradeAggre."Amount In INR");
+                    "Price Inclusive of Tax" := true;
+                end else begin
+                    TradeAggre.SetRange("Location Code");
+                    IF TradeAggre.FindFirst() then begin
+                        Validate("Unit Price Incl. of Tax", TradeAggre."Amount In INR");
+                        "Price Inclusive of Tax" := true;
+                    end
                 end;
             end;
 
