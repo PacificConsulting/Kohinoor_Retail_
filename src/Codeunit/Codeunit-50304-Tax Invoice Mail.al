@@ -52,6 +52,7 @@ codeunit 50304 "Tax Invoice Mail"
                 Clear(VCount);
                 ETF.Reset();
                 ETF.SetRange("Payment Method", PaymentMethod.Code);
+
                 IF ETF.FindSet() then
                     repeat
                         VarRecipient.Add(ETF."E-Mail");
@@ -65,8 +66,8 @@ codeunit 50304 "Tax Invoice Mail"
                     //**** Report SaveAsPDF and Attached in Mail
                     PPL.Reset();
                     PPL.SetCurrentKey("Invoice Posting Date", "Payment type");
-                    //PPL.SetRange("Invoice Posting Date", CalcDate('-1D', Today));
-                    PPL.SetFilter("Document No.", '%1|%2', 'CHETI23240200036', 'THATI23240900023');
+                    PPL.SetRange("Invoice Posting Date", CalcDate('-1D', Today));
+                    //PPL.SetFilter("Document No.", '%1|%2', 'CHETI23240200036', 'THATI23240900023');
                     PPL.SetRange("Payment type", PPL."Payment type"::Finance);
                     PPL.SetRange("Payment Method Code", PaymentMethod.Code);
                     IF PPL.FindSet() then
@@ -81,9 +82,7 @@ codeunit 50304 "Tax Invoice Mail"
                             TempBlob.CreateInStream(InStr);
                             FileName := SIHNEW."No." + '_' + FORMAT(Today) + '.pdf';
                             Emailmessage.AddAttachment(FileName, '.pdf', InStr);
-
                         until PPL.Next() = 0;
-
                     //**** Email Body Creation *****
                     Emailmessage.AppendToBody('<p><font face="Georgia">Dear <B>Sir,</B></font></p>');
                     Char := 13;

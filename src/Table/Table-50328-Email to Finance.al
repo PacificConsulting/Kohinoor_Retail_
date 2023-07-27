@@ -14,10 +14,16 @@ table 50328 "Email to Finance"
         {
             Caption = 'E-Mail';
         }
+        field(3; "Store No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Store No.';
+            TableRelation = Location.Code where(Store = filter(true));
+        }
     }
     keys
     {
-        key(PK; "Payment Method", "E-Mail")
+        key(PK; "Payment Method", "E-Mail", "Store No.")
         {
             Clustered = true;
         }

@@ -58,7 +58,7 @@ report 50314 "Transfer Order New"
             {
                 DataItemLink = "Document No." = field("No.");
                 DataItemLinkReference = "Transfer Shipment Header";
-                DataItemTableView = sorting("Document No.", "Line No.") order(ascending);
+                DataItemTableView = sorting("Document No.", "Line No.") order(ascending) where(Quantity = filter(<> 0));
                 column(SrNo; SrNo)
                 {
 

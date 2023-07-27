@@ -83,7 +83,7 @@ report 50310 "Tax Invoice"
             {
             }
 
-            column(StoreAddress1; loc.Address + ' ' + loc."Address 2" + '' + loc.City + ',' + loc."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + loc."State Code" + ',' + loc."Country/Region Code")
+            column(StoreAddress1; Reclocation.Address + ' ' + Reclocation."Address 2" + '' + loc.City + ',' + loc."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + loc."State Code" + ',' + loc."Country/Region Code")
             {
 
             }
@@ -190,6 +190,10 @@ report 50310 "Tax Invoice"
 
             }
             column(ExchangeComments; ExchangeComments)
+            {
+
+            }
+            column(Modelno_2; RecItem."No. 2")
             {
 
             }
@@ -489,7 +493,8 @@ report 50310 "Tax Invoice"
                     CustGSTIN := RecCust."GST Registration No.";
                 end;
 
-
+                //item no.2
+                if RecItem.Get("No.") then;
 
                 IF Reclocation.get("Location Code") then;
                 if loc.get("Store No.") then;
@@ -660,6 +665,7 @@ report 50310 "Tax Invoice"
 
     var
         myInt: Integer;
+        RecItem: Record Item;
         SGSTAMTPER: Text;
         CGSTAMTPER: Text;
         IGSTAMTPER: Text;

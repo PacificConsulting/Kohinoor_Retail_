@@ -20,6 +20,10 @@ page 50398 "Email to Finance"
                 {
                     ToolTip = 'Specifies the value of the E-Mail field.';
                 }
+                field("Store No."; Rec."Store No.")
+                {
+                    ToolTip = 'Specifies the value of the Store No. field.';
+                }
 
             }
         }
