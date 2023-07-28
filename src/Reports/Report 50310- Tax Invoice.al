@@ -83,7 +83,7 @@ report 50310 "Tax Invoice"
             {
             }
 
-            column(StoreAddress1; Reclocation.Address + ' ' + Reclocation."Address 2" + '' + loc.City + ',' + loc."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + loc."State Code" + ',' + loc."Country/Region Code")
+            column(StoreAddress1; Reclocation.Address + ' ' + Reclocation."Address 2" + '' + Reclocation.City + ',' + Reclocation."Post Code" + ',' /*+ 'PANNO.' + Compinfo."P.A.N. No." + ','*/ + Reclocation."State Code" + ',' + Reclocation."Country/Region Code")
             {
 
             }
@@ -193,10 +193,7 @@ report 50310 "Tax Invoice"
             {
 
             }
-            column(Modelno_2; RecItem."No. 2")
-            {
 
-            }
 
 
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
@@ -307,6 +304,10 @@ report 50310 "Tax Invoice"
                 {
 
                 }
+                column(Modelno_2; RecItem."No. 2")
+                {
+
+                }
                 /*
                 dataitem("Value Entry"; "Value Entry")
                 {
@@ -357,6 +358,12 @@ report 50310 "Tax Invoice"
                             else
                                 SerialCaption := '';
                         end;
+                    // if "Sales Invoice Line".Type="Sales Invoice Line".Type::Item then begin
+                    //    
+                    //     RecItem.SetFilter("No. 2",'<>%1','');
+                    //     if RecItem.FindFirst() then
+                    // end;
+
                     Clear(SrNo1);
                     if "Sales Invoice Line".Type = "Sales Invoice Line".Type::Item then begin
                         VE.Reset();
@@ -439,7 +446,7 @@ report 50310 "Tax Invoice"
 
                     TotalGST := SGST + CGST + IGST;
 
-
+                    if RecItem.Get("No.") then;
                     //Clear(TotalAmt);
                     Clear(TotalAmount);
                     CalcSta.GetPostedSalesInvStatisticsAmount("Sales Invoice Header", TotalAmount);
@@ -494,7 +501,6 @@ report 50310 "Tax Invoice"
                 end;
 
                 //item no.2
-                if RecItem.Get("No.") then;
 
                 IF Reclocation.get("Location Code") then;
                 if loc.get("Store No.") then;

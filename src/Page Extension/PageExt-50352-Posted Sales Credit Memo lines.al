@@ -69,6 +69,21 @@ pageextension 50352 "Posted Sales Credit Memo lines" extends "Posted Sales Credi
                 ApplicationArea = All;
                 Caption = 'Total UPIT Amount';
             }
+            field("Exchange Item No."; Rec."Exchange Item No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Exchange Item No. field.';
+            }
+            field("Exchange Comment"; Rec."Exchange Comment")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Exchange Comment field.';
+            }
+            field("Serial No."; Rec."Serial No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Serial No. field.';
+            }
         }
 
     }

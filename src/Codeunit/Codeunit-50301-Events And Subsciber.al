@@ -272,6 +272,7 @@ codeunit 50301 "Event and Subscribers"
         SIH: Record 112;
         GLSetup: Record "General Ledger Setup";
         PaymentLine: Record "Payment Lines";
+        PMC: Record "Payment Method";
     begin
         //*****************New Code for Check Payment Should not be more then Invoice Amt ******
 
@@ -285,10 +286,21 @@ codeunit 50301 "Event and Subscribers"
                 IF PaymentLine."Payment Method Code" <> 'CHEQUE' then
                     TotalPaymentAmt += PaymentLine.Amount;
             until PaymentLine.Next() = 0;
-        IF (SalesHeader."Allow for Credit Bill" = false) AND (SalesHeader."Allow for Cheque Clearance" = false) then begin
+        IF (SalesHeader."Allow for Credit Bill" = false) /*AND (SalesHeader."Allow for Cheque Clearance" = false)*/ then begin
             IF TotalInvoiceAmt > TotalPaymentAmt then
                 Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', TotalInvoiceAmt, TotalPaymentAmt);
         end;
+        PaymentLine.Reset();
+        PaymentLine.SetRange("Document No.", SalesHeader."No.");
+        IF PaymentLine.FindSet() then
+            repeat
+                IF PMC.Get(PaymentLine."Payment Method Code") then
+                    if PMC."Payment Type" = PMC."Payment Type"::Cheque then
+                        IF SalesHeader."Allow for Cheque Clearance" = false then
+                            Error('Invoice can be generated only when CHEQUE\RTGS\NEFT Clearance is done on this sales order');
+            until PaymentLine.Next() = 0;
+
+
         // IF EverythingInvoiced = true then
         //   DeletePayemntLines(SalesHeader, PaymentLine);
 

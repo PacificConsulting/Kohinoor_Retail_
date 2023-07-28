@@ -299,6 +299,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 trigger OnAction()
                 var
                     Userset: Record "User Setup";
+                    PaymentLine: Record "Payment Lines";
                 begin
                     If Userset.Get(UserId) then begin
                         IF Userset."Allow Cheque Clearance" then begin

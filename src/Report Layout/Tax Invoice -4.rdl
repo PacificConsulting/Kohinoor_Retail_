@@ -1307,7 +1307,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Model Number</Value>
+                                  <Value>Item No.</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2264,18 +2264,11 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Item No.2</Value>
+                                  <Value xml:space="preserve"> </Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!Modelno_2.Value</Value>
                                   <Style>
@@ -5658,9 +5651,6 @@ End Function
         <Field Name="ExchangeComments">
           <DataField>ExchangeComments</DataField>
         </Field>
-        <Field Name="Modelno_2">
-          <DataField>Modelno_2</DataField>
-        </Field>
         <Field Name="SrNo">
           <DataField>SrNo</DataField>
         </Field>
@@ -5756,6 +5746,9 @@ End Function
         </Field>
         <Field Name="SrNo1">
           <DataField>SrNo1</DataField>
+        </Field>
+        <Field Name="Modelno_2">
+          <DataField>Modelno_2</DataField>
         </Field>
       </Fields>
       <Query>

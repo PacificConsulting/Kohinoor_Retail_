@@ -71,6 +71,16 @@ page 50390 "Tender Bank Acc Recon Lines"
                         CurrPage.Update();
                     end;
                 }
+                field("Debit Amount"; Rec."Debit Amount")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Debit Amount field.';
+                }
+                field("Credit Amount"; Rec."Credit Amount")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Credit Amount field.';
+                }
                 field("Approval Code"; Rec."Approval Code")
                 {
                     ApplicationArea = All;
