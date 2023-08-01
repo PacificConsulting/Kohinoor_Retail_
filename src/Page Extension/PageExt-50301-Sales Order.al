@@ -120,7 +120,22 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
 
     actions
     {
+        modify(Post)
+        {
+            trigger OnBeforeAction()
+            var
+                SL: Record "Sales Line";
+            begin
+                SL.Reset();
+                SL.SetRange("Document No.", rec."No.");
+                IF SL.FindSet() then
+                    repeat
+                        IF SL.Type <> SL.Type::" " then
+                            SL.TestField("Salesperson Code");
+                    until SL.Next() = 0;
 
+            end;
+        }
         modify(Statistics)
         {
             Trigger OnAfterAction()
@@ -648,6 +663,15 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
         //end;
     end;
 
+    // trigger OnModifyRecord(): Boolean
+    // var
+    //     US: Record 91;
+    // begin
+    //     IF US.Get(UserId) then begin
+    //         IF Us."Allow Cheque Clearance" then
+    //             Error('You do not have access modify order.');
+    //     end;
+    // end;
 
     trigger OnAfterGetRecord()
     begin

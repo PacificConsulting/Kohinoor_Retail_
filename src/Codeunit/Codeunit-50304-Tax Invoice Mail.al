@@ -44,12 +44,17 @@ codeunit 50304 "Tax Invoice Mail"
         DocumentNo: Code[20];
         PaymentMethod: Record "Payment Method";
         Store: Record Location;
+        SentmailBool: Boolean;
     begin
+        clear(SentmailBool);
         Store.Reset();
+        Store.SetCurrentKey(Store);
         Store.SetRange(Store, true);
         if Store.FindSet() then
             repeat
+                Clear(SentmailBool);
                 PaymentMethod.Reset();
+                PaymentMethod.SetCurrentKey("Payment Type");
                 PaymentMethod.SetRange("Payment Type", PaymentMethod."Payment Type"::Finance);
                 IF PaymentMethod.FindSet() then
                     repeat
@@ -88,6 +93,7 @@ codeunit 50304 "Tax Invoice Mail"
                                     TempBlob.CreateInStream(InStr);
                                     FileName := SIHNEW."No." + '_' + FORMAT(Today) + '.pdf';
                                     Emailmessage.AddAttachment(FileName, '.pdf', InStr);
+                                    SentmailBool := true;
                                 until PPL.Next() = 0;
                             //**** Email Body Creation *****
                             Emailmessage.AppendToBody('<p><font face="Georgia">Dear <B>Sir,</B></font></p>');
@@ -107,7 +113,8 @@ codeunit 50304 "Tax Invoice Mail"
                             Emailmessage.AppendToBody(FORMAT(Char));
                             Emailmessage.AppendToBody(FORMAT(Char));
                             //**** Email Send Function
-                            EMail.Send(Emailmessage, Enum::"Email Scenario"::Default);
+                            if SentmailBool = true then
+                                EMail.Send(Emailmessage, Enum::"Email Scenario"::Default);
                         end;
                     until PaymentMethod.Next() = 0;
             until Store.Next() = 0;

@@ -261,4 +261,16 @@ pageextension 50304 "Sales Line Subform" extends "Sales Order Subform"
 
     end;
 
+
+    trigger OnModifyRecord(): Boolean
+    var
+        US: Record 91;
+    begin
+        IF US.Get(UserId) then begin
+            IF Us."Allow Cheque Clearance" then
+                Error('You do not have access modify order.');
+        end;
+    end;
+
+
 }

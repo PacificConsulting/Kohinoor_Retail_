@@ -285,6 +285,7 @@ report 50312 "Pre-Payment Sheet Report"
                 Totalpurchaseprice := (Totalbasic + TotalGST) - "Line Discount Amount";
 
                 //TDS Amount
+                //PCPL-064 
                 TDSAmT := 0;
                 Clear(TDSAmt);
                 if documentno <> "Document No." then begin
@@ -335,7 +336,7 @@ report 50312 "Pre-Payment Sheet Report"
                     Margin_percent_on_NLC := (PUP * 100 / Dealerprice) + 100;
                 //Margin percent on Purchase unit price
                 if (TradeAggrement.DP <> 0) AND (Dealerprice <> 0) then
-                    Margin_percent_on_Purchase_unit_price := (PUP * 100 / Dealerprice) + 100;
+                    Margin_percent_on_Purchase_unit_price := ABS((PUP * 100 / Dealerprice) - 100);
 
 
             end;

@@ -84,6 +84,16 @@ pageextension 50352 "Posted Sales Credit Memo lines" extends "Posted Sales Credi
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Serial No. field.';
             }
+            field("Salesperson Code"; Rec."Salesperson Code")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Salesperson Code field.';
+            }
+            field("Salesperson Name"; Rec."Salesperson Name")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Salesperson Name field.';
+            }
         }
 
     }

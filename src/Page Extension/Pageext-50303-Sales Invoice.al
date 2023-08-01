@@ -78,6 +78,38 @@ pageextension 50303 "Sales Invoice Retail" extends "Sales Invoice"
 
     actions
     {
+        modify(Post)
+        {
+            trigger OnBeforeAction()
+            var
+                SL: Record "Sales Line";
+            begin
+                SL.Reset();
+                SL.SetRange("Document No.", rec."No.");
+                IF SL.FindSet() then
+                    repeat
+                        IF SL.Type <> SL.Type::" " then
+                            SL.TestField("Salesperson Code");
+                    until SL.Next() = 0;
+
+            end;
+        }
+        modify(PostAndSend)
+        {
+            trigger OnBeforeAction()
+            var
+                SL: Record "Sales Line";
+            begin
+                SL.Reset();
+                SL.SetRange("Document No.", rec."No.");
+                IF SL.FindSet() then
+                    repeat
+                        IF SL.Type <> SL.Type::" " then
+                            SL.TestField("Salesperson Code");
+                    until SL.Next() = 0;
+
+            end;
+        }
         modify(Statistics)
         {
             Trigger OnAfterAction()

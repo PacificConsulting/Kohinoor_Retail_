@@ -1,0 +1,362 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="PostingDate_PINLINES">
+          <DataField>PostingDate_PINLINES</DataField>
+        </Field>
+        <Field Name="LineNos">
+          <DataField>LineNos</DataField>
+        </Field>
+        <Field Name="Purch_InvoiceNo">
+          <DataField>Purch_InvoiceNo</DataField>
+        </Field>
+        <Field Name="VendorInvoiceNo">
+          <DataField>VendorInvoiceNo</DataField>
+        </Field>
+        <Field Name="VendorInv_Date">
+          <DataField>VendorInv_Date</DataField>
+        </Field>
+        <Field Name="DocumentNo_PINLINES">
+          <DataField>DocumentNo_PINLINES</DataField>
+        </Field>
+        <Field Name="VendorName">
+          <DataField>VendorName</DataField>
+        </Field>
+        <Field Name="CountryName">
+          <DataField>CountryName</DataField>
+        </Field>
+        <Field Name="PurchaseName">
+          <DataField>PurchaseName</DataField>
+        </Field>
+        <Field Name="StateCode">
+          <DataField>StateCode</DataField>
+        </Field>
+        <Field Name="No_PINLINES">
+          <DataField>No_PINLINES</DataField>
+        </Field>
+        <Field Name="Description_PINLINES">
+          <DataField>Description_PINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PINLINES">
+          <DataField>Quantity_PINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PINLINESFormat">
+          <DataField>Quantity_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="UnitCost_PINLINES">
+          <DataField>UnitCost_PINLINES</DataField>
+        </Field>
+        <Field Name="UnitCost_PINLINESFormat">
+          <DataField>UnitCost_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="Amount_PINLINES">
+          <DataField>Amount_PINLINES</DataField>
+        </Field>
+        <Field Name="Amount_PINLINESFormat">
+          <DataField>Amount_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="CurrencyCode">
+          <DataField>CurrencyCode</DataField>
+        </Field>
+        <Field Name="CurrencyRate">
+          <DataField>CurrencyRate</DataField>
+        </Field>
+        <Field Name="CurrencyRateFormat">
+          <DataField>CurrencyRateFormat</DataField>
+        </Field>
+        <Field Name="AmountinCurrency">
+          <DataField>AmountinCurrency</DataField>
+        </Field>
+        <Field Name="AmountinCurrencyFormat">
+          <DataField>AmountinCurrencyFormat</DataField>
+        </Field>
+        <Field Name="CGSTAmt">
+          <DataField>CGSTAmt</DataField>
+        </Field>
+        <Field Name="CGSTAmtFormat">
+          <DataField>CGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="SGSTAmt">
+          <DataField>SGSTAmt</DataField>
+        </Field>
+        <Field Name="SGSTAmtFormat">
+          <DataField>SGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="IGSTAmt">
+          <DataField>IGSTAmt</DataField>
+        </Field>
+        <Field Name="IGSTAmtFormat">
+          <DataField>IGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="GST_PINLINES">
+          <DataField>GST_PINLINES</DataField>
+        </Field>
+        <Field Name="GSTBaseAmount_PINLINES">
+          <DataField>GSTBaseAmount_PINLINES</DataField>
+        </Field>
+        <Field Name="TotalGSTAmount_PINLINES">
+          <DataField>TotalGSTAmount_PINLINES</DataField>
+        </Field>
+        <Field Name="GenBusPostingGroup_PINLINES">
+          <DataField>GenBusPostingGroup_PINLINES</DataField>
+        </Field>
+        <Field Name="PurchaserCode">
+          <DataField>PurchaserCode</DataField>
+        </Field>
+        <Field Name="VendorGSTIN">
+          <DataField>VendorGSTIN</DataField>
+        </Field>
+        <Field Name="PaymentTerms">
+          <DataField>PaymentTerms</DataField>
+        </Field>
+        <Field Name="DueDate">
+          <DataField>DueDate</DataField>
+        </Field>
+        <Field Name="VendorNo_PINLINES">
+          <DataField>VendorNo_PINLINES</DataField>
+        </Field>
+        <Field Name="LocationCode">
+          <DataField>LocationCode</DataField>
+        </Field>
+        <Field Name="OrderNo">
+          <DataField>OrderNo</DataField>
+        </Field>
+        <Field Name="UOM">
+          <DataField>UOM</DataField>
+        </Field>
+        <Field Name="ShortcutDimension1Code">
+          <DataField>ShortcutDimension1Code</DataField>
+        </Field>
+        <Field Name="ShortcutDimension2Code">
+          <DataField>ShortcutDimension2Code</DataField>
+        </Field>
+        <Field Name="Description2">
+          <DataField>Description2</DataField>
+        </Field>
+        <Field Name="GRNNo">
+          <DataField>GRNNo</DataField>
+        </Field>
+        <Field Name="AssesseeCode">
+          <DataField>AssesseeCode</DataField>
+        </Field>
+        <Field Name="TDS_TCSpercentage">
+          <DataField>TDS_TCSpercentage</DataField>
+        </Field>
+        <Field Name="TDS_TCSAmount">
+          <DataField>TDS_TCSAmount</DataField>
+        </Field>
+        <Field Name="HSN_SACCode">
+          <DataField>HSN_SACCode</DataField>
+        </Field>
+        <Field Name="PostingDate_PCINLINES">
+          <DataField>PostingDate_PCINLINES</DataField>
+        </Field>
+        <Field Name="PCMLineNos">
+          <DataField>PCMLineNos</DataField>
+        </Field>
+        <Field Name="Purch_CRMNo">
+          <DataField>Purch_CRMNo</DataField>
+        </Field>
+        <Field Name="PCMVendorNo">
+          <DataField>PCMVendorNo</DataField>
+        </Field>
+        <Field Name="VendorCrMemoNo">
+          <DataField>VendorCrMemoNo</DataField>
+        </Field>
+        <Field Name="VendoCRM_Date">
+          <DataField>VendoCRM_Date</DataField>
+        </Field>
+        <Field Name="DocumentNo_PCINLINES">
+          <DataField>DocumentNo_PCINLINES</DataField>
+        </Field>
+        <Field Name="VendorNamePCM">
+          <DataField>VendorNamePCM</DataField>
+        </Field>
+        <Field Name="VendorGSTINPCM">
+          <DataField>VendorGSTINPCM</DataField>
+        </Field>
+        <Field Name="CountryNamePCM">
+          <DataField>CountryNamePCM</DataField>
+        </Field>
+        <Field Name="No_PCINLINES">
+          <DataField>No_PCINLINES</DataField>
+        </Field>
+        <Field Name="Description_PCINLINES">
+          <DataField>Description_PCINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PCINLINES">
+          <DataField>Quantity_PCINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PCINLINESFormat">
+          <DataField>Quantity_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="UnitCost_PCINLINES">
+          <DataField>UnitCost_PCINLINES</DataField>
+        </Field>
+        <Field Name="UnitCost_PCINLINESFormat">
+          <DataField>UnitCost_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="Amount_PCINLINES">
+          <DataField>Amount_PCINLINES</DataField>
+        </Field>
+        <Field Name="Amount_PCINLINESFormat">
+          <DataField>Amount_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="CurrencyCodePCM">
+          <DataField>CurrencyCodePCM</DataField>
+        </Field>
+        <Field Name="CurrencyRatePCM">
+          <DataField>CurrencyRatePCM</DataField>
+        </Field>
+        <Field Name="CurrencyRatePCMFormat">
+          <DataField>CurrencyRatePCMFormat</DataField>
+        </Field>
+        <Field Name="AmountinCurrencyPCM">
+          <DataField>AmountinCurrencyPCM</DataField>
+        </Field>
+        <Field Name="AmountinCurrencyPCMFormat">
+          <DataField>AmountinCurrencyPCMFormat</DataField>
+        </Field>
+        <Field Name="PurchaseNamePCM">
+          <DataField>PurchaseNamePCM</DataField>
+        </Field>
+        <Field Name="StateCodePCM">
+          <DataField>StateCodePCM</DataField>
+        </Field>
+        <Field Name="PCMCGSTAmt">
+          <DataField>PCMCGSTAmt</DataField>
+        </Field>
+        <Field Name="PCMCGSTAmtFormat">
+          <DataField>PCMCGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="PCMSGSTAmt">
+          <DataField>PCMSGSTAmt</DataField>
+        </Field>
+        <Field Name="PCMSGSTAmtFormat">
+          <DataField>PCMSGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="PCMIGSTAmt">
+          <DataField>PCMIGSTAmt</DataField>
+        </Field>
+        <Field Name="PCMIGSTAmtFormat">
+          <DataField>PCMIGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="GST_PCINLINES">
+          <DataField>GST_PCINLINES</DataField>
+        </Field>
+        <Field Name="GSTBaseAmount_PCINLINES">
+          <DataField>GSTBaseAmount_PCINLINES</DataField>
+        </Field>
+        <Field Name="TotalGSTAmount_PCINLINES">
+          <DataField>TotalGSTAmount_PCINLINES</DataField>
+        </Field>
+        <Field Name="GenBusPostingGroup_PCINLINES">
+          <DataField>GenBusPostingGroup_PCINLINES</DataField>
+        </Field>
+        <Field Name="PurchaserCodePCM">
+          <DataField>PurchaserCodePCM</DataField>
+        </Field>
+        <Field Name="PaymentTermsPCM">
+          <DataField>PaymentTermsPCM</DataField>
+        </Field>
+        <Field Name="DueDatePCM">
+          <DataField>DueDatePCM</DataField>
+        </Field>
+        <Field Name="VendorNo_PCINLINES">
+          <DataField>VendorNo_PCINLINES</DataField>
+        </Field>
+        <Field Name="LocationCodePCM">
+          <DataField>LocationCodePCM</DataField>
+        </Field>
+        <Field Name="OrderNoPCM">
+          <DataField>OrderNoPCM</DataField>
+        </Field>
+        <Field Name="UOMPCM">
+          <DataField>UOMPCM</DataField>
+        </Field>
+        <Field Name="ShortcutDimension1CodePCM">
+          <DataField>ShortcutDimension1CodePCM</DataField>
+        </Field>
+        <Field Name="ShortcutDimension2CodePCM">
+          <DataField>ShortcutDimension2CodePCM</DataField>
+        </Field>
+        <Field Name="Description2PCM">
+          <DataField>Description2PCM</DataField>
+        </Field>
+        <Field Name="GRNNoPCM">
+          <DataField>GRNNoPCM</DataField>
+        </Field>
+        <Field Name="HSN_SACCodePCM">
+          <DataField>HSN_SACCodePCM</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

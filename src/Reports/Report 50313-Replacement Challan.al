@@ -227,8 +227,6 @@ report 50313 "Replacement Challan"
                         Narration += SalesCommLine.Comment;
                     until SalesCommLine.Next = 0;
 
-
-
             end;
 
             trigger OnPreDataItem()

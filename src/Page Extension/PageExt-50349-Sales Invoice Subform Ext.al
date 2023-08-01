@@ -2,6 +2,20 @@ pageextension 50349 "Sales Invoice Subform Retail" extends "Sales Invoice Subfor
 {
     layout
     {
+        addafter("Shortcut Dimension 2 Code")
+        {
+
+            field("Salesperson Code"; Rec."Salesperson Code")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Salesperson Code field.';
+            }
+            field("Salesperson Name"; Rec."Salesperson Name")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Salesperson Name field.';
+            }
+        }
         moveafter("Location Code"; Quantity)
         modify("Tax Area Code")
         {
