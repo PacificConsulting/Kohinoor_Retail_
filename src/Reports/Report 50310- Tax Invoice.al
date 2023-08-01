@@ -304,7 +304,11 @@ report 50310 "Tax Invoice"
                 {
 
                 }
-                column(Modelno_2; RecItem."No. 2")
+                /* column(Modelno_2; RecItem."No. 2")
+                {
+
+                } */
+                column(Modelno_2; "No. 2")
                 {
 
                 }
@@ -445,8 +449,10 @@ report 50310 "Tax Invoice"
                             Clear(IGSTAMTPER);
 
                     TotalGST := SGST + CGST + IGST;
-
+                    if "No. 2" <> '' then;
                     if RecItem.Get("No.") then;
+
+
                     //Clear(TotalAmt);
                     Clear(TotalAmount);
                     CalcSta.GetPostedSalesInvStatisticsAmount("Sales Invoice Header", TotalAmount);
@@ -573,12 +579,15 @@ report 50310 "Tax Invoice"
                     until RecPaymentlines.Next = 0;
                 end;
 
-                //PCPL/NSW/07 250723
+                //<<PCPL/NSW/07 250723 
+
+                CalcSta.GetPostedSalesInvStatisticsAmount("Sales Invoice Header", AmtToCust);
                 "Sales Invoice Header".CalcFields("Remaining Amount");
                 IF "Sales Invoice Header"."Remaining Amount" = 0 then begin
-                    IF TotalPaidAmount <> "Sales Invoice Header"."Amount To Customer" then
-                        TotalPaidAmount := "Sales Invoice Header"."Amount To Customer";
+                    IF TotalPaidAmount <> AmtToCust then
+                        TotalPaidAmount := AmtToCust;
                 end;
+                //>>PCPL/NSW/07 250723 
 
 
                 if ReLocation.Get("Store No.") then;
@@ -670,7 +679,7 @@ report 50310 "Tax Invoice"
     end;
 
     var
-        myInt: Integer;
+        AmtToCust: Decimal;
         RecItem: Record Item;
         SGSTAMTPER: Text;
         CGSTAMTPER: Text;
