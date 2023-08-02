@@ -74,10 +74,12 @@ codeunit 50304 "Tax Invoice Mail"
                         IF VCount <> 0 then begin
                             Emailmessage.Create(VarRecipient, 'Tax Invoice: ' + ' Dated ' + FORMAT(CalcDate('-1D', Today)), '', true);
                             //**** Report SaveAsPDF and Attached in Mail
+                            Clear(SentmailBool);
                             PPL.Reset();
                             PPL.SetCurrentKey("Invoice Posting Date", "Payment type");
                             PPL.SetRange("Invoice Posting Date", CalcDate('-1D', Today));
-                            //PPL.SetFilter("Document No.", '%1|%2', 'CHETI23240200036', 'THATI23240900023');
+                            //PPL.SetFilter("Document No.", '%1|%2|%3', 'CHETI23240200036', 'THATI23240900023', 'VASTI23241100023');
+                            PPL.SetRange("Invoice Posting Date", 20230801D);
                             PPL.SetRange("Payment type", PPL."Payment type"::Finance);
                             PPL.SetRange("Payment Method Code", PaymentMethod.Code);
                             PPL.SetRange("Store No.", Store.Code);
