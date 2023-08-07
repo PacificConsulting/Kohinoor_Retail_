@@ -5,6 +5,15 @@ codeunit 50301 "Event and Subscribers"
 
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
+    local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; PreviewMode: Boolean; var HideProgressWindow: Boolean; var IsHandled: Boolean)
+    begin
+        IF SalesHeader."Document Type" <> SalesHeader."Document Type"::"Credit Memo" then begin
+            SalesHeader.Validate("Posting Date", Today);
+            // SalesHeader.Validate("Shipment Date", Today);
+        end;
+    end;
+
     //<<<<<<<START********************************CU-370*****************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Bank Acc. Reconciliation Post", 'OnBeforeFinalizePost', '', false, false)]
     local procedure OnBeforeFinalizePost(var BankAccReconciliation: Record "Bank Acc. Reconciliation")

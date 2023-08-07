@@ -1,7 +1,7 @@
 page 50302 "Posted Payment Lines Subform"
 {
     PageType = ListPart;
-    // ApplicationArea = All;
+    ApplicationArea = All;
     //UsageCategory = Administration;
     SourceTable = "Posted Payment Lines";
     Editable = false;

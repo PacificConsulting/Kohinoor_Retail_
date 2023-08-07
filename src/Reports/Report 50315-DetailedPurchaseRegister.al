@@ -1,12 +1,17 @@
 report 50315 "Detailed Purchase Register"
 {
+    //DefaultLayout = RDLC;
+    //RDLCLayout = './DetailedPurchaseRegister.rdlc';
     DefaultLayout = RDLC;
-    RDLCLayout = './DetailedPurchaseRegister.rdlc';
+    RDLCLayout = 'src\Report Layout\DetailedPurchaseRegister.rdl';
+    ApplicationArea = all;
+    UsageCategory = ReportsAndAnalysis;
 
     dataset
     {
         dataitem("Purch. Inv. Line"; "Purch. Inv. Line")
         {
+            RequestFilterFields = "Document No.", "Posting Date";
             DataItemTableView = WHERE(Type = FILTER(<> ' '),
                                       Quantity = FILTER(<> 0));
             column(PostingDate_PINLINES; "Purch. Inv. Line"."Posting Date")
@@ -72,10 +77,10 @@ report 50315 "Detailed Purchase Register"
             column(IGSTAmt; IGSTAmt)
             {
             }
-            column(GST_PINLINES; '')//"Purch. Inv. Line"."GST %") //pcpl-064 01Aug2023
+            column(GST_PINLINES; TotGSTPer)//"Purch. Inv. Line"."GST %") //pcpl-064 01Aug2023
             {
             }
-            column(GSTBaseAmount_PINLINES; '')//"Purch. Inv. Line"."GST Base Amount") //pcpl-064 01Aug2023
+            column(GSTBaseAmount_PINLINES; DGSTLE."GST Base Amount") //pcpl-064 01Aug2023
             {
             }
             column(TotalGSTAmount_PINLINES; '')//"Purch. Inv. Line"."Total GST Amount") //pcpl-064 01Aug2023
@@ -102,7 +107,10 @@ report 50315 "Detailed Purchase Register"
             column(LocationCode; PurchInvHeader."Location Code")
             {
             }
-            column(OrderNo; PurchRcptHeader."Order No.")
+            // column(OrderNo; PurchRcptHeader."Order No.") pcpl-64 3aug2023
+            // {
+            // }
+            column(OrderNo; OrderNo)
             {
             }
             column(UOM; "Purch. Inv. Line"."Unit of Measure Code")
@@ -117,20 +125,35 @@ report 50315 "Detailed Purchase Register"
             column(Description2; "Purch. Inv. Line"."Description 2")
             {
             }
-            column(GRNNo; "Purch. Inv. Line"."Receipt No.")
+            /*  column(GRNNo; "Purch. Inv. Line"."Receipt No.")  //pcpl-064 01Aug2023
+             {
+             } */
+            column(GRNNo; GRNNo)  //pcpl-064 01Aug2023
             {
             }
             column(AssesseeCode; '')//"Purch. Inv. Line"."Assessee Code") //pcpl-064 01Aug2023
             {
             }
-            column(TDS_TCSpercentage; '')// "Purch. Inv. Line"."TDS %") //pcpl-064 01Aug2023
+            column(TDS_TCSpercentage; TDSPer)// "Purch. Inv. Line"."TDS %") //pcpl-064 01Aug2023
             {
             }
-            column(TDS_TCSAmount; '')// "Purch. Inv. Line"."TDS Amount") //pcpl-064 01Aug2023
+            column(TDS_TCSAmount; TDSAmount)// "Purch. Inv. Line"."TDS Amount") //pcpl-064 01Aug2023
             {
             }
             column(HSN_SACCode; "Purch. Inv. Line"."HSN/SAC Code")
             {
+            }
+            column(cgstrate; cgstrate)
+            {
+
+            }
+            column(sgstrate; sgstrate)
+            {
+
+            }
+            column(igstrate; igstrate)
+            {
+
             }
 
             trigger OnAfterGetRecord()
@@ -155,6 +178,9 @@ report 50315 "Detailed Purchase Register"
                 CLEAR(CGSTAmt);
                 CLEAR(SGSTAmt);
                 CLEAR(IGSTAmt);
+                // Clear(cgstrate);
+                // Clear(sgstrate);
+                // Clear(igstrate);
                 DGSTLE.RESET;
                 DGSTLE.SETCURRENTKEY("Transaction Type", "Document Type", "Document No.", "Document Line No.");
                 DGSTLE.SETRANGE("Transaction Type", DGSTLE."Transaction Type"::Purchase);
@@ -164,15 +190,15 @@ report 50315 "Detailed Purchase Register"
                     REPEAT
                         IF DGSTLE."GST Component Code" = 'CGST' THEN BEGIN
                             CGSTAmt := ABS(DGSTLE."GST Amount");
-                            //cgstrate := ABS(DGSTLE."GST %");
+                            cgstrate := ABS(DGSTLE."GST %");
                         END ELSE
                             IF (DGSTLE."GST Component Code" = 'SGST') OR (DGSTLE."GST Component Code" = 'UTGST') THEN BEGIN
                                 SGSTAmt := ABS(DGSTLE."GST Amount");
-                                //sgstrate := ABS(DGSTLE."GST %");
+                                sgstrate := ABS(DGSTLE."GST %");
                             END ELSE
                                 IF DGSTLE."GST Component Code" = 'IGST' THEN BEGIN
                                     IGSTAmt := ABS(DGSTLE."GST Amount");
-                                    //igstrate := ABS(DGSTLE."GST %");
+                                    igstrate := ABS(DGSTLE."GST %");
                                 END ELSE
                                     IF DGSTLE."GST Component Code" = 'CESS' THEN BEGIN
                                         CESSGSTAmt := ABS(DGSTLE."GST Amount");
@@ -183,6 +209,61 @@ report 50315 "Detailed Purchase Register"
                 PurchRcptHeader.RESET;
                 PurchRcptHeader.SETRANGE(PurchRcptHeader."No.", "Purch. Inv. Line"."Receipt No.");
                 IF PurchRcptHeader.FINDFIRST THEN;
+
+
+                TotalGST := SGSTAmt + CGSTAmt + IGSTAmt; //pcpl-064 3aug2023
+                TotGSTPer := cgstrate + sgstrate + igstrate; //pcpl-064 3aug2023
+                //<<pcpl-064 3aug2023
+                TDSAmount := 0;
+                TDSAmount := 0;
+                Clear(TDSAmount);
+                Clear(TDSPer);
+                if documentno <> "Document No." then begin
+                    TDSEntry.Reset();
+                    TDSEntry.SetRange("Document No.", "Document No.");
+                    TDSEntry.SetRange("Posting Date", "Posting Date");
+                    TDSEntry.SetRange("Document Type", TDSEntry."Document Type"::Invoice);
+                    if TDSEntry.FindSet() then
+                        repeat
+                            TDSAmount += TDSEntry."TDS Amount";
+
+                            if TDSAmount <> 0 then
+                                TDSPer := TDSEntry."TDS %";
+
+                        until TDSEntry.Next = 0;
+
+                end;
+                documentno := "Document No.";
+
+
+                //Order No.
+                RPIH.Reset();
+                RPIH.SetRange("No.", "Document No.");
+                if RPIH.FindFirst() then
+                    RPPR.Reset();
+                RPPR.SetRange("No.", "Receipt No.");
+                if RPPR.FindFirst() then
+                    if RPIH."Order No." <> '' then
+                        Orderno := RPIH."Order No."
+                    else
+                        Orderno := RPPR."Order No.";
+                //>>pcpl-064 3aug2023
+
+                //<<pcpl-064 7aug2023
+                if "Purch. Inv. Line"."Receipt No." <> '' then
+                    VL.Reset();
+                VL.SetRange("Document No.", "Purch. Inv. Line"."Document No.");
+                VL.SetRange("Document Line No.", "Purch. Inv. Line"."Line No.");
+                if VL.FindFirst() then
+                    ILE.Reset();
+                ILE.SetRange("Entry No.", VL."Item Ledger Entry No.");
+                if ILE.FindFirst() then begin
+                    GRNNO := ILE."Document No.";
+                end;
+
+
+                //>>pcpl-064 7aug2023
+
             end;
         }
         dataitem("Purch. Cr. Memo Line"; "Purch. Cr. Memo Line")
@@ -264,7 +345,7 @@ report 50315 "Detailed Purchase Register"
             column(GSTBaseAmount_PCINLINES; '')//"Purch. Cr. Memo Line"."GST Base Amount") //pcpl-064 01Aug2023
             {
             }
-            column(TotalGSTAmount_PCINLINES; '')//"Purch. Cr. Memo Line"."Total GST Amount") //pcpl-064 01Aug2023
+            column(TotalGSTAmount_PCINLINES; TotalGST)//"Purch. Cr. Memo Line"."Total GST Amount") //pcpl-064 01Aug2023
             {
             }
             column(GenBusPostingGroup_PCINLINES; "Purch. Cr. Memo Line"."Gen. Bus. Posting Group")
@@ -377,6 +458,23 @@ report 50315 "Detailed Purchase Register"
     }
 
     var
+        Orderno: Code[20];
+        TDSAMTPER: Text;
+        PIL: Record "Purch. Inv. Line";
+        VL: Record "Value Entry";
+        ILE: Record "Item Ledger Entry";
+        GRNNO: Code[20];
+        RPPR: Record "Purch. Rcpt. Header";
+        RPIH: Record "Purch. Inv. Header";
+        documentno: Code[20];
+        TDSEntry: Record "TDS Entry";
+        TDSAmount: Decimal;
+        TDSPer: Decimal;
+        TotGSTPer: Decimal;
+        cgstrate: Decimal;
+        sgstrate: Decimal;
+        igstrate: Decimal;
+        TotalGST: Decimal;
         recSP: Record 13;
         recCR: Record 9;
         Vendor: Record 23;

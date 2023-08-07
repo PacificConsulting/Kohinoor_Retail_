@@ -83,13 +83,16 @@ pageextension 50303 "Sales Invoice Retail" extends "Sales Invoice"
             trigger OnBeforeAction()
             var
                 SL: Record "Sales Line";
+                SR: Record "Sales & Receivables Setup";
             begin
+                Rec.TestField("Store No.");
                 SL.Reset();
                 SL.SetRange("Document No.", rec."No.");
+                SL.SetRange(Type, SL.Type::Item);
                 IF SL.FindSet() then
                     repeat
-                        IF SL.Type <> SL.Type::" " then
-                            SL.TestField("Salesperson Code");
+                        //IF (SL.Type <> SL.Type::" ") or (SL."No." <> SR."Exchange Item G/L") then
+                        SL.TestField("Salesperson Code");
                     until SL.Next() = 0;
 
             end;
@@ -99,13 +102,16 @@ pageextension 50303 "Sales Invoice Retail" extends "Sales Invoice"
             trigger OnBeforeAction()
             var
                 SL: Record "Sales Line";
+                SR: Record "Sales & Receivables Setup";
             begin
+                Rec.TestField("Store No.");
                 SL.Reset();
                 SL.SetRange("Document No.", rec."No.");
+                SL.SetRange(Type, SL.Type::Item);
                 IF SL.FindSet() then
                     repeat
-                        IF SL.Type <> SL.Type::" " then
-                            SL.TestField("Salesperson Code");
+                        // IF (SL.Type <> SL.Type::" ") or (SL."No." <> SR."Exchange Item G/L") then
+                        SL.TestField("Salesperson Code");
                     until SL.Next() = 0;
 
             end;

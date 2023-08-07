@@ -78,8 +78,8 @@ codeunit 50304 "Tax Invoice Mail"
                             PPL.Reset();
                             PPL.SetCurrentKey("Invoice Posting Date", "Payment type");
                             PPL.SetRange("Invoice Posting Date", CalcDate('-1D', Today));
-                            //PPL.SetFilter("Document No.", '%1|%2|%3', 'CHETI23240200036', 'THATI23240900023', 'VASTI23241100023');
-                            PPL.SetRange("Invoice Posting Date", 20230801D);
+                            // PPL.SetFilter("Document No.", '%1|%2', 'GBRTI23240700900', 'GBRTI23240700909');
+                            //PPL.SetRange("Invoice Posting Date", 20230801D);
                             PPL.SetRange("Payment type", PPL."Payment type"::Finance);
                             PPL.SetRange("Payment Method Code", PaymentMethod.Code);
                             PPL.SetRange("Store No.", Store.Code);

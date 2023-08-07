@@ -19,6 +19,11 @@ pageextension 50351 "Sales Cr. Memo Subform Ext" extends "Sales Cr. Memo Subform
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Exchange Comment field.';
             }
+            field("Salesperson Code"; Rec."Salesperson Code")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Salesperson Code field.';
+            }
             field("Salesperson Name"; Rec."Salesperson Name")
             {
                 ApplicationArea = All;

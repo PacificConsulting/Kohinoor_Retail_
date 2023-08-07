@@ -67,6 +67,11 @@ pageextension 50315 Cust_card extends "Customer Card"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Customer Group field.';
             }
+            field("Global Dimension 2 Code"; Rec."Global Dimension 2 Code")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Global Dimension 2 Code field.';
+            }
         }
     }
 

@@ -134,7 +134,7 @@ report 50310 "Tax Invoice"
             {
 
             }
-            column(Shipment_Date; "Shipment Date")
+            column(Shipment_Date; "Sales Invoice Header"."Posting Date")
             {
 
             }
@@ -449,7 +449,7 @@ report 50310 "Tax Invoice"
                             Clear(IGSTAMTPER);
 
                     TotalGST := SGST + CGST + IGST;
-                    if "No. 2" <> '' then;
+                    //if "No. 2" <> '' then;
                     if RecItem.Get("No.") then;
 
 
