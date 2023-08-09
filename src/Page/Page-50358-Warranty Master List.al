@@ -45,6 +45,10 @@ page 50358 "Warranty Master List"
                 {
                     ToolTip = 'Specifies the value of the EW Prices field.';
                 }
+                field("Warranty Value"; Rec."Warranty Value")
+                {
+                    ToolTip = 'Specifies the value of the Warranty Value field.';
+                }
             }
         }
     }

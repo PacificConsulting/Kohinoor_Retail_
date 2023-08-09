@@ -161,51 +161,81 @@ report 50313 "Replacement Challan"
                 end;
 
                 //Old Serial No.
-                Clear(serialno);
-                SalesInvLine.Reset();
+                //Clear(serialno);
+                /*SalesInvLine.Reset();
                 SalesInvLine.SetRange("Document No.", "Document No.");
+                SalesInvLine.SetRange(Type, SalesInvLine.Type::Item);
                 SalesInvLine.SetRange("No.", "Item No.");
                 if SalesInvLine.FindFirst() then begin
                     VL.Reset();
                     VL.SetRange("Document No.", "Document No.");
                     VL.SetRange("Item No.", "Item No.");
-                    VL.SetRange("Item Ledger Entry Type", VL."Item Ledger Entry Type"::"Negative Adjmt.");
-                    if VL.FindSet() then begin
-                        repeat
-                            ILE.Reset();
-                            ILE.SetRange("Entry No.", VL."Item Ledger Entry No.");
-                            ILE.SetFilter("Serial No.", '<>%1', '');
-                            if ILE.FindFirst() then
-                                serialno := ILE."Serial No." + ',';
-                        until VL.Next() = 0;
-                        IF serialno <> '' then
-                            serialno := DelStr(serialno, StrLen(serialno), 1);
+                    //VL.SetRange("Item Ledger Entry Type", VL."Item Ledger Entry Type"::"Negative Adjmt.");
+                    if VL.FindFirst() then begin
+                        ILE.Reset();
+                        ILE.SetRange("Entry No.", VL."Item Ledger Entry No.");
+                        //ILE.SetRange("Entry Type", ILE."Entry Type"::"Negative Adjmt.");
+                        ILE.SetFilter("Serial No.", '<>%1', '');
+                        if ILE.FindFirst() then begin
+                            serialno := ILE."Serial No.";
+                            /* IF serialno <> '' then
+                                serialno := DelStr(serialno, StrLen(serialno), 1); */
+                // end;
+                //         end;
+                //     end;*/
 
+                /* SalesInvLine.Reset();
+                SalesInvLine.SetRange("Document No.", "Item Journal Replace Data"."Document No.");
+                SalesInvLine.SetRange("No.", "Item Journal Replace Data"."Item No.");
+                if SalesInvLine.FindFirst() then begin
+                    VL.Reset();
+                    VL.SetRange("Document No.", SalesInvLine."Document No.");
+                    VL.SetRange("Item No.", SalesInvLine."No.");
+                    if VL.FindFirst() then begin
+                        ILE.Reset();
+                        ILE.SetRange("Entry No.", VL."Item Ledger Entry No.");
+                        if ILE.FindFirst() then begin
+                            serialno := ILE."Serial No.";
+                        end;
                     end;
+                end; */
+                ILE.Reset();
+                ILE.SetRange("External Document No.", "Item Journal Replace Data"."External Document No.");
+                ILE.SetRange("Entry Type", ILE."Entry Type"::"Positive Adjmt.");
+                if ILE.FindFirst() then begin
+                    serialno := ILE."Serial No.";
                 end;
+
+
+
 
                 //NEW Serial No.
-                Clear(NewSerialNo);
-                RSIL.Reset();
-                RSIL.SetRange("Document No.", "Document No.");
-                RSIL.SetRange("No.", "Item No.");
-                if RSIL.FindFirst() then begin
-                    ValEntry.Reset();
-                    ValEntry.SetRange("Document No.", "Document No.");
-                    ValEntry.SetRange("Item No.", "Item No.");
-                    ValEntry.SetRange("Item Ledger Entry Type", ValEntry."Item Ledger Entry Type"::"Positive Adjmt.");
-                    if ValEntry.FindFirst() then begin
-                        itemLedEntry.Reset();
-                        itemLedEntry.SetRange("Entry No.", ValEntry."Item Ledger Entry No.");
-                        itemLedEntry.SetFilter("Serial No.", '<>%1', '');
-                        if itemLedEntry.FindFirst() then
-                            repeat
-                                NewSerialNo := itemLedEntry."Serial No." + ',';
-                            until ValEntry.Next() = 0;
-                        if NewSerialNo <> '' then
-                            NewSerialNo := DelStr(NewSerialNo, StrLen(NewSerialNo), 1);
-                    end;
+                /*  Clear(NewSerialNo);
+                 RSIL.Reset();
+                 RSIL.SetRange("Document No.", "Document No.");
+                 RSIL.SetRange("No.", "Item No.");
+                 if RSIL.FindFirst() then begin
+                 ValEntry.Reset();
+                 ValEntry.SetRange("Document No.", "Item Journal Replace Data"."Document No.");
+                 ValEntry.SetRange("Item Ledger Entry Type", ValEntry."Item Ledger Entry Type"::"Negative Adjmt.");
+                 if ValEntry.FindFirst() then begin
+                     itemLedEntry.Reset();
+                     itemLedEntry.SetRange("Entry No.", ValEntry."Item Ledger Entry No.");
+                     itemLedEntry.SetRange("Entry Type", itemLedEntry."Entry Type"::"Negative Adjmt.");
+                     if itemLedEntry.FindFirst() then begin
+                         NewSerialNo := itemLedEntry."Serial No.";
+                     end;
+                     end;
+                 end; */
+
+                itemLedEntry.Reset();
+                itemLedEntry.SetRange("External Document No.", "Item Journal Replace Data"."External Document No.");
+                itemLedEntry.SetRange("Entry Type", itemLedEntry."Entry Type"::"Negative Adjmt.");
+                if itemLedEntry.FindFirst() then begin
+                    // itemLedEntry.CalcFields("Serial No.");
+                    NewSerialNo := itemLedEntry."Serial No.";
                 end;
+
 
                 //Contact No.
                 if SIH.get("Document No.") then;
@@ -216,17 +246,27 @@ report 50313 "Replacement Challan"
                     custphoneno := cust."Phone No.";
 
                 //Narration
-                RecSIH.Reset();
+                /* RecSIH.Reset();
                 RecSIH.SetRange("No.", "Document No.");
-                if RecSIH.FindFirst() then
+                if RecSIH.FindFirst() then begin
                     SalesCommLine.Reset();
-                SalesCommLine.SetRange("No.", RecSIH."No.");
-                SalesCommLine.SetRange("Document Line No.", 0);
-                if SalesCommLine.FindFirst() then
+                    SalesCommLine.SetRange("No.", RecSIH."No.");
+                    SalesCommLine.SetRange("Document Line No.", 0);
+                    if SalesCommLine.FindFirst() then
+                        repeat
+                            Narration += SalesCommLine.Comment;
+                        until SalesCommLine.Next = 0;
+                end; */
+                //Clear(Narration);
+                IJRD.Reset();
+                IJRD.SetRange("Document No.", "Item Journal Replace Data"."Document No.");
+                IF IJRD.FindSet() then
                     repeat
-                        Narration += SalesCommLine.Comment;
-                    until SalesCommLine.Next = 0;
-
+                        IF IJRD."Replacement Remarks" <> '' then
+                            Narration += IJRD."Replacement Remarks" + ',';
+                    until IJRD.Next() = 0;
+                if Narration <> '' then
+                    Narration := DelStr(Narration, StrLen(Narration), 1);
             end;
 
             trigger OnPreDataItem()
@@ -282,6 +322,8 @@ report 50313 "Replacement Challan"
 
     var
         myInt: Integer;
+        txt1: Text;
+        IJRD: Record "Item Journal Replace Data";
         NewSerialNo: Code[50];
         RECILE: Record "Item Ledger Entry";
         RSIL: Record "Sales Invoice Line";

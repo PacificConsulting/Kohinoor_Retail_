@@ -25,6 +25,7 @@ pageextension 50353 Item_Replacement_List_Ext extends "Item Journal Replace Data
                 begin
                     IRD.Reset();
                     IRD.SetRange("Document No.", Rec."Document No.");
+                    //IRD.SetFilter("Item No.", '<>%1', '');
                     if IRD.FindFirst() then
                         Report.RunModal(50313, true, false, IRD);
                 end;
@@ -34,5 +35,16 @@ pageextension 50353 Item_Replacement_List_Ext extends "Item Journal Replace Data
         }
         // Add changes to page actions here
     }
-
+    trigger OnOpenPage()
+    var
+        IRD: Record "Item Journal Replace Data";
+    begin
+        IRD.Reset();
+        IRD.SetFilter("Item No.", '%1', '');
+        IRD.SetRange(Quantity, 0);
+        IF IRD.FindSet() then
+            repeat
+                IRD.Delete();
+            until IRD.Next() = 0;
+    end;
 }

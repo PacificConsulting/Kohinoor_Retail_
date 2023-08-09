@@ -326,6 +326,7 @@ codeunit 50302 "POS Event and Subscriber"
                     Saleslineinit.Validate("Price Inclusive of Tax", true);
                     Saleslineinit.Validate(Quantity, 1);
                     Saleslineinit.Description := WarrMaster.Description;
+                    Saleslineinit."Warranty Value" := WarrMaster."Warranty Value";
                 end else
                     Error('Warranty not found');
                 Saleslineinit.Modify();
@@ -360,6 +361,7 @@ codeunit 50302 "POS Event and Subscriber"
                     Saleslineinit."Price Inclusive of Tax" := true;
                     Saleslineinit.Validate(Quantity, 1);
                     Saleslineinit.Description := WarrMaster.Description;
+                    Saleslineinit."Warranty Value" := WarrMaster."Warranty Value";
                     Saleslineinit.modify();
                 end;
             end;
@@ -403,6 +405,7 @@ codeunit 50302 "POS Event and Subscriber"
                     Saleslineinit.Validate("Price Inclusive of Tax", true);
                     Saleslineinit.Validate(Quantity, 1);
                     Saleslineinit.Description := WarrMaster.Description;
+                    Saleslineinit."Warranty Value" := WarrMaster."Warranty Value";
                 end else
                     Error('Warranty not found');
                 Saleslineinit.Modify();
@@ -431,6 +434,7 @@ codeunit 50302 "POS Event and Subscriber"
                     Saleslineinit."Price Inclusive of Tax" := true;
                     Saleslineinit.Validate(Quantity, 1);
                     Saleslineinit.Description := WarrMaster.Description;
+                    Saleslineinit."Warranty Value" := WarrMaster."Warranty Value";
                     Saleslineinit.modify();
                 end;
             end;

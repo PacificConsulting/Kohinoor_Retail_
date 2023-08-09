@@ -67,6 +67,22 @@ tableextension 50313 "Sales Ship Line" extends "Sales Shipment Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50315; "POS Release Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Invoice Header"."POS Released Date" where("No." = field("Document No.")));
+        }
+        field(50317; "No. 2"; Text[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."No. 2" where("No." = field("No.")));
+            Editable = false;
+        }
+        field(50318; "Warranty Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
 
 
     }

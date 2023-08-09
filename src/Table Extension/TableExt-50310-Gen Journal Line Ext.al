@@ -10,6 +10,11 @@ tableextension 50310 "Gen. Journal Line Ext" extends "Gen. Journal Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(50303; "Staff Id"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Staff Master".ID;
+        }
 
 
         modify("Location Code")

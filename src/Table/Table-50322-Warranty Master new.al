@@ -45,6 +45,10 @@ table 50322 "Warranty Master new"
         {
             DataClassification = ToBeClassified;
         }
+        field(9; "Warranty Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

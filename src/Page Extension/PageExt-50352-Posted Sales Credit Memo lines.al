@@ -94,6 +94,11 @@ pageextension 50352 "Posted Sales Credit Memo lines" extends "Posted Sales Credi
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Salesperson Name field.';
             }
+            field("Warranty Value"; Rec."Warranty Value")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Warranty Value field.';
+            }
         }
 
     }

@@ -222,6 +222,122 @@ page 50389 "Tender Bank Acc. Reconciliate"
                         TransBankRecToGenJnl.Run();
                     end;
                 }
+                action("Create Contra Voucher")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Create Contra Voucher';
+                    Image = ContractPayment;
+                    ToolTip = 'Transfer the lines from the current window to the general journal.';
+                    trigger OnAction()
+                    var
+                        BankRecoLine: Record 274;
+                        BankLedgerEntry: Record "Bank Account Ledger Entry";
+                        GL: Record 81;
+                        GenJnLine: Record 81;
+                        PayMethod: Record "Payment Method";
+                        GenJnlpost: Codeunit 12;
+                    begin
+                        IF PayMethod.Get(Rec."Bank Account No.") then begin
+                            IF (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
+                                BankRecoLine.Reset();
+                                BankRecoLine.SetRange("Bank Account No.", rec."Bank Account No.");
+                                BankRecoLine.SetFilter(Difference, '<>%1', 0);
+                                IF BankRecoLine.FindSet() then
+                                    repeat
+                                        BankLedgerEntry.Reset();
+                                        BankLedgerEntry.SetRange("Bank Account No.", BankRecoLine."Bank Account No.");
+                                        BankLedgerEntry.SetRange("Statement No.", BankRecoLine."Statement No.");
+                                        BankLedgerEntry.SetRange("Statement Line No.", BankRecoLine."Statement Line No.");
+                                        IF BankLedgerEntry.FindFirst() then begin
+                                            //************Credit Amount****************
+                                            Gl.Reset();
+                                            Gl.SetRange("Journal Template Name", 'CONTRAV');
+                                            Gl.SetRange("Journal Batch Name", 'DEFAULT');
+                                            GenJnLine.Init();
+                                            GenJnLine."Journal Template Name" := 'CONTRAV';
+                                            GenJnLine.validate("Journal Batch Name", 'DEFAULT');
+                                            IF Gl.FindLast() then
+                                                GenJnLine."Line No." := Gl."Line No." + 10000
+                                            else
+                                                GenJnLine."Line No." := 10000;
+
+                                            GenJnLine.Validate("Posting Date", BankLedgerEntry."Posting Date");
+                                            GenJnLine."Document Type" := GenJnLine."Document Type"::Payment;
+                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            GenJnLine."Account Type" := GenJnLine."Account Type"::"Bank Account";
+                                            GenJnLine.Validate("Account No.", Rec."Bank Account No.");
+                                            GenJnLine."Bal. Account Type" := GenJnLine."Bal. Account Type"::"G/L Account";
+                                            GenJnLine.Validate("Credit Amount", BankLedgerEntry.Amount);
+                                            BankLedgerEntry.CalcFields("Customer Name");
+                                            GenJnLine.Description := BankLedgerEntry."Customer Name";
+                                            GenJnLine."Approval Code" := BankLedgerEntry."Approval Code";
+                                            GenJnLine.Validate("Shortcut Dimension 1 Code", BankLedgerEntry."Global Dimension 1 Code");
+                                            GenJnLine.Validate("Shortcut Dimension 2 Code", BankLedgerEntry."Global Dimension 2 Code");
+                                            GenJnLine."External Document No." := BankLedgerEntry."External Document No.";
+                                            GenJnLine.Insert();
+                                            //*************Applied Amount*************************
+                                            Gl.Reset();
+                                            Gl.SetRange("Journal Template Name", 'CONTRAV');
+                                            Gl.SetRange("Journal Batch Name", 'DEFAULT');
+                                            GenJnLine.Init();
+                                            GenJnLine."Journal Template Name" := 'CONTRAV';
+                                            GenJnLine.validate("Journal Batch Name", 'DEFAULT');
+                                            IF Gl.FindLast() then
+                                                GenJnLine."Line No." := Gl."Line No." + 10000
+                                            else
+                                                GenJnLine."Line No." := 10000;
+
+                                            GenJnLine.Validate("Posting Date", BankLedgerEntry."Posting Date");
+                                            GenJnLine."Document Type" := GenJnLine."Document Type"::Payment;
+                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            GenJnLine."Account Type" := GenJnLine."Account Type"::"Bank Account";
+                                            GenJnLine.Validate("Account No.", Rec."Bank Account No.");
+                                            GenJnLine."Bal. Account Type" := GenJnLine."Bal. Account Type"::"G/L Account";
+                                            GenJnLine.Validate("Debit Amount", BankRecoLine."Statement Amount");
+                                            BankLedgerEntry.CalcFields("Customer Name");
+                                            GenJnLine.Description := BankLedgerEntry."Customer Name";
+                                            GenJnLine."Approval Code" := BankLedgerEntry."Approval Code";
+                                            GenJnLine.Validate("Shortcut Dimension 1 Code", BankLedgerEntry."Global Dimension 1 Code");
+                                            GenJnLine.Validate("Shortcut Dimension 2 Code", BankLedgerEntry."Global Dimension 2 Code");
+                                            GenJnLine."External Document No." := BankLedgerEntry."External Document No.";
+                                            GenJnLine.Insert();
+                                            //*************Remaning Amount*************************
+                                            Gl.Reset();
+                                            Gl.SetRange("Journal Template Name", 'CONTRAV');
+                                            Gl.SetRange("Journal Batch Name", 'DEFAULT');
+                                            GenJnLine.Init();
+                                            GenJnLine."Journal Template Name" := 'CONTRAV';
+                                            GenJnLine.validate("Journal Batch Name", 'DEFAULT');
+                                            IF Gl.FindLast() then
+                                                GenJnLine."Line No." := Gl."Line No." + 10000
+                                            else
+                                                GenJnLine."Line No." := 10000;
+
+                                            GenJnLine.Validate("Posting Date", BankLedgerEntry."Posting Date");
+                                            GenJnLine."Document Type" := GenJnLine."Document Type"::Payment;
+                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            GenJnLine."Account Type" := GenJnLine."Account Type"::"Bank Account";
+                                            GenJnLine.Validate("Account No.", Rec."Bank Account No.");
+                                            GenJnLine."Bal. Account Type" := GenJnLine."Bal. Account Type"::"G/L Account";
+                                            GenJnLine.Validate("Debit Amount", ABS(BankRecoLine.Difference));
+                                            BankLedgerEntry.CalcFields("Customer Name");
+                                            GenJnLine.Description := BankLedgerEntry."Customer Name";
+                                            GenJnLine."Approval Code" := BankLedgerEntry."Approval Code";
+                                            GenJnLine.Validate("Shortcut Dimension 1 Code", BankLedgerEntry."Global Dimension 1 Code");
+                                            GenJnLine.Validate("Shortcut Dimension 2 Code", BankLedgerEntry."Global Dimension 2 Code");
+                                            GenJnLine."External Document No." := BankLedgerEntry."External Document No.";
+                                            GenJnLine.Correction := false;
+                                            GenJnLine.Insert();
+                                        end;
+                                    until BankRecoLine.Next() = 0;
+                            end else
+                                Error('Conta Voucher Allowed only for Finance.');
+                        end;
+                        //GenJnlpost.RunWithCheck(GenJnLine);
+                        Message('Entry Created and posted succesfully');
+                    end;
+
+                }
                 action(ChangeStatementNo)
                 {
                     ApplicationArea = Basic, Suite;
@@ -522,6 +638,10 @@ page 50389 "Tender Bank Acc. Reconciliate"
 
                 actionref("Transfer to General Journal_Promoted"; "Transfer to General Journal")
                 {
+                }
+                actionref("Create Contra Voucher."; "Create Contra Voucher")
+                {
+
                 }
                 actionref(SuggestLines_Promoted; SuggestLines)
                 {

@@ -214,6 +214,11 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             CalcFormula = lookup(Item."No. 2" where("No." = field("No.")));
             Editable = false;
         }
+        field(50318; "Warranty Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
 
 
 

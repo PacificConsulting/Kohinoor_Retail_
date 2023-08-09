@@ -57,12 +57,12 @@ tableextension 50304 "Sales inv. Line Retail" extends "Sales Invoice Line"
         field(50311; "Salesperson Code"; Code[20])
         {
             DataClassification = ToBeClassified;
-            Editable = false;
+            //Editable = false;
         }
         field(50312; "Salesperson Name"; Text[50])
         {
             DataClassification = ToBeClassified;
-            Editable = false;
+            //Editable = false;
         }
         field(50313; "Warranty Parent Line No."; Integer)
         {
@@ -83,6 +83,11 @@ tableextension 50304 "Sales inv. Line Retail" extends "Sales Invoice Line"
         {
             FieldClass = FlowField;
             CalcFormula = lookup(Item."No. 2" where("No." = field("No.")));
+            Editable = false;
+        }
+        field(50318; "Warranty Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
             Editable = false;
         }
     }

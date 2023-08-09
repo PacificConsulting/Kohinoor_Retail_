@@ -106,6 +106,11 @@ pageextension 50333 "Posted Sales Invoice Lines ext" extends "Posted Sales Invoi
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Serial No. field.';
             }
+            field("Warranty Value"; Rec."Warranty Value")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Warranty Value field.';
+            }
 
         }
 

@@ -225,7 +225,7 @@ report 50312 "Pre-Payment Sheet Report"
                     RPPR.Reset();
                 RPPR.SetRange("No.", "Receipt No.");
                 if RPPR.FindFirst() then
-                    if PIH."Order No." <> '' then
+                    if RPIH."Order No." <> '' then
                         Orderno := RPIH."Order No."
                     else
                         Orderno := RPPR."Order No.";

@@ -17,7 +17,7 @@ tableextension 50335 SalesCrMemoHdrExt extends "Sales Cr.Memo Header"
         {
             DataClassification = ToBeClassified;
             Caption = 'Store No.';
-            Editable = false;
+            // Editable = false;
         }
         field(50303; "Staff Id"; Code[10])
         {

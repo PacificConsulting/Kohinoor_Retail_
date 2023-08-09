@@ -2307,6 +2307,7 @@ codeunit 50303 "POS Procedure"
                 Evaluate(CheqNo, Format(PaymentLine."Cheque No 6 Digit"));
                 GenJourLineInit.validate("Cheque No.", CheqNo);
                 GenJourLineInit.Comment := 'Auto Post';
+                GenJourLineInit."Staff Id" := Salesheader."Staff Id";
                 GenJourLineInit.Insert();
             Until PaymentLine.Next() = 0;
         //****Advanced payment below filter add***

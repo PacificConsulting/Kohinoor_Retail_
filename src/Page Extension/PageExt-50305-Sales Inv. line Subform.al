@@ -61,6 +61,11 @@ pageextension 50305 "Sales Inv Line Subform" extends "Posted Sales Invoice Subfo
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the POS Release Date field.';
             }
+            field("Warranty Value"; Rec."Warranty Value")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Warranty Value field.';
+            }
 
         }
 

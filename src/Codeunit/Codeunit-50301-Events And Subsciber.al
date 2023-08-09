@@ -5,13 +5,19 @@ codeunit 50301 "Event and Subscribers"
 
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", OnAfterInitGLRegister, '', false, false)]
+    local procedure OnAfterInitGLRegister(var GLRegister: Record "G/L Register"; var GenJournalLine: Record "Gen. Journal Line");
+    begin
+        GLRegister."Staff Id" := GenJournalLine."Staff Id";
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
     local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; PreviewMode: Boolean; var HideProgressWindow: Boolean; var IsHandled: Boolean)
     begin
-        IF SalesHeader."Document Type" <> SalesHeader."Document Type"::"Credit Memo" then begin
-            SalesHeader.Validate("Posting Date", Today);
-            // SalesHeader.Validate("Shipment Date", Today);
-        end;
+        //IF SalesHeader."Document Type" <> SalesHeader."Document Type"::"Credit Memo" then begin
+        SalesHeader.Validate("Posting Date", Today);
+        // SalesHeader.Validate("Shipment Date", Today);
+        //end;
     end;
 
     //<<<<<<<START********************************CU-370*****************************************

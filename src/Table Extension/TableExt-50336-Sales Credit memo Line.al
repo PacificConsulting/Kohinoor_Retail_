@@ -85,6 +85,11 @@ tableextension 50336 "Sales Credit memo Line" extends "Sales Cr.Memo Line"
             CalcFormula = lookup(Item."No. 2" where("No." = field("No.")));
             Editable = false;
         }
+        field(50318; "Warranty Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
 
     }
 }

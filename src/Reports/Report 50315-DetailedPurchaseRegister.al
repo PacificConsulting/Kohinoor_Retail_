@@ -9,11 +9,13 @@ report 50315 "Detailed Purchase Register"
 
     dataset
     {
+
+
         dataitem("Purch. Inv. Line"; "Purch. Inv. Line")
         {
             RequestFilterFields = "Document No.", "Posting Date";
             DataItemTableView = WHERE(Type = FILTER(<> ' '),
-                                      Quantity = FILTER(<> 0));
+                                      Quantity = FILTER(<> 0), Description = filter(<> 'Round Off'));
             column(PostingDate_PINLINES; "Purch. Inv. Line"."Posting Date")
             {
             }
@@ -83,7 +85,7 @@ report 50315 "Detailed Purchase Register"
             column(GSTBaseAmount_PINLINES; DGSTLE."GST Base Amount") //pcpl-064 01Aug2023
             {
             }
-            column(TotalGSTAmount_PINLINES; '')//"Purch. Inv. Line"."Total GST Amount") //pcpl-064 01Aug2023
+            column(TotalGSTAmount_PINLINES; TotalGST)//"Purch. Inv. Line"."Total GST Amount") //pcpl-064 01Aug2023
             {
             }
             column(GenBusPostingGroup_PINLINES; "Purch. Inv. Line"."Gen. Bus. Posting Group")
@@ -155,6 +157,37 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
+            column(PIL_No2; "No. 2")
+            {
+
+            }
+            column(PIL_Category1; RecItem."Category 1")
+            {
+
+
+            }
+            column(PIL_Category2; RecItem."Category 2")
+            {
+
+
+            }
+            column(PIL_Category3; RecItem."Category 3")
+            {
+
+
+            }
+            column(PIL_orderdate; orderdate)
+            {
+
+            }
+            column(PurchInvoiceAcc; PurchInvoiceAcc)
+            {
+
+            }
+            column(PIL_Bin_Code; "Bin Code")
+            {
+
+            }
 
             trigger OnAfterGetRecord()
             begin
@@ -210,7 +243,7 @@ report 50315 "Detailed Purchase Register"
                 PurchRcptHeader.SETRANGE(PurchRcptHeader."No.", "Purch. Inv. Line"."Receipt No.");
                 IF PurchRcptHeader.FINDFIRST THEN;
 
-
+                //<<pcpl-064
                 TotalGST := SGSTAmt + CGSTAmt + IGSTAmt; //pcpl-064 3aug2023
                 TotGSTPer := cgstrate + sgstrate + igstrate; //pcpl-064 3aug2023
                 //<<pcpl-064 3aug2023
@@ -247,6 +280,8 @@ report 50315 "Detailed Purchase Register"
                         Orderno := RPIH."Order No."
                     else
                         Orderno := RPPR."Order No.";
+
+
                 //>>pcpl-064 3aug2023
 
                 //<<pcpl-064 7aug2023
@@ -260,16 +295,45 @@ report 50315 "Detailed Purchase Register"
                 if ILE.FindFirst() then begin
                     GRNNO := ILE."Document No.";
                 end;
-
-
                 //>>pcpl-064 7aug2023
+                //<<pcpl-064 8aug2023
+                if RecItem.Get("No.") then;
 
+                //Order Date  PCPL-064 8aug2023
+                RecPIH.Reset();
+                RecPIH.SetRange("No.", "Document No.");
+                if RecPIH.FindFirst() then
+                    RPPR.Reset();
+                RPPR.SetRange("No.", "Receipt No.");
+                if RPPR.FindFirst() then begin
+                    orderdate := RPPR."Order Date";
+                end;
+
+                if "Purch. Inv. Line".Type = "Purch. Inv. Line".Type::Item then begin
+                    GenPosSetup.Reset();
+                    GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
+                    GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
+                    if GenPosSetup.FindFirst() then begin
+                        PurchInvoiceAcc := GenPosSetup."Purch. Account";
+                    end;
+                end
+                else
+                    if "Purch. Inv. Line".Type = "Purch. Inv. Line".Type::"Charge (Item)" then begin
+                        GenPosSetup.Reset();
+                        GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
+                        GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
+                        if GenPosSetup.FindFirst() then begin
+                            PurchInvoiceAcc := GenPosSetup."Purch. Account";
+                        end;
+                    end;
+
+                //>>pcpl-064 8aug2023
             end;
         }
         dataitem("Purch. Cr. Memo Line"; "Purch. Cr. Memo Line")
         {
-            DataItemTableView = WHERE(Type = FILTER(<> ' '),
-                                      Quantity = FILTER(<> 0));
+            /*  DataItemTableView = WHERE(Type = FILTER(<> ' '),
+                                       Quantity = FILTER(<> 0)); */
             column(PostingDate_PCINLINES; "Purch. Cr. Memo Line"."Posting Date")
             {
             }
@@ -339,13 +403,13 @@ report 50315 "Detailed Purchase Register"
             column(PCMIGSTAmt; PCMIGSTAmt)
             {
             }
-            column(GST_PCINLINES; '')//"Purch. Cr. Memo Line"."GST %") //pcpl-064 01Aug2023
+            column(GST_PCINLINES; TotGSTPer_1)//"Purch. Cr. Memo Line"."GST %") //pcpl-064 01Aug2023
             {
             }
-            column(GSTBaseAmount_PCINLINES; '')//"Purch. Cr. Memo Line"."GST Base Amount") //pcpl-064 01Aug2023
+            column(GSTBaseAmount_PCINLINES; PCMDGSTLE."GST Base Amount")//"Purch. Cr. Memo Line"."GST Base Amount") //pcpl-064 01Aug2023
             {
             }
-            column(TotalGSTAmount_PCINLINES; TotalGST)//"Purch. Cr. Memo Line"."Total GST Amount") //pcpl-064 01Aug2023
+            column(TotalGSTAmount_PCINLINES; TotalGST_1)//"Purch. Cr. Memo Line"."Total GST Amount") //pcpl-064 01Aug2023
             {
             }
             column(GenBusPostingGroup_PCINLINES; "Purch. Cr. Memo Line"."Gen. Bus. Posting Group")
@@ -387,6 +451,30 @@ report 50315 "Detailed Purchase Register"
             column(HSN_SACCodePCM; "Purch. Cr. Memo Line"."HSN/SAC Code")
             {
             }
+            column(PCML_No2; RecItem_1."No. 2")
+            {
+
+            }
+            column(PCML_Category1; RecItem_1."Category 1")
+            {
+
+            }
+            column(PCML_Category2; RecItem_1."Category 2")
+            {
+
+            }
+            column(PCML_Category3; RecItem_1."Category 3")
+            {
+
+            }
+            column(PurchCreditAcc; PurchCreditAcc)
+            {
+
+            }
+            column(PCML_Bin_Code; "Bin Code")
+            {
+
+            }
 
             trigger OnAfterGetRecord()
             begin
@@ -418,15 +506,15 @@ report 50315 "Detailed Purchase Register"
                     REPEAT
                         IF PCMDGSTLE."GST Component Code" = 'CGST' THEN BEGIN
                             PCMCGSTAmt := ABS(PCMDGSTLE."GST Amount");
-                            //cgstrate := ABS(PCMDGSTLE."GST %");
+                            cgstrate_1 := ABS(PCMDGSTLE."GST %");
                         END ELSE
                             IF (PCMDGSTLE."GST Component Code" = 'SGST') OR (PCMDGSTLE."GST Component Code" = 'UTGST') THEN BEGIN
                                 PCMSGSTAmt := ABS(PCMDGSTLE."GST Amount");
-                                //sgstrate := ABS(PCMDGSTLE."GST %");
+                                sgstrate_1 := ABS(PCMDGSTLE."GST %");
                             END ELSE
                                 IF PCMDGSTLE."GST Component Code" = 'IGST' THEN BEGIN
                                     PCMIGSTAmt := ABS(PCMDGSTLE."GST Amount");
-                                    //igstrate := ABS(PCMDGSTLE."GST %");
+                                    igstrate_1 := ABS(PCMDGSTLE."GST %");
                                 END ELSE
                                     IF PCMDGSTLE."GST Component Code" = 'CESS' THEN BEGIN
                                         PCMCESSGSTAmt := ABS(PCMDGSTLE."GST Amount");
@@ -437,8 +525,54 @@ report 50315 "Detailed Purchase Register"
                 ReturnShipmentHeader.RESET;
                 ReturnShipmentHeader.SETRANGE(ReturnShipmentHeader."No.", "Purch. Cr. Memo Line"."Return Shipment No.");
                 IF ReturnShipmentHeader.FINDFIRST THEN;
+                //<<pcpl-064 8aug2023
+                TotGSTPer_1 := cgstrate_1 + sgstrate_1 + igstrate_1;
+                TotalGST_1 := PCMSGSTAmt + PCMCGSTAmt + PCMIGSTAmt;
+
+                if RecItem_1.Get("No.") then;
+
+                //>>pcpl-064 8aug2023
+                //<<pcpl-064 9aug2023
+                if "Purch. Cr. Memo Line".Type = "Purch. Cr. Memo Line".Type::Item then begin
+                    GenPosSetup.Reset();
+                    GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
+                    GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
+                    if GenPosSetup.FindFirst() then begin
+                        PurchCreditAcc := GenPosSetup."Purch. Account";
+                    end;
+                end
+                else
+                    if "Purch. Cr. Memo Line".Type = "Purch. Cr. Memo Line".Type::"Charge (Item)" then begin
+                        GenPosSetup.Reset();
+                        GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
+                        GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
+                        if GenPosSetup.FindFirst() then begin
+                            PurchCreditAcc := GenPosSetup."Purch. Account";
+                        end;
+                    end;
+                //  Message('hello');
+                //>>pcpl-064 9aug2023
+
             end;
         }
+        dataitem(PCML; "Purch. Cr. Memo Line")
+        {
+            column(Posting_Date; "Posting Date")
+            {
+
+            }
+            column(Document_No_; "Document No.")
+            {
+
+            }
+            trigger OnAfterGetRecord()
+            var
+                myInt: Integer;
+            begin
+                Message("Document No.");
+            end;
+        }
+
     }
 
     requestpage
@@ -459,6 +593,15 @@ report 50315 "Detailed Purchase Register"
 
     var
         Orderno: Code[20];
+        GenPosSetup: Record "General Posting Setup";
+        PurchInvoiceAcc: Code[20];
+        GenPosSetup_1: Record "General Posting Setup";
+        PurchCreditAcc: Code[20];
+        RecPCML: Record "Purch. Cr. Memo Line";
+        RecPIH: Record "Purch. Inv. Header";
+        orderdate: Date;
+        RecItem: Record Item;
+        RecItem_1: Record Item;
         TDSAMTPER: Text;
         PIL: Record "Purch. Inv. Line";
         VL: Record "Value Entry";
@@ -468,13 +611,20 @@ report 50315 "Detailed Purchase Register"
         RPIH: Record "Purch. Inv. Header";
         documentno: Code[20];
         TDSEntry: Record "TDS Entry";
+        TDSEntry_1: Record "TDS Entry";
         TDSAmount: Decimal;
         TDSPer: Decimal;
+
         TotGSTPer: Decimal;
+        TotGSTPer_1: Decimal;
         cgstrate: Decimal;
         sgstrate: Decimal;
         igstrate: Decimal;
+        cgstrate_1: Decimal;
+        sgstrate_1: Decimal;
+        igstrate_1: Decimal;
         TotalGST: Decimal;
+        TotalGST_1: Decimal;
         recSP: Record 13;
         recCR: Record 9;
         Vendor: Record 23;

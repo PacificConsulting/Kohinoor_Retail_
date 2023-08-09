@@ -11,7 +11,7 @@ tableextension 50302 "Sales Inv Hdr AmtToCust" extends "Sales Invoice Header"
         {
             DataClassification = ToBeClassified;
             Caption = 'Store No.';
-            Editable = false;
+            //Editable = false;
         }
         field(50303; "Staff Id"; Code[10])
         {
