@@ -567,11 +567,16 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value />
-                        <Style />
+                        <Value>=First(Fields!Posting_Date.Value, "DataSet_Result")</Value>
+                        <Style>
+                          <FontSize>8pt</FontSize>
+                          <Format>d</Format>
+                        </Style>
                       </TextRun>
                     </TextRuns>
-                    <Style />
+                    <Style>
+                      <TextAlign>Left</TextAlign>
+                    </Style>
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox13</rd:DefaultName>
@@ -594,6 +599,7 @@
                     <Style>Solid</Style>
                     <Width>1pt</Width>
                   </LeftBorder>
+                  <VerticalAlign>Top</VerticalAlign>
                   <PaddingLeft>2pt</PaddingLeft>
                   <PaddingRight>2pt</PaddingRight>
                   <PaddingTop>2pt</PaddingTop>
@@ -1862,6 +1868,9 @@ End Function
         </Field>
         <Field Name="NewSerialNo">
           <DataField>NewSerialNo</DataField>
+        </Field>
+        <Field Name="Posting_Date">
+          <DataField>Posting_Date</DataField>
         </Field>
       </Fields>
       <Query>

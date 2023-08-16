@@ -2,7 +2,7 @@
   "id": "4ba22a4e-fc4f-4f0b-9a57-5874849a493e",
   "name": "Kohinoor_Retail",
   "publisher": "Pacific",
-  "version": "1.0.0.296",
+  "version": "1.0.0.298",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -77,14 +77,12 @@
       "name": "Kohinoor_Reports",
       "publisher": "Pacific",
       "version": "1.0.0.0"
-    },
-    {
+    },{
       "id": "47ec39d2-1898-4cb6-92f9-9fddf8cc2c6f",
       "name": "Kohinoor_E-Invoice",
       "publisher": "Pacific",
-      "version": "1.0.0.2"
+      "version": "1.0.0.8"
     }
-    
   ],
   "screenshots": [],
   "platform": "1.0.0.0",

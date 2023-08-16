@@ -107,6 +107,10 @@ report 50313 "Replacement Challan"
             {
 
             }
+            column(Posting_Date; "Posting Date")
+            {
+
+            }
 
 
 
@@ -122,6 +126,7 @@ report 50313 "Replacement Challan"
                 RECILE.SetRange("External Document No.", "External Document No.");
                 if RECILE.FindLast() then begin
                     SalesOrderNo := RECILE."Document No.";
+                    PosDate := RECILE."Posting Date";
                 end;
                 //Bill to and Ship to Address
                 if Loc.Get("Location Code") then;
@@ -184,7 +189,7 @@ report 50313 "Replacement Challan"
                 //         end;
                 //     end;*/
 
-                /* SalesInvLine.Reset();
+                SalesInvLine.Reset();
                 SalesInvLine.SetRange("Document No.", "Item Journal Replace Data"."Document No.");
                 SalesInvLine.SetRange("No.", "Item Journal Replace Data"."Item No.");
                 if SalesInvLine.FindFirst() then begin
@@ -198,13 +203,15 @@ report 50313 "Replacement Challan"
                             serialno := ILE."Serial No.";
                         end;
                     end;
-                end; */
+                end;
+                /*
                 ILE.Reset();
                 ILE.SetRange("External Document No.", "Item Journal Replace Data"."External Document No.");
                 ILE.SetRange("Entry Type", ILE."Entry Type"::"Positive Adjmt.");
                 if ILE.FindFirst() then begin
                     serialno := ILE."Serial No.";
                 end;
+                */
 
 
 
@@ -322,6 +329,7 @@ report 50313 "Replacement Challan"
 
     var
         myInt: Integer;
+        PosDate: Date;
         txt1: Text;
         IJRD: Record "Item Journal Replace Data";
         NewSerialNo: Code[50];

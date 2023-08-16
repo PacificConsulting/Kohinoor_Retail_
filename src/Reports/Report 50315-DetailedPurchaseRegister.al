@@ -157,7 +157,7 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
-            column(PIL_No2; "No. 2")
+            column(PIL_No2; RecItem."No. 2")
             {
 
             }
@@ -185,6 +185,26 @@ report 50315 "Detailed Purchase Register"
 
             }
             column(PIL_Bin_Code; "Bin Code")
+            {
+
+            }
+            column(PIL_FNNLC; FNNLC)
+            {
+
+            }
+            column(PIL_Sellout; Sellout)
+            {
+
+            }
+            column(PIL_FNNLCwithSellout; FNNLCwithSellout)
+            {
+
+            }
+            column(PIL_FNNLCwithoutSellout; FNNLCwithoutSellout)
+            {
+
+            }
+            column(SrNo; SrNo)
             {
 
             }
@@ -297,6 +317,7 @@ report 50315 "Detailed Purchase Register"
                 end;
                 //>>pcpl-064 7aug2023
                 //<<pcpl-064 8aug2023
+                Clear(RecItem);
                 if RecItem.Get("No.") then;
 
                 //Order Date  PCPL-064 8aug2023
@@ -309,10 +330,11 @@ report 50315 "Detailed Purchase Register"
                     orderdate := RPPR."Order Date";
                 end;
 
+                Clear(PurchInvoiceAcc);
                 if "Purch. Inv. Line".Type = "Purch. Inv. Line".Type::Item then begin
                     GenPosSetup.Reset();
-                    GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
-                    GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
+                    GenPosSetup.SetRange("Gen. Bus. Posting Group", "Gen. Bus. Posting Group");
+                    GenPosSetup.SetRange("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");
                     if GenPosSetup.FindFirst() then begin
                         PurchInvoiceAcc := GenPosSetup."Purch. Account";
                     end;
@@ -320,20 +342,63 @@ report 50315 "Detailed Purchase Register"
                 else
                     if "Purch. Inv. Line".Type = "Purch. Inv. Line".Type::"Charge (Item)" then begin
                         GenPosSetup.Reset();
-                        GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
-                        GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
+                        GenPosSetup.SetRange("Gen. Bus. Posting Group", "Gen. Bus. Posting Group");
+                        GenPosSetup.SetRange("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");
                         if GenPosSetup.FindFirst() then begin
                             PurchInvoiceAcc := GenPosSetup."Purch. Account";
                         end;
-                    end;
+                    end
+                    else
+                        if "Purch. Inv. Line".Type = "Purch. Inv. Line".Type::"G/L Account" then begin
+                            PurchInvoiceAcc := "Purch. Inv. Line"."No.";
+                        end;
 
                 //>>pcpl-064 8aug2023
+                //<<PCPL-064 10aug2023
+
+                Clear(FNNLC);
+                Clear(Sellout);
+                Clear(FNNLCwithSellout);
+                Clear(FNNLCwithoutSellout);
+                TradeAggrement.Reset();
+                TradeAggrement.SetRange("Item No.", "Purch. Inv. Line"."No.");
+                TradeAggrement.SetRange("Customer Group", TradeAggrement."Customer Group"::Regular);
+                //TradeAggrement.SetRange("From Date", Fromdate);
+                //TradeAggrement.SetRange("To Date", Todate);
+                TradeAggrement.SetFilter("From Date", '<=%1', "Posting Date");
+                TradeAggrement.SetFilter("To Date", '>=%1', "Posting Date");
+                if TradeAggrement.FindFirst() then begin
+                    FNNLC += TradeAggrement.FNNLC;
+                    Sellout += TradeAggrement.Sellout;
+                    FNNLCwithSellout += TradeAggrement."Fnnlc with sell out";
+                    FNNLCwithoutSellout += TradeAggrement."FNNLC Without SELLOUT";
+                end;
+                //>>pcpl-064 10aug2023
+                //<<PCPL-064 11aug2023
+                Clear(SrNo);
+                if "Purch. Inv. Line".Type = "Purch. Inv. Line".Type::Item then begin
+                    Val.Reset();
+                    Val.SetRange("Document No.", "Purch. Inv. Line"."Document No.");
+                    Val.SetRange("Document Line No.", "Purch. Inv. Line"."Line No.");
+                    IF Val.FindSet() then
+                        repeat
+                            ItemLed.Reset();
+                            ItemLed.SetRange("Entry No.", Val."Item Ledger Entry No.");
+                            ItemLed.SetFilter("Serial No.", '<>%1', '');
+                            if ItemLed.FindFirst() then
+                                SrNo += ItemLed."Serial No." + ','
+                        until Val.Next() = 0;
+                    IF SrNo <> '' then
+                        SrNo := DelStr(SrNo, StrLen(SrNo), 1);
+                end;
+
+                //>>pcpl-064 11aug2023
             end;
         }
         dataitem("Purch. Cr. Memo Line"; "Purch. Cr. Memo Line")
         {
-            /*  DataItemTableView = WHERE(Type = FILTER(<> ' '),
-                                       Quantity = FILTER(<> 0)); */
+            DataItemTableView = WHERE(Type = FILTER(<> ' '),
+                                      Quantity = FILTER(<> 0), Description = filter(<> 'Round Off'));
             column(PostingDate_PCINLINES; "Purch. Cr. Memo Line"."Posting Date")
             {
             }
@@ -406,7 +471,7 @@ report 50315 "Detailed Purchase Register"
             column(GST_PCINLINES; TotGSTPer_1)//"Purch. Cr. Memo Line"."GST %") //pcpl-064 01Aug2023
             {
             }
-            column(GSTBaseAmount_PCINLINES; PCMDGSTLE."GST Base Amount")//"Purch. Cr. Memo Line"."GST Base Amount") //pcpl-064 01Aug2023
+            column(GSTBaseAmount_PCINLINES; Abs(PCMDGSTLE."GST Base Amount"))//"Purch. Cr. Memo Line"."GST Base Amount") //pcpl-064 01Aug2023
             {
             }
             column(TotalGSTAmount_PCINLINES; TotalGST_1)//"Purch. Cr. Memo Line"."Total GST Amount") //pcpl-064 01Aug2023
@@ -475,6 +540,26 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
+            column(PCML_FNNLC_1; FNNLC_1)
+            {
+
+            }
+            column(PCML_Sellout_1; Sellout_1)
+            {
+
+            }
+            column(PCML_FNNLCwithSellout_1; FNNLCwithSellout_1)
+            {
+
+            }
+            column(PCML_FNNLCwithoutSellout_1; FNNLCwithoutSellout_1)
+            {
+
+            }
+            column(SrNo_1; SrNo_1)
+            {
+
+            }
 
             trigger OnAfterGetRecord()
             begin
@@ -529,49 +614,81 @@ report 50315 "Detailed Purchase Register"
                 TotGSTPer_1 := cgstrate_1 + sgstrate_1 + igstrate_1;
                 TotalGST_1 := PCMSGSTAmt + PCMCGSTAmt + PCMIGSTAmt;
 
+                Clear(RecItem_1);
                 if RecItem_1.Get("No.") then;
 
                 //>>pcpl-064 8aug2023
                 //<<pcpl-064 9aug2023
+                clear(PurchCreditAcc);
                 if "Purch. Cr. Memo Line".Type = "Purch. Cr. Memo Line".Type::Item then begin
-                    GenPosSetup.Reset();
-                    GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
-                    GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
-                    if GenPosSetup.FindFirst() then begin
-                        PurchCreditAcc := GenPosSetup."Purch. Account";
+                    GenPosSetup_1.Reset();
+                    GenPosSetup_1.SetRange("Gen. Bus. Posting Group", "Gen. Bus. Posting Group");
+                    GenPosSetup_1.SetRange("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");
+                    if GenPosSetup_1.FindFirst() then begin
+                        PurchCreditAcc := GenPosSetup_1."Purch. Credit Memo Account";
                     end;
                 end
                 else
                     if "Purch. Cr. Memo Line".Type = "Purch. Cr. Memo Line".Type::"Charge (Item)" then begin
-                        GenPosSetup.Reset();
-                        GenPosSetup.SetRange("Gen. Bus. Posting Group", 'DOMESTIC', "Gen. Bus. Posting Group");
-                        GenPosSetup.SetRange("Gen. Prod. Posting Group", 'STOCK', "Gen. Prod. Posting Group");
-                        if GenPosSetup.FindFirst() then begin
-                            PurchCreditAcc := GenPosSetup."Purch. Account";
+                        GenPosSetup_1.Reset();
+                        GenPosSetup_1.SetRange("Gen. Bus. Posting Group", "Gen. Bus. Posting Group");
+                        GenPosSetup_1.SetRange("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");
+                        if GenPosSetup_1.FindFirst() then begin
+                            PurchCreditAcc := GenPosSetup_1."Purch. Credit Memo Account";
                         end;
-                    end;
+                    end
+                    else
+                        if "Purch. Cr. Memo Line".Type = "Purch. Cr. Memo Line".Type::"G/L Account" then begin
+                            PurchCreditAcc := "Purch. Cr. Memo Line"."No.";
+                        end;
                 //  Message('hello');
                 //>>pcpl-064 9aug2023
 
+                //<<PCPL-064 10aug2023
+
+                Clear(FNNLC_1);
+                Clear(Sellout_1);
+                Clear(FNNLCwithSellout_1);
+                Clear(FNNLCwithoutSellout_1);
+                TradeAggrement_1.Reset();
+                TradeAggrement_1.SetRange("Item No.", "Purch. Cr. Memo Line"."No.");
+                TradeAggrement_1.SetRange("Customer Group", TradeAggrement."Customer Group"::Regular);
+                //TradeAggrement.SetRange("From Date", Fromdate);
+                //TradeAggrement.SetRange("To Date", Todate);
+                TradeAggrement_1.SetFilter("From Date", '<=%1', "Posting Date");
+                TradeAggrement_1.SetFilter("To Date", '>=%1', "Posting Date");
+                if TradeAggrement_1.FindFirst() then begin
+
+                    FNNLC_1 += TradeAggrement_1.FNNLC;
+                    Sellout_1 += TradeAggrement_1.Sellout;
+                    FNNLCwithSellout_1 += TradeAggrement_1."Fnnlc with sell out";
+                    FNNLCwithoutSellout_1 += TradeAggrement_1."FNNLC Without SELLOUT";
+                end;
+                //>>pcpl-064 10aug2023
+                //Message('done');
+                //<<PCPL-064 11aug2023
+                Clear(SrNo_1);
+                if "Purch. Cr. Memo Line".Type = "Purch. Cr. Memo Line".Type::Item then begin
+                    Val_1.Reset();
+                    Val_1.SetRange("Document No.", "Purch. Cr. Memo Line"."Document No.");
+                    Val_1.SetRange("Document Line No.", "Purch. Cr. Memo Line"."Line No.");
+                    IF Val_1.FindSet() then
+                        repeat
+                            ItemLed_1.Reset();
+                            ItemLed_1.SetRange("Entry No.", Val_1."Item Ledger Entry No.");
+                            ItemLed_1.SetFilter("Serial No.", '<>%1', '');
+                            if ItemLed_1.FindFirst() then
+                                SrNo_1 += ItemLed_1."Serial No." + ','
+                        until Val_1.Next() = 0;
+                    IF SrNo_1 <> '' then
+                        SrNo_1 := DelStr(SrNo_1, StrLen(SrNo_1), 1);
+                end;
+
+                //>>pcpl-064 11aug2023
+
             end;
         }
-        dataitem(PCML; "Purch. Cr. Memo Line")
-        {
-            column(Posting_Date; "Posting Date")
-            {
 
-            }
-            column(Document_No_; "Document No.")
-            {
-
-            }
-            trigger OnAfterGetRecord()
-            var
-                myInt: Integer;
-            begin
-                Message("Document No.");
-            end;
-        }
 
     }
 
@@ -593,6 +710,16 @@ report 50315 "Detailed Purchase Register"
 
     var
         Orderno: Code[20];
+        Sellout: Decimal;
+        FNNLCwithSellout: Decimal;
+        FNNLCwithoutSellout: Decimal;
+        FNNLC: Decimal;
+        TradeAggrement: record "Trade Aggrement";
+        Sellout_1: Decimal;
+        FNNLCwithSellout_1: Decimal;
+        FNNLCwithoutSellout_1: Decimal;
+        FNNLC_1: Decimal;
+        TradeAggrement_1: record "Trade Aggrement";
         GenPosSetup: Record "General Posting Setup";
         PurchInvoiceAcc: Code[20];
         GenPosSetup_1: Record "General Posting Setup";
@@ -657,5 +784,14 @@ report 50315 "Detailed Purchase Register"
         PCMrecSP: Record 13;
         PurchRcptHeader: Record 120;
         ReturnShipmentHeader: Record 6650;
+        SrNo: Text;
+        SrNo_1: Text;
+        PILRec: record "Purch. Inv. Line";
+        PCMLRec: Record "Purch. Cr. Memo Line";
+        Val: Record "Value Entry";
+        ItemLed: Record "Item Ledger Entry";
+        Val_1: Record "Value Entry";
+        ItemLed_1: Record "Item Ledger Entry";
+
 }
 

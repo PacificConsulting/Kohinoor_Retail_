@@ -147,7 +147,6 @@ permissionset 50302 GeneratedPermissiRe
         tabledata "Link Item" = RIMD,
         table "Link Item" = X,
         report "Sales Order" = X,
-        report "Tax Invoice" = X,
         codeunit "Event & Subscriber 1" = X,
         xmlport "Sales Document Upload" = X,
         page "Copy Menu" = X,
@@ -166,5 +165,15 @@ permissionset 50302 GeneratedPermissiRe
         page "Delivery Order for Warehoue" = X,
         page "Email to Finance" = X,
         page "Kohinoor Admin Access" = X,
-        page "Reservation Entry Modify" = X;
+        page "Reservation Entry Modify" = X,
+        report "Aged Accounts Receivable No." = X,
+        report "Detailed Purchase Register" = X,
+        report "Tax Invoice" = X,
+        report "Transfer Order New" = X,
+        codeunit "Tax Invoice Mail" = X,
+        codeunit "Tax Invoice Upload on AZURE" = X,
+        page "Payment Lines" = X,
+        page "Posted Credit Memo Line Modify" = X,
+        page "Posted Sales Inv. Line Modify" = X,
+        page "Posted Sales Inv.Header Modify" = X;
 }
