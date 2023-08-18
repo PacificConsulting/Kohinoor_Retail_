@@ -7,26 +7,9 @@ codeunit 50304 "Tax Invoice Mail"
         SalesInvHdr: Record "Sales Invoice Header";
     begin
         SendMail();
-        /*
-        PPL.Reset();
-        PPL.SetCurrentKey("Invoice Posting Date", "Payment type");
-        //PPL.SetRange("Invoice Posting Date", CalcDate('-1D', Today));
-        PPL.SetFilter("Document No.", '%1|%2', 'CHETI23240200036', 'THATI23240900023');
-        PPL.SetRange("Payment type", PPL."Payment type"::Finance);
-        IF PPL.FindSet() then
-            repeat
-                //IF PaymentMethod.Get(PPL."Payment Method Code") then begin
-                //  IF PaymentMethod."Payment Type" = PaymentMethod."Payment Type"::Finance then begin
-                SalesInvHdr.Reset();
-                SalesInvHdr.SetRange("No.", PPL."Document No.");
-                IF SalesInvHdr.FindFirst() then
-                    SendMail(SalesInvHdr, PPL."Payment Method Code");
-            //end;
-            until PPL.Next() = 0;
-            */
     end;
 
-    procedure SendMail();//(SIH: Record "Sales Invoice Header"; PayMethodCode: Code[10])
+    procedure SendMail();
     var
         Recref: RecordRef;
         TempBlob: Codeunit "Temp Blob";
@@ -45,6 +28,7 @@ codeunit 50304 "Tax Invoice Mail"
         PaymentMethod: Record "Payment Method";
         Store: Record Location;
         SentmailBool: Boolean;
+        TaxInv: Report "Tax Invoice";
     begin
         clear(SentmailBool);
         Store.Reset();
@@ -60,6 +44,9 @@ codeunit 50304 "Tax Invoice Mail"
                     repeat
                         VarRecipient.RemoveRange(1, VarRecipient.Count);
                         Clear(VCount);
+                        Clear(FileName);
+                        Clear(Instr);
+                        Clear(OutStr);
                         ETF.Reset();
                         ETF.SetRange("Payment Method", PaymentMethod.Code);
                         ETF.SetRange("Store No.", Store.Code);
@@ -86,16 +73,21 @@ codeunit 50304 "Tax Invoice Mail"
                             IF PPL.FindSet() then
                                 repeat
                                     //*****SAVE As PDF Code*****
+                                    Clear(FileName);
+                                    Clear(Instr);
+                                    Clear(OutStr);
                                     SIHNEW.Reset();
                                     SIHNEW.SetRange("No.", PPL."Document No.");
-                                    IF SIHNEW.FindFirst() then;
-                                    Recref.GetTable(SIHNEW);
-                                    TempBlob.CreateOutStream(OutStr);
-                                    Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStr, Recref);
-                                    TempBlob.CreateInStream(InStr);
-                                    FileName := SIHNEW."No." + '_' + FORMAT(Today) + '.pdf';
-                                    Emailmessage.AddAttachment(FileName, '.pdf', InStr);
-                                    SentmailBool := true;
+                                    SIHNEW.SetRange("Store No.", PPL."Store No.");
+                                    IF SIHNEW.FindFirst() then begin
+                                        Recref.GetTable(SIHNEW);
+                                        TempBlob.CreateOutStream(OutStr);
+                                        Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStr, Recref);
+                                        TempBlob.CreateInStream(InStr);
+                                        FileName := SIHNEW."No." + '_' + FORMAT(Today) + '.pdf';
+                                        Emailmessage.AddAttachment(FileName, '.pdf', InStr);
+                                        SentmailBool := true;
+                                    end;
                                 until PPL.Next() = 0;
                             //**** Email Body Creation *****
                             Emailmessage.AppendToBody('<p><font face="Georgia">Dear <B>Sir,</B></font></p>');

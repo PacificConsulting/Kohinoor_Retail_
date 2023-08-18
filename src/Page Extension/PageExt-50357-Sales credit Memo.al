@@ -9,6 +9,16 @@ pageextension 50357 "Sales credit Memo 1" extends "Sales Credit Memo"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Store No. field.';
             }
+            field("Order Date"; Rec."Order Date")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the date when the order was created.';
+            }
+            field("Order Reference"; Rec."Order Reference")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Order Reference field.';
+            }
         }
     }
     actions

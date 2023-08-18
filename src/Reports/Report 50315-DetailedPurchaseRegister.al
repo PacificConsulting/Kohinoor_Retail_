@@ -208,6 +208,19 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
+            column(PIL_OrderAdd; RecOrderAdd.Address + ' ' + RecOrderAdd."Address 2" + ' ' + RecOrderAdd.State)
+            {
+
+            }
+            column(PIL_OrderAdd_GSTIN; RecOrderAdd."GST Registration No.")
+            {
+
+            }
+            column(PIL_RecOrderAdd_State; RecOrderAdd.State)
+            {
+
+            }
+
 
             trigger OnAfterGetRecord()
             begin
@@ -231,9 +244,9 @@ report 50315 "Detailed Purchase Register"
                 CLEAR(CGSTAmt);
                 CLEAR(SGSTAmt);
                 CLEAR(IGSTAmt);
-                // Clear(cgstrate);
-                // Clear(sgstrate);
-                // Clear(igstrate);
+                Clear(cgstrate);
+                Clear(sgstrate);
+                Clear(igstrate);
                 DGSTLE.RESET;
                 DGSTLE.SETCURRENTKEY("Transaction Type", "Document Type", "Document No.", "Document Line No.");
                 DGSTLE.SETRANGE("Transaction Type", DGSTLE."Transaction Type"::Purchase);
@@ -393,6 +406,17 @@ report 50315 "Detailed Purchase Register"
                 end;
 
                 //>>pcpl-064 11aug2023
+                //<<PCPL-064 18aug2023
+                /* if RecOrderAdd.Get("Order Address Code") then begin
+                    Orderadd := RecOrderAdd.State;
+                end; */
+
+                RecOrderAdd.Reset();
+                RecOrderAdd.SetRange(Code, "Order Address Code");
+                if RecOrderAdd.FindFirst() then; //begin
+                                                 //Orderadd := RecOrderAdd.State;
+                                                 //end;
+                                                 //..PCPL-064 18aug2023
             end;
         }
         dataitem("Purch. Cr. Memo Line"; "Purch. Cr. Memo Line")
@@ -560,6 +584,19 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
+            column(PCML_RecOrderAdd_1; RecOrderAdd_1.Address + ' ' + RecOrderAdd_1."Address 2" + ' ' + RecOrderAdd_1.State)
+            {
+
+            }
+            column(PCML_RecOrderAdd_1_GSTIN; RecOrderAdd_1."GST Registration No.")
+            {
+
+            }
+            column(PCML_RecOrderAdd_1_State; RecOrderAdd_1.State)
+            {
+
+            }
+
 
             trigger OnAfterGetRecord()
             begin
@@ -582,6 +619,9 @@ report 50315 "Detailed Purchase Register"
                 CLEAR(PCMCGSTAmt);
                 CLEAR(PCMSGSTAmt);
                 CLEAR(PCMIGSTAmt);
+                Clear(cgstrate_1);
+                Clear(sgstrate_1);
+                Clear(igstrate_1);
                 PCMDGSTLE.RESET;
                 PCMDGSTLE.SETCURRENTKEY("Transaction Type", "Document Type", "Document No.", "Document Line No.");
                 PCMDGSTLE.SETRANGE("Transaction Type", DGSTLE."Transaction Type"::Purchase);
@@ -685,6 +725,13 @@ report 50315 "Detailed Purchase Register"
                 end;
 
                 //>>pcpl-064 11aug2023
+                //<<PCPL-064 18aug2023
+                //if RecOrderAdd_1.Get("Order Address Code") then;
+
+                RecOrderAdd_1.Reset();
+                RecOrderAdd_1.SetRange(Code, "Order Address Code");
+                if RecOrderAdd_1.FindFirst() then;
+                //..PCPL-064 18aug2023
 
             end;
         }
@@ -792,6 +839,12 @@ report 50315 "Detailed Purchase Register"
         ItemLed: Record "Item Ledger Entry";
         Val_1: Record "Value Entry";
         ItemLed_1: Record "Item Ledger Entry";
+        RecOrderAdd: record "Order Address";
+        RecOrderAdd_1: record "Order Address";
+        Orderadd: text[250];
+        OrderGSTIN: code[20];
+        Orderadd_1: text[250];
+        OrderGSTIN_1: code[20];
 
 }
 

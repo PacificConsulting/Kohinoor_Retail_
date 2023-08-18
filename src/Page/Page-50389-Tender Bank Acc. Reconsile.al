@@ -236,7 +236,11 @@ page 50389 "Tender Bank Acc. Reconciliate"
                         GenJnLine: Record 81;
                         PayMethod: Record "Payment Method";
                         GenJnlpost: Codeunit 12;
+                        BRLInit: Record "Bank Acc. Reconciliation Line";
+                        BankAccledEntryTemp: Record "Bank Account Ledger Entry" temporary;
+                        GenJnlPostBatch: Codeunit "Gen. Jnl.-Post Batch";
                     begin
+                        Clear(BankAccledEntryTemp);
                         IF PayMethod.Get(Rec."Bank Account No.") then begin
                             IF (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
                                 BankRecoLine.Reset();
@@ -250,6 +254,10 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         BankLedgerEntry.SetRange("Statement Line No.", BankRecoLine."Statement Line No.");
                                         IF BankLedgerEntry.FindFirst() then begin
                                             //************Credit Amount****************
+                                            BankAccledEntryTemp.Init();
+                                            BankAccledEntryTemp := BankLedgerEntry;
+                                            BankAccledEntryTemp.Insert();
+
                                             Gl.Reset();
                                             Gl.SetRange("Journal Template Name", 'CONTRAV');
                                             Gl.SetRange("Journal Batch Name", 'DEFAULT');
@@ -333,9 +341,65 @@ page 50389 "Tender Bank Acc. Reconciliate"
                             end else
                                 Error('Conta Voucher Allowed only for Finance.');
                         end;
+                        //*****Auto Post Entry
                         //GenJnlpost.RunWithCheck(GenJnLine);
+                        GenJnlPostBatch.Run(GenJnLine);
+
+                        //************Bank Reconsilation Lines Creation*************************
+                        IF PayMethod.Get(Rec."Bank Account No.") then begin
+                            IF (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
+                                if BankAccledEntryTemp.FindSet() then
+                                    repeat
+                                        //*******Negative Amount Entry
+                                        BRLInit.Init();
+                                        BRLInit."Statement Type" := BRLInit."Statement Type"::"Bank Reconciliation";
+                                        BRLInit."Bank Account No." := Rec."Bank Account No.";
+                                        BRLInit."Statement No." := rec."Statement No.";
+                                        BankRecoLine.Reset();
+                                        BankRecoLine.SetRange("Bank Account No.", rec."Bank Account No.");
+                                        BankRecoLine.SetRange("Statement No.", Rec."Statement No.");
+                                        IF BankRecoLine.FindLast() then
+                                            BRLInit."Statement Line No." := BankRecoLine."Statement Line No." + 10000
+                                        else
+                                            BRLInit."Statement Line No." := 10000;
+
+                                        BRLInit."Transaction Date" := Today;
+                                        //BRLInit.Description:=
+                                        BRLInit."Document No." := BankAccledEntryTemp."External Document No.";
+                                        BRLInit."Value Date" := Today;
+                                        BRLInit.Validate("Credit Amount", BankAccledEntryTemp.Amount);
+                                        BRLInit."Approval Code" := BankAccledEntryTemp."Approval Code";
+                                        BRLInit."External Document No." := BankAccledEntryTemp."External Document No.";
+                                        BRLInit.Insert();
+                                        //*******Postive Amount Entry
+                                        BRLInit.Init();
+                                        BRLInit."Statement Type" := BRLInit."Statement Type"::"Bank Reconciliation";
+                                        BRLInit."Bank Account No." := Rec."Bank Account No.";
+                                        BRLInit."Statement No." := rec."Statement No.";
+                                        BankRecoLine.Reset();
+                                        BankRecoLine.SetRange("Bank Account No.", rec."Bank Account No.");
+                                        BankRecoLine.SetRange("Statement No.", Rec."Statement No.");
+                                        IF BankRecoLine.FindLast() then
+                                            BRLInit."Statement Line No." := BankRecoLine."Statement Line No." + 10000
+                                        else
+                                            BRLInit."Statement Line No." := 10000;
+
+                                        BRLInit."Transaction Date" := BankAccledEntryTemp."Posting Date";
+                                        BankAccledEntryTemp.CalcFields("Customer Name");
+                                        BRLInit.Description := BankAccledEntryTemp."Customer Name";
+                                        BRLInit."Value Date" := Today;
+                                        BRLInit.Validate("Debit Amount", BankAccledEntryTemp.Amount);
+                                        BRLInit."Approval Code" := BankAccledEntryTemp."Approval Code";
+                                        BRLInit."External Document No." := BankAccledEntryTemp."External Document No.";
+                                        BRLInit.Insert();
+                                    until BankAccledEntryTemp.Next() = 0;
+                            end;
+                        end;
                         Message('Entry Created and posted succesfully');
                     end;
+                    //************
+
+                    //end;
 
                 }
                 action(ChangeStatementNo)
@@ -398,6 +462,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                         MatchBankRecLines: Codeunit "Match Bank Rec. Lines";
                         TempBankAccReconciliationLine: Record "Bank Acc. Reconciliation Line" temporary;
                         TempBankAccountLedgerEntry: Record "Bank Account Ledger Entry" temporary;
+                        PayMethod: record "Payment Method";
                     begin
                         /*
                         BRl.Reset();
@@ -433,6 +498,10 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                 BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
                                 BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
                                 BLE.SetRange("Approval Code", BRL."Approval Code");
+                                IF PayMethod.Get(Rec."Bank Account No.") then begin
+                                    IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
+                                        BLE.SetRange(Amount, BRL."Statement Amount");
+                                end;
                                 BLE.SetRange(Open, true);
                                 IF BLE.FindFirst() then
                                     repeat
@@ -441,6 +510,10 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         BRL11.Reset();
                                         BRL11.SetRange("Bank Account No.", BLE."Bank Account No.");
                                         BRL11.SetRange("Approval Code", BLE."Approval Code");
+                                        IF PayMethod.Get(Rec."Bank Account No.") then begin
+                                            IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
+                                                BRL11.SetRange("Statement Amount", BLE.Amount);
+                                        end;
                                         IF BRL11.FindSet() then
                                             repeat
                                                 TempBankAccReconciliationLine := BRL11;

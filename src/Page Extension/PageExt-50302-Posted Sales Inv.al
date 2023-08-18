@@ -47,7 +47,7 @@ pageextension 50302 "Posted Sales invoice Retail" extends "Posted Sales Invoice"
                 PromotedIsBig = true;
                 Promoted = true;
                 Image = SendMail;
-                //Visible = false;
+                Visible = true;
                 trigger OnAction()
                 var
                     CU: Codeunit 50304;

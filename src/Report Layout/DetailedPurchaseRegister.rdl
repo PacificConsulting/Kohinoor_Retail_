@@ -11,439 +11,6 @@
       <rd:DataSourceID>2a40cb7c-69e0-4980-8bd7-b59b2bb438be</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="PostingDate_PINLINES">
-          <DataField>PostingDate_PINLINES</DataField>
-        </Field>
-        <Field Name="LineNos">
-          <DataField>LineNos</DataField>
-        </Field>
-        <Field Name="Purch_InvoiceNo">
-          <DataField>Purch_InvoiceNo</DataField>
-        </Field>
-        <Field Name="VendorInvoiceNo">
-          <DataField>VendorInvoiceNo</DataField>
-        </Field>
-        <Field Name="VendorInv_Date">
-          <DataField>VendorInv_Date</DataField>
-        </Field>
-        <Field Name="DocumentNo_PINLINES">
-          <DataField>DocumentNo_PINLINES</DataField>
-        </Field>
-        <Field Name="VendorName">
-          <DataField>VendorName</DataField>
-        </Field>
-        <Field Name="CountryName">
-          <DataField>CountryName</DataField>
-        </Field>
-        <Field Name="PurchaseName">
-          <DataField>PurchaseName</DataField>
-        </Field>
-        <Field Name="StateCode">
-          <DataField>StateCode</DataField>
-        </Field>
-        <Field Name="No_PINLINES">
-          <DataField>No_PINLINES</DataField>
-        </Field>
-        <Field Name="Description_PINLINES">
-          <DataField>Description_PINLINES</DataField>
-        </Field>
-        <Field Name="Quantity_PINLINES">
-          <DataField>Quantity_PINLINES</DataField>
-        </Field>
-        <Field Name="Quantity_PINLINESFormat">
-          <DataField>Quantity_PINLINESFormat</DataField>
-        </Field>
-        <Field Name="UnitCost_PINLINES">
-          <DataField>UnitCost_PINLINES</DataField>
-        </Field>
-        <Field Name="UnitCost_PINLINESFormat">
-          <DataField>UnitCost_PINLINESFormat</DataField>
-        </Field>
-        <Field Name="Amount_PINLINES">
-          <DataField>Amount_PINLINES</DataField>
-        </Field>
-        <Field Name="Amount_PINLINESFormat">
-          <DataField>Amount_PINLINESFormat</DataField>
-        </Field>
-        <Field Name="CurrencyCode">
-          <DataField>CurrencyCode</DataField>
-        </Field>
-        <Field Name="CurrencyRate">
-          <DataField>CurrencyRate</DataField>
-        </Field>
-        <Field Name="CurrencyRateFormat">
-          <DataField>CurrencyRateFormat</DataField>
-        </Field>
-        <Field Name="AmountinCurrency">
-          <DataField>AmountinCurrency</DataField>
-        </Field>
-        <Field Name="AmountinCurrencyFormat">
-          <DataField>AmountinCurrencyFormat</DataField>
-        </Field>
-        <Field Name="CGSTAmt">
-          <DataField>CGSTAmt</DataField>
-        </Field>
-        <Field Name="CGSTAmtFormat">
-          <DataField>CGSTAmtFormat</DataField>
-        </Field>
-        <Field Name="SGSTAmt">
-          <DataField>SGSTAmt</DataField>
-        </Field>
-        <Field Name="SGSTAmtFormat">
-          <DataField>SGSTAmtFormat</DataField>
-        </Field>
-        <Field Name="IGSTAmt">
-          <DataField>IGSTAmt</DataField>
-        </Field>
-        <Field Name="IGSTAmtFormat">
-          <DataField>IGSTAmtFormat</DataField>
-        </Field>
-        <Field Name="GST_PINLINES">
-          <DataField>GST_PINLINES</DataField>
-        </Field>
-        <Field Name="GST_PINLINESFormat">
-          <DataField>GST_PINLINESFormat</DataField>
-        </Field>
-        <Field Name="GSTBaseAmount_PINLINES">
-          <DataField>GSTBaseAmount_PINLINES</DataField>
-        </Field>
-        <Field Name="GSTBaseAmount_PINLINESFormat">
-          <DataField>GSTBaseAmount_PINLINESFormat</DataField>
-        </Field>
-        <Field Name="TotalGSTAmount_PINLINES">
-          <DataField>TotalGSTAmount_PINLINES</DataField>
-        </Field>
-        <Field Name="TotalGSTAmount_PINLINESFormat">
-          <DataField>TotalGSTAmount_PINLINESFormat</DataField>
-        </Field>
-        <Field Name="GenBusPostingGroup_PINLINES">
-          <DataField>GenBusPostingGroup_PINLINES</DataField>
-        </Field>
-        <Field Name="PurchaserCode">
-          <DataField>PurchaserCode</DataField>
-        </Field>
-        <Field Name="VendorGSTIN">
-          <DataField>VendorGSTIN</DataField>
-        </Field>
-        <Field Name="PaymentTerms">
-          <DataField>PaymentTerms</DataField>
-        </Field>
-        <Field Name="DueDate">
-          <DataField>DueDate</DataField>
-        </Field>
-        <Field Name="VendorNo_PINLINES">
-          <DataField>VendorNo_PINLINES</DataField>
-        </Field>
-        <Field Name="LocationCode">
-          <DataField>LocationCode</DataField>
-        </Field>
-        <Field Name="OrderNo">
-          <DataField>OrderNo</DataField>
-        </Field>
-        <Field Name="UOM">
-          <DataField>UOM</DataField>
-        </Field>
-        <Field Name="ShortcutDimension1Code">
-          <DataField>ShortcutDimension1Code</DataField>
-        </Field>
-        <Field Name="ShortcutDimension2Code">
-          <DataField>ShortcutDimension2Code</DataField>
-        </Field>
-        <Field Name="Description2">
-          <DataField>Description2</DataField>
-        </Field>
-        <Field Name="GRNNo">
-          <DataField>GRNNo</DataField>
-        </Field>
-        <Field Name="AssesseeCode">
-          <DataField>AssesseeCode</DataField>
-        </Field>
-        <Field Name="TDS_TCSpercentage">
-          <DataField>TDS_TCSpercentage</DataField>
-        </Field>
-        <Field Name="TDS_TCSpercentageFormat">
-          <DataField>TDS_TCSpercentageFormat</DataField>
-        </Field>
-        <Field Name="TDS_TCSAmount">
-          <DataField>TDS_TCSAmount</DataField>
-        </Field>
-        <Field Name="TDS_TCSAmountFormat">
-          <DataField>TDS_TCSAmountFormat</DataField>
-        </Field>
-        <Field Name="HSN_SACCode">
-          <DataField>HSN_SACCode</DataField>
-        </Field>
-        <Field Name="cgstrate">
-          <DataField>cgstrate</DataField>
-        </Field>
-        <Field Name="cgstrateFormat">
-          <DataField>cgstrateFormat</DataField>
-        </Field>
-        <Field Name="sgstrate">
-          <DataField>sgstrate</DataField>
-        </Field>
-        <Field Name="sgstrateFormat">
-          <DataField>sgstrateFormat</DataField>
-        </Field>
-        <Field Name="igstrate">
-          <DataField>igstrate</DataField>
-        </Field>
-        <Field Name="igstrateFormat">
-          <DataField>igstrateFormat</DataField>
-        </Field>
-        <Field Name="PIL_No2">
-          <DataField>PIL_No2</DataField>
-        </Field>
-        <Field Name="PIL_Category1">
-          <DataField>PIL_Category1</DataField>
-        </Field>
-        <Field Name="PIL_Category2">
-          <DataField>PIL_Category2</DataField>
-        </Field>
-        <Field Name="PIL_Category3">
-          <DataField>PIL_Category3</DataField>
-        </Field>
-        <Field Name="PIL_orderdate">
-          <DataField>PIL_orderdate</DataField>
-        </Field>
-        <Field Name="PurchInvoiceAcc">
-          <DataField>PurchInvoiceAcc</DataField>
-        </Field>
-        <Field Name="PIL_Bin_Code">
-          <DataField>PIL_Bin_Code</DataField>
-        </Field>
-        <Field Name="PIL_FNNLC">
-          <DataField>PIL_FNNLC</DataField>
-        </Field>
-        <Field Name="PIL_FNNLCFormat">
-          <DataField>PIL_FNNLCFormat</DataField>
-        </Field>
-        <Field Name="PIL_Sellout">
-          <DataField>PIL_Sellout</DataField>
-        </Field>
-        <Field Name="PIL_SelloutFormat">
-          <DataField>PIL_SelloutFormat</DataField>
-        </Field>
-        <Field Name="PIL_FNNLCwithSellout">
-          <DataField>PIL_FNNLCwithSellout</DataField>
-        </Field>
-        <Field Name="PIL_FNNLCwithSelloutFormat">
-          <DataField>PIL_FNNLCwithSelloutFormat</DataField>
-        </Field>
-        <Field Name="PIL_FNNLCwithoutSellout">
-          <DataField>PIL_FNNLCwithoutSellout</DataField>
-        </Field>
-        <Field Name="PIL_FNNLCwithoutSelloutFormat">
-          <DataField>PIL_FNNLCwithoutSelloutFormat</DataField>
-        </Field>
-        <Field Name="SrNo">
-          <DataField>SrNo</DataField>
-        </Field>
-        <Field Name="PostingDate_PCINLINES">
-          <DataField>PostingDate_PCINLINES</DataField>
-        </Field>
-        <Field Name="PCMLineNos">
-          <DataField>PCMLineNos</DataField>
-        </Field>
-        <Field Name="Purch_CRMNo">
-          <DataField>Purch_CRMNo</DataField>
-        </Field>
-        <Field Name="PCMVendorNo">
-          <DataField>PCMVendorNo</DataField>
-        </Field>
-        <Field Name="VendorCrMemoNo">
-          <DataField>VendorCrMemoNo</DataField>
-        </Field>
-        <Field Name="VendoCRM_Date">
-          <DataField>VendoCRM_Date</DataField>
-        </Field>
-        <Field Name="DocumentNo_PCINLINES">
-          <DataField>DocumentNo_PCINLINES</DataField>
-        </Field>
-        <Field Name="VendorNamePCM">
-          <DataField>VendorNamePCM</DataField>
-        </Field>
-        <Field Name="VendorGSTINPCM">
-          <DataField>VendorGSTINPCM</DataField>
-        </Field>
-        <Field Name="CountryNamePCM">
-          <DataField>CountryNamePCM</DataField>
-        </Field>
-        <Field Name="No_PCINLINES">
-          <DataField>No_PCINLINES</DataField>
-        </Field>
-        <Field Name="Description_PCINLINES">
-          <DataField>Description_PCINLINES</DataField>
-        </Field>
-        <Field Name="Quantity_PCINLINES">
-          <DataField>Quantity_PCINLINES</DataField>
-        </Field>
-        <Field Name="Quantity_PCINLINESFormat">
-          <DataField>Quantity_PCINLINESFormat</DataField>
-        </Field>
-        <Field Name="UnitCost_PCINLINES">
-          <DataField>UnitCost_PCINLINES</DataField>
-        </Field>
-        <Field Name="UnitCost_PCINLINESFormat">
-          <DataField>UnitCost_PCINLINESFormat</DataField>
-        </Field>
-        <Field Name="Amount_PCINLINES">
-          <DataField>Amount_PCINLINES</DataField>
-        </Field>
-        <Field Name="Amount_PCINLINESFormat">
-          <DataField>Amount_PCINLINESFormat</DataField>
-        </Field>
-        <Field Name="CurrencyCodePCM">
-          <DataField>CurrencyCodePCM</DataField>
-        </Field>
-        <Field Name="CurrencyRatePCM">
-          <DataField>CurrencyRatePCM</DataField>
-        </Field>
-        <Field Name="CurrencyRatePCMFormat">
-          <DataField>CurrencyRatePCMFormat</DataField>
-        </Field>
-        <Field Name="AmountinCurrencyPCM">
-          <DataField>AmountinCurrencyPCM</DataField>
-        </Field>
-        <Field Name="AmountinCurrencyPCMFormat">
-          <DataField>AmountinCurrencyPCMFormat</DataField>
-        </Field>
-        <Field Name="PurchaseNamePCM">
-          <DataField>PurchaseNamePCM</DataField>
-        </Field>
-        <Field Name="StateCodePCM">
-          <DataField>StateCodePCM</DataField>
-        </Field>
-        <Field Name="PCMCGSTAmt">
-          <DataField>PCMCGSTAmt</DataField>
-        </Field>
-        <Field Name="PCMCGSTAmtFormat">
-          <DataField>PCMCGSTAmtFormat</DataField>
-        </Field>
-        <Field Name="PCMSGSTAmt">
-          <DataField>PCMSGSTAmt</DataField>
-        </Field>
-        <Field Name="PCMSGSTAmtFormat">
-          <DataField>PCMSGSTAmtFormat</DataField>
-        </Field>
-        <Field Name="PCMIGSTAmt">
-          <DataField>PCMIGSTAmt</DataField>
-        </Field>
-        <Field Name="PCMIGSTAmtFormat">
-          <DataField>PCMIGSTAmtFormat</DataField>
-        </Field>
-        <Field Name="GST_PCINLINES">
-          <DataField>GST_PCINLINES</DataField>
-        </Field>
-        <Field Name="GST_PCINLINESFormat">
-          <DataField>GST_PCINLINESFormat</DataField>
-        </Field>
-        <Field Name="GSTBaseAmount_PCINLINES">
-          <DataField>GSTBaseAmount_PCINLINES</DataField>
-        </Field>
-        <Field Name="GSTBaseAmount_PCINLINESFormat">
-          <DataField>GSTBaseAmount_PCINLINESFormat</DataField>
-        </Field>
-        <Field Name="TotalGSTAmount_PCINLINES">
-          <DataField>TotalGSTAmount_PCINLINES</DataField>
-        </Field>
-        <Field Name="TotalGSTAmount_PCINLINESFormat">
-          <DataField>TotalGSTAmount_PCINLINESFormat</DataField>
-        </Field>
-        <Field Name="GenBusPostingGroup_PCINLINES">
-          <DataField>GenBusPostingGroup_PCINLINES</DataField>
-        </Field>
-        <Field Name="PurchaserCodePCM">
-          <DataField>PurchaserCodePCM</DataField>
-        </Field>
-        <Field Name="PaymentTermsPCM">
-          <DataField>PaymentTermsPCM</DataField>
-        </Field>
-        <Field Name="DueDatePCM">
-          <DataField>DueDatePCM</DataField>
-        </Field>
-        <Field Name="VendorNo_PCINLINES">
-          <DataField>VendorNo_PCINLINES</DataField>
-        </Field>
-        <Field Name="LocationCodePCM">
-          <DataField>LocationCodePCM</DataField>
-        </Field>
-        <Field Name="OrderNoPCM">
-          <DataField>OrderNoPCM</DataField>
-        </Field>
-        <Field Name="UOMPCM">
-          <DataField>UOMPCM</DataField>
-        </Field>
-        <Field Name="ShortcutDimension1CodePCM">
-          <DataField>ShortcutDimension1CodePCM</DataField>
-        </Field>
-        <Field Name="ShortcutDimension2CodePCM">
-          <DataField>ShortcutDimension2CodePCM</DataField>
-        </Field>
-        <Field Name="Description2PCM">
-          <DataField>Description2PCM</DataField>
-        </Field>
-        <Field Name="GRNNoPCM">
-          <DataField>GRNNoPCM</DataField>
-        </Field>
-        <Field Name="HSN_SACCodePCM">
-          <DataField>HSN_SACCodePCM</DataField>
-        </Field>
-        <Field Name="PCML_No2">
-          <DataField>PCML_No2</DataField>
-        </Field>
-        <Field Name="PCML_Category1">
-          <DataField>PCML_Category1</DataField>
-        </Field>
-        <Field Name="PCML_Category2">
-          <DataField>PCML_Category2</DataField>
-        </Field>
-        <Field Name="PCML_Category3">
-          <DataField>PCML_Category3</DataField>
-        </Field>
-        <Field Name="PurchCreditAcc">
-          <DataField>PurchCreditAcc</DataField>
-        </Field>
-        <Field Name="PCML_Bin_Code">
-          <DataField>PCML_Bin_Code</DataField>
-        </Field>
-        <Field Name="PCML_FNNLC_1">
-          <DataField>PCML_FNNLC_1</DataField>
-        </Field>
-        <Field Name="PCML_FNNLC_1Format">
-          <DataField>PCML_FNNLC_1Format</DataField>
-        </Field>
-        <Field Name="PCML_Sellout_1">
-          <DataField>PCML_Sellout_1</DataField>
-        </Field>
-        <Field Name="PCML_Sellout_1Format">
-          <DataField>PCML_Sellout_1Format</DataField>
-        </Field>
-        <Field Name="PCML_FNNLCwithSellout_1">
-          <DataField>PCML_FNNLCwithSellout_1</DataField>
-        </Field>
-        <Field Name="PCML_FNNLCwithSellout_1Format">
-          <DataField>PCML_FNNLCwithSellout_1Format</DataField>
-        </Field>
-        <Field Name="PCML_FNNLCwithoutSellout_1">
-          <DataField>PCML_FNNLCwithoutSellout_1</DataField>
-        </Field>
-        <Field Name="PCML_FNNLCwithoutSellout_1Format">
-          <DataField>PCML_FNNLCwithoutSellout_1Format</DataField>
-        </Field>
-        <Field Name="SrNo_1">
-          <DataField>SrNo_1</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -477,6 +44,12 @@
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.23958in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.59375in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.69792in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
@@ -796,6 +369,66 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox109</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox167">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox167</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox171">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox171</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2321,6 +1954,108 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox110</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox168">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Order Address State</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox168</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox172">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Order Address GSTIN</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox172</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -4643,6 +4378,104 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox169">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PIL_RecOrderAdd_State.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox169</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox173">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PIL_OrderAdd_GSTIN.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox173</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="No_PINLINES">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -6821,6 +6654,104 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox170">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox170</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox174">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox174</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox307">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -8652,6 +8583,8 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -8689,7 +8622,7 @@
               </SortExpression>
             </SortExpressions>
             <Height>1in</Height>
-            <Width>59.6875in</Width>
+            <Width>63.97917in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -8725,6 +8658,12 @@
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.23958in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.59375in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.80208in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
@@ -8812,6 +8751,9 @@
                 </TablixColumn>
                 <TablixColumn>
                   <Width>5.61457in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.4375in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -9023,6 +8965,66 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox130</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox175">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox175</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox179">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox179</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -9906,6 +9908,36 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox183">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox183</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
@@ -10328,7 +10360,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Customer GSTIN</Value>
+                                  <Value>Vendor GSTIN</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -10338,6 +10370,108 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox110</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox176">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Order Address State</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox176</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox180">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Order Address GSTIN</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox180</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -11849,6 +11983,57 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox184">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Applied Document No.</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox184</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
@@ -11964,7 +12149,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DocumentNo_PCINLINES.Value</Value>
+                                  <Value>=Fields!VendoCRM_Date.Value</Value>
                                   <Style>
                                     <Format>dd/MM/yy</Format>
                                   </Style>
@@ -12268,6 +12453,104 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>VendorGSTINPCM</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox177">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PCML_RecOrderAdd_1_State.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox177</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox181">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PCML_RecOrderAdd_1_GSTIN.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox181</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -13705,6 +13988,55 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox185">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox185</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
@@ -14119,6 +14451,104 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox133</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox178">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox178</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox182">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox182</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -15586,12 +16016,64 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox186">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox186</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -15662,7 +16144,7 @@
             </SortExpressions>
             <Top>1.025in</Top>
             <Height>1in</Height>
-            <Width>53.08333in</Width>
+            <Width>59.91666in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -15674,19 +16156,13 @@
         <Height>2.17083in</Height>
         <Style />
       </Body>
-      <Width>59.6875in</Width>
+      <Width>64.28125in</Width>
       <Page>
         <PageWidth>55in</PageWidth>
         <Style />
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParametersLayout>
-    <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
-    </GridLayoutDefinition>
-  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -15726,4 +16202,455 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="PostingDate_PINLINES">
+          <DataField>PostingDate_PINLINES</DataField>
+        </Field>
+        <Field Name="LineNos">
+          <DataField>LineNos</DataField>
+        </Field>
+        <Field Name="Purch_InvoiceNo">
+          <DataField>Purch_InvoiceNo</DataField>
+        </Field>
+        <Field Name="VendorInvoiceNo">
+          <DataField>VendorInvoiceNo</DataField>
+        </Field>
+        <Field Name="VendorInv_Date">
+          <DataField>VendorInv_Date</DataField>
+        </Field>
+        <Field Name="DocumentNo_PINLINES">
+          <DataField>DocumentNo_PINLINES</DataField>
+        </Field>
+        <Field Name="VendorName">
+          <DataField>VendorName</DataField>
+        </Field>
+        <Field Name="CountryName">
+          <DataField>CountryName</DataField>
+        </Field>
+        <Field Name="PurchaseName">
+          <DataField>PurchaseName</DataField>
+        </Field>
+        <Field Name="StateCode">
+          <DataField>StateCode</DataField>
+        </Field>
+        <Field Name="No_PINLINES">
+          <DataField>No_PINLINES</DataField>
+        </Field>
+        <Field Name="Description_PINLINES">
+          <DataField>Description_PINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PINLINES">
+          <DataField>Quantity_PINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PINLINESFormat">
+          <DataField>Quantity_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="UnitCost_PINLINES">
+          <DataField>UnitCost_PINLINES</DataField>
+        </Field>
+        <Field Name="UnitCost_PINLINESFormat">
+          <DataField>UnitCost_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="Amount_PINLINES">
+          <DataField>Amount_PINLINES</DataField>
+        </Field>
+        <Field Name="Amount_PINLINESFormat">
+          <DataField>Amount_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="CurrencyCode">
+          <DataField>CurrencyCode</DataField>
+        </Field>
+        <Field Name="CurrencyRate">
+          <DataField>CurrencyRate</DataField>
+        </Field>
+        <Field Name="CurrencyRateFormat">
+          <DataField>CurrencyRateFormat</DataField>
+        </Field>
+        <Field Name="AmountinCurrency">
+          <DataField>AmountinCurrency</DataField>
+        </Field>
+        <Field Name="AmountinCurrencyFormat">
+          <DataField>AmountinCurrencyFormat</DataField>
+        </Field>
+        <Field Name="CGSTAmt">
+          <DataField>CGSTAmt</DataField>
+        </Field>
+        <Field Name="CGSTAmtFormat">
+          <DataField>CGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="SGSTAmt">
+          <DataField>SGSTAmt</DataField>
+        </Field>
+        <Field Name="SGSTAmtFormat">
+          <DataField>SGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="IGSTAmt">
+          <DataField>IGSTAmt</DataField>
+        </Field>
+        <Field Name="IGSTAmtFormat">
+          <DataField>IGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="GST_PINLINES">
+          <DataField>GST_PINLINES</DataField>
+        </Field>
+        <Field Name="GST_PINLINESFormat">
+          <DataField>GST_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="GSTBaseAmount_PINLINES">
+          <DataField>GSTBaseAmount_PINLINES</DataField>
+        </Field>
+        <Field Name="GSTBaseAmount_PINLINESFormat">
+          <DataField>GSTBaseAmount_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="TotalGSTAmount_PINLINES">
+          <DataField>TotalGSTAmount_PINLINES</DataField>
+        </Field>
+        <Field Name="TotalGSTAmount_PINLINESFormat">
+          <DataField>TotalGSTAmount_PINLINESFormat</DataField>
+        </Field>
+        <Field Name="GenBusPostingGroup_PINLINES">
+          <DataField>GenBusPostingGroup_PINLINES</DataField>
+        </Field>
+        <Field Name="PurchaserCode">
+          <DataField>PurchaserCode</DataField>
+        </Field>
+        <Field Name="VendorGSTIN">
+          <DataField>VendorGSTIN</DataField>
+        </Field>
+        <Field Name="PaymentTerms">
+          <DataField>PaymentTerms</DataField>
+        </Field>
+        <Field Name="DueDate">
+          <DataField>DueDate</DataField>
+        </Field>
+        <Field Name="VendorNo_PINLINES">
+          <DataField>VendorNo_PINLINES</DataField>
+        </Field>
+        <Field Name="LocationCode">
+          <DataField>LocationCode</DataField>
+        </Field>
+        <Field Name="OrderNo">
+          <DataField>OrderNo</DataField>
+        </Field>
+        <Field Name="UOM">
+          <DataField>UOM</DataField>
+        </Field>
+        <Field Name="ShortcutDimension1Code">
+          <DataField>ShortcutDimension1Code</DataField>
+        </Field>
+        <Field Name="ShortcutDimension2Code">
+          <DataField>ShortcutDimension2Code</DataField>
+        </Field>
+        <Field Name="Description2">
+          <DataField>Description2</DataField>
+        </Field>
+        <Field Name="GRNNo">
+          <DataField>GRNNo</DataField>
+        </Field>
+        <Field Name="AssesseeCode">
+          <DataField>AssesseeCode</DataField>
+        </Field>
+        <Field Name="TDS_TCSpercentage">
+          <DataField>TDS_TCSpercentage</DataField>
+        </Field>
+        <Field Name="TDS_TCSpercentageFormat">
+          <DataField>TDS_TCSpercentageFormat</DataField>
+        </Field>
+        <Field Name="TDS_TCSAmount">
+          <DataField>TDS_TCSAmount</DataField>
+        </Field>
+        <Field Name="TDS_TCSAmountFormat">
+          <DataField>TDS_TCSAmountFormat</DataField>
+        </Field>
+        <Field Name="HSN_SACCode">
+          <DataField>HSN_SACCode</DataField>
+        </Field>
+        <Field Name="cgstrate">
+          <DataField>cgstrate</DataField>
+        </Field>
+        <Field Name="cgstrateFormat">
+          <DataField>cgstrateFormat</DataField>
+        </Field>
+        <Field Name="sgstrate">
+          <DataField>sgstrate</DataField>
+        </Field>
+        <Field Name="sgstrateFormat">
+          <DataField>sgstrateFormat</DataField>
+        </Field>
+        <Field Name="igstrate">
+          <DataField>igstrate</DataField>
+        </Field>
+        <Field Name="igstrateFormat">
+          <DataField>igstrateFormat</DataField>
+        </Field>
+        <Field Name="PIL_No2">
+          <DataField>PIL_No2</DataField>
+        </Field>
+        <Field Name="PIL_Category1">
+          <DataField>PIL_Category1</DataField>
+        </Field>
+        <Field Name="PIL_Category2">
+          <DataField>PIL_Category2</DataField>
+        </Field>
+        <Field Name="PIL_Category3">
+          <DataField>PIL_Category3</DataField>
+        </Field>
+        <Field Name="PIL_orderdate">
+          <DataField>PIL_orderdate</DataField>
+        </Field>
+        <Field Name="PurchInvoiceAcc">
+          <DataField>PurchInvoiceAcc</DataField>
+        </Field>
+        <Field Name="PIL_Bin_Code">
+          <DataField>PIL_Bin_Code</DataField>
+        </Field>
+        <Field Name="PIL_FNNLC">
+          <DataField>PIL_FNNLC</DataField>
+        </Field>
+        <Field Name="PIL_FNNLCFormat">
+          <DataField>PIL_FNNLCFormat</DataField>
+        </Field>
+        <Field Name="PIL_Sellout">
+          <DataField>PIL_Sellout</DataField>
+        </Field>
+        <Field Name="PIL_SelloutFormat">
+          <DataField>PIL_SelloutFormat</DataField>
+        </Field>
+        <Field Name="PIL_FNNLCwithSellout">
+          <DataField>PIL_FNNLCwithSellout</DataField>
+        </Field>
+        <Field Name="PIL_FNNLCwithSelloutFormat">
+          <DataField>PIL_FNNLCwithSelloutFormat</DataField>
+        </Field>
+        <Field Name="PIL_FNNLCwithoutSellout">
+          <DataField>PIL_FNNLCwithoutSellout</DataField>
+        </Field>
+        <Field Name="PIL_FNNLCwithoutSelloutFormat">
+          <DataField>PIL_FNNLCwithoutSelloutFormat</DataField>
+        </Field>
+        <Field Name="SrNo">
+          <DataField>SrNo</DataField>
+        </Field>
+        <Field Name="PIL_OrderAdd">
+          <DataField>PIL_OrderAdd</DataField>
+        </Field>
+        <Field Name="PIL_OrderAdd_GSTIN">
+          <DataField>PIL_OrderAdd_GSTIN</DataField>
+        </Field>
+        <Field Name="PIL_RecOrderAdd_State">
+          <DataField>PIL_RecOrderAdd_State</DataField>
+        </Field>
+        <Field Name="PostingDate_PCINLINES">
+          <DataField>PostingDate_PCINLINES</DataField>
+        </Field>
+        <Field Name="PCMLineNos">
+          <DataField>PCMLineNos</DataField>
+        </Field>
+        <Field Name="Purch_CRMNo">
+          <DataField>Purch_CRMNo</DataField>
+        </Field>
+        <Field Name="PCMVendorNo">
+          <DataField>PCMVendorNo</DataField>
+        </Field>
+        <Field Name="VendorCrMemoNo">
+          <DataField>VendorCrMemoNo</DataField>
+        </Field>
+        <Field Name="VendoCRM_Date">
+          <DataField>VendoCRM_Date</DataField>
+        </Field>
+        <Field Name="DocumentNo_PCINLINES">
+          <DataField>DocumentNo_PCINLINES</DataField>
+        </Field>
+        <Field Name="VendorNamePCM">
+          <DataField>VendorNamePCM</DataField>
+        </Field>
+        <Field Name="VendorGSTINPCM">
+          <DataField>VendorGSTINPCM</DataField>
+        </Field>
+        <Field Name="CountryNamePCM">
+          <DataField>CountryNamePCM</DataField>
+        </Field>
+        <Field Name="No_PCINLINES">
+          <DataField>No_PCINLINES</DataField>
+        </Field>
+        <Field Name="Description_PCINLINES">
+          <DataField>Description_PCINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PCINLINES">
+          <DataField>Quantity_PCINLINES</DataField>
+        </Field>
+        <Field Name="Quantity_PCINLINESFormat">
+          <DataField>Quantity_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="UnitCost_PCINLINES">
+          <DataField>UnitCost_PCINLINES</DataField>
+        </Field>
+        <Field Name="UnitCost_PCINLINESFormat">
+          <DataField>UnitCost_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="Amount_PCINLINES">
+          <DataField>Amount_PCINLINES</DataField>
+        </Field>
+        <Field Name="Amount_PCINLINESFormat">
+          <DataField>Amount_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="CurrencyCodePCM">
+          <DataField>CurrencyCodePCM</DataField>
+        </Field>
+        <Field Name="CurrencyRatePCM">
+          <DataField>CurrencyRatePCM</DataField>
+        </Field>
+        <Field Name="CurrencyRatePCMFormat">
+          <DataField>CurrencyRatePCMFormat</DataField>
+        </Field>
+        <Field Name="AmountinCurrencyPCM">
+          <DataField>AmountinCurrencyPCM</DataField>
+        </Field>
+        <Field Name="AmountinCurrencyPCMFormat">
+          <DataField>AmountinCurrencyPCMFormat</DataField>
+        </Field>
+        <Field Name="PurchaseNamePCM">
+          <DataField>PurchaseNamePCM</DataField>
+        </Field>
+        <Field Name="StateCodePCM">
+          <DataField>StateCodePCM</DataField>
+        </Field>
+        <Field Name="PCMCGSTAmt">
+          <DataField>PCMCGSTAmt</DataField>
+        </Field>
+        <Field Name="PCMCGSTAmtFormat">
+          <DataField>PCMCGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="PCMSGSTAmt">
+          <DataField>PCMSGSTAmt</DataField>
+        </Field>
+        <Field Name="PCMSGSTAmtFormat">
+          <DataField>PCMSGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="PCMIGSTAmt">
+          <DataField>PCMIGSTAmt</DataField>
+        </Field>
+        <Field Name="PCMIGSTAmtFormat">
+          <DataField>PCMIGSTAmtFormat</DataField>
+        </Field>
+        <Field Name="GST_PCINLINES">
+          <DataField>GST_PCINLINES</DataField>
+        </Field>
+        <Field Name="GST_PCINLINESFormat">
+          <DataField>GST_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="GSTBaseAmount_PCINLINES">
+          <DataField>GSTBaseAmount_PCINLINES</DataField>
+        </Field>
+        <Field Name="GSTBaseAmount_PCINLINESFormat">
+          <DataField>GSTBaseAmount_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="TotalGSTAmount_PCINLINES">
+          <DataField>TotalGSTAmount_PCINLINES</DataField>
+        </Field>
+        <Field Name="TotalGSTAmount_PCINLINESFormat">
+          <DataField>TotalGSTAmount_PCINLINESFormat</DataField>
+        </Field>
+        <Field Name="GenBusPostingGroup_PCINLINES">
+          <DataField>GenBusPostingGroup_PCINLINES</DataField>
+        </Field>
+        <Field Name="PurchaserCodePCM">
+          <DataField>PurchaserCodePCM</DataField>
+        </Field>
+        <Field Name="PaymentTermsPCM">
+          <DataField>PaymentTermsPCM</DataField>
+        </Field>
+        <Field Name="DueDatePCM">
+          <DataField>DueDatePCM</DataField>
+        </Field>
+        <Field Name="VendorNo_PCINLINES">
+          <DataField>VendorNo_PCINLINES</DataField>
+        </Field>
+        <Field Name="LocationCodePCM">
+          <DataField>LocationCodePCM</DataField>
+        </Field>
+        <Field Name="OrderNoPCM">
+          <DataField>OrderNoPCM</DataField>
+        </Field>
+        <Field Name="UOMPCM">
+          <DataField>UOMPCM</DataField>
+        </Field>
+        <Field Name="ShortcutDimension1CodePCM">
+          <DataField>ShortcutDimension1CodePCM</DataField>
+        </Field>
+        <Field Name="ShortcutDimension2CodePCM">
+          <DataField>ShortcutDimension2CodePCM</DataField>
+        </Field>
+        <Field Name="Description2PCM">
+          <DataField>Description2PCM</DataField>
+        </Field>
+        <Field Name="GRNNoPCM">
+          <DataField>GRNNoPCM</DataField>
+        </Field>
+        <Field Name="HSN_SACCodePCM">
+          <DataField>HSN_SACCodePCM</DataField>
+        </Field>
+        <Field Name="PCML_No2">
+          <DataField>PCML_No2</DataField>
+        </Field>
+        <Field Name="PCML_Category1">
+          <DataField>PCML_Category1</DataField>
+        </Field>
+        <Field Name="PCML_Category2">
+          <DataField>PCML_Category2</DataField>
+        </Field>
+        <Field Name="PCML_Category3">
+          <DataField>PCML_Category3</DataField>
+        </Field>
+        <Field Name="PurchCreditAcc">
+          <DataField>PurchCreditAcc</DataField>
+        </Field>
+        <Field Name="PCML_Bin_Code">
+          <DataField>PCML_Bin_Code</DataField>
+        </Field>
+        <Field Name="PCML_FNNLC_1">
+          <DataField>PCML_FNNLC_1</DataField>
+        </Field>
+        <Field Name="PCML_FNNLC_1Format">
+          <DataField>PCML_FNNLC_1Format</DataField>
+        </Field>
+        <Field Name="PCML_Sellout_1">
+          <DataField>PCML_Sellout_1</DataField>
+        </Field>
+        <Field Name="PCML_Sellout_1Format">
+          <DataField>PCML_Sellout_1Format</DataField>
+        </Field>
+        <Field Name="PCML_FNNLCwithSellout_1">
+          <DataField>PCML_FNNLCwithSellout_1</DataField>
+        </Field>
+        <Field Name="PCML_FNNLCwithSellout_1Format">
+          <DataField>PCML_FNNLCwithSellout_1Format</DataField>
+        </Field>
+        <Field Name="PCML_FNNLCwithoutSellout_1">
+          <DataField>PCML_FNNLCwithoutSellout_1</DataField>
+        </Field>
+        <Field Name="PCML_FNNLCwithoutSellout_1Format">
+          <DataField>PCML_FNNLCwithoutSellout_1Format</DataField>
+        </Field>
+        <Field Name="SrNo_1">
+          <DataField>SrNo_1</DataField>
+        </Field>
+        <Field Name="PCML_RecOrderAdd_1">
+          <DataField>PCML_RecOrderAdd_1</DataField>
+        </Field>
+        <Field Name="PCML_RecOrderAdd_1_GSTIN">
+          <DataField>PCML_RecOrderAdd_1_GSTIN</DataField>
+        </Field>
+        <Field Name="PCML_RecOrderAdd_1_State">
+          <DataField>PCML_RecOrderAdd_1_State</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
