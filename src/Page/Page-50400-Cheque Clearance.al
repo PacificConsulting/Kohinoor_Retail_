@@ -9,7 +9,7 @@ page 50400 "Payment Lines"
     MultipleNewLines = true;
     PageType = List;
     SourceTable = "Payment Lines";
-    SourceTableView = WHERE("Document Type" = FILTER(Order), Posted = filter(false), "Payment type" = filter('CHEQUE'));
+    SourceTableView = WHERE("Document Type" = FILTER(Order), "Payment type" = filter('CHEQUE'));
     DeleteAllowed = false;
     ModifyAllowed = false;
     InsertAllowed = false;

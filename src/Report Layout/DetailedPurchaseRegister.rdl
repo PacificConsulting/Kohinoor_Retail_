@@ -13997,7 +13997,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!AppliedDocument.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -16433,9 +16433,6 @@ End Function
         <Field Name="SrNo">
           <DataField>SrNo</DataField>
         </Field>
-        <Field Name="PIL_OrderAdd">
-          <DataField>PIL_OrderAdd</DataField>
-        </Field>
         <Field Name="PIL_OrderAdd_GSTIN">
           <DataField>PIL_OrderAdd_GSTIN</DataField>
         </Field>
@@ -16637,14 +16634,14 @@ End Function
         <Field Name="SrNo_1">
           <DataField>SrNo_1</DataField>
         </Field>
-        <Field Name="PCML_RecOrderAdd_1">
-          <DataField>PCML_RecOrderAdd_1</DataField>
-        </Field>
         <Field Name="PCML_RecOrderAdd_1_GSTIN">
           <DataField>PCML_RecOrderAdd_1_GSTIN</DataField>
         </Field>
         <Field Name="PCML_RecOrderAdd_1_State">
           <DataField>PCML_RecOrderAdd_1_State</DataField>
+        </Field>
+        <Field Name="AppliedDocument">
+          <DataField>AppliedDocument</DataField>
         </Field>
       </Fields>
       <Query>

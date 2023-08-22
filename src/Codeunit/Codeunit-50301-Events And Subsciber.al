@@ -13,7 +13,21 @@ codeunit 50301 "Event and Subscribers"
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
     local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; PreviewMode: Boolean; var HideProgressWindow: Boolean; var IsHandled: Boolean)
+    var
+        SalesLine: Record 37;
     begin
+        //>> BRB-21082023
+        SalesLine.reset;
+        SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+        SalesLine.SetRange("Document No.", SalesHeader."No.");
+        if SalesLine.FindSet then
+            repeat
+                if (SalesLine."GST Group Code" <> 'HSNO') OR (SalesLine."GST Group Code" <> 'NOUSE') then begin
+                    if (SalesLine."Unit Price Incl. of Tax" <> 0) AND (NOT SalesLine."Price Inclusive of Tax") AND (SalesLine."Unit Price" = 0) then begin
+                        SalesLine.TestField("Unit Price");
+                    end;
+                end;
+            until SalesLine.Next = 0;//<< BRB-21082023
         //IF SalesHeader."Document Type" <> SalesHeader."Document Type"::"Credit Memo" then begin
         SalesHeader.Validate("Posting Date", Today);
         // SalesHeader.Validate("Shipment Date", Today);

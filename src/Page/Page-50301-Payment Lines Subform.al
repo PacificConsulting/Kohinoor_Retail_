@@ -161,7 +161,7 @@ page 50301 "Payment Lines Subform"
         SH: Record 36;
     begin
         IF US.Get(UserId) then begin
-            IF not Us."Admin Access" then
+            IF not (Us."Admin Access" OR US."Allow Cheque Clearance") then
                 Error('You do not have access to modify the data.');
         end;
         SH.Reset();
@@ -176,7 +176,7 @@ page 50301 "Payment Lines Subform"
         SH: Record 36;
     begin
         IF US.Get(UserId) then begin
-            IF not Us."Admin Access" then
+            IF not (Us."Admin Access" OR US."Allow Cheque Clearance") then
                 Error('You do not have access to modify the data.');
         end;
         SH.Reset();

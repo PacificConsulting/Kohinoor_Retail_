@@ -208,15 +208,12 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
-            column(PIL_OrderAdd; RecOrderAdd.Address + ' ' + RecOrderAdd."Address 2" + ' ' + RecOrderAdd.State)
+
+            column(PIL_OrderAdd_GSTIN; PILOrderGSTIN)
             {
 
             }
-            column(PIL_OrderAdd_GSTIN; RecOrderAdd."GST Registration No.")
-            {
-
-            }
-            column(PIL_RecOrderAdd_State; RecOrderAdd.State)
+            column(PIL_RecOrderAdd_State; PILState)
             {
 
             }
@@ -410,13 +407,25 @@ report 50315 "Detailed Purchase Register"
                 /* if RecOrderAdd.Get("Order Address Code") then begin
                     Orderadd := RecOrderAdd.State;
                 end; */
-
+                Clear(PILOrderGSTIN);
+                Clear(PILState);
                 RecOrderAdd.Reset();
                 RecOrderAdd.SetRange(Code, "Order Address Code");
-                if RecOrderAdd.FindFirst() then; //begin
-                                                 //Orderadd := RecOrderAdd.State;
-                                                 //end;
-                                                 //..PCPL-064 18aug2023
+                RecOrderAdd.SetRange("Vendor No.", "Buy-from Vendor No.");
+                if RecOrderAdd.FindFirst() then begin
+                    PILOrderGSTIN := RecOrderAdd."GST Registration No.";
+                    recstate.Reset();
+                    recstate.SetRange(code, RecOrderAdd.State);
+                    if recstate.FindFirst() then begin
+                        PILState := recstate.Description;
+                    end;
+
+                end;
+
+
+
+
+                //..PCPL-064 18aug2023
             end;
         }
         dataitem("Purch. Cr. Memo Line"; "Purch. Cr. Memo Line")
@@ -584,15 +593,16 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
-            column(PCML_RecOrderAdd_1; RecOrderAdd_1.Address + ' ' + RecOrderAdd_1."Address 2" + ' ' + RecOrderAdd_1.State)
+
+            column(PCML_RecOrderAdd_1_GSTIN; PCMLOrderGSTIN_1)
             {
 
             }
-            column(PCML_RecOrderAdd_1_GSTIN; RecOrderAdd_1."GST Registration No.")
+            column(PCML_RecOrderAdd_1_State; PCMLState)
             {
 
             }
-            column(PCML_RecOrderAdd_1_State; RecOrderAdd_1.State)
+            column(AppliedDocument; AppliedDocument)
             {
 
             }
@@ -727,11 +737,42 @@ report 50315 "Detailed Purchase Register"
                 //>>pcpl-064 11aug2023
                 //<<PCPL-064 18aug2023
                 //if RecOrderAdd_1.Get("Order Address Code") then;
-
+                Clear(PCMLOrderGSTIN_1);
+                Clear(PCMLState);
                 RecOrderAdd_1.Reset();
                 RecOrderAdd_1.SetRange(Code, "Order Address Code");
-                if RecOrderAdd_1.FindFirst() then;
+                RecOrderAdd_1.SetRange("Vendor No.", "Buy-from Vendor No.");
+                if RecOrderAdd_1.FindFirst() then begin
+                    PCMLOrderGSTIN_1 := RecOrderAdd_1."GST Registration No.";
+                    recstate_1.Reset();
+                    recstate_1.SetRange(Code, RecOrderAdd_1.State);
+                    if recstate_1.FindFirst() then begin
+                        PCMLState := recstate_1.Description;
+                    end;
+                end;
                 //..PCPL-064 18aug2023
+                //<<PCPL-064 21aug2023
+                //Applied Document No.
+                Clear(AppliedDocument);
+                VLE.Reset();
+                VLE.SetRange("Document No.", "Purch. Cr. Memo Line"."Document No.");
+                //  vle.SetRange("Posting Date", "Purch. Cr. Memo Line"."Posting Date");
+                VLE.SetRange("Document Type", VLE."Document Type"::"Credit Memo");
+                if VLE.FindFirst() then begin
+                    DVLE.Reset();
+                    DVLE.SetRange("Applied Vend. Ledger Entry No.", VLE."Entry No.");
+                    if DVLE.FindFirst() then begin
+                        VLE_2.Reset();
+                        VLE_2.SetRange("Entry No.", DVLE."Vendor Ledger Entry No.");
+                        if VLE_2.FindSet() then
+                            repeat
+                                AppliedDocument += VLE_2."Document No." + ',';
+                            until VLE_2.Next() = 0;
+                        if AppliedDocument <> '' then
+                            AppliedDocument := DelStr(AppliedDocument, StrLen(AppliedDocument), 1)
+                    end;
+                end;
+                //>>PCPL-064 21aug2023
 
             end;
         }
@@ -842,9 +883,20 @@ report 50315 "Detailed Purchase Register"
         RecOrderAdd: record "Order Address";
         RecOrderAdd_1: record "Order Address";
         Orderadd: text[250];
-        OrderGSTIN: code[20];
+        PILOrderGSTIN: code[20];
         Orderadd_1: text[250];
-        OrderGSTIN_1: code[20];
+        PCMLOrderGSTIN_1: code[20];
+        PILState: Code[20];
+        PCMLState: Code[20];
+        recstate: Record State;
+        recstate_1: Record State;
+        PCML: record "Purch. Cr. Memo Line";
+        PCMH: record "Purch. Cr. Memo Hdr.";
+        VLE: record "Vendor Ledger Entry";
+        VLE_2: record "Vendor Ledger Entry";
+        DVLE: record "Detailed Vendor Ledg. Entry";
+        AppliedDocument: Code[250];
+
 
 }
 

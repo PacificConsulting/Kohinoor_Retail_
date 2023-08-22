@@ -225,8 +225,9 @@ page 50389 "Tender Bank Acc. Reconciliate"
                 action("Create Contra Voucher")
                 {
                     ApplicationArea = All;
-                    Caption = 'Create Contra Voucher';
+                    Caption = 'Identify & Adjust Differenec';
                     Image = ContractPayment;
+                    Visible = false;
                     ToolTip = 'Transfer the lines from the current window to the general journal.';
                     trigger OnAction()
                     var
@@ -239,10 +240,57 @@ page 50389 "Tender Bank Acc. Reconciliate"
                         BRLInit: Record "Bank Acc. Reconciliation Line";
                         BankAccledEntryTemp: Record "Bank Account Ledger Entry" temporary;
                         GenJnlPostBatch: Codeunit "Gen. Jnl.-Post Batch";
+
+                        BRL: Record "Bank Acc. Reconciliation Line";
+                        BRL11: Record "Bank Acc. Reconciliation Line";
+                        MBEL: codeunit "Match Bank Rec. Lines";
+                        BLE: Record "Bank Account Ledger Entry";
+                        MatchBankRecLines: Codeunit "Match Bank Rec. Lines";
+                        TempBankAccReconciliationLine: Record "Bank Acc. Reconciliation Line" temporary;
+                        TempBankAccountLedgerEntry: Record "Bank Account Ledger Entry" temporary;
                     begin
                         Clear(BankAccledEntryTemp);
                         IF PayMethod.Get(Rec."Bank Account No.") then begin
                             IF (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
+
+                                BRl.Reset();
+                                BRL.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                BRL.SetRange("Bank Account No.", rec."Bank Account No.");
+                                BRL.SetRange("Statement No.", rec."Statement No.");
+                                IF BRL.FindSet() then
+                                    repeat
+                                        BLE.Reset();
+                                        BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                        BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
+                                        BLE.SetRange("Approval Code", BRL."Approval Code");
+                                        // IF PayMethod.Get(Rec."Bank Account No.") then begin
+                                        //     IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
+                                        //         BLE.SetRange(Amount, BRL."Statement Amount");
+                                        // end;
+                                        BLE.SetRange(Open, true);
+                                        IF BLE.FindFirst() then
+                                            repeat
+                                                TempBankAccReconciliationLine.DeleteAll();
+                                                TempBankAccountLedgerEntry.DeleteAll();
+                                                BRL11.Reset();
+                                                BRL11.SetRange("Bank Account No.", BLE."Bank Account No.");
+                                                BRL11.SetRange("Approval Code", BLE."Approval Code");
+                                                // IF PayMethod.Get(Rec."Bank Account No.") then begin
+                                                //     IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
+                                                //         BRL11.SetRange("Statement Amount", BLE.Amount);
+                                                // end;
+                                                IF BRL11.FindSet() then
+                                                    repeat
+                                                        TempBankAccReconciliationLine := BRL11;
+                                                        TempBankAccReconciliationLine.Insert();
+                                                    until BRL11.Next() = 0;
+                                                TempBankAccountLedgerEntry := BLE;
+                                                TempBankAccountLedgerEntry.Insert();
+                                                MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
+                                            until BLE.Next() = 0;
+                                    until BRL.Next() = 0;
+
+                                //PCPL-BRB
                                 BankRecoLine.Reset();
                                 BankRecoLine.SetRange("Bank Account No.", rec."Bank Account No.");
                                 BankRecoLine.SetFilter(Difference, '<>%1', 0);
@@ -260,10 +308,10 @@ page 50389 "Tender Bank Acc. Reconciliate"
 
                                             Gl.Reset();
                                             Gl.SetRange("Journal Template Name", 'CONTRAV');
-                                            Gl.SetRange("Journal Batch Name", 'DEFAULT');
+                                            Gl.SetRange("Journal Batch Name", 'AUTO');
                                             GenJnLine.Init();
                                             GenJnLine."Journal Template Name" := 'CONTRAV';
-                                            GenJnLine.validate("Journal Batch Name", 'DEFAULT');
+                                            GenJnLine.validate("Journal Batch Name", 'AUTO');
                                             IF Gl.FindLast() then
                                                 GenJnLine."Line No." := Gl."Line No." + 10000
                                             else
@@ -271,7 +319,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
 
                                             GenJnLine.Validate("Posting Date", BankLedgerEntry."Posting Date");
                                             GenJnLine."Document Type" := GenJnLine."Document Type"::Payment;
-                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement No.") + FORMAT(BankLedgerEntry."Statement Line No.");
                                             GenJnLine."Account Type" := GenJnLine."Account Type"::"Bank Account";
                                             GenJnLine.Validate("Account No.", Rec."Bank Account No.");
                                             GenJnLine."Bal. Account Type" := GenJnLine."Bal. Account Type"::"G/L Account";
@@ -286,10 +334,10 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                             //*************Applied Amount*************************
                                             Gl.Reset();
                                             Gl.SetRange("Journal Template Name", 'CONTRAV');
-                                            Gl.SetRange("Journal Batch Name", 'DEFAULT');
+                                            Gl.SetRange("Journal Batch Name", 'AUTO');
                                             GenJnLine.Init();
                                             GenJnLine."Journal Template Name" := 'CONTRAV';
-                                            GenJnLine.validate("Journal Batch Name", 'DEFAULT');
+                                            GenJnLine.validate("Journal Batch Name", 'AUTO');
                                             IF Gl.FindLast() then
                                                 GenJnLine."Line No." := Gl."Line No." + 10000
                                             else
@@ -297,7 +345,8 @@ page 50389 "Tender Bank Acc. Reconciliate"
 
                                             GenJnLine.Validate("Posting Date", BankLedgerEntry."Posting Date");
                                             GenJnLine."Document Type" := GenJnLine."Document Type"::Payment;
-                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            //GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement No.") + FORMAT(BankLedgerEntry."Statement Line No.");
                                             GenJnLine."Account Type" := GenJnLine."Account Type"::"Bank Account";
                                             GenJnLine.Validate("Account No.", Rec."Bank Account No.");
                                             GenJnLine."Bal. Account Type" := GenJnLine."Bal. Account Type"::"G/L Account";
@@ -312,10 +361,10 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                             //*************Remaning Amount*************************
                                             Gl.Reset();
                                             Gl.SetRange("Journal Template Name", 'CONTRAV');
-                                            Gl.SetRange("Journal Batch Name", 'DEFAULT');
+                                            Gl.SetRange("Journal Batch Name", 'AUTO');
                                             GenJnLine.Init();
                                             GenJnLine."Journal Template Name" := 'CONTRAV';
-                                            GenJnLine.validate("Journal Batch Name", 'DEFAULT');
+                                            GenJnLine.validate("Journal Batch Name", 'AUTO');
                                             IF Gl.FindLast() then
                                                 GenJnLine."Line No." := Gl."Line No." + 10000
                                             else
@@ -323,7 +372,8 @@ page 50389 "Tender Bank Acc. Reconciliate"
 
                                             GenJnLine.Validate("Posting Date", BankLedgerEntry."Posting Date");
                                             GenJnLine."Document Type" := GenJnLine."Document Type"::Payment;
-                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            //GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement Line No.");
+                                            GenJnLine."Document No." := 'TENDERREC' + FORMAT(BankLedgerEntry."Statement No.") + FORMAT(BankLedgerEntry."Statement Line No.");
                                             GenJnLine."Account Type" := GenJnLine."Account Type"::"Bank Account";
                                             GenJnLine.Validate("Account No.", Rec."Bank Account No.");
                                             GenJnLine."Bal. Account Type" := GenJnLine."Bal. Account Type"::"G/L Account";
@@ -363,10 +413,11 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         else
                                             BRLInit."Statement Line No." := 10000;
 
-                                        BRLInit."Transaction Date" := Today;
+                                        //BRLInit."Transaction Date" := Today;
+                                        BRLInit."Transaction Date" := BankAccledEntryTemp."Posting Date";
                                         //BRLInit.Description:=
                                         BRLInit."Document No." := BankAccledEntryTemp."External Document No.";
-                                        BRLInit."Value Date" := Today;
+                                        BRLInit."Value Date" := BankAccledEntryTemp."Posting Date";
                                         BRLInit.Validate("Credit Amount", BankAccledEntryTemp.Amount);
                                         BRLInit."Approval Code" := BankAccledEntryTemp."Approval Code";
                                         BRLInit."External Document No." := BankAccledEntryTemp."External Document No.";
@@ -387,7 +438,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         BRLInit."Transaction Date" := BankAccledEntryTemp."Posting Date";
                                         BankAccledEntryTemp.CalcFields("Customer Name");
                                         BRLInit.Description := BankAccledEntryTemp."Customer Name";
-                                        BRLInit."Value Date" := Today;
+                                        BRLInit."Value Date" := BankAccledEntryTemp."Posting Date";
                                         BRLInit.Validate("Debit Amount", BankAccledEntryTemp.Amount);
                                         BRLInit."Approval Code" := BankAccledEntryTemp."Approval Code";
                                         BRLInit."External Document No." := BankAccledEntryTemp."External Document No.";
@@ -498,6 +549,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                 BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
                                 BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
                                 BLE.SetRange("Approval Code", BRL."Approval Code");
+                                // BLE.SetRange(Amount, BRL."Statement Amount");    //PCPL-BRB 21082023
                                 IF PayMethod.Get(Rec."Bank Account No.") then begin
                                     IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
                                         BLE.SetRange(Amount, BRL."Statement Amount");
@@ -510,6 +562,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         BRL11.Reset();
                                         BRL11.SetRange("Bank Account No.", BLE."Bank Account No.");
                                         BRL11.SetRange("Approval Code", BLE."Approval Code");
+                                        // BRL11.SetRange("Statement Amount", BLE.Amount);  //PCPL-BRB 21082023
                                         IF PayMethod.Get(Rec."Bank Account No.") then begin
                                             IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
                                                 BRL11.SetRange("Statement Amount", BLE.Amount);
@@ -524,7 +577,6 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
                                     until BLE.Next() = 0;
                             until BRL.Next() = 0;
-
                     end;
 
                 }
