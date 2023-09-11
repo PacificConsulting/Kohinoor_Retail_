@@ -812,8 +812,6 @@ report 50311 "Sales Order"
                                 IGSTAmount += Round(TaxTransactionValue.Amount, GetGSTRoundingPrecision(ComponentName));
                                 IGSTPer := TaxTransactionValue.Percent;
                                 IGSTAMTPER := '[' + FORMAT(IGSTPer) + '%]'
-
-
                             end;
                     end;
                 until TaxTransactionValue.Next() = 0;

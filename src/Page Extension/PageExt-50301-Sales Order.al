@@ -1,5 +1,6 @@
 pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
 {
+
     layout
     {
         addafter("Work Description")
@@ -174,6 +175,16 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                 //         SL.Modify();
                 //     until SL.Next() = 0;
 
+            end;
+        }
+        modify(Reopen)
+        {
+            trigger OnBeforeAction()
+            var
+
+            begin
+                if Rec."Completely Shipped" then
+                    Error('You can not reopen completly shipped order');
             end;
         }
 
@@ -422,6 +433,28 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     Message(result);
                 end;
             }
+            action("Advance receipt")
+            {
+                Caption = 'Advnce Receipt';
+                ApplicationArea = all;
+                PromotedCategory = Process;
+                Promoted = true;
+                PromotedOnly = true;
+                Image = Print;
+
+                trigger OnAction()
+                var
+                    PaymentLine: Record 50301;
+                    adva: Codeunit 50302;
+                begin
+                    PaymentLine.Reset();
+                    PaymentLine.SetRange("Document No.", Rec."No.");
+                    if PaymentLine.FindFirst() then
+                        adva.Advancepaymentreceipt(PaymentLine);
+
+                end;
+
+            }
             action("Send PAGE Mail")
             {
                 Caption = 'Send Mail';
@@ -487,10 +520,6 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
         }
 
     }
-
-
-
-
 
     procedure GetGSTAmountTotal(
       SalesHeader: Record 36;
@@ -677,10 +706,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
     //     end;
     // end;
 
-    trigger OnAfterGetRecord()
-    begin
 
-    end;
 
     var
 
@@ -690,4 +716,6 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
         TotalTCSAmt: Decimal;
         IsPaymentLineeditable: Boolean;
         POS: Codeunit "POS Procedure";
+        [InDataSet]
+        Ispageeditable: Boolean;
 }

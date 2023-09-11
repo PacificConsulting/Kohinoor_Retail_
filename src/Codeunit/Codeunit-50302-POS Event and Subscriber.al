@@ -607,7 +607,8 @@ codeunit 50302 "POS Event and Subscriber"
         PaymentFilter.Reset();
         PaymentFilter.SetCurrentKey("Document No.");
         PaymentFilter.SetRange("Document No.", documentno);
-        If PaymentFilter.FindFirst() then;
+
+        If PaymentFilter.FindLast() then;
 
         IF RecLocation.Get(PaymentFilter."Store No.") then;
         //     RecLocation.TestField("Payment Journal Template Name");
@@ -682,6 +683,12 @@ codeunit 50302 "POS Event and Subscriber"
                 PaymentLine.Posted := True;
                 PaymentLine.Modify();
             Until PaymentLine.Next() = 0;
+        //Receipt Report
+        PaymentLine.Reset();
+        PaymentLine.SetRange("Document No.", customerno);
+        if PaymentLine.FindFirst() then
+            Advancepaymentreceipt(PaymentLine);
+
         exit('Success');
     end;
 
@@ -970,8 +977,31 @@ codeunit 50302 "POS Event and Subscriber"
         TotalInclTaxAmount := TotalInclTaxAmount + GSTAmount + TCSAmount;
     end;
 
-
-
+    procedure Advancepaymentreceipt(PaymentLines_: Record "Payment Lines")
+    var
+        Recref: RecordRef;//
+        TempBlob: Codeunit "Temp Blob";
+        OutStr: OutStream;
+        ABSBlobClient: Codeunit "ABS Blob Client";
+        Authorization: Interface "Storage Service Authorization";
+        ABSCSetup: Record "Azure Storage Container Setup";
+        StorageServiceAuth: Codeunit "Storage Service Authorization";
+        FileName: Text;
+        response: Codeunit "ABS Operation Response";
+        ReadTXT: Text;
+        Istr: InStream;
+    begin
+        Recref.GetTable(PaymentLines_);
+        TempBlob.CreateOutStream(OutStr);
+        Report.SaveAs(Report::"Advance Receipt Voucher Report", '', ReportFormat::Pdf, OutStr, Recref);
+        TempBlob.CreateInStream(Istr);
+        //DownloadFromStream(Istr, '', '', '', ReadTXT);
+        ABSCSetup.Get();
+        Authorization := StorageServiceAuth.CreateSharedKey(ABSCSetup."Access key");
+        ABSBlobClient.Initialize(ABSCSetup."Account Name", 'advancepaymentreceipt', Authorization);
+        FileName := PaymentLines_."Document No." + '_' + Format(Today) + '.' + 'pdf';
+        response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Istr);
+    end;
 
     //>>>>>>******************************** Local function created depending on original function*************
 

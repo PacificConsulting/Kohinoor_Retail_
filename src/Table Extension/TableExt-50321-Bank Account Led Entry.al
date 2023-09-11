@@ -30,5 +30,10 @@ tableextension 50321 "Bank Account Led. Entry" extends "Bank Account Ledger Entr
             CalcFormula = lookup("Bank Acc. Reconciliation Line"."Value Date" where("Bank Account No." = field("Bank Account No."), "Statement No." = field("Statement No."), "Statement Line No." = field("Statement Line No.")));
             Enabled = false;
         }
+        field(5036; "Contra Lines"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+
+        }
     }
 }

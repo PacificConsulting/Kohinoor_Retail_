@@ -107,6 +107,11 @@ page 50390 "Tender Bank Acc Recon Lines"
                     ApplicationArea = Basic, Suite;
                     ToolTip = 'Specifies the difference between the amount in the Statement Amount field and the amount in the Applied Amount field.';
                 }
+                field(Isledgerexist; Rec.Isledgerexist)
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the ledger entry.';
+                }
                 field("Applied Entries"; Rec."Applied Entries")
                 {
                     ApplicationArea = Basic, Suite;

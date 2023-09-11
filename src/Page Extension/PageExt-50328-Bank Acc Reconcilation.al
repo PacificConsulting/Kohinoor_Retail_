@@ -2,6 +2,13 @@ pageextension 50328 "Bank Acc reconcilation" extends "Bank Acc. Reconciliation"
 {
     layout
     {
+        addafter(BalanceLastStatement)
+        {
+            field(Tender; Rec.Tender)
+            {
+                ApplicationArea = All;
+            }
+        }
         modify(BankAccountNo)
         {
             trigger OnAfterValidate()
@@ -13,6 +20,9 @@ pageextension 50328 "Bank Acc reconcilation" extends "Bank Acc. Reconciliation"
                         Error('This Bank Account is define as Tender Account');
             end;
         }
+
+
+
 
     }
     actions

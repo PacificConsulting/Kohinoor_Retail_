@@ -217,10 +217,20 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
+            column(SystemCreatedAt_PIL; CreateDate_PIL)
+            {
+
+            }
 
 
-            trigger OnAfterGetRecord()
+            trigger OnAfterGetRecord() // PIL
             begin
+                Clear(CreateDate_PIL);
+                // CreateDate := System.CurrentDateTime;
+                CreateDate_PIL := SystemCreatedAt;
+                //Message(format(CreateDate));
+
+
                 PurchInvHeader.RESET;
                 PurchInvHeader.SETRANGE(PurchInvHeader."No.", "Purch. Inv. Line"."Document No.");
                 IF PurchInvHeader.FINDFIRST THEN;
@@ -606,11 +616,16 @@ report 50315 "Detailed Purchase Register"
             {
 
             }
+            column(SystemCreatedAt_PCML; CreateDate_PCML)
+            {
+
+            }
 
 
-            trigger OnAfterGetRecord()
+            trigger OnAfterGetRecord() //PCML
             begin
-
+                Clear(CreateDate_PCML);
+                CreateDate_PCML := SystemCreatedAt;
                 PurchCrMemoHdr.RESET;
                 PurchCrMemoHdr.SETRANGE(PurchCrMemoHdr."No.", "Purch. Cr. Memo Line"."Document No.");
                 IF PurchCrMemoHdr.FINDFIRST THEN;
@@ -896,6 +911,8 @@ report 50315 "Detailed Purchase Register"
         VLE_2: record "Vendor Ledger Entry";
         DVLE: record "Detailed Vendor Ledg. Entry";
         AppliedDocument: Code[250];
+        CreateDate_PIL: DateTime;
+        CreateDate_PCML: DateTime;
 
 
 }

@@ -27,5 +27,17 @@ pageextension 50323 "Sales Order List" extends "Sales Order List"
                 end;
             }
         }
+        modify(Reopen)
+        {
+            trigger OnBeforeAction()
+            var
+
+            begin
+                if Rec."Completely Shipped" then
+                    Error('You can not reopen completly shipped order');
+            end;
+        }
     }
+
+
 }

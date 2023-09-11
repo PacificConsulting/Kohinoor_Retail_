@@ -35,5 +35,10 @@ tableextension 50333 "Bank Acc Reconsilation line" extends "Bank Acc. Reconcilia
                     Validate("Statement Amount", "Credit Amount" * -1);
             end;
         }
+        field(50305; "Isledgerexist"; Boolean)
+        {
+            Caption = 'IsAmtmatchline';
+            DataClassification = ToBeClassified;
+        }
     }
 }

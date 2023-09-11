@@ -227,7 +227,6 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     ApplicationArea = All;
                     Caption = 'Identify & Adjust Differenec';
                     Image = ContractPayment;
-                    Visible = false;
                     ToolTip = 'Transfer the lines from the current window to the general journal.';
                     trigger OnAction()
                     var
@@ -293,7 +292,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                 //PCPL-BRB
                                 BankRecoLine.Reset();
                                 BankRecoLine.SetRange("Bank Account No.", rec."Bank Account No.");
-                                BankRecoLine.SetFilter(Difference, '<>%1', 0);
+                                BankRecoLine.SetFilter(Difference, '<%1', 0);
                                 IF BankRecoLine.FindSet() then
                                     repeat
                                         BankLedgerEntry.Reset();
@@ -421,6 +420,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         BRLInit.Validate("Credit Amount", BankAccledEntryTemp.Amount);
                                         BRLInit."Approval Code" := BankAccledEntryTemp."Approval Code";
                                         BRLInit."External Document No." := BankAccledEntryTemp."External Document No.";
+                                        BRLInit.Isledgerexist := true;
                                         BRLInit.Insert();
                                         //*******Postive Amount Entry
                                         BRLInit.Init();
@@ -442,6 +442,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         BRLInit.Validate("Debit Amount", BankAccledEntryTemp.Amount);
                                         BRLInit."Approval Code" := BankAccledEntryTemp."Approval Code";
                                         BRLInit."External Document No." := BankAccledEntryTemp."External Document No.";
+                                        BRLInit.Isledgerexist := true;
                                         BRLInit.Insert();
                                     until BankAccledEntryTemp.Next() = 0;
                             end;
@@ -453,6 +454,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                     //end;
 
                 }
+
                 action(ChangeStatementNo)
                 {
                     ApplicationArea = Basic, Suite;
@@ -514,6 +516,9 @@ page 50389 "Tender Bank Acc. Reconciliate"
                         TempBankAccReconciliationLine: Record "Bank Acc. Reconciliation Line" temporary;
                         TempBankAccountLedgerEntry: Record "Bank Account Ledger Entry" temporary;
                         PayMethod: record "Payment Method";
+                        vApprovalCode: Code[20];
+                        vApprovalCodechild: Code[20];
+                        StatementNoLineApplied: Code[20];
                     begin
                         /*
                         BRl.Reset();
@@ -549,6 +554,9 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                 BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
                                 BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
                                 BLE.SetRange("Approval Code", BRL."Approval Code");
+                                BLE.SetRange(Reversed, false);   //skip reverse entry 
+
+
                                 // BLE.SetRange(Amount, BRL."Statement Amount");    //PCPL-BRB 21082023
                                 IF PayMethod.Get(Rec."Bank Account No.") then begin
                                     IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
@@ -562,6 +570,7 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         BRL11.Reset();
                                         BRL11.SetRange("Bank Account No.", BLE."Bank Account No.");
                                         BRL11.SetRange("Approval Code", BLE."Approval Code");
+
                                         // BRL11.SetRange("Statement Amount", BLE.Amount);  //PCPL-BRB 21082023
                                         IF PayMethod.Get(Rec."Bank Account No.") then begin
                                             IF (PayMethod."Payment Type" = PayMethod."Payment Type"::Finance) then
@@ -577,6 +586,89 @@ page 50389 "Tender Bank Acc. Reconciliate"
                                         MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
                                     until BLE.Next() = 0;
                             until BRL.Next() = 0;
+
+                        //BRB
+                        IF PayMethod.Get(Rec."Bank Account No.") then begin
+                            IF (PayMethod."Payment Type" in [PayMethod."Payment Type"::Finance]) then begin
+
+                                BRl.Reset();
+                                BRL.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                BRL.SetRange("Bank Account No.", rec."Bank Account No.");
+                                BRL.SetRange("Statement No.", rec."Statement No.");
+                                BRL.SetFilter(Difference, '>%1', 0);
+                                IF BRL.FindSet() then
+                                    repeat
+                                        //IF vApprovalCode <> BRL."Approval Code" THEN begin
+                                        BLE.Reset();
+                                        BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                        BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
+                                        BLE.SetRange("Approval Code", BRL."Approval Code");
+                                        BLE.SetRange(Reversed, false);   //skip reverse entry
+                                        BLE.SetRange(Open, true);
+                                        IF BLE.FindFirst() then
+                                            repeat
+                                                TempBankAccReconciliationLine.DeleteAll();
+                                                TempBankAccountLedgerEntry.DeleteAll();
+                                                BRL11.Reset();
+                                                BRL11.SetRange("Bank Account No.", BLE."Bank Account No.");
+                                                BRL11.SetRange("Approval Code", BLE."Approval Code");
+                                                IF BRL11.FindSet() then
+                                                    repeat
+                                                        TempBankAccReconciliationLine := BRL11;
+                                                        TempBankAccReconciliationLine.Insert();
+                                                    until BRL11.Next() = 0;
+                                                TempBankAccountLedgerEntry := BLE;
+                                                TempBankAccountLedgerEntry.Insert();
+                                                if vApprovalCodechild <> BLE."Approval Code" then
+                                                    MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
+                                                vApprovalCodechild := BLE."Approval Code";
+                                            until BLE.Next() = 0;
+                                    // vApprovalCode := BRL."Approval Code";
+                                    //  END;
+                                    until BRL.Next() = 0;
+
+                                //For difference 
+                                BRl.Reset();
+                                BRL.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                BRL.SetRange("Bank Account No.", rec."Bank Account No.");
+                                BRL.SetRange("Statement No.", rec."Statement No.");
+                                BRL.SetFilter(Difference, '>%1', 0);
+                                if BRL.FindSet then
+                                    repeat
+                                        BLE.Reset();
+                                        BLE.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                        BLE.SetRange("Bank Account No.", BRL."Bank Account No.");
+                                        BLE.SetRange("Approval Code", BRL."Approval Code");
+                                        BLE.SetRange(Reversed, false);   //skip reverse entry
+                                        BLE.SetRange(Open, true);
+                                        IF BLE.FindFirst() then
+                                            repeat
+                                                StatementNoLineApplied := BLE.GetAppliedStatementNo();
+                                                if StatementNoLineApplied = '' then begin
+                                                    TempBankAccReconciliationLine.DeleteAll();
+                                                    TempBankAccountLedgerEntry.DeleteAll();
+                                                    BRL11.Reset();
+                                                    BRL11.SetCurrentKey("Bank Account No.", "Statement No.", "Approval Code");
+                                                    BRL11.SetRange("Bank Account No.", BLE."Bank Account No.");
+                                                    BRL11.SetRange("Approval Code", BLE."Approval Code");
+                                                    BRL11.SetRange(Difference, BLE.Amount);
+                                                    IF BRL11.FindSet() then
+                                                        repeat
+                                                            TempBankAccReconciliationLine := BRL11;
+                                                            TempBankAccReconciliationLine.Insert();
+                                                        until BRL11.Next() = 0;
+                                                    TempBankAccountLedgerEntry := BLE;
+                                                    TempBankAccountLedgerEntry.Insert();
+                                                    // if vApprovalCodechild <> BLE."Approval Code" then
+                                                    MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
+                                                    //vApprovalCodechild := BLE."Approval Code";
+                                                end;
+                                            until BLE.Next() = 0;
+
+                                    until BRL.Next() = 0;
+
+                            end;
+                        end;
                     end;
 
                 }

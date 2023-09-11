@@ -19,6 +19,7 @@ pageextension 50358 "Bank Acc. Reconciliation Lines" extends "Bank Acc. Reconcil
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Approval Code field.';
             }
+
         }
     }
 }

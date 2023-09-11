@@ -98,9 +98,9 @@ page 50345 "Bank Drop Entry "
     begin
 
         GLSetup.Get();
-        IF Staff.Get(rec."Staff ID") then
-            IF Loc.Get(Staff."Store No.") then;
-
+        //IF Staff.Get(rec."Staff ID") then
+        // IF Loc.Get(Staff."Store No.") then;
+        Loc.GET(Rec."Store No.");
         GLSetup.TestField("Bank Drop Batch");
         if TenderPOSSetup.Get(rec."Store No.") then begin
             TenderPOSSetup.TestField("Journal Template Name");
