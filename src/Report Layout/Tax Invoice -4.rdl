@@ -5126,7 +5126,7 @@ invoice.</Value>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=Fields!Order_Date.Value</Value>
+                        <Value>=First(Fields!Shipment_Date.Value, "DataSet_Result")</Value>
                         <Style>
                           <FontWeight>Bold</FontWeight>
                           <Format>d MMM yyyy</Format>

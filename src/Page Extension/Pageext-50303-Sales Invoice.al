@@ -2,6 +2,7 @@ pageextension 50303 "Sales Invoice Retail" extends "Sales Invoice"
 {
     layout
     {
+
         modify("Responsibility Center")
         {
             Visible = false;

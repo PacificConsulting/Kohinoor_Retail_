@@ -197,4 +197,5 @@ page 50301 "Payment Lines Subform"
 
     var
         US: Record 91;
+        PG: Page "Item Tracking Lines";
 }

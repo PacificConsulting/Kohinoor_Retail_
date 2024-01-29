@@ -124,5 +124,6 @@ tableextension 50312 "General Led.Setup Ext" extends "General Ledger Setup"
         {
             DataClassification = ToBeClassified;
         }
+
     }
 }

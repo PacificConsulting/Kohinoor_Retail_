@@ -88,6 +88,12 @@ page 50306 "Ship To Address API"
                 field(gstRegistrationNo; Rec."GST Registration No.")
                 {
                     Caption = 'GST Registration No.';
+                    trigger OnValidate()
+
+                    begin
+                        //Rec.code := NoSeries.GetNextNo(SR."Ship To address No Series", Today, true);
+                        rec."Ship-to GST Customer Type" := Rec."Ship-to GST Customer Type"::Registered;
+                    end;
                 }
                 field(homePage; Rec."Home Page")
                 {

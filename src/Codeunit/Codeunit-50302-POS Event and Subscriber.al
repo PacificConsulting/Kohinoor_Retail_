@@ -3,7 +3,7 @@ codeunit 50302 "POS Event and Subscriber"
     Access = Public;
     trigger OnRun()
     begin
-
+        CreateSalesLine('SANSO23240600794', 'KTVACC00283');
     end;
 
     procedure POSAction(documentno: text; lineno: Integer; posaction: text; parameter1: Text; input: Text; parameter2: Text): Text
@@ -940,20 +940,15 @@ codeunit 50302 "POS Event and Subscriber"
 
     end;
 
-
-
-
     procedure UpdateLocation(documentno: Code[20]): Text
     var
         SalesHeader: Record "Sales Header";
-
     begin
         SalesHeader.GET(SalesHeader."Document Type"::Order, DocumentNo);
         SalesHeader.Validate("Location Code", SalesHeader."Store No.");
         SalesHeader.Modify();
         exit('Success');
     end;
-
 
     procedure GetSalesorderStatisticsAmount(
             SalesHeader: Record 36;
@@ -972,7 +967,6 @@ codeunit 50302 "POS Event and Subscriber"
                 RecordIDList.Add(SalesLine.RecordId());
                 TotalInclTaxAmount += SalesLine.Amount;
             until SalesLine.Next() = 0;
-
 
         TotalInclTaxAmount := TotalInclTaxAmount + GSTAmount + TCSAmount;
     end;
@@ -1002,6 +996,34 @@ codeunit 50302 "POS Event and Subscriber"
         FileName := PaymentLines_."Document No." + '_' + Format(Today) + '.' + 'pdf';
         response := ABSBlobClient.PutBlobBlockBlobStream(FileName, Istr);
     end;
+
+    procedure CreateSalesLine(documentno: Code[20]; itemno: Code[20]): Text
+    var
+        SL: Record "Sales Line";
+        RecSL: Record 37;
+        RecSH: Record 36;
+        Lineno: Integer;
+    BEGIN
+        RecSH.GET(RecSH."Document Type"::Order, documentno);
+        RecSL.Reset();
+        RecSL.SetRange("Document No.", documentno);
+        RecSL.SetRange("Document Type", RecSL."Document Type"::Order);
+        IF RecSL.FindLast() then
+            Lineno := RecSL."Line No.";
+
+        RecSL.Init();
+        RecSL."Document No." := documentno;
+        RecSL."Document Type" := RecSL."Document Type"::Order;
+        RecSL.Type := RecSL.Type::Item;
+        RecSL."Line No." := Lineno + 10000;
+        RecSL.Validate("No.", itemno);
+        RecSL.Insert();
+
+        RecSL.Validate(Quantity, 1);
+        RecSL.Validate("Store No.", RecSH."Store No.");
+        RecSL.Modify();
+        exit('Success');
+    END;
 
     //>>>>>>******************************** Local function created depending on original function*************
 

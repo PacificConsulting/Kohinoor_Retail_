@@ -127,6 +127,7 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
             var
                 SL: Record "Sales Line";
                 SR: Record "Sales & Receivables Setup";
+                GSTAmount: Decimal;
             begin
                 Rec.TestField("Store No.");
                 SR.Get();
@@ -187,8 +188,27 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     Error('You can not reopen completly shipped order');
             end;
         }
-
-
+        addafter("Sales Order")
+        {
+            action("Proforma Invoice")
+            {
+                Caption = 'Proforma Invoice';
+                Promoted = true;
+                PromotedCategory = Report;
+                Image = Print;
+                ApplicationArea = all;
+                trigger OnAction()
+                var
+                    SH: Record "Sales Header";
+                begin
+                    SH.Reset();
+                    SH.SetRange("No.", rec."No.");
+                    if SH.FindFirst() then
+                        Report.RunModal(50324, true, false, SH);
+                    // SH.Modify();
+                end;
+            }
+        }
 
         addafter(Post)
         {
@@ -432,6 +452,11 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
                     //result := cu.PaymentReceipt(rec."Sell-to Customer No.");
                     Message(result);
                 end;
+            }
+            action("TEST")
+            {
+                ApplicationArea = all;
+                RunObject = codeunit 50302;
             }
             action("Advance receipt")
             {
@@ -705,8 +730,6 @@ pageextension 50301 "Sales Order Payment Ext" extends "Sales Order"
     //             Error('You do not have access modify order.');
     //     end;
     // end;
-
-
 
     var
 

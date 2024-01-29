@@ -2,6 +2,7 @@ pageextension 50349 "Sales Invoice Subform Retail" extends "Sales Invoice Subfor
 {
     layout
     {
+
         addafter("Shortcut Dimension 2 Code")
         {
 

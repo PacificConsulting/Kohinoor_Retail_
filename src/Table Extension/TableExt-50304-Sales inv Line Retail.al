@@ -90,5 +90,153 @@ tableextension 50304 "Sales inv. Line Retail" extends "Sales Invoice Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50319; MOP; Decimal)
+        {
+            Caption = 'MOP';
+            DataClassification = ToBeClassified;
+        }
+
+        field(50321; "Last Selling Price"; Decimal)
+        {
+            Caption = 'Last Selling Price';
+            DataClassification = ToBeClassified;
+        }
+        field(50322; NNLC; Decimal)
+        {
+            Caption = 'NNLC';
+            DataClassification = ToBeClassified;
+        }
+        field(50323; "PMG NLC W/O SELL OUT"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50324; "Manager Discection"; Decimal)
+        {
+            Caption = 'Manager Discection';
+            DataClassification = ToBeClassified;
+        }
+        field(50325; "Sellout Text"; Text[100])
+        {
+            Caption = 'Sellout Text';
+            DataClassification = ToBeClassified;
+        }
+
+        field(50327; "Sell out Text From Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50328; "Sell out Text To Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50329; Sellout; Decimal)
+        {
+            Caption = 'Sellout';
+            DataClassification = ToBeClassified;
+        }
+        field(50330; "From Date"; Date)
+        {
+            Caption = 'From Date';
+            DataClassification = ToBeClassified;
+        }
+        field(50331; "To Date"; Date)
+        {
+            Caption = 'To Date';
+            DataClassification = ToBeClassified;
+        }
+        field(50332; FNNLC; Decimal)
+        {
+            Caption = 'FNNLC';
+            DataClassification = ToBeClassified;
+        }
+        field(50333; "Fnnlc with sell out"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Fnnlc with sell out';
+        }
+        field(50334; "FNNLC Without SELLOUT"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50335; "Manager Discection - INC"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Manager Discection - INC';
+        }
+        field(50336; "SLAB 1 - PRICE"; Decimal)
+        {
+            Caption = 'SLAB 1 - PRICE';
+            DataClassification = ToBeClassified;
+        }
+        field(50337; "SLAB 2 - PRICE"; Decimal)
+        {
+            Caption = 'SLAB 2 - PRICE';
+            DataClassification = ToBeClassified;
+        }
+        field(50338; "SLAB 1 - INC"; Decimal)
+        {
+            Caption = 'SLAB 1 - INC';
+            DataClassification = ToBeClassified;
+        }
+        field(50339; "SLAB 2 - INC"; Decimal)
+        {
+            Caption = 'SLAB 2 - INC';
+            DataClassification = ToBeClassified;
+        }
+        field(50340; AMZ; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'AMZ';
+        }
+        field(50341; PROMO; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'PROMO';
+        }
+        field(50342; "PRICE_TAG"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'PRICE_TAG';
+        }
+        field(50343; "KTVWEB_WOE"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'KTVWEB_WOE';
+        }
+        field(50344; "KTVWEB_WE"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'KTVWEB_WE';
+        }
+        field(50345; "M.R.P"; Decimal)
+        {
+            Caption = 'M.R.P';
+            DataClassification = ToBeClassified;
+        }
+        field(50346; "ALLFINANCE"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'ALLFINANCE';
+        }
+        field(50347; CASHBACK; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'CASHBACK';
+        }
+        field(50348; DP; Decimal)
+        {
+            Caption = 'DP';
+            DataClassification = ToBeClassified;
+        }
+        field(50349; "Actual From Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Actual From Date';
+        }
+        field(50350; "Actual To Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Actual To Date';
+        }
     }
 }

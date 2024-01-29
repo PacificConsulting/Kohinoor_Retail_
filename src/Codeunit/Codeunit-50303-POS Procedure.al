@@ -1094,7 +1094,21 @@ codeunit 50303 "POS Procedure"
                 SalesLine.TestField("Salesperson Code");
                 If (SalesLine."Unit Price Incl. of Tax" <> 0) then
                     SalesLine.TestField("Unit Price");
+                //PCPL-Sourav
+                If (SalesLine."Unit Price" <> 0) then
+                    SalesLine.Testfield(SalesLine."Unit Price Incl. of Tax");
+                //PCPL-Sourav
 
+
+                //PCPL-25/101123
+                IF (SalesLine."GST Group Code" <> 'NOUSE') AND (SalesLine."GST Group Code" <> 'HSN0')
+                AND (SalesLine."GST Group Code" <> 'SAC0') THEN BEGIN
+                    GSTAmount := GetGSTAmount(SalesLine.RecordId()); //PCPL-25/091123
+                    Message(FORMAT(GSTAmount));
+                    if (GSTAmount = 0) AND (SalesLine."Unit Price" <> 0) then
+                        Error('GST is not calculated on Item , Please remove and then re-update line or else contact admin for the same');
+                END;
+            //PCPL-25/101123 
             until SalesLine.Next() = 0;
 
 
@@ -1233,8 +1247,20 @@ codeunit 50303 "POS Procedure"
                 SalesLine.TestField("Salesperson Code");
                 If (SalesLine."Unit Price Incl. of Tax" <> 0) then
                     SalesLine.TestField("Unit Price");
-            until SalesLine.Next() = 0;
+                //PCPL-Sourav
+                If (SalesLine."Unit Price" <> 0) then
+                    SalesLine.Testfield(SalesLine."Unit Price Incl. of Tax");
+                //PCPL-Sourav
 
+                //PCPL-25/101123
+                IF (SalesLine."GST Group Code" <> 'NOUSE') AND (SalesLine."GST Group Code" <> 'HSN0')
+                AND (SalesLine."GST Group Code" <> 'SAC0') THEN BEGIN
+                    GSTAmount := GetGSTAmount(SalesLine.RecordId());
+                    if (GSTAmount = 0) AND (SalesLine."Unit Price" <> 0) then
+                        Error('GST is not calculated on Item ' + SalesLine."No." + ', Please remove and then re-update line or else contact admin for the same');
+                END;
+            //PCPL-25/101123   
+            until SalesLine.Next() = 0;
 
 
 
@@ -1344,8 +1370,8 @@ codeunit 50303 "POS Procedure"
 
                 ReleaseSalesDoc.PerformManualRelease(SalesHdr);
                 ArchiveManagement.ArchiveSalesDocument(SalesHdr);//PCPL-Sourav
-                //SalesHdr.Status := SalesHdr.Status::Released;
-                //SalesHdr.Modify();
+                                                                 //SalesHdr.Status := SalesHdr.Status::Released;
+                                                                 //SalesHdr.Modify();
             end;
         end else
             exit('Order does not exist');
@@ -2528,6 +2554,29 @@ codeunit 50303 "POS Procedure"
         Message('Approval mail sent successfully');
     end;
 
+    //PCPL-25/101123
+    local procedure GetGSTAmount(RecID: RecordID): Decimal
+    var
+        TaxTransactionValue: Record "Tax Transaction Value";
+        GSTSetup: Record "GST Setup";
+    begin
+        if not GSTSetup.Get() then
+            exit;
+        TaxTransactionValue.SetRange("Tax Record ID", RecID);
+        TaxTransactionValue.SetRange("Value Type", TaxTransactionValue."Value Type"::COMPONENT);
+        if GSTSetup."Cess Tax Type" <> '' then
+            TaxTransactionValue.SetRange("Tax Type", GSTSetup."GST Tax Type", GSTSetup."Cess Tax Type")
+        else
+            TaxTransactionValue.SetRange("Tax Type", GSTSetup."GST Tax Type");
+        TaxTransactionValue.SetFilter(Percent, '<>%1', 0);
+        if not TaxTransactionValue.IsEmpty() then begin
+            TaxTransactionValue.CalcSums(Amount);
+            TaxTransactionValue.CalcSums(Percent);
+        end;
+        exit(TaxTransactionValue.Amount);
+    end;
+    //PCPL-25/101123
+
     var
         TotalSalesLine: array[3] of Record "Sales Line";
         TotalSalesLineLCY: array[3] of Record "Sales Line";
@@ -2565,6 +2614,7 @@ codeunit 50303 "POS Procedure"
         AllowVATDifference: Boolean;
 
         ArchiveManagement: Codeunit ArchiveManagement;
+        GSTAmount: Decimal;
 
 
 

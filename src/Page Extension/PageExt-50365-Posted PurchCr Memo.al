@@ -9,5 +9,8 @@ pageextension 50365 PostedPurch_Crmemo extends "Posted Purchase Credit Memos"
                 ApplicationArea = all;
             }
         }
+        // moveafter("Buy-from Vendor No."; Amount)
+
+
     }
 }

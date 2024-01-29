@@ -15,18 +15,37 @@ codeunit 50301 "Event and Subscribers"
     local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; PreviewMode: Boolean; var HideProgressWindow: Boolean; var IsHandled: Boolean)
     var
         SalesLine: Record 37;
+        GSTAmount: Decimal;
     begin
         //>> BRB-21082023
         SalesLine.reset;
-        SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+        //SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+        SalesLine.SetCurrentKey("Document No.", Type);
         SalesLine.SetRange("Document No.", SalesHeader."No.");
+        SalesLine.SetRange(Type, SalesLine.Type::Item);
         if SalesLine.FindSet then
             repeat
-                if (SalesLine."GST Group Code" <> 'HSNO') OR (SalesLine."GST Group Code" <> 'NOUSE') then begin
-                    if (SalesLine."Unit Price Incl. of Tax" <> 0) AND (NOT SalesLine."Price Inclusive of Tax") AND (SalesLine."Unit Price" = 0) then begin
+                if (SalesLine."GST Group Code" <> 'HSN0') AND (SalesLine."GST Group Code" <> 'NOUSE')
+                AND (SalesLine."GST Group Code" <> 'SAC0') then begin
+                    if (SalesLine."Unit Price Incl. of Tax" <> 0) then begin
                         SalesLine.TestField("Unit Price");
                     end;
+                    //PCPL-Sourav
+                    If (SalesLine."Unit Price" <> 0) then
+                        SalesLine.Testfield(SalesLine."Unit Price Incl. of Tax");
+                    //PCPL-Sourav
+
+                    //PCPL-25/101123
+                    IF (SalesLine."GST Group Code" <> 'NOUSE') AND (SalesLine."GST Group Code" <> 'HSN0')
+                    AND (SalesLine."GST Group Code" <> 'SAC0') THEN BEGIN
+                        GSTAmount := GetGSTAmount(SalesLine.RecordId());
+                        if (GSTAmount = 0) AND (SalesLine."Unit Price" <> 0) then
+                            Error('GST is not calculated on Item ' + SalesLine."No." + ', Please remove and then re-update line or else contact admin for the same');
+                    END;
+                    //PCPL-25/101123  
+
                 end;
+
             until SalesLine.Next = 0;//<< BRB-21082023
         //IF SalesHeader."Document Type" <> SalesHeader."Document Type"::"Credit Memo" then begin
         SalesHeader.Validate("Posting Date", Today);
@@ -267,7 +286,81 @@ codeunit 50301 "Event and Subscribers"
         // PurchRcptHeader.Modify();
     end;
     //<<<<<<<END********************************CU-90*****************************************
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnAfterPostPurchaseDoc', '', false, false)]
+    local procedure OnAfterInsertSerailNum(PurchRcpHdrNo: Code[20])
+    var
+        RecPurchaseRcpHdr: Record "Purch. Rcpt. Header";
+        SerialNoInfo: Record "Serial No. Information";
+        RecILE: Record "Item Ledger Entry";
+    begin
+        RecILE.Reset();
+        RecILE.SetRange("Document No.", PurchRcpHdrNo);
+        RecILE.SetRange("Document Type", RecILE."Document Type"::"Purchase Receipt");
+        if RecILE.FindFirst() then begin
+            repeat
+                RecPurchaseRcpHdr.Reset();
+                RecPurchaseRcpHdr.SetRange("No.", PurchRcpHdrNo);
+                if RecPurchaseRcpHdr.FindFirst() then begin
+                    SerialNoInfo.Reset();
+                    SerialNoInfo.SetRange("Serial No.", RecILE."Serial No.");
+                    SerialNoInfo.SetRange("Item No.", RecILE."Item No.");
+                    if SerialNoInfo.FindFirst() then begin
+                        SerialNoInfo."Inward Date" := RecPurchaseRcpHdr."LR Date";
+                        SerialNoInfo.Modify();
+                    end;
+                end;
+            until RecILE.Next() = 0;
+        end;
+    end;
 
+    procedure ModifyingSerlialNo()
+    var
+        RecPurchaseRcpHdr: Record "Purch. Rcpt. Header";
+        SerialNoInfo: Record "Serial No. Information";
+        RecILE: Record "Item Ledger Entry";
+    begin
+
+        SerialNoInfo.Reset();
+        // SerialNoInfo.SetRange("Serial No.", RecILE."Serial No.");
+        //SerialNoInfo.SetFilter("Inward Date", '<>%1', '');
+        if SerialNoInfo.FindSet() then begin
+            repeat
+                if SerialNoInfo."Inward Date" = 0D then begin
+                    RecILE.Reset();
+                    RecILE.SetRange("Document Type", RecILE."Document Type"::"Purchase Receipt");
+                    RecILE.SetRange("Serial No.", SerialNoInfo."Serial No.");
+                    if RecILE.FindFirst() then begin
+                        RecPurchaseRcpHdr.Reset();
+                        RecPurchaseRcpHdr.SetRange("No.", RecILE."Document No.");
+                        if RecPurchaseRcpHdr.FindFirst() then begin
+                            SerialNoInfo."Inward Date" := RecPurchaseRcpHdr."LR Date";
+                            SerialNoInfo.Modify();
+                        end;
+                    end;
+                end;
+            until SerialNoInfo.Next() = 0;
+        end;
+    end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", 'OnBeforeCheckItemTrackingInformation', '', false, false)]
+    // local procedure OnAfterInsertTrcking(var TrackingSpecification: Record "Tracking Specification"; var ItemJnlLine2: Record "Item Journal Line"; var GlobalItemTrackingCode: Record "Item Tracking Code"; var ItemTrackingCode: Record "Item Tracking Code")
+    // var
+    //     RecPurchase: Record "Purchase Header";
+    // begin
+
+    //     TrackingSpecification.Validate("Source ID", ItemJnlLine2."Document No.");
+
+    // end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", 'OnBeforeInsertSetupTempSplitItemJnlLine', '', false, false)]
+    // local procedure OnBeforeSetupSplitJnlLine(var TempTrackingSpecification: Record "Tracking Specification" temporary; var ItemJournalLine2: Record "Item Journal Line"; var TempItemJournalLine: Record "Item Journal Line" temporary)
+    // var
+    //     RecPurchase: Record "Purchase Header";
+    // begin
+
+    //     TempTrackingSpecification.Validate("Source ID", ItemJournalLine2."Document No.");
+    //     TempTrackingSpecification.Validate("Source ID", TempItemJournalLine."Document No.");
+    // end;
     //START**********************************CU-5708*******************************************
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Transfer Document", 'OnAfterReleaseTransferDoc', '', false, false)]
     local procedure OnAfterReleaseTransferDoc(var TransferHeader: Record "Transfer Header")
@@ -318,9 +411,22 @@ codeunit 50301 "Event and Subscribers"
         GLSetup: Record "General Ledger Setup";
         PaymentLine: Record "Payment Lines";
         PMC: Record "Payment Method";
+        PostedSalesInvHeader: Record "Sales Invoice Header";
+        PostedTotalInvoiceAmt: Decimal;
+        TotalPostedInvAmt: Decimal;
     begin
         //*****************New Code for Check Payment Should not be more then Invoice Amt ******
-
+        //>>sourav New Code added on 5/01/2024 for considering posted invoice data
+        Clear(PostedTotalInvoiceAmt);
+        PostedSalesInvHeader.Reset();
+        PostedSalesInvHeader.SetRange("Order No.", SalesHeader."No.");
+        PostedSalesInvHeader.SETFILTER("No.", '<>%1', SalesInvoiceHeader."No.");
+        IF PostedSalesInvHeader.FindSet() THEN
+            Repeat
+                CalcStatistics.GetPostedSalesInvStatisticsAmount(PostedSalesInvHeader, PostedTotalInvoiceAmt);
+                TotalPostedInvAmt += PostedTotalInvoiceAmt;
+            Until PostedSalesInvHeader.Next() = 0;
+        //<<Sourav
         CalcStatistics.GetPostedsalesInvStatisticsAmount(SalesInvoiceHeader, TotalInvoiceAmt);
         PaymentLine.Reset();
         PaymentLine.SetRange("Document No.", SalesHeader."No.");
@@ -332,8 +438,8 @@ codeunit 50301 "Event and Subscribers"
                     TotalPaymentAmt += PaymentLine.Amount;
             until PaymentLine.Next() = 0;
         IF (SalesHeader."Allow for Credit Bill" = false) /*AND (SalesHeader."Allow for Cheque Clearance" = false)*/ then begin
-            IF TotalInvoiceAmt > TotalPaymentAmt then
-                Error('You can not generate Invoice when Invoice Amt. %1 more than payment amt. %2', TotalInvoiceAmt, TotalPaymentAmt);
+            IF TotalInvoiceAmt + TotalPostedInvAmt > TotalPaymentAmt then//Sourav-Code updated on 5/01/2024
+                Error('You can not generate Invoice when Posted Invoice Amt is %1 and Current Invoice Amt. %2 against payment amt. %3', TotalPostedInvAmt, TotalInvoiceAmt, TotalPaymentAmt);
         end;
         PaymentLine.Reset();
         PaymentLine.SetRange("Document No.", SalesHeader."No.");
@@ -698,6 +804,7 @@ codeunit 50301 "Event and Subscribers"
         //end;
     end;
 
+
     procedure UploadonAzurBlobStorageTransferreport(FileName: Text; Base64: Text): Text
 
     Var
@@ -724,6 +831,42 @@ codeunit 50301 "Event and Subscribers"
         header.Add('Content-Type', 'application/json');
         client.Post(URL, cont, response);
     end;
+
+    //<<PCPL-064 19oct2023
+    [EventSubscriber(ObjectType::Report, Report::"Suggest Bank Acc. Recon. Lines", 'OnBeforeInsertBankAccReconLine', '', false, false)]
+    local procedure OnBeforeInsertBankAccReconLine(var BankAccReconLine: Record "Bank Acc. Reconciliation Line"; var BankAccLedgEntry: Record "Bank Account Ledger Entry")
+    begin
+
+
+        BankAccReconLine."Approval Code" := BankAccLedgEntry."Approval Code";
+
+
+
+    end;
+    //pcpl>>-064 19oct2023
+
+    //PCPL-25/101123
+    local procedure GetGSTAmount(RecID: RecordID): Decimal
+    var
+        TaxTransactionValue: Record "Tax Transaction Value";
+        GSTSetup: Record "GST Setup";
+    begin
+        if not GSTSetup.Get() then
+            exit;
+        TaxTransactionValue.SetRange("Tax Record ID", RecID);
+        TaxTransactionValue.SetRange("Value Type", TaxTransactionValue."Value Type"::COMPONENT);
+        if GSTSetup."Cess Tax Type" <> '' then
+            TaxTransactionValue.SetRange("Tax Type", GSTSetup."GST Tax Type", GSTSetup."Cess Tax Type")
+        else
+            TaxTransactionValue.SetRange("Tax Type", GSTSetup."GST Tax Type");
+        TaxTransactionValue.SetFilter(Percent, '<>%1', 0);
+        if not TaxTransactionValue.IsEmpty() then begin
+            TaxTransactionValue.CalcSums(Amount);
+            TaxTransactionValue.CalcSums(Percent);
+        end;
+        exit(TaxTransactionValue.Amount);
+    end;
+    //PCPL-25/101123
 
 
 }

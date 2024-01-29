@@ -1,5 +1,7 @@
 report 50315 "Detailed Purchase Register"
 {
+    //PCPL-064
+
     //DefaultLayout = RDLC;
     //RDLCLayout = './DetailedPurchaseRegister.rdlc';
     DefaultLayout = RDLC;
@@ -82,7 +84,7 @@ report 50315 "Detailed Purchase Register"
             column(GST_PINLINES; TotGSTPer)//"Purch. Inv. Line"."GST %") //pcpl-064 01Aug2023
             {
             }
-            column(GSTBaseAmount_PINLINES; DGSTLE."GST Base Amount") //pcpl-064 01Aug2023
+            column(GSTBaseAmount_PINLINES; GSTBaseAmt_PIL) //pcpl-064 01Aug2023
             {
             }
             column(TotalGSTAmount_PINLINES; TotalGST)//"Purch. Inv. Line"."Total GST Amount") //pcpl-064 01Aug2023
@@ -279,6 +281,20 @@ report 50315 "Detailed Purchase Register"
                                     END;
                     UNTIL DGSTLE.NEXT = 0;
 
+                //15sep2023
+                Clear(GSTBaseAmt_PIL);
+                DGLE_PIL.RESET;
+                DGLE_PIL.SETCURRENTKEY("Transaction Type", "Document Type", "Document No.", "Document Line No.");
+                DGLE_PIL.SETRANGE("Transaction Type", DGLE_PIL."Transaction Type"::Purchase);
+                DGLE_PIL.SETRANGE("Document No.", "Purch. Inv. Line"."Document No.");
+                DGLE_PIL.SETRANGE("Document Line No.", "Purch. Inv. Line"."Line No.");
+                IF DGLE_PIL.FINDSET THEN
+                    REPEAT
+                        GSTBaseAmt_PIL := DGLE_PIL."GST Base Amount";
+                    until DGLE_PIL.Next() = 0;
+
+
+
                 PurchRcptHeader.RESET;
                 PurchRcptHeader.SETRANGE(PurchRcptHeader."No.", "Purch. Inv. Line"."Receipt No.");
                 IF PurchRcptHeader.FINDFIRST THEN;
@@ -417,6 +433,35 @@ report 50315 "Detailed Purchase Register"
                 /* if RecOrderAdd.Get("Order Address Code") then begin
                     Orderadd := RecOrderAdd.State;
                 end; */
+                /* Clear(PILOrderGSTIN);
+                Clear(PILState);
+                IF Vendor.GET(PIHrec."Buy-from Vendor No.") THEN;
+                PIHrec.RESET;
+                PIHrec.SETRANGE(PIHrec."No.", "Purch. Inv. Line"."Document No.");
+                IF PIHrec.FINDFIRST THEN begin
+                    RecOrderAdd.Reset();
+                    RecOrderAdd.SetRange(Code, "Order Address Code");
+                    RecOrderAdd.SetRange("Vendor No.", "Buy-from Vendor No.");
+                    if RecOrderAdd.FindFirst() then begin
+                        IF PIHrec."Order Address Code" <> '' THEN
+                            PILOrderGSTIN := RecOrderAdd."GST Registration No."
+                        // PILState := Vendor."State Code"
+                        else
+                            PILOrderGSTIN := Vendor."GST Registration No."
+                    end
+                end else begin
+                    recstate.Reset();
+                    recstate.SetRange(code, RecOrderAdd.State);
+                    if recstate.FindFirst() then begin
+                        if RecOrderAdd.Code <> '' then
+                            PILState := recstate.Description
+                        else
+                            PILState := Vendor."State Code";
+                        //end
+                    end;
+                end; */
+                //..PCPL-064 18aug2023
+                //<<pcpl-064 20sep2023
                 Clear(PILOrderGSTIN);
                 Clear(PILState);
                 RecOrderAdd.Reset();
@@ -425,17 +470,41 @@ report 50315 "Detailed Purchase Register"
                 if RecOrderAdd.FindFirst() then begin
                     PILOrderGSTIN := RecOrderAdd."GST Registration No.";
                     recstate.Reset();
-                    recstate.SetRange(code, RecOrderAdd.State);
+                    recstate.SetRange(Code, RecOrderAdd.State);
                     if recstate.FindFirst() then begin
-                        PILState := recstate.Description;
+                        //  PILState := recstate.Description;
+                        PILState := recstate.Code;
                     end;
+                end
+                else begin
+                    recvender.Reset();
+                    recvender.SetRange("No.", "Buy-from Vendor No.");
+                    if recvender.FindFirst() then begin
+                        PILOrderGSTIN := recvender."GST Registration No.";
+                        RecState.Reset();
+                        RecState.SetRange(Code, recvender."State Code");
+                        if RecState.FindFirst() then begin
+                            //  PILState := RecState.Description;
+                            PILState := recvender."State Code";
 
+                        end;
+                    end;
                 end;
+                //>>pcpl-064 20sep2023
 
 
+                /* //<<pcpl-064 15sep2023
+                IF Vendor.GET(PIHrec."Buy-from Vendor No.") THEN;
+                PIHrec.RESET;
+                PIHrec.SETRANGE(PIHrec."No.", "Purch. Inv. Line"."Document No.");
+                IF PIHrec.FINDFIRST THEN begin
+                    IF PIHrec."Order Address Code" <> '' THEN
+                        PILOrderGSTIN := RecOrderAdd."GST Registration No."
 
-
-                //..PCPL-064 18aug2023
+                    ELSE
+                        PILOrderGSTIN := Vendor."GST Registration No."
+                end;
+                //>>pcpl-064 15sep2023 */
             end;
         }
         dataitem("Purch. Cr. Memo Line"; "Purch. Cr. Memo Line")
@@ -514,7 +583,7 @@ report 50315 "Detailed Purchase Register"
             column(GST_PCINLINES; TotGSTPer_1)//"Purch. Cr. Memo Line"."GST %") //pcpl-064 01Aug2023
             {
             }
-            column(GSTBaseAmount_PCINLINES; Abs(PCMDGSTLE."GST Base Amount"))//"Purch. Cr. Memo Line"."GST Base Amount") //pcpl-064 01Aug2023
+            column(GSTBaseAmount_PCINLINES; Abs(GSTBaseAmt_PCML))//"Purch. Cr. Memo Line"."GST Base Amount") //pcpl-064 01Aug2023
             {
             }
             column(TotalGSTAmount_PCINLINES; TotalGST_1)//"Purch. Cr. Memo Line"."Total GST Amount") //pcpl-064 01Aug2023
@@ -672,6 +741,17 @@ report 50315 "Detailed Purchase Register"
                                     END;
                     UNTIL PCMDGSTLE.NEXT = 0;
 
+                Clear(GSTBaseAmt_PCML);
+                DGLE_PCML.RESET;
+                DGLE_PCML.SETCURRENTKEY("Transaction Type", "Document Type", "Document No.", "Document Line No.");
+                DGLE_PCML.SETRANGE("Transaction Type", DGLE_PCML."Transaction Type"::Purchase);
+                DGLE_PCML.SETRANGE("Document No.", "Purch. Cr. Memo Line"."Document No.");
+                DGLE_PCML.SETRANGE("Document Line No.", "Purch. Cr. Memo Line"."Line No.");
+                IF DGLE_PCML.FINDSET THEN
+                    REPEAT
+                        GSTBaseAmt_PCML := DGLE_PCML."GST Base Amount";
+                    until DGLE_PCML.Next() = 0;
+
                 ReturnShipmentHeader.RESET;
                 ReturnShipmentHeader.SETRANGE(ReturnShipmentHeader."No.", "Purch. Cr. Memo Line"."Return Shipment No.");
                 IF ReturnShipmentHeader.FINDFIRST THEN;
@@ -750,8 +830,23 @@ report 50315 "Detailed Purchase Register"
                 end;
 
                 //>>pcpl-064 11aug2023
-                //<<PCPL-064 18aug2023
-                //if RecOrderAdd_1.Get("Order Address Code") then;
+                /*  //<<PCPL-064 18aug2023
+                 //if RecOrderAdd_1.Get("Order Address Code") then;
+                 Clear(PCMLOrderGSTIN_1);
+                 Clear(PCMLState);
+                 RecOrderAdd_1.Reset();
+                 RecOrderAdd_1.SetRange(Code, "Order Address Code");
+                 RecOrderAdd_1.SetRange("Vendor No.", "Buy-from Vendor No.");
+                 if RecOrderAdd_1.FindFirst() then begin
+                     PCMLOrderGSTIN_1 := RecOrderAdd_1."GST Registration No.";
+                     recstate_1.Reset();
+                     recstate_1.SetRange(Code, RecOrderAdd_1.State);
+                     if recstate_1.FindFirst() then begin
+                         PCMLState := recstate_1.Description;
+                     end;
+                 end;
+                 //..PCPL-064 18aug2023 */
+                //<<PCPL-064 20sep2023
                 Clear(PCMLOrderGSTIN_1);
                 Clear(PCMLState);
                 RecOrderAdd_1.Reset();
@@ -762,10 +857,24 @@ report 50315 "Detailed Purchase Register"
                     recstate_1.Reset();
                     recstate_1.SetRange(Code, RecOrderAdd_1.State);
                     if recstate_1.FindFirst() then begin
-                        PCMLState := recstate_1.Description;
+                        PCMLState := recstate_1.Code;
+                    end;
+                end
+                else begin
+                    recvender_1.Reset();
+                    recvender_1.SetRange("No.", "Buy-from Vendor No.");
+                    if recvender_1.FindFirst() then begin
+                        PCMLOrderGSTIN_1 := recvender_1."GST Registration No.";
+                        recstate_1.Reset();
+                        recstate_1.SetRange(Code, recvender_1."State Code");
+                        if recstate_1.FindFirst() then begin
+                            PCMLState := recvender_1."State Code";
+                        end;
                     end;
                 end;
-                //..PCPL-064 18aug2023
+                //>>PCPL-064 20sep2023
+
+
                 //<<PCPL-064 21aug2023
                 //Applied Document No.
                 Clear(AppliedDocument);
@@ -812,6 +921,15 @@ report 50315 "Detailed Purchase Register"
     }
 
     var
+        recvender_1: Record Vendor;
+        recvender: Record Vendor;
+        PIHrec: Record "Purch. Inv. Header";
+        PCMHrec: Record "Purch. Cr. Memo Hdr.";
+        GSTBaseAmt_PIL: Decimal;
+        GSTBaseAmt_PCML: Decimal;
+
+        DGLE_PIL: record "Detailed GST Ledger Entry";
+        DGLE_PCML: record "Detailed GST Ledger Entry";
         Orderno: Code[20];
         Sellout: Decimal;
         FNNLCwithSellout: Decimal;

@@ -237,6 +237,7 @@ report 50313 "Replacement Challan"
 
                 itemLedEntry.Reset();
                 itemLedEntry.SetRange("External Document No.", "Item Journal Replace Data"."External Document No.");
+                itemLedEntry.SetRange("Item No.", "Item Journal Replace Data"."Item No.");
                 itemLedEntry.SetRange("Entry Type", itemLedEntry."Entry Type"::"Negative Adjmt.");
                 if itemLedEntry.FindFirst() then begin
                     // itemLedEntry.CalcFields("Serial No.");

@@ -29,6 +29,7 @@ codeunit 50304 "Tax Invoice Mail"
         Store: Record Location;
         SentmailBool: Boolean;
         TaxInv: Report "Tax Invoice";
+        Parameter: Text[100];
     begin
         clear(SentmailBool);
         Store.Reset();
@@ -40,6 +41,7 @@ codeunit 50304 "Tax Invoice Mail"
                 PaymentMethod.Reset();
                 PaymentMethod.SetCurrentKey("Payment Type");
                 PaymentMethod.SetRange("Payment Type", PaymentMethod."Payment Type"::Finance);
+                //PaymentMethod.SetRange(Code, 'BAJAJ FIN');//Sourav-Temp
                 IF PaymentMethod.FindSet() then
                     repeat
                         VarRecipient.RemoveRange(1, VarRecipient.Count);
@@ -66,7 +68,7 @@ codeunit 50304 "Tax Invoice Mail"
                             PPL.SetCurrentKey("Invoice Posting Date", "Payment type");
                             PPL.SetRange("Invoice Posting Date", CalcDate('-1D', Today));
                             // PPL.SetFilter("Document No.", '%1|%2', 'GBRTI23240700900', 'GBRTI23240700909');
-                            //PPL.SetRange("Invoice Posting Date", 20230801D);
+                            //PPL.SetRange("Invoice Posting Date", 20230822D);//Sourav-Temp
                             PPL.SetRange("Payment type", PPL."Payment type"::Finance);
                             PPL.SetRange("Payment Method Code", PaymentMethod.Code);
                             PPL.SetRange("Store No.", Store.Code);
@@ -80,9 +82,14 @@ codeunit 50304 "Tax Invoice Mail"
                                     SIHNEW.SetRange("No.", PPL."Document No.");
                                     SIHNEW.SetRange("Store No.", PPL."Store No.");
                                     IF SIHNEW.FindFirst() then begin
+                                        //Message(SIHNEW."No." + SIHNEW."Store No.");
                                         Recref.GetTable(SIHNEW);
+                                        Clear(TempBlob);
                                         TempBlob.CreateOutStream(OutStr);
-                                        Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStr, Recref);
+                                        //Report.SaveAs(Report::"Tax Invoice", '', ReportFormat::Pdf, OutStr);
+                                        Clear(TaxInv);
+                                        TaxInv.SetTableView(SIHNEW);
+                                        TaxInv.SaveAs('', ReportFormat::Pdf, OutStr);
                                         TempBlob.CreateInStream(InStr);
                                         FileName := SIHNEW."No." + '_' + FORMAT(Today) + '.pdf';
                                         Emailmessage.AddAttachment(FileName, '.pdf', InStr);

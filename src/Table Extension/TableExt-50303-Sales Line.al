@@ -40,11 +40,68 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
                             IF TradeAggre.FindFirst() then begin
                                 Validate("Unit Price Incl. of Tax", TradeAggre."Amount In INR");
                                 "Price Inclusive of Tax" := true;
+                                Validate(MOP, TradeAggre.MOP);
+                                validate("Last Selling Price", TradeAggre."Last Selling Price");
+                                Validate(NNLC, TradeAggre.NNLC);
+                                validate("PMG NLC W/O SELL OUT", TradeAggre."PMG NLC W/O SELL OUT");
+                                Validate("Manager Discection", TradeAggre."Manager Discection");
+                                validate("Manager Discection - INC", TradeAggre."Manager Discection - INC");
+                                Validate("Sellout Text", TradeAggre."Sellout Text");
+                                Validate(Sellout, TradeAggre.Sellout);
+                                Validate("Sell out Text From Date", TradeAggre."Sell out Text From Date");
+                                Validate("Sell out Text To Date", TradeAggre."Sell out Text To Date");
+                                Validate("Fnnlc with sell out", TradeAggre."Fnnlc with sell out");
+                                Validate(FNNLC, TradeAggre.FNNLC);
+                                Validate("FNNLC Without SELLOUT", TradeAggre."FNNLC Without SELLOUT");
+                                Validate("SLAB 1 - INC", TradeAggre."SLAB 1 - INC");
+                                Validate("SLAB 2 - INC", TradeAggre."SLAB 2 - INC");
+                                Validate("SLAB 1 - PRICE", TradeAggre."SLAB 1 - PRICE");
+                                Validate("SLAB 2 - PRICE", TradeAggre."SLAB 2 - PRICE");
+                                Validate(AMZ, TradeAggre.AMZ);
+                                Validate(PROMO, TradeAggre.PROMO);
+                                Validate(PRICE_TAG, TradeAggre.PRICE_TAG);
+                                Validate(KTVWEB_WE, TradeAggre.KTVWEB_WE);
+                                Validate(KTVWEB_WOE, TradeAggre.KTVWEB_WOE);
+                                Validate("M.R.P", TradeAggre."M.R.P");
+                                Validate(ALLFINANCE, TradeAggre.ALLFINANCE);
+                                Validate(CASHBACK, TradeAggre.CASHBACK);
+                                Validate(DP, TradeAggre.DP);
+                                Validate("Actual From Date", TradeAggre."Actual From Date");
+                                Validate("Actual To Date", TradeAggre."Actual To Date");
+
                             end else begin
                                 TradeAggre.SetRange("Location Code");
                                 IF TradeAggre.FindFirst() then begin
                                     Validate("Unit Price Incl. of Tax", TradeAggre."Amount In INR");
                                     "Price Inclusive of Tax" := true;
+                                    Validate(MOP, TradeAggre.MOP);
+                                    validate("Last Selling Price", TradeAggre."Last Selling Price");
+                                    Validate(NNLC, TradeAggre.NNLC);
+                                    validate("PMG NLC W/O SELL OUT", TradeAggre."PMG NLC W/O SELL OUT");
+                                    Validate("Manager Discection", TradeAggre."Manager Discection");
+                                    validate("Manager Discection - INC", TradeAggre."Manager Discection - INC");
+                                    Validate("Sellout Text", TradeAggre."Sellout Text");
+                                    Validate(Sellout, TradeAggre.Sellout);
+                                    Validate("Sell out Text From Date", TradeAggre."Sell out Text From Date");
+                                    Validate("Sell out Text To Date", TradeAggre."Sell out Text To Date");
+                                    Validate("Fnnlc with sell out", TradeAggre."Fnnlc with sell out");
+                                    Validate(FNNLC, TradeAggre.FNNLC);
+                                    Validate("FNNLC Without SELLOUT", TradeAggre."FNNLC Without SELLOUT");
+                                    Validate("SLAB 1 - INC", TradeAggre."SLAB 1 - INC");
+                                    Validate("SLAB 2 - INC", TradeAggre."SLAB 2 - INC");
+                                    Validate("SLAB 1 - PRICE", TradeAggre."SLAB 1 - PRICE");
+                                    Validate("SLAB 2 - PRICE", TradeAggre."SLAB 2 - PRICE");
+                                    Validate(AMZ, TradeAggre.AMZ);
+                                    Validate(PROMO, TradeAggre.PROMO);
+                                    Validate(PRICE_TAG, TradeAggre.PRICE_TAG);
+                                    Validate(KTVWEB_WE, TradeAggre.KTVWEB_WE);
+                                    Validate(KTVWEB_WOE, TradeAggre.KTVWEB_WOE);
+                                    Validate("M.R.P", TradeAggre."M.R.P");
+                                    Validate(ALLFINANCE, TradeAggre.ALLFINANCE);
+                                    Validate(CASHBACK, TradeAggre.CASHBACK);
+                                    Validate(DP, TradeAggre.DP);
+                                    Validate("Actual From Date", TradeAggre."Actual From Date");
+                                    Validate("Actual To Date", TradeAggre."Actual To Date");
                                 end else
                                     Error('Trade Agreement does not exist for posting date %1', SalesHeder."Posting Date");
                             end;
@@ -180,6 +237,7 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             begin
                 IF SP.Get(Rec."Salesperson Code") then
                     "Salesperson Name" := SP.Name;
+
             end;
         }
         field(50312; "Salesperson Name"; Text[50])
@@ -219,9 +277,160 @@ tableextension 50303 "Sales Line Retail" extends "Sales Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(50319; MOP; Decimal)
+        {
+            Caption = 'MOP';
+            DataClassification = ToBeClassified;
+        }
+        field(50321; "Last Selling Price"; Decimal)
+        {
+            Caption = 'Last Selling Price';
+            DataClassification = ToBeClassified;
+        }
+        field(50322; NNLC; Decimal)
+        {
+            Caption = 'NNLC';
+            DataClassification = ToBeClassified;
+        }
+        field(50323; "PMG NLC W/O SELL OUT"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50324; "Manager Discection"; Decimal)
+        {
+            Caption = 'Manager Discection';
+            DataClassification = ToBeClassified;
+        }
+        field(50325; "Sellout Text"; Text[100])
+        {
+            Caption = 'Sellout Text';
+            DataClassification = ToBeClassified;
+        }
 
+        field(50327; "Sell out Text From Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50328; "Sell out Text To Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50329; Sellout; Decimal)
+        {
+            Caption = 'Sellout';
+            DataClassification = ToBeClassified;
+        }
+        field(50330; "From Date"; Date)
+        {
+            Caption = 'From Date';
+            DataClassification = ToBeClassified;
+        }
+        field(50331; "To Date"; Date)
+        {
+            Caption = 'To Date';
+            DataClassification = ToBeClassified;
+        }
+        field(50332; FNNLC; Decimal)
+        {
+            Caption = 'FNNLC';
+            DataClassification = ToBeClassified;
+        }
+        field(50333; "Fnnlc with sell out"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Fnnlc with sell out';
+        }
+        field(50334; "FNNLC Without SELLOUT"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50335; "Manager Discection - INC"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Manager Discection - INC';
+        }
+        field(50336; "SLAB 1 - PRICE"; Decimal)
+        {
+            Caption = 'SLAB 1 - PRICE';
+            DataClassification = ToBeClassified;
+        }
+        field(50337; "SLAB 2 - PRICE"; Decimal)
+        {
+            Caption = 'SLAB 2 - PRICE';
+            DataClassification = ToBeClassified;
+        }
+        field(50338; "SLAB 1 - INC"; Decimal)
+        {
+            Caption = 'SLAB 1 - INC';
+            DataClassification = ToBeClassified;
+        }
+        field(50339; "SLAB 2 - INC"; Decimal)
+        {
+            Caption = 'SLAB 2 - INC';
+            DataClassification = ToBeClassified;
+        }
+        field(50340; AMZ; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'AMZ';
+        }
+        field(50341; PROMO; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'PROMO';
+        }
+        field(50342; "PRICE_TAG"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'PRICE_TAG';
+        }
+        field(50343; "KTVWEB_WOE"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'KTVWEB_WOE';
+        }
+        field(50344; "KTVWEB_WE"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'KTVWEB_WE';
+        }
+        field(50345; "M.R.P"; Decimal)
+        {
+            Caption = 'M.R.P';
+            DataClassification = ToBeClassified;
+        }
+        field(50346; "ALLFINANCE"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'ALLFINANCE';
+        }
+        field(50347; CASHBACK; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'CASHBACK';
+        }
+        field(50348; DP; Decimal)
+        {
+            Caption = 'DP';
+            DataClassification = ToBeClassified;
+        }
+        field(50349; "Actual From Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Actual From Date';
+        }
+        field(50350; "Actual To Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Actual To Date';
+        }
+        field(50351; "Customer Name"; Text[100])
+        {
 
-
+            Caption = 'Customer Name';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Customer.Name where("No." = field("Sell-to Customer No.")));
+        }
 
 
     }

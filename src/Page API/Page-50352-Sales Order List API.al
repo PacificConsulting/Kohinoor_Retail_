@@ -10,6 +10,7 @@ page 50352 "Sales Order List API"
     EntitySetName = 'SalesOrderLists';
     PageType = API;
     SourceTable = "Sales Header";
+    SourceTableView = where("Completely Shipped" = filter(false));
     ODataKeyFields = SystemId;
 
     layout
@@ -33,6 +34,7 @@ page 50352 "Sales Order List API"
                         SR.TestField("Order Nos.");
                         Rec."No." := NoSeries.GetNextNo(SR."Order Nos.", rec."Posting Date", true);
                         Rec.Modify();
+
                         /*
                         IF Staff.Get(rec."Staff Id") then begin
                             IF RecLoc.Get(Staff."Store No.") then begin

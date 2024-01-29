@@ -2,7 +2,7 @@
   "id": "4ba22a4e-fc4f-4f0b-9a57-5874849a493e",
   "name": "Kohinoor_Retail",
   "publisher": "Pacific",
-  "version": "1.0.0.316",
+  "version": "1.0.0.349",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -15,7 +15,7 @@
       "id": "db643212-b7fb-4dd4-b5a8-cb44ac714461",
       "publisher": "Microsoft",
       "name": "India GST",
-      "version": "18.3.27240.28751"
+      "version": "18.3.27240.28751" 
     },
     {
       "id": "eae5779e-7797-4c4c-977e-7516652b7a65",
